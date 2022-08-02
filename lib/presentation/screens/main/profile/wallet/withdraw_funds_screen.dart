@@ -28,7 +28,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
     final textTheme = Theme.of(context).textTheme;
     return SingleChildScrollView(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
             margin: const EdgeInsets.fromLTRB(15, 15, 15, 15),
@@ -82,30 +82,34 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                   ),
                   child: Container(
                       width: MediaQuery.of(context).size.width * 1,
-                      height: MediaQuery.of(context).size.height * 0.3,
+                      height: 140.0,
                       decoration: BoxDecoration(
                         color: aquaGreenColor,
                         borderRadius: BorderRadius.circular(16.0),
                       ),
                       child: Padding(
-                        padding: EdgeInsets.only(top: 1.h),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8.0),
                         child: Column(
                           children: [
                             Text('Current Balance',
                                 textAlign: TextAlign.center,
                                 style: textTheme.headline3
                                     ?.copyWith(color: textTunaBlueColor)),
-
-                            Text('₹ 25,000',
-                                textAlign: TextAlign.center,
-                                style: textTheme.headlineLarge
-                                    ?.copyWith(color: textTunaBlueColor)),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.0, vertical: 16.0),
+                              child: Text('₹ 25,000',
+                                  textAlign: TextAlign.center,
+                                  style: textTheme.headlineLarge
+                                      ?.copyWith(color: textTunaBlueColor)),
+                            ),
                           ],
                         ),
                       )),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 15.h),
+                  padding: EdgeInsets.only(top: 110.0),
                   child: Card(
                     color: backgroundBalticSeaColor,
                     elevation: 0.0,
@@ -122,23 +126,30 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Padding(
-                              padding:
-                              EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-                              child: MyDropDownWidget()
-                          ),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 24.0, horizontal: 24.0),
+                              child: MyDropDownWidget()),
                           const Padding(
-                              padding:
-                              EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
-                              child: InputTextWidget(hintName: 'Enter Amount (INR)',)
-                          ),
+                              padding: EdgeInsets.only(
+                                  top: 0.0,
+                                  bottom: 24.0,
+                                  left: 24.0,
+                                  right: 24.0),
+                              child: InputTextWidget(
+                                hintName: 'Enter Amount (INR)',
+                                keyboardType: TextInputType.number,
+                              )),
                           Padding(
-                            padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0,),
+                            padding: const EdgeInsets.only(
+                              left: 16.0,
+                              right: 16.0,
+                            ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 SizedBox(
                                   width:
-                                  MediaQuery.of(context).size.width * 0.35,
+                                      MediaQuery.of(context).size.width * 0.35,
                                   child: CustomButton(
                                     color: carminePinkColor,
                                     textColor: textWhiteColor,
@@ -151,10 +162,11 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                               ],
                             ),
                           ),
-
                           Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal:16.0),
-                            child: Text('Minimum Account Balance to maintain in your Wallet is Rs. 200',
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 16.0, horizontal: 16.0),
+                            child: Text(
+                                'Minimum Account Balance to maintain in your Wallet is Rs. 200',
                                 textAlign: TextAlign.center,
                                 style: textTheme.headline5
                                     ?.copyWith(color: textWhiteColor)),
@@ -166,6 +178,19 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                 ),
               ],
             ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 16.0,),
+            child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.7,
+                child: CustomButton(
+                  color: purpleLightIndigoColor,
+                  textColor: textWhiteColor,
+                  name: "Add New Withdraw Method",
+                  onTap: () {
+                  //  context.pushNamed(withdrawFundScreenPage);
+                  },
+                )),
           ),
         ],
       ),

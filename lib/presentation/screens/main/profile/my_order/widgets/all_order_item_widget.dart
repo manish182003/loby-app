@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../../../../../core/theme/colors.dart';
 import '../../../../../../services/routing_service/routes_name.dart';
+import '../../../../../widgets/UpdateStatusDialog.dart';
 import '../../../../../widgets/custom_dialog.dart';
-import '../../../../../widgets/follow_btn.dart';
 
 class OrderItem extends StatelessWidget {
   final String name;
 
-   const OrderItem({Key? key, required this.name});
+  const OrderItem({Key? key, required this.name});
 
   @override
   Widget build(BuildContext context) {
@@ -86,33 +87,40 @@ class OrderItem extends StatelessWidget {
                             Container(
                               decoration: BoxDecoration(
                                 color: orangeColor,
-                                borderRadius: BorderRadius.circular(1.2.h),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    vertical: 4.0, horizontal: 6.0),
+                                    vertical: 4.0, horizontal: 8.0),
                                 child: Text('Account',
                                     style: textTheme.subtitle1
                                         ?.copyWith(color: textWhiteColor)),
                               ),
                             ),
                             const SizedBox(width: 4.0),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.31,
-                              child: Button(
-                                width: MediaQuery.of(context).size.width * 0.31,
-                                height: 24,
-                                onPress: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          CustomDialog());
-                                },
-                                txtPadding: 2.0,
-                                btnBgColor: butterflyBlueColor,
-                                txtColor: textWhiteColor,
-                                borderRadius: 1.2.h,
-                                btnName: 'Update Status',
+                            GestureDetector(
+                              onTap: () {
+                                UpdateStatusDialog(
+                                    textTheme: textTheme,
+                                    tileName: "Congratulations",
+                                    titleColor: aquaGreenColor,
+                                    contentName:
+                                    "Your service has been successfully listed. You can edit your listings from My Listings.",
+                                    contentLinkName: ' My Listings')
+                                    .showBottomDialog(context);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: butterflyBlueColor,
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 4.0, horizontal: 8.0),
+                                  child: Text('Update Status',
+                                      style: textTheme.subtitle1
+                                          ?.copyWith(color: textWhiteColor)),
+                                ),
                               ),
                             ),
                           ],

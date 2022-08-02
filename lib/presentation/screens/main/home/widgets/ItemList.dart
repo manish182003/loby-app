@@ -112,10 +112,10 @@ class ItemList extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CircleAvatar(
-                        backgroundColor: Colors.green[500],
+                      const CircleAvatar(
+                        backgroundColor: aquaGreenColor,
                         radius: 15,
-                        child: const Padding(
+                        child: Padding(
                           padding: EdgeInsets.all(1.0),
                           child: CircleAvatar(
                             backgroundImage:
@@ -128,60 +128,58 @@ class ItemList extends StatelessWidget {
                         width: 2.0,
                       ),
                       Expanded(
-                        child: Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Mukesh Kumar Patel",
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                style: textTheme.headline4?.copyWith(
-                                    fontSize: 11.0, color: textWhiteColor),
-                              ),
-                              Row(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      SvgPicture.asset(
-                                        'assets/icons/user_rating_icon.svg',
-                                        color: iconWhiteColor,
-                                      ),
-                                      const SizedBox(width: 2.0),
-                                      Text(
-                                        "4.5",
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                        style: textTheme.headline4?.copyWith(
-                                            fontSize: 11.0,
-                                            color: textWhiteColor),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(width: 4.0),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      SvgPicture.asset(
-                                        'assets/icons/user_chat_icon.svg',
-                                        color: iconWhiteColor,
-                                      ),
-                                      const SizedBox(width: 2.0),
-                                      Text(
-                                        "12",
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                        style: textTheme.headline4?.copyWith(
-                                            fontSize: 11.0,
-                                            color: textWhiteColor),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Mukesh Kumar Patel",
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: textTheme.headline4?.copyWith(
+                                  fontSize: 11.0, color: textWhiteColor),
+                            ),
+                            Row(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                      'assets/icons/user_rating_icon.svg',
+                                      color: iconWhiteColor,
+                                    ),
+                                    const SizedBox(width: 2.0),
+                                    Text(
+                                      "4.5",
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: textTheme.headline4?.copyWith(
+                                          fontSize: 11.0,
+                                          color: textWhiteColor),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(width: 4.0),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                      'assets/icons/user_chat_icon.svg',
+                                      color: iconWhiteColor,
+                                    ),
+                                    const SizedBox(width: 2.0),
+                                    Text(
+                                      "12",
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: textTheme.headline4?.copyWith(
+                                          fontSize: 11.0,
+                                          color: textWhiteColor),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                       SizedBox(

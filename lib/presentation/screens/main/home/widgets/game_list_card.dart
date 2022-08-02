@@ -17,27 +17,39 @@ class GameCard extends StatelessWidget {
       color: Colors.transparent,
       child: SizedBox(
         width: 150,
-        height: 150,
+        height: 166,
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Column(
             children: [
-              CircleAvatar(
-                backgroundColor: Colors.green[500],
-                radius: 35,
-                child: const Padding(
-                  padding: EdgeInsets.all(2.0),
-                  child: CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/img.png'),
-                    radius: 35,
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CircleAvatar(
+                  radius: 36,
+                  backgroundColor: aquaGreenColor,
+                  child: Padding(
+                    padding: EdgeInsets.all(1.0),
+                    child: CircleAvatar(
+                      backgroundColor: backgroundDarkJungleGreenColor,
+                      radius: 36,
+                      child: Padding(
+                        padding: EdgeInsets.all(3.0),
+                        child: CircleAvatar(
+                          backgroundImage: AssetImage('assets/images/img.png'),
+                          radius: 36,
+                          backgroundColor: backgroundDarkJungleGreenColor,
+                        ),
+                      ), //CircleAvatar
+                    ),
                   ),
-                ), //CircleAvatar
+                ),
               ),
               SizedBox(
                 height: 0.5.h,
               ), //CircleAvatar//SizedBox
               Text(
-                'Bettelground Mobile',
+                'Bettelground Mobile India',
+                maxLines: 2,
                 textAlign: TextAlign.center,
                 style: textTheme.headline6
                     ?.copyWith(color: textWhiteColor), //Textstyle

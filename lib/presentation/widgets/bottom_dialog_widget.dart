@@ -43,7 +43,7 @@ class BottomDialog {
   Widget _buildDialogContent(BuildContext context) {
     return IntrinsicHeight(
       child: Container(
-        margin: const EdgeInsets.all(12.0),
+        margin: const EdgeInsets.all(24.0),
         width: double.maxFinite,
         clipBehavior: Clip.antiAlias,
         padding: const EdgeInsets.all(16),
@@ -60,9 +60,7 @@ class BottomDialog {
           color: backgroundDarkJungleGreenColor,
           child: Column(
             children: [
-              const SizedBox(height: 16),
               _buildCongratulationsText(),
-              const SizedBox(height: 16),
               _buildContentText(),
               const SizedBox(height: 16),
               SizedBox(
@@ -85,10 +83,13 @@ class BottomDialog {
   }
 
   Widget _buildCongratulationsText() {
-    return Text(
-      tileName?? 'Loby',
-      style: textTheme?.headline2?.copyWith(color: titleColor, fontWeight: FontWeight.w400),
-    );
+    return tileName != null? Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Text(
+        tileName?? 'Loby',
+        style: textTheme?.headline2?.copyWith(color: titleColor, fontWeight: FontWeight.w400),
+      ),
+    ) :  Container();
   }
 
   Widget _buildContentText() {

@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../../core/theme/colors.dart';
+import '../../../../../widgets/CustomSwitch.dart';
 
-class MyListingItemList extends StatelessWidget {
+class MyListingItemList extends StatefulWidget {
   final String name;
 
   const MyListingItemList({required this.name});
 
   @override
+  State<MyListingItemList> createState() => _MyListingItemListState();
+}
+
+class _MyListingItemListState extends State<MyListingItemList> {
+  bool _enable = false;
+
+  @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return InkWell(
-      onTap: () {
-      },
+      onTap: () {},
       child: Card(
         color: backgroundBalticSeaColor,
         elevation: 0.0,
@@ -68,9 +75,10 @@ class MyListingItemList extends StatelessWidget {
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    vertical: 0.0, horizontal: 4.0),
+                                    vertical: 2.0, horizontal: 6.0),
                                 child: Text('Account',
-                                    style: textTheme.headline6?.copyWith(color: textWhiteColor)),
+                                    style: textTheme.headline6
+                                        ?.copyWith(color: textWhiteColor)),
                               ),
                             ),
                           ],
@@ -81,37 +89,26 @@ class MyListingItemList extends StatelessWidget {
                         child: Column(
                           children: <Widget>[
                             Text('₹ 25,000',
-                                style: textTheme.headline5?.copyWith(color: aquaGreenColor)),
+                                overflow: TextOverflow.ellipsis,
+                                style: textTheme.headline4
+                                    ?.copyWith(color: aquaGreenColor)),
                           ],
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: TextButton(
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(concordColor),
-                          shape: MaterialStateProperty.all<
-                              RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),))),
-                      onPressed: () {},
-                      child: Text("Mark Inactive",
-                          style: textTheme.headline6
-                              ?.copyWith(color: textWhiteColor)),
-                    ),
-                  ),
+                  const SizedBox(height: 4.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TextButton(
                         style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(butterflyBlueColor),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                butterflyBlueColor),
                             shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),))),
+                                RoundedRectangleBorder>(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                            ))),
                         onPressed: () {},
                         child: Text("Edit",
                             style: textTheme.headline6
@@ -119,11 +116,12 @@ class MyListingItemList extends StatelessWidget {
                       ),
                       TextButton(
                         style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(lavaRedColor),
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(lavaRedColor),
                             shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0),))),
+                                RoundedRectangleBorder>(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                            ))),
                         onPressed: () {},
                         child: Text("Delete",
                             style: textTheme.headline6
@@ -131,6 +129,31 @@ class MyListingItemList extends StatelessWidget {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 8.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Inactive",
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: textTheme.headline5
+                              ?.copyWith(color: textWhiteColor)),
+                      CustomSwitch(
+                        value: _enable,
+                        onChanged: (bool val) {
+                          setState(() {
+                            _enable = val;
+                          });
+                        },
+                      ),
+                      Text("Active",
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: textTheme.headline5
+                              ?.copyWith(color: textWhiteColor)),
+                    ],
+                  ),
+                  const SizedBox(height: 16.0),
                 ],
               ),
             ),

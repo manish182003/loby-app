@@ -20,13 +20,6 @@ class _MyListingScreenState extends State<MyListingScreen> {
       child: Scaffold(
         backgroundColor: backgroundDarkJungleGreenColor,
         body: body(textTheme),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {},
-          backgroundColor: purpleLightIndigoColor,
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(16.0))),
-          label: Text('Add Listing', style: textTheme.headline4?.copyWith(color: textWhiteColor)),
-        ),
       ),
     );
   }
@@ -85,7 +78,7 @@ class _MyListingScreenState extends State<MyListingScreen> {
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 6.0 / 10.2,
+        childAspectRatio: 6.4 / 10.2,
         mainAxisSpacing: 0.1.h,
         crossAxisSpacing: 0.1.h,
       ),

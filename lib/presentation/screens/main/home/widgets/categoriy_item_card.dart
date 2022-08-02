@@ -44,7 +44,7 @@ class CategoryItemCard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 0.0),
+              padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -53,7 +53,7 @@ class CategoryItemCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                       style:
-                      textTheme.headline6?.copyWith(color: textWhiteColor)),
+                      textTheme.subtitle1?.copyWith(color: textWhiteColor)),
                 ],
               ),
             ),

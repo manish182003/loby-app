@@ -8,6 +8,7 @@ const Color orangeColor = Color(0xFFEE7C5E);
 const Color lavaRedColor = Color(0xFFD82F0E);
 const Color carminePinkColor = Color(0xFFE94F31);
 const Color saffronMangoOrangeColor = Color(0xFFFAC663);
+const Color selectiveYellowColor = Color(0xFFFBBC05);
 const Color gambogeOrangeColor = Color(0xFFE29509);
 const Color butterflyBlueColor = Color(0xFF33A9FF);
 const Color frenchBlueColor = Color(0xFF006FC2);
@@ -16,11 +17,12 @@ const Color concordColor = Color(0xFF7B7B7B);
 const Color backgroundBalticSeaColor = Color(0xFF242731);
 const Color backgroundDarkJungleGreenColor = Color(0xFF1F2128);
 const Color whiteColor = Color(0xFFFFFFFF);
+const Color shipGreyColor = Color(0xFF383B45);
 
 // text Colors
 const Color textFieldColor = Color(0x1AE4E4E4);
 const Color textBlackColor = Color(0xFF000000);
-const Color textWhiteColor = Color(0xFFFFFFFF);
+const Color textWhiteColor = Color(0xFFfcfcfc);
 const Color textLightColor = Color(0xFF808191);
 const Color textCharcoalBlueColor = Color(0xFF33343B);
 const Color textTunaBlueColor = Color(0xFF373A43);

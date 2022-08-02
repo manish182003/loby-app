@@ -20,6 +20,7 @@ class SignUpCardList extends StatefulWidget {
 
 class _SignUpCardListState extends State<SignUpCardList> {
   final _formKey = GlobalKey<FormState>();
+  bool visible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +39,7 @@ class _SignUpCardListState extends State<SignUpCardList> {
                       width: double.infinity,
                       height: 1.h,
                     ),
-                    Text('Sign up',
+                    Text('Create New Account',
                         style: textTheme.headline2
                             ?.copyWith(color: textWhiteColor)),
                     SizedBox(
@@ -69,10 +70,13 @@ class _SignUpCardListState extends State<SignUpCardList> {
                       width: double.infinity,
                       height: 2.h,
                     ),
-                    InputTextWidget(hintName: 'Ex: jhonsingh@gmail.com',
+                    InputTextWidget(
+                      hintName: 'Ex: jhonsingh@gmail.com',
+                      keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         return Helpers.validateEmail(value!);
-                      },),
+                      },
+                    ),
                     SizedBox(
                       width: double.infinity,
                       height: 4.h,
@@ -84,10 +88,24 @@ class _SignUpCardListState extends State<SignUpCardList> {
                       width: double.infinity,
                       height: 2.h,
                     ),
-                    InputTextWidget(hintName: '******',
-                      validator: (value) {
-                        return Helpers.validateField(value!);
-                      },),
+                    passwordTextFieldWidget(textTheme, 'Password', (value) {
+                      return Helpers.validateField(value!);
+                    }),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 4.h,
+                    ),
+                    const InputTextTitleWidget(
+                        titleName: 'Re-Enter Password',
+                        titleTextColor: textInputTitleColor),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 2.h,
+                    ),
+                    passwordTextFieldWidget(textTheme, 'Re-Enter Password',
+                        (value) {
+                      return Helpers.validateField(value!);
+                    }),
                     SizedBox(
                       width: double.infinity,
                       height: 4.h,
@@ -95,9 +113,9 @@ class _SignUpCardListState extends State<SignUpCardList> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
                       child: CustomButton(
-                        color: purpleLightIndigoColor,
-                        textColor: textWhiteColor,
-                        name: "Create Profile",
+                        color: aquaGreenColor,
+                        textColor: textCharcoalBlueColor,
+                        name: "Create Account",
                         onTap: () {
                           if (_formKey.currentState!.validate()) {
                             Navigator.pop(context);
@@ -108,36 +126,45 @@ class _SignUpCardListState extends State<SignUpCardList> {
                     ),
                     SizedBox(
                       width: double.infinity,
-                      height: 4.h,
+                      height: 2.h,
                     ),
                     Text('Sign up using Google or Apple',
-                        style: textTheme.subtitle2
+                        style: textTheme.headline5
                             ?.copyWith(color: textInputTitleColor)),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 4.h,
-                    ),
-                    CustomButton(
-                        color: butterflyBlueColor,
-                        textColor: textWhiteColor,
-                        name: "Google Account",
-                        onTap: () {
-                          _goToMainScreen(context, textTheme);
-                        }),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 4.h,
-                    ),
-                    CustomButton(
-                        color: butterflyBlueColor,
-                        textColor: textWhiteColor,
-                        name: "Apple Account",
-                        onTap: () {
-                          _goToMainScreen(context, textTheme);
-                        }),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 4.h,
+                    Center(
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(4.h, 2.h, 4.h, 8.h),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: Column(
+                            children: [
+                              CustomButton(
+                                  color: whiteColor,
+                                  name: "Signup with Google",
+                                  iconWidget: 'assets/icons/google_icon.svg',
+                                  onTap: () {
+                                    _goToMainScreen(context, textTheme);
+                                  }),
+                              SizedBox(
+                                width: double.infinity,
+                                height: 2.h,
+                              ),
+                              CustomButton(
+                                  color: whiteColor,
+                                  name: "Signup with Apple",
+                                  iconWidget:
+                                      'assets/icons/apple_logo_icon.svg',
+                                  onTap: () {
+                                    _goToMainScreen(context, textTheme);
+                                  }),
+                              SizedBox(
+                                width: double.infinity,
+                                height: 2.h,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -148,6 +175,57 @@ class _SignUpCardListState extends State<SignUpCardList> {
   void _goToMainScreen(BuildContext context, TextTheme textTheme) {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const MainScreen()));
+  }
+
+  Widget passwordTextFieldWidget(TextTheme textTheme, String password,
+      FormFieldValidator<String> validator) {
+    return Container(
+      decoration: BoxDecoration(
+        color: textFieldColor,
+        borderRadius: BorderRadius.circular(1.5.h),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 23.0, vertical: 2.0),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextFormField(
+                obscureText: !visible,
+                cursorColor: aquaGreenColor,
+                validator: validator,
+                style: textTheme.headline4?.copyWith(color: textWhiteColor),
+                maxLines: 1,
+                keyboardType: TextInputType.visiblePassword,
+                decoration: InputDecoration(
+                  /*focusedBorder:OutlineInputBorder(
+                    borderSide: const BorderSide(color: aquaGreenColor, width: 0.5),
+                    borderRadius: BorderRadius.circular(1.5.h),
+                  ),*/
+                  border: InputBorder.none,
+                  hintStyle:
+                      textTheme.headline4?.copyWith(color: textInputTitleColor),
+                  hintText: password,
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                setState(() {
+                  visible = !visible;
+                });
+              },
+              child: Icon(
+                visible
+                    ? Icons.visibility_outlined
+                    : Icons.visibility_off_outlined,
+                color: iconTintColor,
+                size: 15,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   _showCreateProfileBottomSheet(BuildContext context, TextTheme textTheme) {

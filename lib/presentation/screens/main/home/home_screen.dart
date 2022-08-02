@@ -6,6 +6,7 @@ import 'package:loby/presentation/screens/main/home/widgets/game_list_card.dart'
 import 'package:sizer/sizer.dart';
 
 import '../../../../services/routing_service/routes_name.dart';
+import '../../../widgets/SearchFieldWidget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -51,9 +52,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SizedBox(
               width: double.infinity,
-              height: 3.h,
+              height: 2.2.h,
             ),
-            _buildSearchField(textTheme),
+            const SearchFieldWidget(),
             SizedBox(
               width: double.infinity,
               height: 3.h,
@@ -99,6 +100,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
       child: Container(
+        constraints: const BoxConstraints(
+          minHeight: 45,
+          minWidth: double.infinity,
+        ),
         decoration: BoxDecoration(
           color: textFieldColor,
           borderRadius: BorderRadius.circular(10.0),
@@ -122,19 +127,29 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  List<String> litems = [
+    "Buddy",
+    "Accounts",
+    "In-Game Currency",
+    "In-Game Items",
+    "Rank Push",
+    "Duel",
+    "Coach"
+  ];
+
   _buildCategories(TextTheme textTheme) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
       child: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 3.0,
-          mainAxisSpacing: 1.h,
-          crossAxisSpacing: 1.h,
+          childAspectRatio: 2.5,
+          mainAxisSpacing: 1.7.h,
+          crossAxisSpacing: 1.7.h,
         ),
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: 5,
+        itemCount: litems.length,
         itemBuilder: (context, index) {
           return GestureDetector(
               onTap: () {
@@ -146,17 +161,24 @@ class _HomeScreenState extends State<HomeScreen> {
                         CategoryItemScreen(name: 'Buddy $index')));*/
               },
               child: Container(
+                padding: EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
                   color: textFieldColor,
+                  border: Border.all(color: textLightColor, width: 0.5),
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'Buddy $index',
-                      style:
-                          textTheme.headline5?.copyWith(color: aquaGreenColor),
+                    Expanded(
+                      child: Text(
+                        textAlign: TextAlign.center,
+                        litems[index],
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: textTheme.headline5
+                            ?.copyWith(color: aquaGreenColor),
+                      ),
                     ),
                   ],
                 ),
@@ -168,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _buildTopGames(TextTheme textTheme) {
     return SizedBox(
-      height: 150,
+      height: 166,
       child: ListView.builder(
         itemCount: 7,
         scrollDirection: Axis.horizontal,
@@ -182,7 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     GameItemScreen(name: 'Battlegrounds Mobile $index')));*/
           },
           child: SizedBox(
-            height: 150,
+            height: 166,
             width: 150,
             child: Center(
               child: GameCard(index: index),

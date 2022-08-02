@@ -51,7 +51,7 @@ class CustomAnimatedBottomBar extends StatelessWidget {
           child: Container(
             width: double.infinity,
             height: containerHeight,
-            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
             child: Row(
               mainAxisAlignment: mainAxisAlignment,
               children: items.map((item) {
@@ -120,7 +120,7 @@ class _ItemWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: isSelected? 16.0: 0.0),
+                padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: isSelected? 4.0: 4.0),
                 child: IconTheme(
                   data: IconThemeData(
                     size: iconSize,

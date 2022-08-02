@@ -5,6 +5,7 @@ import 'package:sizer/sizer.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/utils/helpers.dart';
 import '../../../widgets/custom_button.dart';
+import '../../../widgets/drop_down.dart';
 import '../../../widgets/input_text_title_widget.dart';
 import '../../../widgets/input_text_widget.dart';
 import '../../main/main_screen.dart';
@@ -20,6 +21,7 @@ class CreateProfileCard extends StatefulWidget {
 
 class _CreateProfileCardState extends State<CreateProfileCard> {
   final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -34,15 +36,11 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                 child: Column(
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Text('Your Profile',
+                        Text('Your Basic Details',
                             style: textTheme.headline2
                                 ?.copyWith(color: textWhiteColor)),
-                        IconButton(
-                          icon: const Icon(Icons.close, color: whiteColor),
-                          onPressed: () => Navigator.of(context).pop(null),
-                        ),
                       ],
                     ),
                     SizedBox(
@@ -71,6 +69,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                     ),
                     InputTextWidget(
                       hintName: 'Ex: Jhon Singh',
+                      keyboardType: TextInputType.name,
                       validator: (value) {
                         return Helpers.validateField(value!);
                       },
@@ -88,6 +87,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                     ),
                     InputTextWidget(
                       hintName: 'Ex: Commander',
+                      keyboardType: TextInputType.name,
                       validator: (value) {
                         return Helpers.validateField(value!);
                       },
@@ -103,7 +103,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                       width: double.infinity,
                       height: 2.h,
                     ),
-                    const InputTextWidget(hintName: 'India (Default)'),
+                    const MyDropDownWidget(),
                     SizedBox(
                       width: double.infinity,
                       height: 4.h,
@@ -126,10 +126,12 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                       width: double.infinity,
                       height: 2.h,
                     ),
-                    InputTextWidget(hintName: '15 July 1999',
+                    InputTextWidget(
+                      hintName: '15 July 1999',
                       validator: (value) {
                         return Helpers.validateField(value!);
-                      },),
+                      },
+                    ),
                     SizedBox(
                       width: double.infinity,
                       height: 4.h,
@@ -189,6 +191,8 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
 
   Widget _buildSearchField(TextTheme textTheme) {
     return Container(
+      constraints: const BoxConstraints(
+        minHeight: 45, minWidth: double.infinity,),
       decoration: BoxDecoration(
         color: textFieldColor,
         borderRadius: BorderRadius.circular(10.0),
@@ -243,10 +247,17 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                       child: Padding(
                         padding:
                             const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
-                        child: Text("Upload New", style: textTheme.button),
+                        child: Text("Change Avatar", style: textTheme.button),
                       )),
                   ElevatedButton(
                       style: ButtonStyle(
+                        side: MaterialStateProperty.all(
+                          const BorderSide(
+                            style: BorderStyle.solid,
+                            color: carminePinkColor,
+                            width: 1.0,
+                          ),
+                        ),
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
@@ -261,7 +272,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                       child: Padding(
                         padding:
                             const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
-                        child: Text("Delete Avatar",
+                        child: Text("Remove Avatar",
                             style:
                                 textTheme.button?.copyWith(color: whiteColor)),
                       )),

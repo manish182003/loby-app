@@ -79,7 +79,7 @@ class _ProfileVerificationScreenState extends State<ProfileVerificationScreen> {
                 Align(
                   alignment: Alignment.topLeft,
                   child: Text(
-                      textAlign: TextAlign.start,
+                      textAlign: TextAlign.center,
                       "Get your profile verified if you are an gaming influncer, esports athlete or a content creator",
                       style: textTheme.headline5?.copyWith(color: orangeColor)),
                 ),
@@ -100,12 +100,24 @@ class _ProfileVerificationScreenState extends State<ProfileVerificationScreen> {
                   height: 4.h,
                 ),
                 const InputTextTitleWidget(
-                    titleName: 'Message', titleTextColor: textWhiteColor),
+                    titleName: 'Name (as per Official Documents)',
+                    titleTextColor: textWhiteColor),
                 SizedBox(
                   width: double.infinity,
                   height: 2.h,
                 ),
                 const InputTextWidget(hintName: ''),
+                SizedBox(
+                  width: double.infinity,
+                  height: 4.h,
+                ),
+                const InputTextTitleWidget(
+                    titleName: 'Message', titleTextColor: textWhiteColor),
+                SizedBox(
+                  width: double.infinity,
+                  height: 2.h,
+                ),
+                const InputTextWidget(hintName: '', maxLines: 5,),
                 SizedBox(
                   width: double.infinity,
                   height: 4.h,
@@ -245,7 +257,7 @@ class _ProfileVerificationScreenState extends State<ProfileVerificationScreen> {
                   height: 8.h,
                 ),
                 Align(
-                  alignment: Alignment.bottomRight,
+                  alignment: Alignment.bottomCenter,
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width * 0.35,
                     child: CustomButton(
@@ -255,15 +267,17 @@ class _ProfileVerificationScreenState extends State<ProfileVerificationScreen> {
                       onTap: () {
                         BottomDialog(
                                 textTheme: textTheme,
-                                tileName: "Congratulations",
                                 titleColor: aquaGreenColor,
                                 contentName:
-                                    "Your service has been successfully listed. You can edit your listings from My Listings.",
-                                contentLinkName: ' My Listings')
+                                    "Your profile has been submitted to Team Loby for verification. We will revert back to you shortly",)
                             .showBottomDialog(context);
                       },
                     ),
                   ),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  height: 8.h,
                 ),
               ],
             ),

@@ -295,12 +295,12 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
                   ),
                   const SizedBox(height: 8.0),
                   Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.h),
+                    padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.h),
                     child: CustomButton(
                       color: createProfileButtonColor,
                       name: "Choose file",
                       textColor: textWhiteColor,
+                      iconWidget: 'assets/icons/upload_img_icon.svg',
                       onTap: () {
                         debugPrint('click chat');
                       },

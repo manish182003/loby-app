@@ -82,7 +82,7 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                     ),
                     child: Container(
                         width: MediaQuery.of(context).size.width * 1,
-                        height: MediaQuery.of(context).size.height * 0.2,
+                        height: 90.0,
                         decoration: BoxDecoration(
                           color: aquaGreenColor,
                           borderRadius: BorderRadius.circular(16.0),
@@ -96,7 +96,7 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                         )),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 5.h),
+                    padding: const EdgeInsets.only(top: 44.0),
                     child: Card(
                       color: backgroundBalticSeaColor,
                       elevation: 0.0,
@@ -105,58 +105,60 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                       ),
                       child: Container(
                           width: MediaQuery.of(context).size.width * 1,
-                          height: MediaQuery.of(context).size.height * 0.22,
                           decoration: BoxDecoration(
                             color: backgroundBalticSeaColor,
                             borderRadius: BorderRadius.circular(16.0),
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    bottom: 16.0, top: 8.0),
-                                child: Text('₹ 25,000',
-                                    textAlign: TextAlign.center,
-                                    style: textTheme.headlineLarge
-                                        ?.copyWith(color: aquaGreenColor)),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 0.0, horizontal: 16.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.35,
-                                      child: CustomButton(
-                                        color: purpleLightIndigoColor,
-                                        textColor: textWhiteColor,
-                                        name: "Add Funds",
-                                        onTap: () {
-                                          context.pushNamed(addFundScreenPage);
-                                        },
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.35,
-                                      child: CustomButton(
-                                        color: orangeColor,
-                                        textColor: textWhiteColor,
-                                        name: "Withdraw",
-                                        onTap: () {
-                                          context.pushNamed(
-                                              withdrawFundScreenPage);
-                                        },
-                                      ),
-                                    ),
-                                  ],
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                bottom: 16.0, top: 8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                                  child: Text('₹ 25,000',
+                                      textAlign: TextAlign.center,
+                                      style: textTheme.headlineLarge
+                                          ?.copyWith(color: aquaGreenColor)),
                                 ),
-                              ),
-                            ],
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 0.0, horizontal: 16.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      SizedBox(
+                                        width: MediaQuery.of(context).size.width *
+                                            0.35,
+                                        child: CustomButton(
+                                          color: purpleLightIndigoColor,
+                                          textColor: textWhiteColor,
+                                          name: "Add Funds",
+                                          onTap: () {
+                                            context.pushNamed(addFundScreenPage);
+                                          },
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: MediaQuery.of(context).size.width *
+                                            0.35,
+                                        child: CustomButton(
+                                          color: carminePinkColor,
+                                          textColor: textWhiteColor,
+                                          name: "Withdraw",
+                                          onTap: () {
+                                            context.pushNamed(
+                                                withdrawFundScreenPage);
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           )),
                     ),
                   ),
@@ -188,7 +190,7 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                     ),
                     child: Container(
                         width: MediaQuery.of(context).size.width * 1,
-                        height: MediaQuery.of(context).size.height * 0.2,
+                        height: 90,
                         decoration: BoxDecoration(
                           color: aquaGreenColor,
                           borderRadius: BorderRadius.circular(16.0),
@@ -202,7 +204,7 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                         )),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 5.h),
+                    padding: EdgeInsets.only(top: 44.0),
                     child: Card(
                       color: backgroundBalticSeaColor,
                       elevation: 0.0,
@@ -211,34 +213,36 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                       ),
                       child: Container(
                           width: MediaQuery.of(context).size.width * 1,
-                          height: MediaQuery.of(context).size.height * 0.22,
                           decoration: BoxDecoration(
                             color: backgroundBalticSeaColor,
                             borderRadius: BorderRadius.circular(16.0),
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    bottom: 16.0, top: 8.0),
-                                child: Text('500',
-                                    textAlign: TextAlign.center,
-                                    style: textTheme.headlineLarge
-                                        ?.copyWith(color: aquaGreenColor)),
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.3,
-                                child: CustomButton(
-                                  color: purpleLightIndigoColor,
-                                  textColor: textWhiteColor,
-                                  name: "Redeem",
-                                  onTap: () {
-                                    debugPrint('click chat');
-                                  },
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                bottom: 16.0, top: 8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                                  child: Text('500',
+                                      textAlign: TextAlign.center,
+                                      style: textTheme.headlineLarge
+                                          ?.copyWith(color: aquaGreenColor)),
                                 ),
-                              ),
-                            ],
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width * 0.3,
+                                  child: CustomButton(
+                                    color: purpleLightIndigoColor,
+                                    textColor: textWhiteColor,
+                                    name: "Redeem",
+                                    onTap: () {
+                                      debugPrint('click chat');
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                           )),
                     ),
                   ),

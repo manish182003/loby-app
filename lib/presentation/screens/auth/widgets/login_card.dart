@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/core/theme/colors.dart';
 import 'package:sizer/sizer.dart';
@@ -19,49 +20,38 @@ class _LoginCardState extends State<LoginCard> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return Center(
-      child: Card(
-        elevation: 0,
-        margin: EdgeInsets.all(10.w),
-        color: backgroundBalticSeaColor,
-        shape: const RoundedRectangleBorder(
-          side: BorderSide(
-            color: textLightColor,
-          ),
-          borderRadius: BorderRadius.all(Radius.circular(12)),
-        ),
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(4.h, 4.h, 4.h,4.h),
-          child: SizedBox(
-            width: double.infinity,
-            child: Column(
-              children: [
-                CustomButton(color: aquaGreenColor, name: "Sign in with Apple", onTap: () {
-                  _goToMainScreen(context, textTheme);
-                }
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  height: 2.h,
-                ),
-                CustomButton(color: aquaGreenColor, name: "Sign in with Google", onTap: () {
-                  _goToMainScreen(context, textTheme);
-                }
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  height: 2.h,
-                ),
-                Text("New User ?", style: textTheme.headline5?.copyWith(color: aquaGreenColor)),
-                SizedBox(
-                  width: double.infinity,
-                  height: 2.h,
-                ),
-                CustomButton(color: whiteColor, name: "Create New Account", onTap: () {
-                  _showDialog(context, textTheme);
-                }
-                ),
-              ],
-            ),
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(4.h, 4.h, 4.h,8.h),
+        child: SizedBox(
+          width: double.infinity,
+          child: Column(
+            children: [
+              CustomButton(color: whiteColor, name: "Continue with Google", iconWidget: 'assets/icons/google_icon.svg', onTap: () {
+                _goToMainScreen(context, textTheme);
+              }
+              ),
+              SizedBox(
+                width: double.infinity,
+                height: 2.h,
+              ),
+              CustomButton(color: whiteColor, name: "Continue with Apple", iconWidget: 'assets/icons/apple_logo_icon.svg', onTap: () {
+                _goToMainScreen(context, textTheme);
+              }
+              ),
+              SizedBox(
+                width: double.infinity,
+                height: 2.h,
+              ),
+              Text("New User ?", style: textTheme.headline5?.copyWith(color: aquaGreenColor)),
+              SizedBox(
+                width: double.infinity,
+                height: 2.h,
+              ),
+              CustomButton(color: aquaGreenColor, name: "Create New Account", onTap: () {
+                _showDialog(context, textTheme);
+              }
+              ),
+            ],
           ),
         ),
       ),

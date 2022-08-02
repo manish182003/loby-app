@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:loby/presentation/screens/main/home/widgets/categoriy_item_card.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/theme/colors.dart';
+import '../../../widgets/SearchFieldWidget.dart';
 import '../../../widgets/drop_down.dart';
 
 class CategoryItemScreen extends StatefulWidget {
@@ -33,7 +34,7 @@ class _CategoryItemScreenState extends State<CategoryItemScreen> {
           Container(
             margin: const EdgeInsets.fromLTRB(15, 15, 15, 15),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(
                   width: 7.h,
@@ -51,12 +52,13 @@ class _CategoryItemScreenState extends State<CategoryItemScreen> {
                   ),
                 ),
                 Container(
+                  width: MediaQuery.of(context).size.width * 0.7,
                   alignment: Alignment.center,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 0.0, horizontal: 8.0),
                     child: Text(
-                      name,
+                      'Account',
                       maxLines: 2,
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
@@ -65,30 +67,10 @@ class _CategoryItemScreenState extends State<CategoryItemScreen> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: 7.h,
-                  height: 7.h,
-                  child: MaterialButton(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    color: backgroundBalticSeaColor,
-                    onPressed: () {
-                      debugPrint("Click Search");
-                    },
-                    child: SvgPicture.asset(
-                      'assets/icons/search_icon.svg',
-                      color: whiteColor,
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 0.0, horizontal:16.0),
-            child: MyDropDownWidget(),
-          ),
+          const SearchFieldWidget(textHint: 'Search Game'),
           _buildCategories(textTheme),
         ],
       ),

@@ -35,7 +35,7 @@ class _GameItemScreenState extends State<GameItemScreen> {
           Container(
             margin: const EdgeInsets.fromLTRB(15, 15, 15, 15),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(
                   width: 7.h,
@@ -52,20 +52,19 @@ class _GameItemScreenState extends State<GameItemScreen> {
                     ),
                   ),
                 ),
-                Expanded(
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 0.0, horizontal: 8.0),
-                      child: Text(
-                        name,
-                        maxLines: 2,
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        style: textTheme.headline2
-                            ?.copyWith(color: aquaGreenColor),
-                      ),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 0.0, horizontal: 8.0),
+                    child: Text(
+                      'Battlegrounds Mobile',
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      style: textTheme.headline2
+                          ?.copyWith(color: aquaGreenColor),
                     ),
                   ),
                 ),

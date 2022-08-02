@@ -197,7 +197,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SvgPicture.asset(
-                            'assets/icons/plus_circle_icon.svg',
+                            'assets/icons/minus_circle_icon.svg',
                             color: whiteColor,
                             width: 5.h,
                             height: 5.h,
@@ -229,7 +229,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                           ),
                           const SizedBox(width: 8.0),
                           SvgPicture.asset(
-                            'assets/icons/minus_circle_icon.svg',
+                            'assets/icons/plus_circle_icon.svg',
                             color: whiteColor,
                             width: 5.h,
                             height: 5.h,
@@ -334,7 +334,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                   "Mukesh Kumar Patel",
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
-                                  style: textTheme.headline3
+                                  style: textTheme.headline4
                                       ?.copyWith(color: textWhiteColor),
                                 ),
                                 Row(
@@ -345,15 +345,15 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                         SvgPicture.asset(
                                           'assets/icons/user_rating_icon.svg',
                                           color: iconWhiteColor,
-                                          height: 16.0,
-                                          width: 16.0,
+                                          height: 13.0,
+                                          width: 13.0,
                                         ),
                                         const SizedBox(width: 4.0),
                                         Text(
                                           "4.5",
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
-                                          style: textTheme.headline3
+                                          style: textTheme.headline5
                                               ?.copyWith(color: textWhiteColor),
                                         ),
                                       ],
@@ -364,15 +364,15 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                         SvgPicture.asset(
                                           'assets/icons/user_chat_icon.svg',
                                           color: iconWhiteColor,
-                                          height: 16.0,
-                                          width: 16.0,
+                                          height: 13.0,
+                                          width: 13.0,
                                         ),
                                         const SizedBox(width: 4.0),
                                         Text(
                                           "12",
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
-                                          style: textTheme.headline3
+                                          style: textTheme.headline5
                                               ?.copyWith(color: textWhiteColor),
                                         ),
                                       ],
@@ -385,19 +385,21 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                         ),
                         const SizedBox(width: 4.0),
                         SizedBox(
-                          width: 7.h,
-                          height: 7.h,
+                          width: 6.3.h,
+                          height: 6.3.h,
                           child: MaterialButton(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8.0),
                             ),
-                            color: backgroundDarkJungleGreenColor,
+                            color: shipGreyColor,
                             onPressed: () {
                               debugPrint("Click Search");
                             },
                             child: SvgPicture.asset(
                               'assets/icons/a_check_icon.svg',
-                              color: iconYellowColor,
+                              color: iconWhiteColor,
+                              width: 24,
+                              height: 24,
                             ),
                           ),
                         ),
@@ -434,7 +436,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           style: textTheme.headline5
-                              ?.copyWith(color: textLightColor),
+                              ?.copyWith(color: textWhiteColor),
                         ),
                       ],
                     ),
@@ -454,7 +456,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           style: textTheme.headline5
-                              ?.copyWith(color: textLightColor),
+                              ?.copyWith(color: textWhiteColor),
                         ),
                       ],
                     ),
@@ -474,7 +476,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           style: textTheme.headline5
-                              ?.copyWith(color: textLightColor),
+                              ?.copyWith(color: textWhiteColor),
                         ),
                       ],
                     ),
@@ -494,7 +496,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           style: textTheme.headline5
-                              ?.copyWith(color: textLightColor),
+                              ?.copyWith(color: textWhiteColor),
                         ),
                       ],
                     ),
@@ -514,19 +516,33 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           style: textTheme.headline5
-                              ?.copyWith(color: textLightColor),
+                              ?.copyWith(color: textWhiteColor),
                         ),
                       ],
                     ),
                     const SizedBox(height: 8.0),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Expanded(
-                          child: Text(
-                            "Description: Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-                            style: textTheme.headline5
-                                ?.copyWith(color: textLightColor),
+                          child: Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                  textAlign: TextAlign.start,
+                                  "Description: ",
+                                  style: textTheme.headline5
+                                      ?.copyWith(color: textLightColor),
+                                ),
+                              ),
+                              Text(
+                                textAlign: TextAlign.center,
+                                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                                style: textTheme.headline5
+                                    ?.copyWith(color: textWhiteColor),
+                              ),
+                            ],
                           ),
                         ),
                       ],

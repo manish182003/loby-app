@@ -81,30 +81,34 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
                   ),
                   child: Container(
                       width: MediaQuery.of(context).size.width * 1,
-                      height: MediaQuery.of(context).size.height * 0.3,
+                      height: 140.0,
                       decoration: BoxDecoration(
                         color: aquaGreenColor,
                         borderRadius: BorderRadius.circular(16.0),
                       ),
                       child: Padding(
-                        padding: EdgeInsets.only(top: 1.h),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8.0),
                         child: Column(
                           children: [
                             Text('Current Balance',
                                 textAlign: TextAlign.center,
                                 style: textTheme.headline3
                                     ?.copyWith(color: textTunaBlueColor)),
-
-                            Text('₹ 25,000',
-                                textAlign: TextAlign.center,
-                                style: textTheme.headlineLarge
-                                    ?.copyWith(color: textTunaBlueColor)),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.0, vertical: 16.0),
+                              child: Text('₹ 25,000',
+                                  textAlign: TextAlign.center,
+                                  style: textTheme.headlineLarge
+                                      ?.copyWith(color: textTunaBlueColor)),
+                            ),
                           ],
                         ),
                       )),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 15.h),
+                  padding: const EdgeInsets.only(top: 110.0),
                   child: Card(
                     color: backgroundBalticSeaColor,
                     elevation: 0.0,
@@ -113,41 +117,45 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
                     ),
                     child: Container(
                       width: MediaQuery.of(context).size.width * 1,
-                      height: MediaQuery.of(context).size.height * 0.22,
                       decoration: BoxDecoration(
                         color: backgroundBalticSeaColor,
                         borderRadius: BorderRadius.circular(16.0),
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Padding(
-                            padding:
-                                EdgeInsets.all(16.0),
-                            child: InputTextWidget(hintName: 'Enter Amount (INR)',)
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 0.0, horizontal: 16.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.35,
-                                  child: CustomButton(
-                                    color: purpleLightIndigoColor,
-                                    textColor: textWhiteColor,
-                                    name: "Add Funds",
-                                    onTap: () {
-                                      debugPrint('click chat');
-                                    },
-                                  ),
-                                ),
-                              ],
+                      child: Padding(
+                        padding: const EdgeInsets.all(24.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(bottom: 24.0),
+                              child: InputTextWidget(
+                                hintName: 'Enter Amount (INR)',
+                                keyboardType: TextInputType.number,
+                              ),
                             ),
-                          ),
-                        ],
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 0.0, horizontal: 16.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.35,
+                                    child: CustomButton(
+                                      color: purpleLightIndigoColor,
+                                      textColor: textWhiteColor,
+                                      name: "Add Funds",
+                                      onTap: () {
+                                        debugPrint('click chat');
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

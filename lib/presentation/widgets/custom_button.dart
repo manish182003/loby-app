@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../core/theme/colors.dart';
@@ -8,12 +9,13 @@ class CustomButton extends StatelessWidget {
   final String name;
   Color? textColor;
   dynamic onTap;
+  String? iconWidget;
 
   CustomButton({Key? key,
     required this.color,
     required this.name,
     required this.onTap,
-    this.textColor})
+    this.textColor, this.iconWidget})
       : super(key: key);
 
   @override
@@ -32,10 +34,24 @@ class CustomButton extends StatelessWidget {
           ),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Text(name,
-                textAlign: TextAlign.center,
-                style: textTheme.button
-                    ?.copyWith(color: textColor ?? textCharcoalBlueColor)),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(child: iconWidget != null? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0,),
+                  child: SvgPicture.asset(
+                    iconWidget!,
+                    height: 19,
+                    width: 19,
+                  ),
+                ) : Container()),
+                Text(name,
+                    textAlign: TextAlign.center,
+                    style: textTheme.button
+                        ?.copyWith(color: textColor ?? textCharcoalBlueColor)),
+              ],
+            ),
           ),
         ),
       ),

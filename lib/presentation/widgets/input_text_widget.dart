@@ -7,29 +7,39 @@ class InputTextWidget extends StatelessWidget {
   final String hintName;
   final int? maxLines;
   final FormFieldValidator<String>? validator;
+  final TextInputType? keyboardType;
+  final Color? txtHintColor;
+  final double? verticalHeight;
 
-  const InputTextWidget({Key? key, required this.hintName, this.maxLines, this.validator}) : super(key: key);
+  const InputTextWidget({Key? key, required this.hintName, this.maxLines, this.validator, this.keyboardType, this.txtHintColor, this.verticalHeight}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return Container(
+      constraints: const BoxConstraints(
+          minHeight: 45, minWidth: double.infinity,),
       decoration: BoxDecoration(
         color: textFieldColor,
         borderRadius: BorderRadius.circular(1.5.h),
       ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 0.7.h, horizontal: 2.h),
-        child: TextFormField(
-          validator: validator,
-          style: textTheme.headline4?.copyWith(color: textWhiteColor),
-          maxLines: maxLines?? 1,
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            hintStyle:
-                textTheme.headline4?.copyWith(color: textInputTitleColor),
-            hintText: hintName,
+      child: TextFormField(
+        validator: validator,
+        style: textTheme.headline4?.copyWith(color: textWhiteColor),
+        maxLines: maxLines?? 1,
+        cursorColor: whiteColor,
+        cursorHeight: 20.0,
+        keyboardType: keyboardType?? TextInputType.name,
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(horizontal: 23.0, vertical: verticalHeight?? 0.0),
+          focusedBorder:OutlineInputBorder(
+            borderSide: const BorderSide(color: aquaGreenColor, width: 0.5),
+            borderRadius: BorderRadius.circular(1.5.h),
           ),
+          border: InputBorder.none,
+          hintStyle:
+              textTheme.headline4?.copyWith(color: txtHintColor??textInputTitleColor),
+          hintText: hintName,
         ),
       ),
     );

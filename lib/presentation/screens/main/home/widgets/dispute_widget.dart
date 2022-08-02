@@ -73,10 +73,10 @@ class DisputeWidget extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                _buildListingIdWidget(textTheme, "Listing Id :", textWhiteColor,
+                _buildListingIdWidget(textTheme, "Listing Id : ", textWhiteColor,
                     context),
                 const SizedBox(height: 8),
-                _buildListingIdWidget(textTheme, "Current Status :", disputeType == "Open" ? orangeColor : aquaGreenColor,
+                _buildListingIdWidget(textTheme, "Current Status : ", disputeType == "Open" ? orangeColor : aquaGreenColor,
                     context)
               ],
             ),
@@ -161,12 +161,12 @@ class DisputeWidget extends StatelessWidget {
         children: [
         Text(
           title,
-        style: textTheme.headline6?.copyWith(color: textLightColor),
+        style: textTheme.subtitle1?.copyWith(color: textLightColor),
       ),
       Expanded(
         child: Text(
           currentStatus,
-          style: textTheme.headline6?.copyWith(color: textColor),
+          style: textTheme.subtitle1?.copyWith(color: textColor),
         ),
       ),
         ],
