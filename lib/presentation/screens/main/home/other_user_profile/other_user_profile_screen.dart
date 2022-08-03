@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loby/presentation/screens/main/home/other_user_profile/widgets/profile_header.dart';
 import 'package:loby/presentation/screens/main/home/other_user_profile/widgets/user_info.dart';
+
 import '../../../../../core/theme/colors.dart';
 
 class OtherUserProfileScreen extends StatefulWidget {
@@ -39,4 +40,3 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
     );
   }
 }
-

@@ -44,7 +44,7 @@ class UserListingWidget extends StatelessWidget {
       ),
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: 4,
+      itemCount: 2,
       itemBuilder: (context, index) {
         return ItemList(name: 'hello $index');
       },

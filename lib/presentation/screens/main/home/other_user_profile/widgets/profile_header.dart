@@ -1,13 +1,15 @@
+import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../../core/theme/colors.dart';
+import '../../../../../../data/models/ItemModel.dart';
 import '../../../../../../services/routing_service/routes_name.dart';
 import '../../../../../widgets/custom_button.dart';
 
-class ProfileHeader extends StatelessWidget {
+class ProfileHeader extends StatefulWidget {
   final coverImage;
   final avatar;
   final String title;
@@ -19,6 +21,25 @@ class ProfileHeader extends StatelessWidget {
     required this.title,
     this.subtitle = "",
   });
+
+  @override
+  State<ProfileHeader> createState() => _ProfileHeaderState();
+}
+
+class _ProfileHeaderState extends State<ProfileHeader> {
+  late List<ItemModel> menuItems;
+  final CustomPopupMenuController _controller = CustomPopupMenuController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    menuItems = [
+      ItemModel(
+        'Report User',
+      ),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,44 +57,91 @@ class ProfileHeader extends StatelessWidget {
                 fit: BoxFit.fitWidth,
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: SizedBox(
-                    width: 7.h,
-                    height: 7.h,
-                    child: MaterialButton(
-                      shape: const CircleBorder(),
-                      color: backgroundBalticSeaColor,
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: SvgPicture.asset(
-                        'assets/icons/back_icon.svg',
-                        color: whiteColor,
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <
+                Widget>[
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: SizedBox(
+                  width: 7.h,
+                  height: 7.h,
+                  child: MaterialButton(
+                    shape: const CircleBorder(),
+                    color: backgroundBalticSeaColor,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: SvgPicture.asset(
+                      'assets/icons/back_icon.svg',
+                      color: whiteColor,
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: SizedBox(
+                  width: 7.h,
+                  height: 7.h,
+                  child: CustomPopupMenu(
+                    arrowColor: lavaRedColor,
+                    menuBuilder: () => ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Container(
+                        color: lavaRedColor,
+                        child: IntrinsicWidth(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: menuItems
+                                .map(
+                                  (item) => GestureDetector(
+                                    behavior: HitTestBehavior.translucent,
+                                    onTap: () {
+                                      _controller.hideMenu();
+                                      context.pushNamed(createNewDisputePage);
+                                    },
+                                    child: Container(
+                                      height: 40,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20),
+                                      child: Row(
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: Container(
+                                              margin: const EdgeInsets.only(
+                                                  left: 10),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 10),
+                                              child: Text(
+                                                item.title,
+                                                style: textTheme.headline6
+                                                    ?.copyWith(
+                                                        color: textWhiteColor),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: SizedBox(
-                    width: 7.h,
-                    height: 7.h,
-                    child: IconButton(
-                      padding: const EdgeInsets.all(0.0),
-                      color: iconWhiteColor,
-                      icon: const Icon(Icons.more_vert, size: 32.0),
-                      onPressed: () {
-                        context.pushNamed(createNewDisputePage);
-                      },
+                    pressType: PressType.singleClick,
+                    verticalMargin: -10,
+                    controller: _controller,
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      child: const Icon(Icons.more_vert,
+                          size: 32.0, color: iconWhiteColor),
                     ),
                   ),
                 ),
-              ]
-            )
+              ),
+            ])
           ],
         ),
         Padding(
@@ -229,7 +297,7 @@ class ProfileHeader extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(
-                          height: 8,
+                          height: 12,
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
@@ -247,7 +315,7 @@ class ProfileHeader extends StatelessWidget {
                                   const SizedBox(width: 4.0),
                                   Text("4.2",
                                       overflow: TextOverflow.ellipsis,
-                                      style: textTheme.headline3
+                                      style: textTheme.headline4
                                           ?.copyWith(color: textWhiteColor)),
                                 ],
                               ),
@@ -265,12 +333,15 @@ class ProfileHeader extends StatelessWidget {
                                   const SizedBox(width: 4.0),
                                   Text("123 Orders",
                                       overflow: TextOverflow.ellipsis,
-                                      style: textTheme.headline3
+                                      style: textTheme.headline4
                                           ?.copyWith(color: textWhiteColor)),
                                 ],
                               ),
                             ],
                           ),
+                        ),
+                        const SizedBox(
+                          height: 12,
                         ),
                       ],
                     ),

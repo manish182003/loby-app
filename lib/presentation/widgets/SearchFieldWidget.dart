@@ -15,7 +15,7 @@ class SearchFieldWidget extends StatelessWidget {
       child: Container(
         constraints: const BoxConstraints(
           minHeight: 45,
-          minWidth: double.infinity,
+          minWidth: 45,
         ),
         decoration: BoxDecoration(
           color: textFieldColor,

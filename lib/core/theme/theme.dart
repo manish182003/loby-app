@@ -72,20 +72,23 @@ class ApplicationTheme {
             color: bodyTextColor,
             fontFamily: 'Inter',
           ),
-          bodyText1: const TextStyle(
-            fontSize: 14,
+          bodyText1: TextStyle(
+            fontSize: 14.sp,
             fontWeight: FontWeight.w500,
             color: bodyTextColor,
+            fontFamily: 'Inter',
           ),
           bodyText2: TextStyle(
             fontSize: 12.sp,
             fontWeight: FontWeight.w400,
             color: primaryTextColor,
+            fontFamily: 'Inter',
           ),
           button: TextStyle(
             fontSize: 12.sp,
             fontWeight: FontWeight.w700,
             color: primaryTextColor,
+            fontFamily: 'Inter',
           ),
         ),
       );

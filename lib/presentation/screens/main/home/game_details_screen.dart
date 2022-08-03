@@ -7,7 +7,6 @@ import '../../../../core/theme/colors.dart';
 import '../../../../services/routing_service/routes_name.dart';
 import '../../../widgets/bottom_dialog_widget.dart';
 import '../../../widgets/custom_button.dart';
-import 'other_user_profile/other_user_profile_screen.dart';
 
 class GameDetailScreen extends StatefulWidget {
   const GameDetailScreen({Key? key}) : super(key: key);
@@ -79,16 +78,68 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.0),
               ),
-              child: Container(
-                width: MediaQuery.of(context).size.width * 1,
-                decoration: BoxDecoration(
-                  color: saffronMangoOrangeColor,
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Image.asset(
-                  "assets/images/img.png",
-                  fit: BoxFit.contain,
-                ),
+              child: Stack(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width * 1,
+                    decoration: BoxDecoration(
+                      color: saffronMangoOrangeColor,
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Image.asset(
+                      "assets/images/img.png",
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 8,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: const [
+                            SizedBox(
+                              height: 32,
+                              width: 32,
+                              child: CircleAvatar(
+                                backgroundColor: orangeColor,
+                                child: Align(
+                                    alignment: Alignment.center,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(left: 8.0),
+                                      child: Icon(
+                                        Icons.arrow_back_ios,
+                                        color: iconWhiteColor,
+                                        size: 18,
+                                      ),
+                                    )),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            SizedBox(
+                              height: 32,
+                              width: 32,
+                              child: CircleAvatar(
+                                backgroundColor: orangeColor,
+                                child: Align(
+                                    alignment: Alignment.center,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(left: 4.0),
+                                      child: Icon(
+                                        Icons.arrow_forward_ios,
+                                        color: iconWhiteColor,
+                                        size: 18,
+                                      ),
+                                    )),
+                              ),
+                            )
+                          ]),
+                    ),
+                  )
+                ],
               ),
             ),
           ),
@@ -301,6 +352,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                 elevation: 0.0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
+                  side: const BorderSide(color: textLightColor, width: 0.5),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -520,7 +572,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 8.0),
+                    const SizedBox(height: 24.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -561,10 +613,10 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
               children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.17,
-                  height: 6.3.h,
+                  height: 48,
                   child: MaterialButton(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+                      borderRadius: BorderRadius.circular(12.0),
                     ),
                     color: purpleLightIndigoColor,
                     onPressed: () {

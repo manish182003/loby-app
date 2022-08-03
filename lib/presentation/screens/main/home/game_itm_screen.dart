@@ -1,9 +1,13 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:loby/presentation/screens/main/home/widgets/ItemList.dart';
+import 'package:loby/presentation/screens/main/home/widgets/filter_bottom_sheet_widget.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../../../core/theme/colors.dart';
 import '../../../widgets/custom_chip.dart';
+import '../../../widgets/drop_down_with_divider.dart';
 
 class GameItemScreen extends StatefulWidget {
   String name;
@@ -16,6 +20,14 @@ class GameItemScreen extends StatefulWidget {
 
 class _GameItemScreenState extends State<GameItemScreen> {
   final int _selectedIndex = 0;
+  final List<String> items = [
+    'Top Rated',
+    'Most Recent',
+    'Low to High Price',
+    'High to Low Price',
+  ];
+  String? selectedValue = 'Top Rated';
+
   @override
   Widget build(BuildContext context) {
     debugPrint(widget.name);
@@ -63,15 +75,15 @@ class _GameItemScreenState extends State<GameItemScreen> {
                       maxLines: 2,
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
-                      style: textTheme.headline2
-                          ?.copyWith(color: aquaGreenColor),
+                      style:
+                          textTheme.headline2?.copyWith(color: aquaGreenColor),
                     ),
                   ),
                 ),
               ],
             ),
           ),
-         _buildCategories(textTheme),
+          _buildCategories(textTheme),
           const SizedBox(height: 8),
           Padding(
             padding:
@@ -79,51 +91,60 @@ class _GameItemScreenState extends State<GameItemScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: textFieldColor,
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: TextField(
-                      style: textTheme.subtitle1
-                          ?.copyWith(fontSize: 18, color: textWhiteColor),
-                      decoration: InputDecoration(
-                        prefixIcon: Padding(
-                          padding: EdgeInsets.all(3.w),
-                          child: SvgPicture.asset(
-                            'assets/icons/search_icon.svg',
-                            color: iconTintColor,
-                            width: 14,
-                            height: 14,
+                Container(
+                  constraints: const BoxConstraints(
+                    minHeight: 45,
+                    minWidth: 45,
+                  ),
+                  decoration: BoxDecoration(
+                    color: textFieldColor,
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.13,
+                        child: SvgPicture.asset(
+                          'assets/icons/search_icon.svg',
+                          color: iconWhiteColor,
+                          width: 18,
+                          height: 18,
+                        ),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        child: TextField(
+                          style: textTheme.headline4
+                              ?.copyWith(color: textWhiteColor),
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintStyle: textTheme.headline4
+                                ?.copyWith(color: textWhiteColor),
+                            hintText: 'Search',
                           ),
                         ),
-                        border: InputBorder.none,
-                        hintStyle: textTheme.headline4
-                            ?.copyWith(color: iconTintColor),
-                        hintText: 'Keyword',
                       ),
-                    ),
+                    ],
                   ),
                 ),
                 const SizedBox(width: 4.0),
                 SizedBox(
-                  width: 7.h,
-                  height: 7.h,
+                  height: 45,
+                  width: 66,
                   child: MaterialButton(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     color: backgroundBalticSeaColor,
                     onPressed: () {
-                      debugPrint("Click Search");
+                      _showDialog(context, textTheme);
                     },
                     child: SvgPicture.asset(
                       'assets/icons/filter_icon.svg',
                       color: iconTintColor,
-                      height: 20,
-                      width: 20,
+                      height: 18,
+                      width: 18,
                     ),
                   ),
                 ),
@@ -138,23 +159,15 @@ class _GameItemScreenState extends State<GameItemScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.7,
                   child: Text(
                     "124 Result",
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
-                    style: textTheme.headline6
-                        ?.copyWith(color: textWhiteColor),
+                    style: textTheme.headline6?.copyWith(color: textWhiteColor),
                   ),
                 ),
                 const SizedBox(width: 4.0),
-                Text(
-                  "Top Rated",
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: textTheme.headline6
-                      ?.copyWith(color: textWhiteColor),
-                ),
+                DropDownDivider(),
               ],
             ),
           ),
@@ -186,7 +199,9 @@ class _GameItemScreenState extends State<GameItemScreen> {
   ];
 
   _buildCategories(TextTheme textTheme) {
-    return CustomChip(labelName: bubbles,);
+    return CustomChip(
+      labelName: bubbles,
+    );
   }
 
   _buildGames(TextTheme textTheme) {
@@ -204,6 +219,37 @@ class _GameItemScreenState extends State<GameItemScreen> {
         return Padding(
           padding: const EdgeInsets.all(10.0),
           child: ItemList(name: 'hello $index'),
+        );
+      },
+    );
+  }
+
+  void _showDialog(BuildContext context, TextTheme textTheme) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) {
+        return DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.3,
+          maxChildSize: 0.3,
+          minChildSize: 0.3,
+          builder: (context, scrollController) {
+            return Column(
+              children: <Widget>[
+                Expanded(
+                    child: Container(
+                  decoration: const BoxDecoration(
+                    color: backgroundBalticSeaColor,
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(24)),
+                  ),
+                  child: FilterBottomSheet(controller: scrollController),
+                )),
+              ],
+            );
+          },
         );
       },
     );

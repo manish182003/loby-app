@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../../../../core/theme/colors.dart';
 
@@ -15,6 +16,56 @@ class UserDuelsWidget extends StatelessWidget {
     double rating = 3.5;
     return Column(
       children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical:8.0),
+          child: Card(
+            color: backgroundBalticSeaColor,
+            elevation: 0.0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            child: Container(
+                width: MediaQuery.of(context).size.width * 1,
+                height: 97.0,
+                decoration: BoxDecoration(
+                  color: aquaGreenColor,
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: [
+                          Text('Total WINS',
+                              textAlign: TextAlign.center,
+                              style: textTheme.headline4
+                                  ?.copyWith(color: textTunaBlueColor, fontWeight: FontWeight.w500)),
+                          Text('23',
+                              textAlign: TextAlign.center,
+                              style: textTheme.headlineLarge
+                                  ?.copyWith(color: textTunaBlueColor, fontWeight: FontWeight.w500)),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text('Total LOSSES',
+                              textAlign: TextAlign.center,
+                              style: textTheme.headline4
+                                  ?.copyWith(color: textTunaBlueColor, fontWeight: FontWeight.w500)),
+                          Text('07',
+                              textAlign: TextAlign.center,
+                              style: textTheme.headlineLarge
+                                  ?.copyWith(color: textTunaBlueColor, fontWeight: FontWeight.w500)),
+                        ],
+                      ),
+                    ],
+                  ),
+                )),
+          ),
+        ),
         Card(
           color: textFieldColor,
           elevation: 0.0,
@@ -75,7 +126,7 @@ class UserDuelsWidget extends StatelessWidget {
               ],
             ),
           ),
-        )
+        ),
       ],
     );
   }

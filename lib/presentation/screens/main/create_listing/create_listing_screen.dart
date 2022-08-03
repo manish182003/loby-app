@@ -1,5 +1,6 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:loby/presentation/screens/main/create_listing/widgets/HoursDropDown.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../core/theme/colors.dart';
@@ -285,23 +286,9 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
       children: [
         SizedBox(
           width: MediaQuery.of(context).size.width * 0.4,
-          child: Container(
-            decoration: BoxDecoration(
-              color: textFieldColor,
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: TextField(
-                style: textTheme.bodyText1?.copyWith(color: textWhiteColor),
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintStyle: textTheme.subtitle1
-                      ?.copyWith(fontSize: 18, color: iconTintColor),
-                  hintText: '\$ Search',
-                ),
-              ),
-            ),
+          child: const InputTextWidget(
+            hintName: '₹ ',
+            keyboardType: TextInputType.number,
           ),
         ),
         const SizedBox(width: 2.0),
@@ -314,11 +301,18 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
         ),
         const SizedBox(width: 2.0),
         SizedBox(
-          width: MediaQuery.of(context).size.width * 0.4,
-          child: const MyDropDownWidget(
-            hintTxt: 'Select Unit',
-          ),
-        ),
+            width: MediaQuery.of(context).size.width * 0.4,
+            child: Container(
+                constraints: const BoxConstraints(
+                  minHeight: 47,
+                  minWidth: double.infinity,
+                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0.0),
+                decoration: BoxDecoration(
+                    color: textFieldColor,
+                    borderRadius: BorderRadius.circular(10)),
+                child: HoursDropDownDivider())),
       ],
     );
   }
@@ -326,56 +320,6 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
   _buildSearchField(TextTheme textTheme, String name) {
     return const MyDropDownWidget(
       hintTxt: 'Select',
-    );
-  }
-
-  _buildTitleField(TextTheme textTheme) {
-    return Container(
-        decoration: BoxDecoration(
-          color: textFieldColor,
-          border: Border.all(color: aquaGreenColor),
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: Padding(
-            padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
-            child: TextFormField(
-                validator: (value) {
-                  return Helpers.validateField(value!);
-                },
-                style: textTheme.subtitle1
-                    ?.copyWith(fontSize: 14, color: whiteColor),
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintStyle: textTheme.subtitle1
-                      ?.copyWith(fontSize: 14, color: textInputTitleColor),
-                  hintText: 'Enter Title',
-                ))));
-  }
-
-  _buildYoutubeLinkPasteField(TextTheme textTheme) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
-      child: Container(
-          constraints: const BoxConstraints(
-            minHeight: 45,
-            minWidth: double.infinity,
-          ),
-          decoration: BoxDecoration(
-            color: textFieldColor,
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
-              child: TextFormField(
-                  style: textTheme.subtitle1
-                      ?.copyWith(fontSize: 14, color: whiteColor),
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintStyle:
-                        textTheme.bodyText1?.copyWith(color: textWhiteColor),
-                    hintText: 'Paste Youtube/Twitch Link',
-                  )))),
     );
   }
 

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../../../../core/theme/colors.dart';
 import '../../../../../widgets/cusstom_text.dart';
@@ -9,10 +11,10 @@ class UserSocialWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return _buildWidget(textTheme);
+    return _buildWidget(textTheme, context);
   }
 
-  _buildWidget(TextTheme textTheme) {
+  _buildWidget(TextTheme textTheme, BuildContext context) {
     return Column(
       children: <Widget>[
         Container(
@@ -20,82 +22,70 @@ class UserSocialWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                child: Text(
-                  "Instagram",
-                  style: textTheme.headline5
-                      ?.copyWith(color: textLightColor),
-                ),
-              ),
+              buildItem(textTheme, context, 'assets/icons/instagram_icon.svg', 'Instagram', 'https://www.instagram.com/loby.gg'),
               const SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                child: MyText(
-                  name: "https://www.instagram.com/loby.gg",
-                  textColor: textWhiteColor,
-                  myBackgroundColor: textFieldColor,
-                ),
-              ),
+              buildItem(textTheme, context, 'assets/icons/youtube_icon.svg', 'YouTube', 'https://www.youtube.com/c/jabykoay'),
               const SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                child: Text(
-                  "YouTube",
-                  style: textTheme.headline5
-                      ?.copyWith(color: textLightColor),
-                ),
-              ),
+              buildItem(textTheme, context, 'assets/icons/discord_icon.svg', 'Discord', 'https://discord.com/channels/827464017693769748'),
               const SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                child: MyText(
-                  name: "https://www.youtube.com/c/jabykoay",
-                  textColor: textWhiteColor,
-                  myBackgroundColor: textFieldColor,
-                ),
-              ),
-              const SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                child: Text(
-                  "Discord",
-                  style: textTheme.headline5
-                      ?.copyWith(color: textLightColor),
-                ),
-              ),
-              const SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                child: MyText(
-                  name: "https://discord.com/channels/827464017693769748",
-                  textColor: textWhiteColor,
-                  myBackgroundColor: textFieldColor,
-                ),
-              ),
-              const SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                child: Text(
-                  "Twitch",
-                  style: textTheme.headline5
-                      ?.copyWith(color: textLightColor),
-                ),
-              ),
-              const SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                child: MyText(
-                  name: "https://www.twitch.tv/shroud",
-                  textColor: textWhiteColor,
-                  myBackgroundColor: textFieldColor,
-                ),
-              ),
+              buildItem(textTheme, context, 'assets/icons/twitch_icon.svg', 'Twitch', 'https://www.twitch.tv/shroud'),
               const SizedBox(height: 16),
             ],
           ),
         ),
       ],
+    );
+  }
+
+  Widget buildItem(TextTheme textTheme, BuildContext context, String socialIcon, String socialTitle, String socialLink) {
+    return Container(
+      constraints: const BoxConstraints(
+        minHeight: 45, minWidth: double.infinity,),
+      decoration: BoxDecoration(
+        color: whiteColor,
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(
+                  child: Container(
+                    child: SvgPicture.asset(
+                      socialIcon,
+                      height: 32,
+                      width: 32,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 8.0,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(socialTitle,
+                          overflow: TextOverflow.ellipsis,
+                          style: textTheme.headline5
+                              ?.copyWith(color: textTunaBlueColor)),
+                      SizedBox(height: 8),
+                      Text(socialLink,
+                          overflow: TextOverflow.ellipsis,
+                          style: textTheme.subtitle1
+                              ?.copyWith(color: purpleLightIndigoColor)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }
