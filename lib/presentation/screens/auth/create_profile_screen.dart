@@ -1,0 +1,342 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:loby/core/theme/colors.dart';
+import 'package:sizer/sizer.dart';
+
+import '../../../core/utils/helpers.dart';
+import '../../widgets/custom_button.dart';
+import '../../widgets/drop_down.dart';
+import '../../widgets/input_text_title_widget.dart';
+import '../../widgets/input_text_widget.dart';
+import '../main/main_screen.dart';
+
+class CreateProfileScreen extends StatefulWidget {
+  const CreateProfileScreen({Key? key}) : super(key: key);
+
+  @override
+  State<CreateProfileScreen> createState() => _CreateProfileScreenState();
+}
+
+class _CreateProfileScreenState extends State<CreateProfileScreen> {
+  final _formKey = GlobalKey<FormState>();
+  bool visible = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: body(),
+    );
+  }
+
+  Widget body() {
+    final textTheme = Theme.of(context).textTheme;
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/login_bg_img.png"),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Stack(
+        children: [
+          Container(
+            margin: EdgeInsets.only(top: 44.0),
+            decoration: const BoxDecoration(
+                color: backgroundBalticSeaColor,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(40.0),
+                  topRight: Radius.circular(40.0),
+                )),
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(31.5, 16.00, 31.5, 16.00),
+              child: SingleChildScrollView(
+                child: Container(
+                  width: double.infinity,
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text('Your Basic Details',
+                                style: textTheme.headline2
+                                    ?.copyWith(color: textWhiteColor)),
+                          ],
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 2.h,
+                        ),
+                        _buildRow(textTheme),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 2.h,
+                        ),
+                        const Divider(
+                          thickness: 1.2,
+                          color: dividerColor,
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 2.h,
+                        ),
+                        const InputTextTitleWidget(
+                            titleName: 'Full Name',
+                            titleTextColor: textInputTitleColor),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 2.h,
+                        ),
+                        InputTextWidget(
+                          hintName: 'Ex: Jhon Singh',
+                          keyboardType: TextInputType.name,
+                          validator: (value) {
+                            return Helpers.validateField(value!);
+                          },
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 4.h,
+                        ),
+                        const InputTextTitleWidget(
+                            titleName: 'Display Name',
+                            titleTextColor: textInputTitleColor),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 2.h,
+                        ),
+                        InputTextWidget(
+                          hintName: 'Ex: Commander',
+                          keyboardType: TextInputType.name,
+                          validator: (value) {
+                            return Helpers.validateField(value!);
+                          },
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 4.h,
+                        ),
+                        const InputTextTitleWidget(
+                            titleName: 'Country',
+                            titleTextColor: textInputTitleColor),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 2.h,
+                        ),
+                        const MyDropDownWidget(),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 4.h,
+                        ),
+                        const InputTextTitleWidget(
+                            titleName: 'City', titleTextColor: textInputTitleColor),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 2.h,
+                        ),
+                        const InputTextWidget(hintName: 'Ex: Bhopal'),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 4.h,
+                        ),
+                        const InputTextTitleWidget(
+                            titleName: 'Date Of Birth',
+                            titleTextColor: textInputTitleColor),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 2.h,
+                        ),
+                        InputTextWidget(
+                          hintName: '15 July 1999',
+                          validator: (value) {
+                            return Helpers.validateField(value!);
+                          },
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 4.h,
+                        ),
+                        const InputTextTitleWidget(
+                            titleName: 'Profile Tag',
+                            titleTextColor: textInputTitleColor),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 2.h,
+                        ),
+                        const InputTextWidget(hintName: 'tag'),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 4.h,
+                        ),
+                        _buildSearchField(textTheme),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 4.h,
+                        ),
+                        const InputTextTitleWidget(
+                            titleName: 'Bio', titleTextColor: textInputTitleColor),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 2.h,
+                        ),
+                        _buildBioNameField(textTheme),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 4.h,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16.w),
+                          child: CustomButton(
+                            color: purpleLightIndigoColor,
+                            textColor: textWhiteColor,
+                            name: "Update Profile",
+                            onTap: () {
+                              if (_formKey.currentState!.validate()) {
+                                Navigator.pop(context);
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => const MainScreen()));
+                              }
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 4.h,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSearchField(TextTheme textTheme) {
+    return Container(
+      constraints: const BoxConstraints(
+        minHeight: 45, minWidth: double.infinity,),
+      decoration: BoxDecoration(
+        color: textFieldColor,
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: TextField(
+        style: textTheme.headline4?.copyWith(color: textWhiteColor),
+        decoration: InputDecoration(
+          prefixIcon: Padding(
+            padding: const EdgeInsets.all(16),
+            child: SvgPicture.asset(
+              'assets/icons/search_icon.svg',
+              color: iconWhiteColor,
+              height: 12,
+              width: 12,
+            ),
+          ),
+          border: InputBorder.none,
+          hintStyle: textTheme.headline4?.copyWith(color: textWhiteColor),
+          hintText: 'Type Tags',
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRow(TextTheme textTheme) {
+    return Row(
+      children: <Widget>[
+        const CircleAvatar(
+          radius: 40,
+          backgroundImage: AssetImage("assets/icons/app_icon.png"),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  ElevatedButton(
+                      style: ButtonStyle(
+                        shape:
+                        MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.0),
+                            )),
+                        backgroundColor:
+                        MaterialStateProperty.all<Color>(aquaGreenColor),
+                      ),
+                      onPressed: () {
+                        debugPrint("change");
+                      },
+                      child: Padding(
+                        padding:
+                        const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+                        child: Text("Change Avatar", style: textTheme.button),
+                      )),
+                  ElevatedButton(
+                      style: ButtonStyle(
+                        side: MaterialStateProperty.all(
+                          const BorderSide(
+                            style: BorderStyle.solid,
+                            color: carminePinkColor,
+                            width: 1.0,
+                          ),
+                        ),
+                        shape:
+                        MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.0),
+                            )),
+                        backgroundColor:
+                        MaterialStateProperty.all<Color>(textFieldColor),
+                      ),
+                      onPressed: () {
+                        debugPrint('clicked');
+                      },
+                      child: Padding(
+                        padding:
+                        const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+                        child: Text("Remove Avatar",
+                            style:
+                            textTheme.button?.copyWith(color: whiteColor)),
+                      )),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  _buildBioNameField(TextTheme textTheme) {
+    return Container(
+      decoration: BoxDecoration(
+        color: textFieldColor,
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
+        child: TextFormField(
+          style: textTheme.headline4?.copyWith(color: whiteColor),
+          maxLines: 4,
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            hintStyle:
+            textTheme.headline4?.copyWith(color: textInputTitleColor),
+            hintText: 'Ex: Jhon Singh',
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _goToMainScreen(BuildContext context, TextTheme textTheme) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const MainScreen()));
+  }
+}

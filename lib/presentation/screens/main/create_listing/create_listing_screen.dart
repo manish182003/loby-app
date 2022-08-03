@@ -139,6 +139,14 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   const SizedBox(height: 16.0),
                   _buildPrice(textTheme),
                   const SizedBox(height: 16.0),
+                  InputTextWidget(
+                    hintName: 'Available Stock (1 to Infinite)',
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      return Helpers.validateField(value!);
+                    },
+                  ),
+                  const SizedBox(height: 16.0),
                   Align(
                     alignment: Alignment.topLeft,
                     child: RichText(
@@ -357,7 +365,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                     // This is your Badge
                     padding: const EdgeInsets.all(8),
                     constraints:
-                        BoxConstraints(minHeight: 12.h, minWidth: 36.w),
+                        BoxConstraints(minHeight: MediaQuery.of(context).size.height * 0.1, minWidth: MediaQuery.of(context).size.width * 0.4),
                     decoration: BoxDecoration(
                       // This controls the shadow
                       boxShadow: [
@@ -371,7 +379,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                     ), // This is your Badge
                     child: Center(
                       // Here you can put whatever content you want inside your Badge
-                      child: Text('1',
+                      child: Text('',
                           style: textTheme.headline1
                               ?.copyWith(color: textLightColor)),
                     ),
@@ -381,7 +389,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                     // This is your Badge
                     padding: const EdgeInsets.all(8),
                     constraints:
-                        BoxConstraints(minHeight: 12.h, minWidth: 36.w),
+                        BoxConstraints(minHeight: MediaQuery.of(context).size.height * 0.1, minWidth: MediaQuery.of(context).size.width * 0.4),
                     decoration: BoxDecoration(
                       // This controls the shadow
                       boxShadow: [
@@ -395,7 +403,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                     ), // This is your Badge
                     child: Center(
                       // Here you can put whatever content you want inside your Badge
-                      child: Text('1',
+                      child: Text('',
                           style: textTheme.headline1
                               ?.copyWith(color: textLightColor)),
                     ),
@@ -410,7 +418,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                     // This is your Badge
                     padding: const EdgeInsets.all(8),
                     constraints:
-                        BoxConstraints(minHeight: 12.h, minWidth: 36.w),
+                        BoxConstraints(minHeight: MediaQuery.of(context).size.height * 0.1, minWidth: MediaQuery.of(context).size.width * 0.4),
                     decoration: BoxDecoration(
                       // This controls the shadow
                       boxShadow: [
@@ -424,7 +432,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                     ), // This is your Badge
                     child: Center(
                       // Here you can put whatever content you want inside your Badge
-                      child: Text('1',
+                      child: Text('',
                           style: textTheme.headline1
                               ?.copyWith(color: textLightColor)),
                     ),
@@ -434,7 +442,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                     // This is your Badge
                     padding: const EdgeInsets.all(8),
                     constraints:
-                        BoxConstraints(minHeight: 12.h, minWidth: 36.w),
+                        BoxConstraints(minHeight: MediaQuery.of(context).size.height * 0.1, minWidth: MediaQuery.of(context).size.width * 0.4),
                     decoration: BoxDecoration(
                       // This controls the shadow
                       boxShadow: [
@@ -448,7 +456,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                     ), // This is your Badge
                     child: Center(
                       // Here you can put whatever content you want inside your Badge
-                      child: Text('1',
+                      child: Text('',
                           style: textTheme.headline1
                               ?.copyWith(color: textLightColor)),
                     ),

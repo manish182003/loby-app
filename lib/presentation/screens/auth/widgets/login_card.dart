@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/core/theme/colors.dart';
+import 'package:loby/presentation/screens/auth/sign_up_screen.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../services/routing_service/routes_name.dart';
@@ -48,7 +49,8 @@ class _LoginCardState extends State<LoginCard> {
                 height: 2.h,
               ),
               CustomButton(color: aquaGreenColor, name: "Create New Account", onTap: () {
-                _showDialog(context, textTheme);
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => const SignUpScreen()));
               }
               ),
             ],

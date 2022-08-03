@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/custom_dropdown_button2.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:loby/core/theme/colors.dart';
@@ -14,7 +15,16 @@ class MyDropDownWidget extends StatefulWidget {
 }
 
 class _MyDropDownWidgetState extends State<MyDropDownWidget> {
-  final items = ['One', 'Two', 'Three', 'Four'];
+  final List<String> items = [
+    'Item1',
+    'Item2',
+    'Item3',
+    'Item4',
+    'Item5',
+    'Item6',
+    'Item7',
+    'Item8',
+  ];
   String? selectedValue;
 
   @override
@@ -30,53 +40,46 @@ class _MyDropDownWidgetState extends State<MyDropDownWidget> {
             color: textFieldColor, borderRadius: BorderRadius.circular(10)),
 
         // dropdown below..
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 0.0),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton2(
-              customButton: Container(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(widget.hintTxt??
-                          'Select',
-                        style: textTheme.headline4
-                            ?.copyWith(color: textLightColor),
-                        overflow: TextOverflow.ellipsis,
-                      ),
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton2(
+            isExpanded: true,
+            // Reduces the dropdowns height by +/- 50%
+            hint: Container(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(widget.hintTxt??
+                        'Select',
+                      style: textTheme.headline4
+                          ?.copyWith(color: textLightColor),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    const Icon(
-                      Icons.keyboard_arrow_down,
-                      color: textLightColor,
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              customItemsIndexes: const [2],
-              customItemsHeight: 8,
-              items: [
-                ...MenuItems.firstItems.map(
-                      (item) =>
-                      DropdownMenuItem<MenuItem>(
-                        value: item,
-                        child: MenuItems.buildItem(item),
-                      ),
-                ),
-              ],
-              onChanged: (value) {
-                MenuItems.onChanged(context, value as MenuItem);
-              },
-              itemHeight: 48,
-              itemPadding: const EdgeInsets.only(left: 16, right: 16),
-              dropdownWidth: 160,
-              dropdownPadding: const EdgeInsets.symmetric(vertical: 2),
-              dropdownDecoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4),
-                color: backgroundBalticSeaColor,
-              ),
-              dropdownElevation: 8,
-              offset: const Offset(0, 8),
             ),
+
+            icon: const Icon(
+              Icons.keyboard_arrow_down,
+              color: iconWhiteColor,
+            ),
+            items: _addDividersAfterItems(items, textTheme),
+            customItemsIndexes: _getDividersIndexes(),
+            customItemsHeight: 4,
+            value: selectedValue,
+            onChanged: (value) {
+              setState(() {
+                selectedValue = value as String;
+              });
+            },
+            dropdownDecoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(14),
+              color: backgroundBalticSeaColor,
+            ),
+            buttonHeight: 40,
+            buttonWidth: 140,
+            itemHeight: 40,
+            itemPadding: const EdgeInsets.symmetric(horizontal: 8.0),
           ),
         ),
     );
@@ -133,40 +136,31 @@ class MenuItem {
 }
 
 class MenuItems {
-  static const List<MenuItem> firstItems = [home, share];
+  static const List<MenuItem> firstItems = [home, share, settings];
 
-  static const home = MenuItem(text: 'Home',);
-  static const share = MenuItem(text: 'Share',);
+  static const home = MenuItem(text: 'Home', );
+  static const share = MenuItem(text: 'Share', );
+  static const settings = MenuItem(text: 'Settings',);
 
   static Widget buildItem(MenuItem item) {
-    return Container(
-      decoration: BoxDecoration(
-        color: textFieldColor,
-        borderRadius: BorderRadius.circular(16.0),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            Container(
-              width: double.infinity,
-              child: Text(
-                textAlign: TextAlign.center,
-                item.text,
-                style: const TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ],
+    return Row(
+      children: [
+        Text(
+          item.text,
+          style: const TextStyle(
+            color: Colors.white,
+          ),
         ),
-      ),
+      ],
     );
   }
 
   static onChanged(BuildContext context, MenuItem item) {
     switch (item) {
       case MenuItems.home:
+      //Do something
+        break;
+      case MenuItems.settings:
       //Do something
         break;
       case MenuItems.share:

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../core/theme/colors.dart';
 import '../../../../../widgets/CustomSwitch.dart';
+import '../../../../../widgets/SuccessfullyDeleteListingBottomDialog.dart';
+import '../../../../../widgets/bottom_dialog_widget.dart';
+import '../../../../../widgets/confirmation_dialog.dart';
 
 class MyListingItemList extends StatefulWidget {
   final String name;
@@ -122,7 +125,16 @@ class _MyListingItemListState extends State<MyListingItemList> {
                                 RoundedRectangleBorder>(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.0),
                             ))),
-                        onPressed: () {},
+                        onPressed: () {
+                          ConfirmationBottomDialog(
+                              textTheme: textTheme,
+                              contentName:
+                              "Are you sure you want delete this listing ?", yesBtnClick: SuccessfullyDeleteListingDialog(
+                            textTheme: textTheme,
+                            contentName:
+                            "Your listing has been completely deleted. Any ongoing order still needs to be completed",))
+                              .showBottomDialog(context);
+                        },
                         child: Text("Delete",
                             style: textTheme.headline6
                                 ?.copyWith(color: textWhiteColor)),

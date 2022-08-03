@@ -6,6 +6,7 @@ import 'package:sizer/sizer.dart';
 import '../../../../../../core/theme/colors.dart';
 import '../../../../../../data/models/ItemModel.dart';
 import '../../../../../../services/routing_service/routes_name.dart';
+import '../../../../../widgets/ConfirmationRiseDisputeBottomDialog.dart';
 import '../../../../../widgets/UpdateStatusDialog.dart';
 
 class OrderItem extends StatefulWidget {
@@ -187,7 +188,11 @@ class _OrderItemState extends State<OrderItem> {
                                     behavior: HitTestBehavior.translucent,
                                     onTap: () {
                                       _controller.hideMenu();
-                                      context.pushNamed(createNewDisputePage);
+                                      ConfirmationRiseDisputeBottomDialog(
+                                        textTheme: textTheme,
+                                        contentName:
+                                        "Are you sure you want raise a dispute against this order ?",
+                                      ).showBottomDialog(context);
                                     },
                                     child: Container(
                                       height: 40,

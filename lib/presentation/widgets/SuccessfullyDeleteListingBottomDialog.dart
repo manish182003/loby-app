@@ -6,7 +6,8 @@ import '../../core/theme/colors.dart';
 import 'custom_button.dart';
 
 
-class BottomDialog {
+
+class SuccessfullyDeleteListingDialog {
   final TextTheme? textTheme;
   String? tileName;
   Color? titleColor;
@@ -14,7 +15,7 @@ class BottomDialog {
   String? contentLinkName;
   String? contentNameLast;
 
-  BottomDialog({this.textTheme, this.tileName, this.titleColor, this.contentName, this.contentLinkName, this.contentNameLast});
+  SuccessfullyDeleteListingDialog({this.textTheme, this.tileName, this.titleColor, this.contentName, this.contentLinkName, this.contentNameLast});
 
   void showBottomDialog(BuildContext context) {
     showGeneralDialog(

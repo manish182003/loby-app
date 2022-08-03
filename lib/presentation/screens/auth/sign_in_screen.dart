@@ -20,31 +20,34 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   Widget body() {
-    return Stack(
-      children: [
-        const BackgroundImage(),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            Align(
-              alignment: Alignment.center,
-              child: SizedBox(
-                height: 61,
-                child: Image.asset(
-                  "assets/icons/app_icon.png",
-                  fit: BoxFit.contain,
-                ),
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/login_bg_img.png"),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Align(
+            alignment: Alignment.center,
+            child: SizedBox(
+              height: 61,
+              child: Image.asset(
+                "assets/icons/app_icon.png",
+                fit: BoxFit.contain,
               ),
             ),
-            const Align(
-              alignment: Alignment.bottomCenter,
-              child: LoginCard(),
-            ),
-          ],
-        )
-      ],
+          ),
+          const Align(
+            alignment: Alignment.bottomCenter,
+            child: LoginCard(),
+          ),
+        ],
+      ),
     );
   }
 }
