@@ -10,8 +10,10 @@ class InputTextWidget extends StatelessWidget {
   final TextInputType? keyboardType;
   final Color? txtHintColor;
   final double? verticalHeight;
+  final TextEditingController? controller;
+  final dynamic onChanged;
 
-  const InputTextWidget({Key? key, required this.hintName, this.maxLines, this.validator, this.keyboardType, this.txtHintColor, this.verticalHeight}) : super(key: key);
+  const InputTextWidget({Key? key, required this.hintName, this.maxLines, this.validator, this.keyboardType, this.txtHintColor, this.verticalHeight, this.controller, this.onChanged}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,9 @@ class InputTextWidget extends StatelessWidget {
         maxLines: maxLines?? 1,
         cursorColor: whiteColor,
         cursorHeight: 20.0,
+        controller: controller,
         keyboardType: keyboardType?? TextInputType.name,
+        onChanged: onChanged,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(horizontal: 23.0, vertical: verticalHeight?? 0.0),
           focusedBorder:OutlineInputBorder(

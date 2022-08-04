@@ -34,7 +34,7 @@ class _CustomChipState extends State<CustomChip> {
                   selected: _selectedIndex == index,
                   label: Text(widget.labelName[index].toString(),
                       style:
-                          textTheme.headline5?.copyWith(color: textWhiteColor)),
+                          textTheme.headline6?.copyWith(color: textWhiteColor)),
                   elevation: 1,
                   side: BorderSide(
                       color: widget.color ?? orangeColor,
@@ -52,7 +52,7 @@ class _CustomChipState extends State<CustomChip> {
                       }
                     });
                   },
-                )),
+                ),),
       ],
     );
   }

@@ -22,7 +22,7 @@ class _LoginCardState extends State<LoginCard> {
     final textTheme = Theme.of(context).textTheme;
     return Center(
       child: Padding(
-        padding: EdgeInsets.fromLTRB(4.h, 4.h, 4.h,8.h),
+        padding: EdgeInsets.fromLTRB(32.0, 32.0, 32.0,32.0),
         child: SizedBox(
           width: double.infinity,
           child: Column(
@@ -33,7 +33,7 @@ class _LoginCardState extends State<LoginCard> {
               ),
               SizedBox(
                 width: double.infinity,
-                height: 2.h,
+                height: 16.0,
               ),
               CustomButton(color: whiteColor, name: "Continue with Apple", iconWidget: 'assets/icons/apple_logo_icon.svg', onTap: () {
                 _goToMainScreen(context, textTheme);
@@ -41,17 +41,21 @@ class _LoginCardState extends State<LoginCard> {
               ),
               SizedBox(
                 width: double.infinity,
-                height: 2.h,
+                height: 16.0,
               ),
               Text("New User ?", style: textTheme.headline5?.copyWith(color: aquaGreenColor)),
               SizedBox(
                 width: double.infinity,
-                height: 2.h,
+                height: 16.0,
               ),
               CustomButton(color: aquaGreenColor, name: "Create New Account", onTap: () {
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) => const SignUpScreen()));
               }
+              ),
+              SizedBox(
+                width: double.infinity,
+                height: 32.0,
               ),
             ],
           ),

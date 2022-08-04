@@ -54,10 +54,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           SizedBox(
                             height: 1.h,
                           ),
-                          Text(
-                            "View Profile",
-                            style: textTheme.subtitle2?.copyWith(
-                                fontSize: 10.sp, color: textWhiteColor),
+                          GestureDetector(
+                            onTap: () {
+                              context.pushNamed(myProfileScreenPage);
+                            },
+                            child: Text(
+                              "View Profile",
+                              style: textTheme.subtitle2?.copyWith(
+                                  fontSize: 10.sp, color: textWhiteColor),
+                            ),
                           ),
                         ],
                       ),

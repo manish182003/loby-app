@@ -29,7 +29,7 @@ class _HoursDropDownDividerState extends State<HoursDropDownDivider> {
           DropdownMenuItem<String>(
             value: item,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
                 item,
                 style: textTheme.headline6?.copyWith(color: textWhiteColor),
@@ -40,8 +40,11 @@ class _HoursDropDownDividerState extends State<HoursDropDownDivider> {
           if (item != items.last)
             const DropdownMenuItem<String>(
               enabled: false,
-              child: Divider(
-                color: dividerColor,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: Divider(
+                  color: footerColor,
+                ),
               ),
             ),
         ],
@@ -85,7 +88,7 @@ class _HoursDropDownDividerState extends State<HoursDropDownDivider> {
           color: backgroundBalticSeaColor,
         ),
         buttonHeight: 40,
-        buttonWidth: 140,
+        buttonWidth: 150,
         itemHeight: 40,
         itemPadding: const EdgeInsets.symmetric(horizontal: 8.0),
       ),

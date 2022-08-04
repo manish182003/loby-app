@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:loby/core/theme/colors.dart';
 import 'package:sizer/sizer.dart';
 
@@ -20,6 +21,24 @@ class CreateProfileScreen extends StatefulWidget {
 class _CreateProfileScreenState extends State<CreateProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   bool visible = false;
+
+  // DateTime selectedDate = DateTime.now() ;
+  DateTime? selectedDate;
+
+  var customFormat = DateFormat('dd-MM-yyyy');
+
+  Future<Null> showPicker(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2018),
+        lastDate: DateTime(2101));
+
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+      });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +150,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                           height: 4.h,
                         ),
                         const InputTextTitleWidget(
-                            titleName: 'City', titleTextColor: textInputTitleColor),
+                            titleName: 'City',
+                            titleTextColor: textInputTitleColor),
                         SizedBox(
                           width: double.infinity,
                           height: 2.h,
@@ -148,12 +168,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                           width: double.infinity,
                           height: 2.h,
                         ),
-                        InputTextWidget(
-                          hintName: '15 July 1999',
-                          validator: (value) {
-                            return Helpers.validateField(value!);
-                          },
-                        ),
+                        selectDate(textTheme),
                         SizedBox(
                           width: double.infinity,
                           height: 4.h,
@@ -176,7 +191,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                           height: 4.h,
                         ),
                         const InputTextTitleWidget(
-                            titleName: 'Bio', titleTextColor: textInputTitleColor),
+                            titleName: 'Bio',
+                            titleTextColor: textInputTitleColor),
                         SizedBox(
                           width: double.infinity,
                           height: 2.h,
@@ -220,7 +236,9 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   Widget _buildSearchField(TextTheme textTheme) {
     return Container(
       constraints: const BoxConstraints(
-        minHeight: 45, minWidth: double.infinity,),
+        minHeight: 45,
+        minWidth: double.infinity,
+      ),
       decoration: BoxDecoration(
         color: textFieldColor,
         borderRadius: BorderRadius.circular(10.0),
@@ -262,19 +280,19 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                   ElevatedButton(
                       style: ButtonStyle(
                         shape:
-                        MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16.0),
-                            )),
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.0),
+                        )),
                         backgroundColor:
-                        MaterialStateProperty.all<Color>(aquaGreenColor),
+                            MaterialStateProperty.all<Color>(aquaGreenColor),
                       ),
                       onPressed: () {
                         debugPrint("change");
                       },
                       child: Padding(
                         padding:
-                        const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+                            const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
                         child: Text("Change Avatar", style: textTheme.button),
                       )),
                   ElevatedButton(
@@ -287,22 +305,22 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                           ),
                         ),
                         shape:
-                        MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16.0),
-                            )),
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.0),
+                        )),
                         backgroundColor:
-                        MaterialStateProperty.all<Color>(textFieldColor),
+                            MaterialStateProperty.all<Color>(textFieldColor),
                       ),
                       onPressed: () {
                         debugPrint('clicked');
                       },
                       child: Padding(
                         padding:
-                        const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+                            const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
                         child: Text("Remove Avatar",
                             style:
-                            textTheme.button?.copyWith(color: whiteColor)),
+                                textTheme.button?.copyWith(color: whiteColor)),
                       )),
                 ],
               ),
@@ -327,7 +345,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
           decoration: InputDecoration(
             border: InputBorder.none,
             hintStyle:
-            textTheme.headline4?.copyWith(color: textInputTitleColor),
+                textTheme.headline4?.copyWith(color: textInputTitleColor),
             hintText: 'Ex: Jhon Singh',
           ),
         ),
@@ -338,5 +356,38 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   void _goToMainScreen(BuildContext context, TextTheme textTheme) {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const MainScreen()));
+  }
+
+  selectDate(TextTheme textTheme) {
+    return GestureDetector(
+      onTap: () {
+        showPicker(context);
+      },
+      child: Container(
+        constraints: const BoxConstraints(
+          minHeight: 45,
+          minWidth: 45,
+        ),
+        decoration: BoxDecoration(
+          color: textFieldColor,
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 23.0),
+              child: Text(
+                selectedDate == null
+                    ? 'Select DOB'
+                    : customFormat.format(selectedDate!),
+                style:
+                    textTheme.headline4?.copyWith(color: textInputTitleColor),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }

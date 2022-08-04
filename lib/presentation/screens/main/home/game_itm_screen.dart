@@ -199,8 +199,11 @@ class _GameItemScreenState extends State<GameItemScreen> {
   ];
 
   _buildCategories(TextTheme textTheme) {
-    return CustomChip(
-      labelName: bubbles,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      child: CustomChip(
+        labelName: bubbles,
+      ),
     );
   }
 

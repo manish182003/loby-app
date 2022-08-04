@@ -32,12 +32,12 @@ class UserInfo extends StatelessWidget {
               padding: const EdgeInsets.all(10.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                   const UserListingWidget(),
-                  const UserAboutWidget(),
-                  const UserReviewRatingWidget(),
-                  const UserDuelsWidget(),
-                    const UserSocialWidget(),
+                children: const [
+                  // UserListingWidget(),
+                   UserAboutWidget(),
+                   UserReviewRatingWidget(),
+                   UserDuelsWidget(),
+                   UserSocialWidget(),
                 ],
               ),
             ),

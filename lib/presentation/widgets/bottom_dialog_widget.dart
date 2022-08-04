@@ -101,14 +101,14 @@ class BottomDialog {
           children: [
             TextSpan(
               text: contentName??'',
-              style: textTheme?.headline5?.copyWith(color: textLightColor),
+              style: textTheme?.headline3?.copyWith(color: textLightColor),
             ),
             TextSpan(
                 text: contentLinkName?? '',
-                style: textTheme?.headline5?.copyWith(color: aquaGreenColor)),
+                style: textTheme?.headline3?.copyWith(color: aquaGreenColor)),
             TextSpan(
               text: contentNameLast??'',
-              style: textTheme?.headline5?.copyWith(color: textLightColor),
+              style: textTheme?.headline3?.copyWith(color: textLightColor),
             ),
           ],
         ),

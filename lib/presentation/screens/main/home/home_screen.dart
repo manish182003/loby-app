@@ -5,7 +5,9 @@ import 'package:loby/core/theme/colors.dart';
 import 'package:loby/presentation/screens/main/home/widgets/game_list_card.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../services/routing_service/routes.dart';
 import '../../../../services/routing_service/routes_name.dart';
+import '../../../widgets/GlobleSearchFieldWidget.dart';
 import '../../../widgets/SearchFieldWidget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -54,7 +56,9 @@ class _HomeScreenState extends State<HomeScreen> {
               width: double.infinity,
               height: 2.2.h,
             ),
-            const SearchFieldWidget(),
+            GlobalSearchFieldWidget(onTap: () {
+              context.pushNamed(searchScreenPage);
+            }),
             SizedBox(
               width: double.infinity,
               height: 3.h,
@@ -205,7 +209,7 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           child: SizedBox(
             height: 166,
-            width: 150,
+            width: 120,
             child: Center(
               child: GameCard(index: index),
             ),
@@ -214,4 +218,5 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
 }

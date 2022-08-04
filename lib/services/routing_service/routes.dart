@@ -17,3 +17,5 @@ const String profileVerificationRoute = "/profile_verification_screen";
 const String feedbackScreenRoute = "/feedback_screen";
 const String addFundScreenRoute = "/add_funds_screen";
 const String withdrawFundScreenRoute = "/withdraw_funds_screen";
+const String myProfileScreenRoute = "/my_profile_screen";
+const String searchScreenRoute = "/search_screen";

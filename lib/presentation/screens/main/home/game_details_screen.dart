@@ -150,10 +150,10 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                 "Lvl 78 Account on SALE. Trusted Seller. 100% Guaranteed",
                 style: textTheme.headline5?.copyWith(color: textWhiteColor)),
           ),
-          const SizedBox(height: 8.0),
+          const SizedBox(height: 23.0),
           Padding(
             padding:
-                const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
+                const EdgeInsets.symmetric(vertical: 0.0, horizontal: 23.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -606,13 +606,13 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
             ),
           ),
           Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
+            padding: const EdgeInsets.only(
+                top: 0.0, left: 23.0, bottom: 24.0, right: 23.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.17,
+                  width: MediaQuery.of(context).size.width * 0.15,
                   height: 48,
                   child: MaterialButton(
                     shape: RoundedRectangleBorder(

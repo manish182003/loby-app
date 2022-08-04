@@ -17,3 +17,5 @@ const String profileVerificationPage = "profile_verification_screen";
 const String feedbackScreenPage = "feedback_screen";
 const String addFundScreenPage = "add_funds_screen";
 const String withdrawFundScreenPage = "withdraw_funds_screen";
+const String myProfileScreenPage = "my_profile_screen";
+const String searchScreenPage = "search_screen";

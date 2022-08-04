@@ -161,7 +161,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                               textTheme: textTheme,
                                               contentName:
                                                   "Are you sure you want to withdraw ",
-                                              contentLinkName: 'Rs. 23,000',
+                                              contentLinkName: '\nRs. 23,000',
                                               contentNameLast:
                                                   ' from you Loby Wallet ?')
                                           .showBottomDialog(context);

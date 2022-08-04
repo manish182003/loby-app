@@ -10,10 +10,12 @@ import '../../presentation/screens/main/home/game_details_screen.dart';
 import '../../presentation/screens/main/home/game_itm_screen.dart';
 import '../../presentation/screens/main/home/other_user_profile/follower_following_screen/followers_screen.dart';
 import '../../presentation/screens/main/home/other_user_profile/other_user_profile_screen.dart';
+import '../../presentation/screens/main/home/search_screen.dart';
 import '../../presentation/screens/main/main_screen.dart';
 import '../../presentation/screens/main/profile/feedback_screen.dart';
 import '../../presentation/screens/main/profile/my_listing/my_listing_screen.dart';
 import '../../presentation/screens/main/profile/my_order/my_order_screen.dart';
+import '../../presentation/screens/main/profile/my_profile_view/my_profile_screen.dart';
 import '../../presentation/screens/main/profile/profile_verification_screen.dart';
 import '../../presentation/screens/main/profile/wallet/add_wallet_screen.dart';
 import '../../presentation/screens/main/profile/wallet/my_wallet_screen.dart';
@@ -206,6 +208,25 @@ class MyRouter {
                 return CupertinoPage(
                   key: state.pageKey,
                   child: const TransactionHistoryScreen(),
+                );
+              }),
+
+          GoRoute(
+              name: myProfileScreenPage,
+              path: myProfileScreenRoute,
+              pageBuilder: (context, state) {
+                return CupertinoPage(
+                  key: state.pageKey,
+                  child: const MyProfileScreen(),
+                );
+              }),
+          GoRoute(
+              name: searchScreenPage,
+              path: searchScreenRoute,
+              pageBuilder: (context, state) {
+                return CupertinoPage(
+                  key: state.pageKey,
+                  child: const SearchScreen(),
                 );
               }),
         ]);

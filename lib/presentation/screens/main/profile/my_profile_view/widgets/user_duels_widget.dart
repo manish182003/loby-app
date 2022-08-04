@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
-import '../../../../../core/theme/colors.dart';
+import '../../../../../../core/theme/colors.dart';
 
-class DisputeWidget extends StatelessWidget {
-  final String disputeType;
-  final String currentStatus;
-
-  const DisputeWidget(
-      {Key? key, required this.disputeType, required this.currentStatus})
-      : super(key: key);
+class UserDuelsWidget extends StatelessWidget {
+  const UserDuelsWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +13,59 @@ class DisputeWidget extends StatelessWidget {
   }
 
   _buildWidget(TextTheme textTheme, BuildContext context) {
+    double rating = 3.5;
     return Column(
       children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical:8.0),
+          child: Card(
+            color: backgroundBalticSeaColor,
+            elevation: 0.0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            child: Container(
+                width: MediaQuery.of(context).size.width * 1,
+                height: 97.0,
+                decoration: BoxDecoration(
+                  color: aquaGreenColor,
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: [
+                          Text('Total WINS',
+                              textAlign: TextAlign.center,
+                              style: textTheme.headline4
+                                  ?.copyWith(color: textTunaBlueColor, fontWeight: FontWeight.w500)),
+                          Text('23',
+                              textAlign: TextAlign.center,
+                              style: textTheme.headlineLarge
+                                  ?.copyWith(color: textTunaBlueColor, fontWeight: FontWeight.w500)),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text('Total LOSSES',
+                              textAlign: TextAlign.center,
+                              style: textTheme.headline4
+                                  ?.copyWith(color: textTunaBlueColor, fontWeight: FontWeight.w500)),
+                          Text('07',
+                              textAlign: TextAlign.center,
+                              style: textTheme.headlineLarge
+                                  ?.copyWith(color: textTunaBlueColor, fontWeight: FontWeight.w500)),
+                        ],
+                      ),
+                    ],
+                  ),
+                )),
+          ),
+        ),
         Card(
           color: textFieldColor,
           elevation: 0.0,
@@ -33,11 +80,10 @@ class DisputeWidget extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    buildUser(textTheme, 'Seller', aquaGreenColor, context),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    buildUser(textTheme, 'Buyer', orangeColor, context),
+                    buildUser(textTheme, 'Winner', aquaGreenColor, context),
+                    _buildNameField(textTheme, 'Vs',
+                        textTheme.headline4?.copyWith(color: textWhiteColor)),
+                    buildUser(textTheme, 'Loser', lavaRedColor, context),
                   ],
                 ),
                 const SizedBox(height: 8),
@@ -56,8 +102,8 @@ class DisputeWidget extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               vertical: 4.0, horizontal: 8.0),
                           child: Text('Battlegrounds Mobile India',
-                              style: textTheme.headline6
-                                  ?.copyWith(color: textWhiteColor)),
+                              style: textTheme.headline4?.copyWith(
+                                  fontSize: 12.0, color: textWhiteColor)),
                         ),
                       ),
                       const SizedBox(width: 4.0),
@@ -70,26 +116,17 @@ class DisputeWidget extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               vertical: 4.0, horizontal: 8.0),
                           child: Text('TDM - 1v1',
-                              style: textTheme.headline6
-                                  ?.copyWith(color: textWhiteColor)),
+                              style: textTheme.headline4?.copyWith(
+                                  fontSize: 12.0, color: textWhiteColor)),
                         ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 8),
-                _buildListingIdWidget(
-                    textTheme, "Listing Id : ", textWhiteColor, context),
-                const SizedBox(height: 8),
-                _buildCurrentStatusWidget(
-                    textTheme,
-                    "Current Status : ",
-                    disputeType == "Open" ? orangeColor : aquaGreenColor,
-                    context)
               ],
             ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -102,7 +139,7 @@ class DisputeWidget extends StatelessWidget {
         _buildTitleField(textTheme, name, borderColor, context),
         _buildUserAvtar(lavaRedColor),
         _buildNameField(textTheme, 'Mukesh',
-            textTheme.headline5?.copyWith(color: textLightColor)),
+            textTheme.headline6?.copyWith(color: textLightColor)),
       ],
     );
   }
@@ -117,14 +154,14 @@ class DisputeWidget extends StatelessWidget {
   _buildTitleField(TextTheme textTheme, String name, Color borderColor,
       BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 8.0),
       child: Container(
-          width: MediaQuery.of(context).size.width * 0.30,
-          /*decoration: BoxDecoration(
+          width: MediaQuery.of(context).size.width * 0.25,
+          decoration: BoxDecoration(
             color: textFieldColor,
             border: Border.all(color: borderColor),
             borderRadius: BorderRadius.circular(10.0),
-          ),*/
+          ),
           child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
@@ -139,69 +176,21 @@ class DisputeWidget extends StatelessWidget {
     return const Padding(
       padding: EdgeInsets.all(8.0),
       child: CircleAvatar(
-        radius: 36,
+        radius: 32,
         backgroundColor: butterflyBlueColor,
         child: Padding(
           padding: EdgeInsets.all(2.0),
           child: CircleAvatar(
             backgroundColor: backgroundDarkJungleGreenColor,
-            radius: 36,
+            radius: 32,
             child: Padding(
               padding: EdgeInsets.all(2.0),
               child: CircleAvatar(
                 backgroundImage: AssetImage('assets/images/img.png'),
-                radius: 36,
+                radius: 32,
                 backgroundColor: backgroundDarkJungleGreenColor,
               ),
             ), //CircleAvatar
-          ),
-        ),
-      ),
-    );
-  }
-
-  _buildListingIdWidget(TextTheme textTheme, String title, Color textColor,
-      BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
-      child: Align(
-        alignment: Alignment.center,
-        child: RichText(
-          textAlign: TextAlign.start,
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: 'Listing ID : ',
-                style: textTheme.headline6?.copyWith(color: textLightColor),
-              ),
-              TextSpan(
-                  text: '2207202200001',
-                  style: textTheme.headline6?.copyWith(color: textWhiteColor)),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  _buildCurrentStatusWidget(TextTheme textTheme, String title, Color textColor,
-      BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
-      child: Align(
-        alignment: Alignment.center,
-        child: RichText(
-          textAlign: TextAlign.start,
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: 'Current Status : ',
-                style: textTheme.headline6?.copyWith(color: textLightColor),
-              ),
-              TextSpan(
-                  text: currentStatus,
-                  style: textTheme.headline6?.copyWith(color: textColor)),
-            ],
           ),
         ),
       ),

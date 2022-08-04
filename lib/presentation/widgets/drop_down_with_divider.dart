@@ -11,7 +11,6 @@ class DropDownDivider extends StatefulWidget {
 }
 
 class _DropDownDividerState extends State<DropDownDivider> {
-
   final List<String> items = [
     'Top Rated',
     'Most Recent',
@@ -29,7 +28,7 @@ class _DropDownDividerState extends State<DropDownDivider> {
           DropdownMenuItem<String>(
             value: item,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
                 item,
                 style: textTheme.headline6?.copyWith(color: textWhiteColor),
@@ -40,8 +39,11 @@ class _DropDownDividerState extends State<DropDownDivider> {
           if (item != items.last)
             const DropdownMenuItem<String>(
               enabled: false,
-              child: Divider(
-                color: dividerColor,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: Divider(
+                  color: footerColor,
+                ),
               ),
             ),
         ],
@@ -60,6 +62,7 @@ class _DropDownDividerState extends State<DropDownDivider> {
     }
     return _dividersIndexes;
   }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -85,7 +88,7 @@ class _DropDownDividerState extends State<DropDownDivider> {
           color: backgroundBalticSeaColor,
         ),
         buttonHeight: 40,
-        buttonWidth: 140,
+        buttonWidth: 150,
         itemHeight: 40,
         itemPadding: const EdgeInsets.symmetric(horizontal: 8.0),
       ),

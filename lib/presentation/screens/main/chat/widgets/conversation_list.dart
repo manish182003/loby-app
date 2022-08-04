@@ -24,14 +24,14 @@ class ConversationList extends StatelessWidget {
           padding: const EdgeInsets.only(left: 16, right: 16, bottom: 10),
           child: Card(
             elevation: 0,
-            color: backgroundBalticSeaColor,
+            color: purpleLightIndigoColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16.0),
             ),
             child: Container(
               padding: const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8),
               decoration: BoxDecoration(
-                color: backgroundBalticSeaColor,
+                color: purpleLightIndigoColor,
                 border: Border.all(width: 0.2, color: dividerColor),
                 borderRadius: BorderRadius.circular(16.0),
               ),
@@ -52,40 +52,43 @@ class ConversationList extends StatelessWidget {
                               children: <Widget>[
                                 Text(
                                   name,
-                                  style: textTheme.headline4?.copyWith(color: textWhiteColor),
+                                  style: textTheme.headline3?.copyWith(color: textWhiteColor),
                                 ),
                                 const SizedBox(
                                   height: 6,
                                 ),
                                 Text(
                                   time,
-                                  style: textTheme.headline5?.copyWith(color: textLightColor),
+                                  style: textTheme.subtitle2?.copyWith(color: textWhiteColor, fontWeight: FontWeight.w200,),
                                 ),
                               ],
                             ),
                           ),
                         ),
-                        Container(
-                          // This is your Badge
-                          padding: const EdgeInsets.all(8),
-                          constraints:
-                          const BoxConstraints(minHeight: 46, minWidth: 46),
-                          decoration: BoxDecoration(
-                            // This controls the shadow
-                            boxShadow: const [
-                              BoxShadow(
-                                  spreadRadius: 1,
-                                  color: orangeColor)
-                            ],
-                            borderRadius: BorderRadius.circular(32),
-                            color:
-                            orangeColor, // This would be color of the Badge
-                          ), // This is your Badge
-                          child: Center(
-                            // Here you can put whatever content you want inside your Badge
-                            child: Text('4',
-                                style: textTheme.headline5
-                                    ?.copyWith(color: textWhiteColor)),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            // This is your Badge
+                            padding: const EdgeInsets.all(8),
+                            constraints:
+                            const BoxConstraints(minHeight: 28, minWidth: 28),
+                            decoration: BoxDecoration(
+                              // This controls the shadow
+                              boxShadow: const [
+                                BoxShadow(
+                                    spreadRadius: 1,
+                                    color: orangeColor)
+                              ],
+                              borderRadius: BorderRadius.circular(44),
+                              color:
+                              orangeColor, // This would be color of the Badge
+                            ), // This is your Badge
+                            child: Center(
+                              // Here you can put whatever content you want inside your Badge
+                              child: Text('4',
+                                  style: textTheme.headline5
+                                      ?.copyWith(color: textWhiteColor)),
+                            ),
                           ),
                         ),
                       ],
@@ -102,18 +105,18 @@ class ConversationList extends StatelessWidget {
     return const Padding(
       padding: EdgeInsets.all(8.0),
       child: CircleAvatar(
-        radius: 36,
-        backgroundColor: butterflyBlueColor,
+        radius: 28,
+        backgroundColor: whiteColor,
         child: Padding(
           padding: EdgeInsets.all(2.0),
           child: CircleAvatar(
-            backgroundColor: backgroundDarkJungleGreenColor,
-            radius: 36,
+            backgroundColor: purpleLightIndigoColor,
+            radius: 28,
             child: Padding(
               padding: EdgeInsets.all(2.0),
               child: CircleAvatar(
                 backgroundImage: AssetImage('assets/images/img.png'),
-                radius: 36,
+                radius: 28,
                 backgroundColor: backgroundBalticSeaColor,
               ),
             ), //CircleAvatar
