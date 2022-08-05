@@ -77,9 +77,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         InputTextWidget(
                           hintName: 'Ex: Jhon Singh',
-                          validator: (value) {
-                            return Helpers.validateField(value!);
-                          },
                         ),
                         SizedBox(
                           width: double.infinity,
@@ -95,9 +92,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         InputTextWidget(
                           hintName: 'Ex: jhonsingh@gmail.com',
                           keyboardType: TextInputType.emailAddress,
-                          validator: (value) {
-                            return Helpers.validateEmail(value!);
-                          },
                         ),
                         SizedBox(
                           width: double.infinity,
@@ -216,7 +210,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               child: TextFormField(
                 obscureText: !visible,
                 cursorColor: aquaGreenColor,
-                validator: validator,
                 style: textTheme.headline4?.copyWith(color: textWhiteColor),
                 maxLines: 1,
                 keyboardType: TextInputType.visiblePassword,

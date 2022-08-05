@@ -86,7 +86,7 @@ class ConfirmationBottomDialog {
                                 borderRadius: BorderRadius.circular(16.0),
                               )),
                           backgroundColor:
-                          MaterialStateProperty.all<Color>(backgroundBalticSeaColor),
+                          MaterialStateProperty.all<Color>(shipGreyColor),
                         ),
                         onPressed: () {
                           Navigator.of(context).pop();

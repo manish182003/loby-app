@@ -1,10 +1,10 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:loby/presentation/screens/main/create_listing/widgets/HoursDropDown.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../core/theme/colors.dart';
-import '../../../../core/utils/helpers.dart';
 import '../../../widgets/bottom_dialog_widget.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_checkbox.dart';
@@ -180,18 +180,24 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   InputTextWidget(
                     hintName: 'Enter Title',
                     keyboardType: TextInputType.name,
-                    validator: (value) {
-                      return Helpers.validateField(value!);
-                    },
                   ),
                   const SizedBox(height: 16.0),
                   Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
+                    alignment: Alignment.topCenter,
+                    child: RichText(
                         textAlign: TextAlign.center,
-                        "For safety reasons, sellers are not allowed to leave their personal contacts. All communications with the buyers can only be made using Loby chat. Any conversation outside Loby Chat will not be insured/covered by Loby Protection",
-                        style: textTheme.headline6
-                            ?.copyWith(color: textLightColor)),
+                        text: TextSpan(children: [
+                          TextSpan(
+                            text:
+                                "For safety reasons, sellers are not allowed to leave their personal contacts. All communications with the buyers can only be made using Loby chat. Any conversation outside Loby Chat will not be insured/covered by ",
+                            style: textTheme.headline6
+                                ?.copyWith(color: textLightColor),
+                          ),
+                          TextSpan(
+                              text: " Loby Protection",
+                              style: textTheme.headline6
+                                  ?.copyWith(color: aquaGreenColor)),
+                        ])),
                   ),
                   const SizedBox(height: 16.0),
                   const InputTextTitleWidget(
@@ -203,9 +209,6 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                     maxLines: 5,
                     verticalHeight: 16.0,
                     keyboardType: TextInputType.name,
-                    validator: (value) {
-                      return Helpers.validateField(value!);
-                    },
                   ),
                   const SizedBox(height: 16.0),
                   _buildUploadField(textTheme),
@@ -224,9 +227,6 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   InputTextWidget(
                     hintName: 'Available Stock (1 to Infinite)',
                     keyboardType: TextInputType.number,
-                    validator: (value) {
-                      return Helpers.validateField(value!);
-                    },
                   ),
                   const SizedBox(height: 16.0),
                   Align(
@@ -236,13 +236,13 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                         text: TextSpan(children: [
                           TextSpan(
                             text: "‘Loby Protection’",
-                            style: textTheme.headline4?.copyWith(
-                                fontSize: 13.0, color: aquaGreenColor),
+                            style: textTheme.headline4
+                                ?.copyWith(color: aquaGreenColor),
                           ),
                           TextSpan(
                               text: " Insurance",
-                              style: textTheme.headline4?.copyWith(
-                                  fontSize: 13.0, color: textLightColor)),
+                              style: textTheme.headline4
+                                  ?.copyWith(color: textLightColor)),
                         ])),
                   ),
                   const SizedBox(height: 16.0),
@@ -258,7 +258,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                           child: Icon(
                             Icons.check,
                             color: Colors.white,
-                            size: 16,
+                            size: 9.5,
                           ),
                         ),
                       ),
@@ -270,8 +270,8 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                                 text: TextSpan(children: [
                                   TextSpan(
                                     text: '7 Days Insurance',
-                                    style: textTheme.headline4?.copyWith(
-                                        fontSize: 13.0, color: textLightColor),
+                                    style: textTheme.subtitle2
+                                        ?.copyWith(color: textLightColor),
                                   ),
                                 ]))),
                       ),
@@ -295,34 +295,37 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                       textTheme,
                       'I have read and agreed to all sellers policy and the ',
                       'Terms of Service.'),
-                  const SizedBox(height: 16.0),
-                  CustomButton(
-                    color: createProfileButtonColor,
-                    name: "Publish",
-                    textColor: textWhiteColor,
-                    onTap: () {
-                      if (_formKey.currentState!.validate()) {
-                        // If the form is valid, display a snackbar. In the real world,
-                        // you'd often call a server or save the information in a database.
+                  const SizedBox(height: 44.0),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    child: CustomButton(
+                      color: createProfileButtonColor,
+                      name: "Publish",
+                      textColor: textWhiteColor,
+                      onTap: () {
+                        if (_formKey.currentState!.validate()) {
+                          // If the form is valid, display a snackbar. In the real world,
+                          // you'd often call a server or save the information in a database.
 
-                        BottomDialog(
+                          BottomDialog(
+                                  textTheme: textTheme,
+                                  tileName: "Congratulations",
+                                  titleColor: aquaGreenColor,
+                                  contentName:
+                                      "Your service has been successfully listed. You can edit your listings from My Listings.",
+                                  contentLinkName: ' My Listings')
+                              .showBottomDialog(context);
+                        }
+                        /*BottomDialog(
                                 textTheme: textTheme,
                                 tileName: "Congratulations",
                                 titleColor: aquaGreenColor,
                                 contentName:
                                     "Your service has been successfully listed. You can edit your listings from My Listings.",
                                 contentLinkName: ' My Listings')
-                            .showBottomDialog(context);
-                      }
-                      /*BottomDialog(
-                              textTheme: textTheme,
-                              tileName: "Congratulations",
-                              titleColor: aquaGreenColor,
-                              contentName:
-                                  "Your service has been successfully listed. You can edit your listings from My Listings.",
-                              contentLinkName: ' My Listings')
-                          .showBottomDialog(context);*/
-                    },
+                            .showBottomDialog(context);*/
+                      },
+                    ),
                   ),
                   const SizedBox(height: 16.0),
                 ],
@@ -346,8 +349,8 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
           backgroundColor: aquaGreenColor,
           borderColor: aquaGreenColor,
           icon: Icons.check,
-          size: 22,
-          iconSize: 16,
+          size: 16,
+          iconSize: 10,
         ),
         const SizedBox(width: 8.0),
         Expanded(
@@ -357,13 +360,13 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   text: TextSpan(children: [
                     TextSpan(
                       text: content,
-                      style: textTheme.headline4
-                          ?.copyWith(fontSize: 13.0, color: textLightColor),
+                      style:
+                          textTheme.subtitle2?.copyWith(color: textLightColor),
                     ),
                     TextSpan(
                         text: textSpan,
-                        style: textTheme.headline4
-                            ?.copyWith(fontSize: 13.0, color: aquaGreenColor)),
+                        style: textTheme.subtitle2
+                            ?.copyWith(color: aquaGreenColor)),
                   ]))),
         ),
       ],
@@ -429,7 +432,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
               const SizedBox(height: 8.0),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                 child: Align(
                   alignment: Alignment.topCenter,
                   child: Text(
@@ -447,7 +450,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                     // This is your Badge
                     padding: const EdgeInsets.all(8),
                     constraints: BoxConstraints(
-                        minHeight: MediaQuery.of(context).size.height * 0.1,
+                        minHeight: MediaQuery.of(context).size.height * 0.08,
                         minWidth: MediaQuery.of(context).size.width * 0.4),
                     decoration: BoxDecoration(
                       // This controls the shadow
@@ -460,11 +463,14 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                       borderRadius: BorderRadius.circular(12),
                       color: iconWhiteColor, // This would be color of the Badge
                     ), // This is your Badge
-                    child: Center(
-                      // Here you can put whatever content you want inside your Badge
-                      child: Text('',
-                          style: textTheme.headline1
-                              ?.copyWith(color: textLightColor)),
+                    child: Align(
+                      alignment: AlignmentDirectional.topEnd,
+                      child: SvgPicture.asset(
+                        'assets/icons/close_icon.svg',
+                        color: selectiveYellowColor,
+                        width: 8,
+                        height: 8,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 8.0),
@@ -472,7 +478,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                     // This is your Badge
                     padding: const EdgeInsets.all(8),
                     constraints: BoxConstraints(
-                        minHeight: MediaQuery.of(context).size.height * 0.1,
+                        minHeight: MediaQuery.of(context).size.height * 0.08,
                         minWidth: MediaQuery.of(context).size.width * 0.4),
                     decoration: BoxDecoration(
                       // This controls the shadow
@@ -485,11 +491,14 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                       borderRadius: BorderRadius.circular(12),
                       color: iconWhiteColor, // This would be color of the Badge
                     ), // This is your Badge
-                    child: Center(
-                      // Here you can put whatever content you want inside your Badge
-                      child: Text('',
-                          style: textTheme.headline1
-                              ?.copyWith(color: textLightColor)),
+                    child: Align(
+                      alignment: AlignmentDirectional.topEnd,
+                      child: SvgPicture.asset(
+                        'assets/icons/close_icon.svg',
+                        color: selectiveYellowColor,
+                        width: 8,
+                        height: 8,
+                      ),
                     ),
                   ),
                 ],
@@ -502,7 +511,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                     // This is your Badge
                     padding: const EdgeInsets.all(8),
                     constraints: BoxConstraints(
-                        minHeight: MediaQuery.of(context).size.height * 0.1,
+                        minHeight: MediaQuery.of(context).size.height * 0.08,
                         minWidth: MediaQuery.of(context).size.width * 0.4),
                     decoration: BoxDecoration(
                       // This controls the shadow
@@ -515,11 +524,14 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                       borderRadius: BorderRadius.circular(12),
                       color: iconWhiteColor, // This would be color of the Badge
                     ), // This is your Badge
-                    child: Center(
-                      // Here you can put whatever content you want inside your Badge
-                      child: Text('',
-                          style: textTheme.headline1
-                              ?.copyWith(color: textLightColor)),
+                    child: Align(
+                      alignment: AlignmentDirectional.topEnd,
+                      child: SvgPicture.asset(
+                        'assets/icons/close_icon.svg',
+                        color: selectiveYellowColor,
+                        width: 8,
+                        height: 8,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 8.0),
@@ -527,7 +539,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                     // This is your Badge
                     padding: const EdgeInsets.all(8),
                     constraints: BoxConstraints(
-                        minHeight: MediaQuery.of(context).size.height * 0.1,
+                        minHeight: MediaQuery.of(context).size.height * 0.08,
                         minWidth: MediaQuery.of(context).size.width * 0.4),
                     decoration: BoxDecoration(
                       // This controls the shadow
@@ -540,18 +552,21 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                       borderRadius: BorderRadius.circular(12),
                       color: iconWhiteColor, // This would be color of the Badge
                     ), // This is your Badge
-                    child: Center(
-                      // Here you can put whatever content you want inside your Badge
-                      child: Text('',
-                          style: textTheme.headline1
-                              ?.copyWith(color: textLightColor)),
+                    child: Align(
+                      alignment: AlignmentDirectional.topEnd,
+                      child: SvgPicture.asset(
+                        'assets/icons/close_icon.svg',
+                        color: selectiveYellowColor,
+                        width: 8,
+                        height: 8,
+                      ),
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 8.0),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.h),
+                padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 10.h),
                 child: CustomButton(
                   color: createProfileButtonColor,
                   name: "Choose file",
@@ -579,12 +594,10 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: InputTextWidget(
+                  textAlign: TextAlign.center,
                   hintName: 'Paste Youtube/Twitch Link',
                   txtHintColor: whiteColor,
                   keyboardType: TextInputType.name,
-                  validator: (value) {
-                    return Helpers.validateField(value!);
-                  },
                 ),
               ),
               const SizedBox(height: 16.0),

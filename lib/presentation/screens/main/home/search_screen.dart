@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:loby/presentation/screens/main/home/widgets/game_list_card.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../../../core/theme/colors.dart';
 import '../../../widgets/SearchFieldWidget.dart';
@@ -16,132 +14,136 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        body: body(),
-      ),
-    );
-  }
-
-  Widget body() {
-    final textTheme = Theme.of(context).textTheme;
-    return Column(
-      children: [
-        Container(
-          margin: const EdgeInsets.fromLTRB(15, 15, 15, 15),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: 7.h,
-                height: 7.h,
-                child: MaterialButton(
-                  shape: const CircleBorder(),
-                  color: backgroundBalticSeaColor,
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: SvgPicture.asset(
-                    'assets/icons/back_icon.svg',
-                    color: whiteColor,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        const SearchFieldWidget(textHint: 'Search Game'),
-        SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Listings",
-                    textAlign: TextAlign.start,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style:
-                        textTheme.headline4?.copyWith(color: aquaGreenColor)),
-                Divider(
-                  color: aquaGreenColor,
-                  thickness: 1.0,
-                ),
-                ListView.builder(
-                  itemCount: 3,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (context, index) => GestureDetector(
-                    onTap: () {},
-                    child: buildListItem(textTheme),
-                  ),
-                ),
-                SizedBox(
-                  height: 44.0,
-                ),
-                Text("Games",
-                    textAlign: TextAlign.start,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style:
-                        textTheme.headline4?.copyWith(color: aquaGreenColor)),
-                Divider(
-                  color: aquaGreenColor,
-                  thickness: 1.0,
-                ),
-                SizedBox(
-                  height: 166,
-                  child: ListView.builder(
-                    itemCount: 2,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) => GestureDetector(
-                      onTap: () {
-                        debugPrint('Battlegrounds Mobile India $index');
-                        FocusManager.instance.primaryFocus?.unfocus();
-                        //  context.pushNamed(gamePage);
-                        /*Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    GameItemScreen(name: 'Battlegrounds Mobile $index')));*/
+        body: Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.fromLTRB(15, 15, 15, 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: 42,
+                    height: 42,
+                    child: MaterialButton(
+                      shape: const CircleBorder(),
+                      color: textCharcoalBlueColor,
+                      onPressed: () {
+                        Navigator.of(context).pop();
                       },
-                      child: SizedBox(
-                        height: 166,
-                        width: 120,
-                        child: Center(
-                          child: GameCard(index: index),
-                        ),
+                      child: Icon(
+                        Icons.arrow_back_ios,
+                        size: 18,
+                        color: Colors.white,
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 44.0,
-                ),
-                Text("Users",
-                    textAlign: TextAlign.start,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style:
-                        textTheme.headline4?.copyWith(color: aquaGreenColor)),
-                Divider(
-                  color: aquaGreenColor,
-                  thickness: 1.0,
-                ),
-                ListView.builder(
-                  itemCount: 3,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (context, index) => GestureDetector(
-                    onTap: () {},
-                    child: buildUsersListItem(textTheme),
+                ],
+              ),
+            ),
+            const SearchFieldWidget(textHint: 'Search Game'),
+            Flexible(
+              child: Container(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text("Listings",
+                            textAlign: TextAlign.start,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: textTheme.headline4
+                                ?.copyWith(color: aquaGreenColor)),
+                        Divider(
+                          color: aquaGreenColor,
+                          thickness: 1.0,
+                        ),
+                        Flexible(
+                          child: ListView.builder(
+                            itemCount: 15,
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) => GestureDetector(
+                              onTap: () {},
+                              child: buildListItem(textTheme),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 44.0,
+                        ),
+                        Text("Games",
+                            textAlign: TextAlign.start,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: textTheme.headline4
+                                ?.copyWith(color: aquaGreenColor)),
+                        Divider(
+                          color: aquaGreenColor,
+                          thickness: 1.0,
+                        ),
+                        SizedBox(
+                          height: 166,
+                          child: ListView.builder(
+                            itemCount: 5,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) => GestureDetector(
+                              onTap: () {
+                                debugPrint('Battlegrounds Mobile India $index');
+                                FocusManager.instance.primaryFocus?.unfocus();
+                                //  context.pushNamed(gamePage);
+                                /*Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            GameItemScreen(name: 'Battlegrounds Mobile $index')));*/
+                              },
+                              child: SizedBox(
+                                height: 166,
+                                width: 120,
+                                child: Center(
+                                  child: GameCard(index: index),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Text("Users",
+                            textAlign: TextAlign.start,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: textTheme.headline4
+                                ?.copyWith(color: aquaGreenColor)),
+                        Divider(
+                          color: aquaGreenColor,
+                          thickness: 1.0,
+                        ),
+                        Flexible(
+                          child: ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: 3,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (context, index) => GestureDetector(
+                              onTap: () {},
+                              child: buildUsersListItem(textTheme),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-        )
-      ],
+          ],
+        ),
+      ),
     );
   }
 

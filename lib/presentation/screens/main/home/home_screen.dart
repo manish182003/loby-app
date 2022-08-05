@@ -5,10 +5,8 @@ import 'package:loby/core/theme/colors.dart';
 import 'package:loby/presentation/screens/main/home/widgets/game_list_card.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../../services/routing_service/routes.dart';
 import '../../../../services/routing_service/routes_name.dart';
 import '../../../widgets/GlobleSearchFieldWidget.dart';
-import '../../../widgets/SearchFieldWidget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -86,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     children: [
                       Padding(
-                          padding: EdgeInsets.all(1.h),
+                          padding: EdgeInsets.all(2.h),
                           child: Text('Top Games',
                               style: textTheme.headline3
                                   ?.copyWith(color: textWhiteColor))),
@@ -165,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         CategoryItemScreen(name: 'Buddy $index')));*/
               },
               child: Container(
-                padding: EdgeInsets.all(8.0),
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
                 decoration: BoxDecoration(
                   color: textFieldColor,
                   border: Border.all(color: textLightColor, width: 0.5),
@@ -218,5 +216,4 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
 }

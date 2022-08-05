@@ -12,8 +12,9 @@ class InputTextWidget extends StatelessWidget {
   final double? verticalHeight;
   final TextEditingController? controller;
   final dynamic onChanged;
+  final TextAlign? textAlign;
 
-  const InputTextWidget({Key? key, required this.hintName, this.maxLines, this.validator, this.keyboardType, this.txtHintColor, this.verticalHeight, this.controller, this.onChanged}) : super(key: key);
+  const InputTextWidget({Key? key, required this.hintName, this.maxLines, this.validator, this.keyboardType, this.txtHintColor, this.verticalHeight, this.controller, this.onChanged, this.textAlign}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +27,7 @@ class InputTextWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(1.5.h),
       ),
       child: TextFormField(
+        textAlign: textAlign?? TextAlign.start,
         validator: validator,
         style: textTheme.headline4?.copyWith(color: textWhiteColor),
         maxLines: maxLines?? 1,

@@ -26,7 +26,7 @@ class _DisputeScreenState extends State<DisputeScreen> {
       length: 2,
       child:  Scaffold(
         appBar:  PreferredSize(
-          preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.2),
+          preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.17),
           child:  Container(
             child:  SafeArea(
               child: Column(
@@ -37,17 +37,18 @@ class _DisputeScreenState extends State<DisputeScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         SizedBox(
-                          width: 7.h,
-                          height: 7.h,
+                          width: 42,
+                          height: 42,
                           child: MaterialButton(
                             shape: const CircleBorder(),
-                            color: backgroundBalticSeaColor,
+                            color: textCharcoalBlueColor,
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: SvgPicture.asset(
-                              'assets/icons/back_icon.svg',
-                              color: whiteColor,
+                            child: Icon(
+                              Icons.arrow_back_ios,
+                              size: 18,
+                              color: Colors.white,
                             ),
                           ),
                         ),
@@ -73,7 +74,7 @@ class _DisputeScreenState extends State<DisputeScreen> {
                   ),
                   TabBar(
                     indicatorSize: TabBarIndicatorSize.label,
-                    indicatorColor: tabIndicatorColor,
+                    indicatorColor: butterflyBlueColor,
                     indicatorWeight: 4.0,
                     labelColor: textWhiteColor,
                     labelStyle: textTheme.headline5,

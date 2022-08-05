@@ -67,7 +67,7 @@ class UpdateStatusDialog {
             Stack(
               children: [
                 Card(
-                  color: backgroundBalticSeaColor,
+                  color: shipGreyColor,
                   elevation: 0.0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16.0),
@@ -114,7 +114,7 @@ class UpdateStatusDialog {
                 Padding(
                   padding: EdgeInsets.only(top: 8.h),
                   child: Card(
-                    color: backgroundBalticSeaColor,
+                    color: shipGreyColor,
                     elevation: 0.0,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16.0),
@@ -125,7 +125,7 @@ class UpdateStatusDialog {
                       child: Container(
                         width: MediaQuery.of(context).size.width * 1,
                         decoration: BoxDecoration(
-                          color: backgroundBalticSeaColor,
+                          color: shipGreyColor,
                           borderRadius: BorderRadius.circular(16.0),
                         ),
                         child: SingleChildScrollView(

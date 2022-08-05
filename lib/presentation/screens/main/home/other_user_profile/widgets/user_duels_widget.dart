@@ -74,7 +74,7 @@ class UserDuelsWidget extends StatelessWidget {
           ),
           child: Padding(
             padding:
-                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 0.0),
             child: Column(
               children: [
                 Row(
@@ -157,11 +157,11 @@ class UserDuelsWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 8.0),
       child: Container(
           width: MediaQuery.of(context).size.width * 0.25,
-          decoration: BoxDecoration(
+          /*decoration: BoxDecoration(
             color: textFieldColor,
             border: Border.all(color: borderColor),
             borderRadius: BorderRadius.circular(10.0),
-          ),
+          ),*/
           child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(

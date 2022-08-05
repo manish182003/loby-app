@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'follower_item_widget.dart';
 
 class FollowerTabScreen extends StatefulWidget {
@@ -31,7 +32,7 @@ class _FollowerTabScreenState extends State<FollowerTabScreen> {
     return ListView.builder(
       itemCount: 50,
       shrinkWrap: true,
-      padding: const EdgeInsets.only(top: 16),
+      padding: const EdgeInsets.only(top: 8),
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         return const FollowerItemWidget();

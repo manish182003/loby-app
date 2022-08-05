@@ -35,17 +35,18 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  width: 7.h,
-                  height: 7.h,
+                  width: 42,
+                  height: 42,
                   child: MaterialButton(
                     shape: const CircleBorder(),
-                    color: backgroundBalticSeaColor,
+                    color: textCharcoalBlueColor,
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: SvgPicture.asset(
-                      'assets/icons/back_icon.svg',
-                      color: whiteColor,
+                    child: Icon(
+                      Icons.arrow_back_ios,
+                      size: 18,
+                      color: Colors.white,
                     ),
                   ),
                 ),
@@ -74,7 +75,7 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
             child: Stack(
               children: [
                 Card(
-                  color: backgroundBalticSeaColor,
+                  color: shipGreyColor,
                   elevation: 0.0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16.0),
@@ -110,7 +111,7 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
                 Padding(
                   padding: const EdgeInsets.only(top: 110.0),
                   child: Card(
-                    color: backgroundBalticSeaColor,
+                    color: shipGreyColor,
                     elevation: 0.0,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16.0),
@@ -118,7 +119,7 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
                     child: Container(
                       width: MediaQuery.of(context).size.width * 1,
                       decoration: BoxDecoration(
-                        color: backgroundBalticSeaColor,
+                        color: shipGreyColor,
                         borderRadius: BorderRadius.circular(16.0),
                       ),
                       child: Padding(

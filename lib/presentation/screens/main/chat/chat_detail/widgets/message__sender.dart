@@ -22,7 +22,7 @@ class MessageSenderWidget extends StatelessWidget {
       padding: const EdgeInsets.only(left: 30, top: 30, right: 30),
       child: Column(
         children: [
-          Row(
+          /*Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -61,9 +61,8 @@ class MessageSenderWidget extends StatelessWidget {
                 ),
               ),
             ],
-          ),
+          ),*/
           Container(
-            padding: EdgeInsets.only(left: 12.w),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [

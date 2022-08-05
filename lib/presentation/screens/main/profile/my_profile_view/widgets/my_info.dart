@@ -48,7 +48,7 @@ class MyInfo extends StatelessWidget {
 
   _buildCategories(TextTheme textTheme) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      padding: const EdgeInsets.symmetric(horizontal: 0.0),
       child: CustomChip(
         labelName: bubbles,
       ),

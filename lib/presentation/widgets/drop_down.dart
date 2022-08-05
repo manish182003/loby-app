@@ -31,7 +31,7 @@ class _MyDropDownWidgetState extends State<MyDropDownWidget> {
     final textTheme = Theme.of(context).textTheme;
     return Container(
       constraints: const BoxConstraints(
-        minHeight: 45,
+        minHeight: 49,
         minWidth: double.infinity,
       ),
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0.0),
@@ -47,19 +47,25 @@ class _MyDropDownWidgetState extends State<MyDropDownWidget> {
             child: Row(
               children: [
                 Expanded(
-                  child: Text(
-                    widget.hintTxt ?? 'Select',
-                    style: textTheme.headline4?.copyWith(color: textLightColor),
-                    overflow: TextOverflow.ellipsis,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0,),
+                    child: Text(
+                      widget.hintTxt ?? 'Select',
+                      style: textTheme.headline4?.copyWith(color: textLightColor),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
 
-          icon: const Icon(
-            Icons.keyboard_arrow_down,
-            color: iconWhiteColor,
+          icon: Padding(
+            padding: const EdgeInsets.only(right:8.0),
+            child: const Icon(
+              Icons.keyboard_arrow_down,
+              color: iconWhiteColor,
+            ),
           ),
           items: _addDividersAfterItems(items, textTheme),
           customItemsIndexes: _getDividersIndexes(),
@@ -72,7 +78,7 @@ class _MyDropDownWidgetState extends State<MyDropDownWidget> {
           },
           dropdownDecoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
-            color: backgroundBalticSeaColor,
+            color: shipGreyColor,
           ),
           buttonHeight: 40,
           buttonWidth: 140,

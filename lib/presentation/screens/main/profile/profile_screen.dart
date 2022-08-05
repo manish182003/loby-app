@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
@@ -46,10 +47,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "Mukesh Kumar Patel",
-                            style: textTheme.subtitle1?.copyWith(
-                                fontSize: 18.sp, color: textWhiteColor),
+                          Row(
+                            crossAxisAlignment:
+                            CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                constraints: BoxConstraints(
+                                    maxWidth: MediaQuery.of(context).size.width * 0.55),
+                                child: Text("Mukesh Kumar",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: textTheme.headline3
+                                        ?.copyWith(
+                                        color: textWhiteColor)),
+                              ),
+                              const SizedBox(width: 8.0),
+                              SvgPicture.asset(
+                                'assets/icons/verified_user_bedge.svg',
+                                height: 15,
+                                width: 15,
+                              ),
+                            ],
                           ),
                           SizedBox(
                             height: 1.h,

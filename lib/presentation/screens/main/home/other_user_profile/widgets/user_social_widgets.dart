@@ -22,13 +22,13 @@ class UserSocialWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const SizedBox(height: 8),
-              buildItem(textTheme, context, 'assets/icons/instagram_icon.svg', 'Instagram', 'https://www.instagram.com/loby.gg'),
+              buildItem(textTheme, context, 'assets/icons/instagram_one_icon.svg', 'Instagram', 'https://www.instagram.com/loby.gg', 38.0, 38.0),
               const SizedBox(height: 16),
-              buildItem(textTheme, context, 'assets/icons/youtube_icon.svg', 'YouTube', 'https://www.youtube.com/c/jabykoay'),
+              buildItem(textTheme, context, 'assets/icons/youtube_icon.svg', 'YouTube', 'https://www.youtube.com/c/jabykoay',32.0, 32.0),
               const SizedBox(height: 16),
-              buildItem(textTheme, context, 'assets/icons/discord_icon.svg', 'Discord', 'https://discord.com/channels/827464017693769748'),
+              buildItem(textTheme, context, 'assets/icons/discord_icon.svg', 'Discord', 'https://discord.com/channels/827464017693769748', 32.0, 32.0),
               const SizedBox(height: 16),
-              buildItem(textTheme, context, 'assets/icons/twitch_icon.svg', 'Twitch', 'https://www.twitch.tv/shroud'),
+              buildItem(textTheme, context, 'assets/icons/twitch_icon.svg', 'Twitch', 'https://www.twitch.tv/shroud', 32.0, 32.0),
               const SizedBox(height: 16),
             ],
           ),
@@ -37,7 +37,7 @@ class UserSocialWidget extends StatelessWidget {
     );
   }
 
-  Widget buildItem(TextTheme textTheme, BuildContext context, String socialIcon, String socialTitle, String socialLink) {
+  Widget buildItem(TextTheme textTheme, BuildContext context, String socialIcon, String socialTitle, String socialLink, double width, double height) {
     return Container(
       constraints: const BoxConstraints(
         minHeight: 45, minWidth: double.infinity,),
@@ -57,8 +57,8 @@ class UserSocialWidget extends StatelessWidget {
                   child: Container(
                     child: SvgPicture.asset(
                       socialIcon,
-                      height: 32,
-                      width: 32,
+                      height: width,
+                      width: height,
                     ),
                   ),
                 ),

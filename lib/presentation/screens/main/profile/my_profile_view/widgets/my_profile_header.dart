@@ -40,11 +40,11 @@ class _MyProfileHeaderState extends State<MyProfileHeader> {
         Stack(
           children: <Widget>[
             SizedBox(
-              height: 250,
+              height: 300,
               width: double.infinity,
               child: Image.asset(
                 "assets/images/img1.png",
-                fit: BoxFit.fitWidth,
+                fit: BoxFit.cover,
               ),
             ),
             Row(
@@ -53,17 +53,18 @@ class _MyProfileHeaderState extends State<MyProfileHeader> {
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: SizedBox(
-                      width: 7.h,
-                      height: 7.h,
+                      width: 42,
+                      height: 42,
                       child: MaterialButton(
                         shape: const CircleBorder(),
-                        color: backgroundBalticSeaColor,
+                        color: textCharcoalBlueColor,
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: SvgPicture.asset(
-                          'assets/icons/back_icon.svg',
-                          color: whiteColor,
+                        child: Icon(
+                          Icons.arrow_back_ios,
+                          size: 18,
+                          color: Colors.white,
                         ),
                       ),
                     ),
@@ -89,11 +90,11 @@ class _MyProfileHeaderState extends State<MyProfileHeader> {
           padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 12.0),
           child: Container(
             width: double.infinity,
-            margin: const EdgeInsets.only(top: 150),
+            margin: const EdgeInsets.only(top: 200),
             child: Column(
               children: <Widget>[
                 Card(
-                  color: backgroundBalticSeaColor,
+                  color: shipGreyColor,
                   elevation: 0.0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16.0),
@@ -171,21 +172,59 @@ class _MyProfileHeaderState extends State<MyProfileHeader> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            Text("536K followers",
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 1,
-                                                style: textTheme.headline6
-                                                    ?.copyWith(
+                                            RichText(
+                                              textAlign: TextAlign.start,
+                                              text: TextSpan(
+                                                children: [
+                                                  TextSpan(
+                                                    text: '536K ',
+                                                    style: textTheme.headline5
+                                                        ?.copyWith(
+                                                      color:
+                                                          selectiveYellowColor,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                    ),
+                                                  ),
+                                                  TextSpan(
+                                                      text: 'Followers',
+                                                      style: textTheme.headline5
+                                                          ?.copyWith(
                                                         color:
-                                                            selectiveYellowColor)),
+                                                            selectiveYellowColor,
+                                                        fontWeight:
+                                                            FontWeight.w200,
+                                                      )),
+                                                ],
+                                              ),
+                                            ),
                                             const SizedBox(width: 16.0),
-                                            Text("120 Listings",
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 1,
-                                                style: textTheme.headline6
-                                                    ?.copyWith(
+                                            RichText(
+                                              textAlign: TextAlign.start,
+                                              text: TextSpan(
+                                                children: [
+                                                  TextSpan(
+                                                    text: '120 ',
+                                                    style: textTheme.headline5
+                                                        ?.copyWith(
+                                                      color:
+                                                          selectiveYellowColor,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                    ),
+                                                  ),
+                                                  TextSpan(
+                                                      text: 'Listing',
+                                                      style: textTheme.headline5
+                                                          ?.copyWith(
                                                         color:
-                                                            selectiveYellowColor)),
+                                                            selectiveYellowColor,
+                                                        fontWeight:
+                                                            FontWeight.w200,
+                                                      )),
+                                                ],
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ],
@@ -206,7 +245,7 @@ class _MyProfileHeaderState extends State<MyProfileHeader> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.4,
+                                width: MediaQuery.of(context).size.width * 0.6,
                                 child: CustomButton(
                                   color: purpleLightIndigoColor,
                                   textColor: textWhiteColor,
@@ -218,8 +257,8 @@ class _MyProfileHeaderState extends State<MyProfileHeader> {
                               ),
                               const SizedBox(width: 4.0),
                               SizedBox(
-                                width: 6.3.h,
-                                height: 6.3.h,
+                                width: 45,
+                                height: 45,
                                 child: MaterialButton(
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8.0),
@@ -244,6 +283,7 @@ class _MyProfileHeaderState extends State<MyProfileHeader> {
                           padding: const EdgeInsets.symmetric(
                               vertical: 0.0, horizontal: 16.0),
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Row(
                                 children: [
@@ -256,8 +296,10 @@ class _MyProfileHeaderState extends State<MyProfileHeader> {
                                   const SizedBox(width: 4.0),
                                   Text("4.2",
                                       overflow: TextOverflow.ellipsis,
-                                      style: textTheme.headline4
-                                          ?.copyWith(color: textWhiteColor)),
+                                      style: textTheme.headline4?.copyWith(
+                                        color: textWhiteColor,
+                                        fontWeight: FontWeight.w300,
+                                      )),
                                 ],
                               ),
                               const SizedBox(
@@ -274,8 +316,10 @@ class _MyProfileHeaderState extends State<MyProfileHeader> {
                                   const SizedBox(width: 4.0),
                                   Text("123 Orders",
                                       overflow: TextOverflow.ellipsis,
-                                      style: textTheme.headline4
-                                          ?.copyWith(color: textWhiteColor)),
+                                      style: textTheme.headline4?.copyWith(
+                                        color: textWhiteColor,
+                                        fontWeight: FontWeight.w300,
+                                      )),
                                 ],
                               ),
                             ],

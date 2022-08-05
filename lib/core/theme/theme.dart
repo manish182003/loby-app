@@ -12,7 +12,8 @@ class ApplicationTheme {
         scaffoldBackgroundColor: backgroundDarkJungleGreenColor,
         // colorScheme:_customColorScheme,
         iconTheme: const IconThemeData(color: iconColor),
-        appBarTheme: const AppBarTheme(backgroundColor: backgroundBalticSeaColor),
+        appBarTheme:
+            const AppBarTheme(backgroundColor: backgroundBalticSeaColor),
         textSelectionTheme: const TextSelectionThemeData(
           cursorColor: primaryTextColor,
         ),
@@ -37,7 +38,7 @@ class ApplicationTheme {
           ),
           headline3: TextStyle(
             fontSize: SizerUtil.deviceType == DeviceType.web ? 3.5.sp : 16,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w400,
             color: primaryTextColor,
             fontFamily: 'Inter',
           ),
@@ -54,12 +55,11 @@ class ApplicationTheme {
             fontFamily: 'Inter',
           ),
           headline6: TextStyle(
-            fontSize: SizerUtil.deviceType == DeviceType.web ? 2.0.sp : 10,
+            fontSize: SizerUtil.deviceType == DeviceType.web ? 2.0.sp : 11,
             fontWeight: FontWeight.w400,
             color: primaryTextColor,
             fontFamily: 'Inter',
           ),
-
           subtitle1: const TextStyle(
             fontSize: 8,
             fontWeight: FontWeight.w400,

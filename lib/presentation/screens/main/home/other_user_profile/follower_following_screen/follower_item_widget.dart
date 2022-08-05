@@ -52,25 +52,22 @@ class FollowerItemWidget extends StatelessWidget {
   }
 
   _buildUserAvtar(Color borderColor) {
-    return const Padding(
-      padding: EdgeInsets.all(8.0),
-      child: CircleAvatar(
-        radius: 28,
-        backgroundColor: aquaGreenColor,
-        child: Padding(
-          padding: EdgeInsets.all(1.0),
-          child: CircleAvatar(
-            backgroundColor: backgroundDarkJungleGreenColor,
-            radius: 28,
-            child: Padding(
-              padding: EdgeInsets.all(2.0),
-              child: CircleAvatar(
-                backgroundImage: AssetImage('assets/images/img.png'),
-                radius: 28,
-                backgroundColor: backgroundBalticSeaColor,
-              ),
-            ), //CircleAvatar
-          ),
+    return const CircleAvatar(
+      radius: 28,
+      backgroundColor: aquaGreenColor,
+      child: Padding(
+        padding: EdgeInsets.all(1.0),
+        child: CircleAvatar(
+          backgroundColor: backgroundDarkJungleGreenColor,
+          radius: 28,
+          child: Padding(
+            padding: EdgeInsets.all(2.0),
+            child: CircleAvatar(
+              backgroundImage: AssetImage('assets/images/img.png'),
+              radius: 28,
+              backgroundColor: backgroundBalticSeaColor,
+            ),
+          ), //CircleAvatar
         ),
       ),
     );

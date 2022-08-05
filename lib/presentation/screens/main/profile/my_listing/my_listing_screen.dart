@@ -33,17 +33,18 @@ class _MyListingScreenState extends State<MyListingScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  width: 7.h,
-                  height: 7.h,
+                  width: 42,
+                  height: 42,
                   child: MaterialButton(
                     shape: const CircleBorder(),
-                    color: backgroundBalticSeaColor,
+                    color: textCharcoalBlueColor,
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: SvgPicture.asset(
-                      'assets/icons/back_icon.svg',
-                      color: whiteColor,
+                    child: Icon(
+                      Icons.arrow_back_ios,
+                      size: 18,
+                      color: Colors.white,
                     ),
                   ),
                 ),
@@ -78,9 +79,9 @@ class _MyListingScreenState extends State<MyListingScreen> {
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 6.4 / 10.2,
-        mainAxisSpacing: 0.1.h,
-        crossAxisSpacing: 0.1.h,
+        childAspectRatio: 0.65,
+        mainAxisSpacing: 0.1,
+        crossAxisSpacing: 0.1,
       ),
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),

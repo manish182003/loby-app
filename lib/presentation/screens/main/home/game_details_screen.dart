@@ -36,17 +36,18 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  width: 7.h,
-                  height: 7.h,
+                  width: 42,
+                  height: 42,
                   child: MaterialButton(
                     shape: const CircleBorder(),
-                    color: backgroundBalticSeaColor,
+                    color: textCharcoalBlueColor,
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: SvgPicture.asset(
-                      'assets/icons/back_icon.svg',
-                      color: whiteColor,
+                    child: Icon(
+                      Icons.arrow_back_ios,
+                      size: 18,
+                      color: Colors.white,
                     ),
                   ),
                 ),
@@ -57,7 +58,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                       padding: const EdgeInsets.symmetric(
                           vertical: 0.0, horizontal: 8.0),
                       child: Text(
-                        'Test',
+                        '',
                         maxLines: 2,
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
@@ -158,6 +159,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
+                  width: MediaQuery.of(context).size.width * 0.6,
                   decoration: BoxDecoration(
                     color: orangeColor,
                     borderRadius: BorderRadius.circular(8),
@@ -166,12 +168,16 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                     padding: const EdgeInsets.symmetric(
                         vertical: 4.0, horizontal: 8.0),
                     child: Text('Battlegrounds Mobile India',
+                        maxLines: 1,
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
                         style: textTheme.headline5
                             ?.copyWith(color: textWhiteColor)),
                   ),
                 ),
                 const SizedBox(width: 4.0),
                 Container(
+                  width: MediaQuery.of(context).size.width * 0.2,
                   decoration: BoxDecoration(
                     color: purpleLightIndigoColor,
                     borderRadius: BorderRadius.circular(8),
@@ -180,6 +186,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                     padding: const EdgeInsets.symmetric(
                         vertical: 4.0, horizontal: 8.0),
                     child: Text('Account',
+                        textAlign: TextAlign.center,
                         style: textTheme.headline5
                             ?.copyWith(color: textWhiteColor)),
                   ),
@@ -239,7 +246,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: textTheme.headline5
-                                ?.copyWith(color: textLightColor),
+                                ?.copyWith(color: textWhiteColor),
                           ),
                         ],
                       ),
@@ -323,7 +330,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: textTheme.headline5
-                                ?.copyWith(color: textLightColor),
+                                ?.copyWith(color: textWhiteColor),
                           ),
                         ],
                       ),
@@ -386,8 +393,11 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                   "Mukesh Kumar Patel",
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
-                                  style: textTheme.headline4
+                                  style: textTheme.headline3
                                       ?.copyWith(color: textWhiteColor),
+                                ),
+                                SizedBox(
+                                  height: 8.0,
                                 ),
                                 Row(
                                   children: [
@@ -437,21 +447,27 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                         ),
                         const SizedBox(width: 4.0),
                         SizedBox(
-                          width: 6.3.h,
-                          height: 6.3.h,
-                          child: MaterialButton(
+                          child: Card(
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
+                              borderRadius: BorderRadius.circular(12.0),
                             ),
                             color: shipGreyColor,
-                            onPressed: () {
-                              debugPrint("Click Search");
-                            },
-                            child: SvgPicture.asset(
-                              'assets/icons/a_check_icon.svg',
-                              color: iconWhiteColor,
-                              width: 24,
-                              height: 24,
+                            child: Container(
+                              width: 45,
+                              height: 45,
+                              decoration: BoxDecoration(
+                                color: shipGreyColor,
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: SvgPicture.asset(
+                                  'assets/icons/a_check_icon.svg',
+                                  color: iconWhiteColor,
+                                  width: 12,
+                                  height: 12,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -588,11 +604,15 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                       ?.copyWith(color: textLightColor),
                                 ),
                               ),
-                              Text(
-                                textAlign: TextAlign.center,
-                                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-                                style: textTheme.headline5
-                                    ?.copyWith(color: textWhiteColor),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Text(
+                                  textAlign: TextAlign.center,
+                                  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                                  style: textTheme.headline6
+                                      ?.copyWith(color: textWhiteColor),
+                                ),
                               ),
                             ],
                           ),

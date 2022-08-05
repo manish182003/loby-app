@@ -53,7 +53,7 @@ class CategoryItemCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                       style:
-                      textTheme.subtitle1?.copyWith(color: textWhiteColor)),
+                      textTheme.headline6?.copyWith(color: textWhiteColor)),
                 ],
               ),
             ),

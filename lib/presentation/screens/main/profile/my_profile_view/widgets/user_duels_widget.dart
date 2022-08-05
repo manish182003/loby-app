@@ -19,7 +19,7 @@ class UserDuelsWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(vertical:8.0),
           child: Card(
-            color: backgroundBalticSeaColor,
+            color: shipGreyColor,
             elevation: 0.0,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16.0),

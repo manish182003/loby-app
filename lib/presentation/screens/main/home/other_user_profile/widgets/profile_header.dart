@@ -50,11 +50,11 @@ class _ProfileHeaderState extends State<ProfileHeader> {
         Stack(
           children: <Widget>[
             SizedBox(
-              height: 250,
+              height: 300,
               width: double.infinity,
               child: Image.asset(
                 "assets/images/img1.png",
-                fit: BoxFit.fitWidth,
+                fit: BoxFit.cover,
               ),
             ),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <
@@ -62,17 +62,18 @@ class _ProfileHeaderState extends State<ProfileHeader> {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: SizedBox(
-                  width: 7.h,
-                  height: 7.h,
+                  width: 42,
+                  height: 42,
                   child: MaterialButton(
                     shape: const CircleBorder(),
-                    color: backgroundBalticSeaColor,
+                    color: textCharcoalBlueColor,
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: SvgPicture.asset(
-                      'assets/icons/back_icon.svg',
-                      color: whiteColor,
+                    child: Icon(
+                      Icons.arrow_back_ios,
+                      size: 18,
+                      color: Colors.white,
                     ),
                   ),
                 ),
@@ -148,7 +149,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
           padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 12.0),
           child: Container(
             width: double.infinity,
-            margin: const EdgeInsets.only(top: 150),
+            margin: const EdgeInsets.only(top: 200),
             child: Column(
               children: <Widget>[
                 Card(
@@ -240,7 +241,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                                   ),
                                                   TextSpan(
                                                       text: 'Followers',
-                                                      style: textTheme.headline5?.copyWith(color: selectiveYellowColor)),
+                                                      style: textTheme.headline5?.copyWith(color: selectiveYellowColor, fontWeight: FontWeight.w200,)),
                                                 ],
                                               ),
                                             ),
@@ -255,7 +256,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                                   ),
                                                   TextSpan(
                                                       text: 'Listing',
-                                                      style: textTheme.headline5?.copyWith(color: selectiveYellowColor)),
+                                                      style: textTheme.headline5?.copyWith(color: selectiveYellowColor, fontWeight: FontWeight.w200,)),
                                                 ],
                                               ),
                                             ),

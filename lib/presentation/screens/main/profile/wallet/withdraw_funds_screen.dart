@@ -38,17 +38,18 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  width: 7.h,
-                  height: 7.h,
+                  width: 42,
+                  height: 42,
                   child: MaterialButton(
                     shape: const CircleBorder(),
-                    color: backgroundBalticSeaColor,
+                    color: textCharcoalBlueColor,
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: SvgPicture.asset(
-                      'assets/icons/back_icon.svg',
-                      color: whiteColor,
+                    child: Icon(
+                      Icons.arrow_back_ios,
+                      size: 18,
+                      color: Colors.white,
                     ),
                   ),
                 ),
@@ -77,7 +78,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
             child: Stack(
               children: [
                 Card(
-                  color: backgroundBalticSeaColor,
+                  color: shipGreyColor,
                   elevation: 0.0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16.0),
@@ -113,7 +114,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                 Padding(
                   padding: EdgeInsets.only(top: 110.0),
                   child: Card(
-                    color: backgroundBalticSeaColor,
+                    color: shipGreyColor,
                     elevation: 0.0,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16.0),
@@ -121,7 +122,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                     child: Container(
                       width: MediaQuery.of(context).size.width * 1,
                       decoration: BoxDecoration(
-                        color: backgroundBalticSeaColor,
+                        color: shipGreyColor,
                         borderRadius: BorderRadius.circular(16.0),
                       ),
                       child: Column(
@@ -217,7 +218,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
           elevation: 0,
           backgroundColor: backgroundDarkJungleGreenColor,
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
           child: Container(
             height: 190,
             child: Padding(
@@ -228,12 +229,16 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                   Text('Add Withdraw Method',
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
-                      style: textTheme.headline4
-                          ?.copyWith(color: textWhiteColor)),
+                      style:
+                          textTheme.headline4?.copyWith(color: textWhiteColor)),
                   const SizedBox(height: 16),
                   buildAddBankDetailItem(textTheme, context, 'Bank Account'),
                   const SizedBox(height: 16),
-                  buildAddUPIItem(textTheme, context, 'UPI ID',),
+                  buildAddUPIItem(
+                    textTheme,
+                    context,
+                    'UPI ID',
+                  ),
                 ],
               ),
             ),
@@ -251,7 +256,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
           elevation: 0,
           backgroundColor: backgroundDarkJungleGreenColor,
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
           child: Container(
             height: MediaQuery.of(context).size.height * 0.62,
             child: Padding(
@@ -285,8 +290,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                       height: 16,
                     ),
                     const InputTextTitleWidget(
-                        titleName: 'IFSC Code',
-                        titleTextColor: textWhiteColor),
+                        titleName: 'IFSC Code', titleTextColor: textWhiteColor),
                     SizedBox(
                       width: double.infinity,
                       height: 16,
@@ -309,8 +313,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                       height: 16,
                     ),
                     SizedBox(
-                      width:
-                      MediaQuery.of(context).size.width * 0.35,
+                      width: MediaQuery.of(context).size.width * 0.35,
                       child: CustomButton(
                         color: purpleLightIndigoColor,
                         textColor: textWhiteColor,
@@ -338,7 +341,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
           elevation: 0,
           backgroundColor: backgroundDarkJungleGreenColor,
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
           child: Container(
             height: 190,
             child: Padding(
@@ -347,8 +350,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const InputTextTitleWidget(
-                      titleName: 'Add UPI ID',
-                      titleTextColor: textWhiteColor),
+                      titleName: 'Add UPI ID', titleTextColor: textWhiteColor),
                   SizedBox(
                     width: double.infinity,
                     height: 16,
@@ -359,8 +361,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                     height: 16,
                   ),
                   SizedBox(
-                    width:
-                    MediaQuery.of(context).size.width * 0.35,
+                    width: MediaQuery.of(context).size.width * 0.35,
                     child: CustomButton(
                       color: purpleLightIndigoColor,
                       textColor: textWhiteColor,
@@ -379,7 +380,8 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
     );
   }
 
-  Widget buildAddBankDetailItem(TextTheme textTheme, BuildContext context, String title) {
+  Widget buildAddBankDetailItem(
+      TextTheme textTheme, BuildContext context, String title) {
     return GestureDetector(
       onTap: () {
         AddBankDetailDialog(context, textTheme);
@@ -390,7 +392,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
           minWidth: double.infinity,
         ),
         decoration: BoxDecoration(
-          color: backgroundBalticSeaColor,
+          color: shipGreyColor,
           borderRadius: BorderRadius.circular(10.0),
         ),
         child: Padding(
@@ -398,14 +400,14 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
           child: Text(title,
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
-              style: textTheme.headline6
-                  ?.copyWith(color: textWhiteColor)),
+              style: textTheme.headline6?.copyWith(color: textWhiteColor)),
         ),
       ),
     );
   }
 
-  Widget buildAddUPIItem(TextTheme textTheme, BuildContext context, String title) {
+  Widget buildAddUPIItem(
+      TextTheme textTheme, BuildContext context, String title) {
     return GestureDetector(
       onTap: () {
         AddUPIDetailDialog(context, textTheme);
@@ -416,7 +418,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
           minWidth: double.infinity,
         ),
         decoration: BoxDecoration(
-          color: backgroundBalticSeaColor,
+          color: shipGreyColor,
           borderRadius: BorderRadius.circular(10.0),
         ),
         child: Padding(
@@ -424,14 +426,13 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
           child: Text(title,
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
-              style: textTheme.headline6
-                  ?.copyWith(color: textWhiteColor)),
+              style: textTheme.headline6?.copyWith(color: textWhiteColor)),
         ),
       ),
     );
   }
 
-  /*void AddWithWithdrawMethodDialog(BuildContext context, TextTheme textTheme) {
+/*void AddWithWithdrawMethodDialog(BuildContext context, TextTheme textTheme) {
     showDialog(
       context: context,
       builder: (BuildContext context) {

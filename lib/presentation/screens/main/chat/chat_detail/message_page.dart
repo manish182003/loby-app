@@ -24,17 +24,18 @@ class MessagePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(
-                    width: 7.h,
-                    height: 7.h,
+                    width: 42,
+                    height: 42,
                     child: MaterialButton(
                       shape: const CircleBorder(),
-                      color: backgroundBalticSeaColor,
+                      color: textCharcoalBlueColor,
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: SvgPicture.asset(
-                        'assets/icons/back_icon.svg',
-                        color: whiteColor,
+                      child: Icon(
+                        Icons.arrow_back_ios,
+                        size: 18,
+                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -77,21 +78,35 @@ class MessagePage extends StatelessWidget {
   }
 
   Widget chatInput(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width - (2 * 17),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: backgroundBalticSeaColor,
-        borderRadius: BorderRadius.circular(75),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
-          Text(
-            'Type Something',
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20.0),
+        child: Container(
+          color: Colors.white,
+          child: Row(
+            children: <Widget>[
+              SizedBox(width: 8.0),
+              Icon(Icons.insert_emoticon,
+                  size: 30.0, color: Theme.of(context).hintColor),
+              SizedBox(width: 8.0),
+              Expanded(
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Type a message',
+                    border: InputBorder.none,
+                  ),
+                ),
+              ),
+              Icon(Icons.attach_file,
+                  size: 30.0, color: Theme.of(context).hintColor),
+              SizedBox(width: 8.0),
+              Icon(Icons.camera_alt,
+                  size: 30.0, color: Theme.of(context).hintColor),
+              SizedBox(width: 8.0),
+            ],
           ),
-          Icon(Icons.send)
-        ],
+        ),
       ),
     );
   }

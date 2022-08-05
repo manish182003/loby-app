@@ -85,7 +85,7 @@ class _DropDownDividerState extends State<DropDownDivider> {
         },
         dropdownDecoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
-          color: backgroundBalticSeaColor,
+          color: shipGreyColor,
         ),
         buttonHeight: 40,
         buttonWidth: 150,

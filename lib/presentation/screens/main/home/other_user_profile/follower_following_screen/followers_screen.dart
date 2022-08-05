@@ -27,7 +27,7 @@ class _FollowersScreenState extends State<FollowersScreen> {
       length: 2,
       child:  Scaffold(
         appBar:  PreferredSize(
-          preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.34),
+          preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.30),
           child:  Container(
             child:  SafeArea(
               child: Column(
@@ -38,17 +38,18 @@ class _FollowersScreenState extends State<FollowersScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         SizedBox(
-                          width: 7.h,
-                          height: 7.h,
+                          width: 42,
+                          height: 42,
                           child: MaterialButton(
                             shape: const CircleBorder(),
-                            color: backgroundBalticSeaColor,
+                            color: textCharcoalBlueColor,
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: SvgPicture.asset(
-                              'assets/icons/back_icon.svg',
-                              color: whiteColor,
+                            child: Icon(
+                              Icons.arrow_back_ios,
+                              size: 18,
+                              color: Colors.white,
                             ),
                           ),
                         ),
@@ -131,7 +132,7 @@ class _FollowersScreenState extends State<FollowersScreen> {
                   ),
                   TabBar(
                     indicatorSize: TabBarIndicatorSize.label,
-                    indicatorColor: tabIndicatorColor,
+                    indicatorColor: butterflyBlueColor,
                     indicatorWeight: 4.0,
                     labelColor: textWhiteColor,
                     labelStyle: textTheme.headline5,

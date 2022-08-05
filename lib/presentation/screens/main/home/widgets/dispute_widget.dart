@@ -27,7 +27,7 @@ class DisputeWidget extends StatelessWidget {
           ),
           child: Padding(
             padding:
-                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 0.0),
             child: Column(
               children: [
                 Row(
@@ -48,6 +48,7 @@ class DisputeWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
+                        width: MediaQuery.of(context).size.width * 0.5,
                         decoration: BoxDecoration(
                           color: orangeColor,
                           borderRadius: BorderRadius.circular(8),
@@ -56,12 +57,16 @@ class DisputeWidget extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               vertical: 4.0, horizontal: 8.0),
                           child: Text('Battlegrounds Mobile India',
+                              maxLines: 1,
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.ellipsis,
                               style: textTheme.headline6
                                   ?.copyWith(color: textWhiteColor)),
                         ),
                       ),
                       const SizedBox(width: 4.0),
                       Container(
+                        width: MediaQuery.of(context).size.width * 0.2,
                         decoration: BoxDecoration(
                           color: butterflyBlueColor,
                           borderRadius: BorderRadius.circular(8),
@@ -70,6 +75,9 @@ class DisputeWidget extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               vertical: 4.0, horizontal: 8.0),
                           child: Text('TDM - 1v1',
+                              maxLines: 1,
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.ellipsis,
                               style: textTheme.headline6
                                   ?.copyWith(color: textWhiteColor)),
                         ),
@@ -117,7 +125,7 @@ class DisputeWidget extends StatelessWidget {
   _buildTitleField(TextTheme textTheme, String name, Color borderColor,
       BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
       child: Container(
           width: MediaQuery.of(context).size.width * 0.30,
           /*decoration: BoxDecoration(
@@ -137,7 +145,7 @@ class DisputeWidget extends StatelessWidget {
 
   _buildUserAvtar(Color borderColor) {
     return const Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: EdgeInsets.symmetric(vertical:8.0, horizontal: 0.0),
       child: CircleAvatar(
         radius: 36,
         backgroundColor: butterflyBlueColor,

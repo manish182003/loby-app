@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:loby/core/theme/colors.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../../core/utils/helpers.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/drop_down.dart';
 import '../../widgets/input_text_title_widget.dart';
@@ -52,7 +51,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
     final textTheme = Theme.of(context).textTheme;
     return Container(
       color: limedAshColor,
-     /* decoration: const BoxDecoration(
+      /* decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage("assets/images/login_bg_img.png"),
           fit: BoxFit.cover,
@@ -112,9 +111,6 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                         InputTextWidget(
                           hintName: 'Ex: Jhon Singh',
                           keyboardType: TextInputType.name,
-                          validator: (value) {
-                            return Helpers.validateField(value!);
-                          },
                         ),
                         SizedBox(
                           width: double.infinity,
@@ -130,9 +126,6 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                         InputTextWidget(
                           hintName: 'Ex: Commander',
                           keyboardType: TextInputType.name,
-                          validator: (value) {
-                            return Helpers.validateField(value!);
-                          },
                         ),
                         SizedBox(
                           width: double.infinity,
@@ -157,7 +150,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                           width: double.infinity,
                           height: 2.h,
                         ),
-                        const InputTextWidget(hintName: 'Ex: Bhopal'),
+                        const MyDropDownWidget(),
                         SizedBox(
                           width: double.infinity,
                           height: 4.h,
@@ -261,10 +254,14 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
             Container(
               width: MediaQuery.of(context).size.width * 0.6,
               child: TextField(
-                style: textTheme.headline4?.copyWith(color: textWhiteColor),
+                style: textTheme.headline4?.copyWith(
+                    color: textWhiteColor, fontWeight: FontWeight.w300),
                 decoration: InputDecoration(
                   border: InputBorder.none,
-                  hintStyle: textTheme.headline4?.copyWith(color: textWhiteColor),
+                  hintStyle: textTheme.headline4?.copyWith(
+                    color: textWhiteColor,
+                    fontWeight: FontWeight.w300,
+                  ),
                   hintText: 'Type Tags',
                 ),
               ),
