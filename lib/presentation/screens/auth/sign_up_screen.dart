@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:loby/core/theme/colors.dart';
-import 'package:loby/presentation/screens/auth/create_profile_screen.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../core/utils/helpers.dart';
+import '../../../services/routing_service/routes_name.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/input_text_title_widget.dart';
 import '../../widgets/input_text_widget.dart';
-import '../main/main_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -31,12 +31,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget body() {
     final textTheme = Theme.of(context).textTheme;
     return Container(
-      decoration: const BoxDecoration(
+      color: limedAshColor,
+      /*decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage("assets/images/login_bg_img.png"),
           fit: BoxFit.cover,
         ),
-      ),
+      ),*/
       child: Stack(
         children: [
           Container(
@@ -139,9 +140,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             name: "Create Account",
                             onTap: () {
                               if (_formKey.currentState!.validate()) {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) =>
-                                        const CreateProfileScreen()));
+                                context.pushNamed(createProfilePage);
                               }
                             },
                           ),
@@ -199,8 +198,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void _goToMainScreen(BuildContext context, TextTheme textTheme) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const MainScreen()));
+    context.pushNamed(mainPage);
   }
 
   Widget passwordTextFieldWidget(TextTheme textTheme, String password,

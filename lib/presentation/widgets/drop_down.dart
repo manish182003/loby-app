@@ -1,14 +1,13 @@
-import 'package:dropdown_button2/custom_dropdown_button2.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:loby/core/theme/colors.dart';
-import 'package:sizer/sizer.dart';
 
 class MyDropDownWidget extends StatefulWidget {
   final String? hintTxt;
   final Color? hintColor;
 
-  const MyDropDownWidget({Key? key, this.hintTxt, this.hintColor}) : super(key: key);
+  const MyDropDownWidget({Key? key, this.hintTxt, this.hintColor})
+      : super(key: key);
 
   @override
   State<MyDropDownWidget> createState() => _MyDropDownWidgetState();
@@ -31,57 +30,56 @@ class _MyDropDownWidgetState extends State<MyDropDownWidget> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return Container(
-        constraints: const BoxConstraints(
-          minHeight: 45,
-          minWidth: double.infinity,
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0.0),
-        decoration: BoxDecoration(
-            color: textFieldColor, borderRadius: BorderRadius.circular(10)),
+      constraints: const BoxConstraints(
+        minHeight: 45,
+        minWidth: double.infinity,
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0.0),
+      decoration: BoxDecoration(
+          color: textFieldColor, borderRadius: BorderRadius.circular(10)),
 
-        // dropdown below..
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton2(
-            isExpanded: true,
-            // Reduces the dropdowns height by +/- 50%
-            hint: Container(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(widget.hintTxt??
-                        'Select',
-                      style: textTheme.headline4
-                          ?.copyWith(color: textLightColor),
-                      overflow: TextOverflow.ellipsis,
-                    ),
+      // dropdown below..
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton2(
+          isExpanded: true,
+          // Reduces the dropdowns height by +/- 50%
+          hint: Container(
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    widget.hintTxt ?? 'Select',
+                    style: textTheme.headline4?.copyWith(color: textLightColor),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-
-            icon: const Icon(
-              Icons.keyboard_arrow_down,
-              color: iconWhiteColor,
-            ),
-            items: _addDividersAfterItems(items, textTheme),
-            customItemsIndexes: _getDividersIndexes(),
-            customItemsHeight: 4,
-            value: selectedValue,
-            onChanged: (value) {
-              setState(() {
-                selectedValue = value as String;
-              });
-            },
-            dropdownDecoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
-              color: backgroundBalticSeaColor,
-            ),
-            buttonHeight: 40,
-            buttonWidth: 140,
-            itemHeight: 40,
-            itemPadding: const EdgeInsets.symmetric(horizontal: 8.0),
           ),
+
+          icon: const Icon(
+            Icons.keyboard_arrow_down,
+            color: iconWhiteColor,
+          ),
+          items: _addDividersAfterItems(items, textTheme),
+          customItemsIndexes: _getDividersIndexes(),
+          customItemsHeight: 4,
+          value: selectedValue,
+          onChanged: (value) {
+            setState(() {
+              selectedValue = value as String;
+            });
+          },
+          dropdownDecoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            color: backgroundBalticSeaColor,
+          ),
+          buttonHeight: 40,
+          buttonWidth: 140,
+          itemHeight: 40,
+          itemPadding: const EdgeInsets.symmetric(horizontal: 8.0),
         ),
+      ),
     );
   }
 
@@ -97,7 +95,7 @@ class _MyDropDownWidgetState extends State<MyDropDownWidget> {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
                 item,
-                style: textTheme.headline6?.copyWith(color: textWhiteColor),
+                style: textTheme.headline4?.copyWith(color: textWhiteColor),
               ),
             ),
           ),
@@ -138,9 +136,15 @@ class MenuItem {
 class MenuItems {
   static const List<MenuItem> firstItems = [home, share, settings];
 
-  static const home = MenuItem(text: 'Home', );
-  static const share = MenuItem(text: 'Share', );
-  static const settings = MenuItem(text: 'Settings',);
+  static const home = MenuItem(
+    text: 'Home',
+  );
+  static const share = MenuItem(
+    text: 'Share',
+  );
+  static const settings = MenuItem(
+    text: 'Settings',
+  );
 
   static Widget buildItem(MenuItem item) {
     return Row(
@@ -158,15 +162,14 @@ class MenuItems {
   static onChanged(BuildContext context, MenuItem item) {
     switch (item) {
       case MenuItems.home:
-      //Do something
+        //Do something
         break;
       case MenuItems.settings:
-      //Do something
+        //Do something
         break;
       case MenuItems.share:
-      //Do something
+        //Do something
         break;
     }
   }
 }
-

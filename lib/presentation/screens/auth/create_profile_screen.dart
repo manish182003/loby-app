@@ -51,12 +51,13 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   Widget body() {
     final textTheme = Theme.of(context).textTheme;
     return Container(
-      decoration: const BoxDecoration(
+      color: limedAshColor,
+     /* decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage("assets/images/login_bg_img.png"),
           fit: BoxFit.cover,
         ),
-      ),
+      ),*/
       child: Stack(
         children: [
           Container(
@@ -234,30 +235,41 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   }
 
   Widget _buildSearchField(TextTheme textTheme) {
-    return Container(
-      constraints: const BoxConstraints(
-        minHeight: 45,
-        minWidth: double.infinity,
-      ),
-      decoration: BoxDecoration(
-        color: textFieldColor,
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: TextField(
-        style: textTheme.headline4?.copyWith(color: textWhiteColor),
-        decoration: InputDecoration(
-          prefixIcon: Padding(
-            padding: const EdgeInsets.all(16),
-            child: SvgPicture.asset(
-              'assets/icons/search_icon.svg',
-              color: iconWhiteColor,
-              height: 12,
-              width: 12,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+      child: Container(
+        constraints: const BoxConstraints(
+          minHeight: 45,
+          minWidth: 45,
+        ),
+        decoration: BoxDecoration(
+          color: textFieldColor,
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width * 0.13,
+              child: SvgPicture.asset(
+                'assets/icons/search_icon.svg',
+                color: iconWhiteColor,
+                width: 18,
+                height: 18,
+              ),
             ),
-          ),
-          border: InputBorder.none,
-          hintStyle: textTheme.headline4?.copyWith(color: textWhiteColor),
-          hintText: 'Type Tags',
+            Container(
+              width: MediaQuery.of(context).size.width * 0.6,
+              child: TextField(
+                style: textTheme.headline4?.copyWith(color: textWhiteColor),
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintStyle: textTheme.headline4?.copyWith(color: textWhiteColor),
+                  hintText: 'Type Tags',
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

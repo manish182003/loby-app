@@ -81,11 +81,93 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   const SizedBox(height: 4.0),
                   Align(
                     alignment: Alignment.topLeft,
-                    child: Text(
-                        textAlign: TextAlign.start,
-                        "1. For Accounts That Cannot Change Email Address : Sellers must provide the email address to the buyers and make sure they gain full access of the email such as secret questions etc.\n2. For Accounts That Can Change Email Address : Sellers must assist buyers to change the email address and provide the proof\n3. Payment will be put on hold if seller did not submit proof for (1) or (2). If seller fails to provide proof, the payment will be deducted to refund buyer when there is a dispute.\n4. You must be the main owner of the account(s) you intend to sell.\n5. Visit Accounts Service Rules and Descriptions for more info.",
-                        style: textTheme.headline6
-                            ?.copyWith(color: textLightColor)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        RichText(
+                            textAlign: TextAlign.start,
+                            text: TextSpan(children: [
+                              TextSpan(
+                                text:
+                                    '1. For Accounts That Cannot Change Email Address : ',
+                                style: textTheme.headline6?.copyWith(
+                                    color: textLightColor,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                              TextSpan(
+                                  text:
+                                      'Sellers must provide the email address to the buyers and make sure they gain full access of the email such as secret questions etc.',
+                                  style: textTheme.headline6?.copyWith(
+                                      color: textLightColor,
+                                      fontWeight: FontWeight.w300)),
+                            ])),
+                        RichText(
+                            textAlign: TextAlign.start,
+                            text: TextSpan(children: [
+                              TextSpan(
+                                text:
+                                    '2. For Accounts That Can Change Email Address : ',
+                                style: textTheme.headline6?.copyWith(
+                                    color: textLightColor,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                              TextSpan(
+                                  text:
+                                      'Sellers must assist buyers to change the email address and provide the proof',
+                                  style: textTheme.headline6?.copyWith(
+                                      color: textLightColor,
+                                      fontWeight: FontWeight.w300)),
+                            ])),
+                        RichText(
+                            textAlign: TextAlign.start,
+                            text: TextSpan(children: [
+                              TextSpan(
+                                text: '',
+                                style: textTheme.headline6?.copyWith(
+                                    color: textLightColor,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                              TextSpan(
+                                  text:
+                                      '3. Payment will be put on hold if seller did not submit proof for (1) or (2). If seller fails to provide proof, the payment will be deducted to refund buyer when there is a dispute.',
+                                  style: textTheme.headline6?.copyWith(
+                                      color: textLightColor,
+                                      fontWeight: FontWeight.w300)),
+                            ])),
+                        RichText(
+                            textAlign: TextAlign.start,
+                            text: TextSpan(children: [
+                              TextSpan(
+                                text: '',
+                                style: textTheme.headline6?.copyWith(
+                                    color: textLightColor,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                              TextSpan(
+                                  text:
+                                      '4. You must be the main owner of the account(s) you intend to sell.',
+                                  style: textTheme.headline6?.copyWith(
+                                      color: textLightColor,
+                                      fontWeight: FontWeight.w300)),
+                            ])),
+                        RichText(
+                            textAlign: TextAlign.start,
+                            text: TextSpan(children: [
+                              TextSpan(
+                                text: '',
+                                style: textTheme.headline6?.copyWith(
+                                    color: textLightColor,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                              TextSpan(
+                                  text:
+                                      '5. Visit Accounts Service Rules and Descriptions for more info.',
+                                  style: textTheme.headline6?.copyWith(
+                                      color: textLightColor,
+                                      fontWeight: FontWeight.w300)),
+                            ])),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 16.0),
                   const MyDropDownWidget(),
@@ -364,8 +446,9 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   Container(
                     // This is your Badge
                     padding: const EdgeInsets.all(8),
-                    constraints:
-                        BoxConstraints(minHeight: MediaQuery.of(context).size.height * 0.1, minWidth: MediaQuery.of(context).size.width * 0.4),
+                    constraints: BoxConstraints(
+                        minHeight: MediaQuery.of(context).size.height * 0.1,
+                        minWidth: MediaQuery.of(context).size.width * 0.4),
                     decoration: BoxDecoration(
                       // This controls the shadow
                       boxShadow: [
@@ -388,8 +471,9 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   Container(
                     // This is your Badge
                     padding: const EdgeInsets.all(8),
-                    constraints:
-                        BoxConstraints(minHeight: MediaQuery.of(context).size.height * 0.1, minWidth: MediaQuery.of(context).size.width * 0.4),
+                    constraints: BoxConstraints(
+                        minHeight: MediaQuery.of(context).size.height * 0.1,
+                        minWidth: MediaQuery.of(context).size.width * 0.4),
                     decoration: BoxDecoration(
                       // This controls the shadow
                       boxShadow: [
@@ -417,8 +501,9 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   Container(
                     // This is your Badge
                     padding: const EdgeInsets.all(8),
-                    constraints:
-                        BoxConstraints(minHeight: MediaQuery.of(context).size.height * 0.1, minWidth: MediaQuery.of(context).size.width * 0.4),
+                    constraints: BoxConstraints(
+                        minHeight: MediaQuery.of(context).size.height * 0.1,
+                        minWidth: MediaQuery.of(context).size.width * 0.4),
                     decoration: BoxDecoration(
                       // This controls the shadow
                       boxShadow: [
@@ -441,8 +526,9 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   Container(
                     // This is your Badge
                     padding: const EdgeInsets.all(8),
-                    constraints:
-                        BoxConstraints(minHeight: MediaQuery.of(context).size.height * 0.1, minWidth: MediaQuery.of(context).size.width * 0.4),
+                    constraints: BoxConstraints(
+                        minHeight: MediaQuery.of(context).size.height * 0.1,
+                        minWidth: MediaQuery.of(context).size.width * 0.4),
                     decoration: BoxDecoration(
                       // This controls the shadow
                       boxShadow: [

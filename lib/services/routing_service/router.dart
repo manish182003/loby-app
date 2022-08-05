@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loby/presentation/screens/auth/create_profile_screen.dart';
+import 'package:loby/presentation/screens/auth/sign_up_screen.dart';
 import 'package:loby/presentation/screens/main/home/disputes/create_new_dispute_screen.dart';
 import 'package:loby/services/routing_service/routes.dart';
 
@@ -49,6 +51,27 @@ class MyRouter {
                   child: const SignInScreen(),
                 );
               }),
+
+          GoRoute(
+              name: signUpScreenPage,
+              path: signUpScreenRoute,
+              pageBuilder: (context, state) {
+                return CupertinoPage(
+                  key: state.pageKey,
+                  child: const SignUpScreen(),
+                );
+              }),
+
+          GoRoute(
+              name: createProfilePage,
+              path: createProfileRoute,
+              pageBuilder: (context, state) {
+                return CupertinoPage(
+                  key: state.pageKey,
+                  child: const CreateProfileScreen(),
+                );
+              }),
+
           GoRoute(
               name: mainPage,
               path: mainRoute,

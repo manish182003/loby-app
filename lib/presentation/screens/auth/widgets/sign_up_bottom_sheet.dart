@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:loby/presentation/widgets/input_text_widget.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../core/theme/colors.dart';
 import '../../../../core/utils/helpers.dart';
+import '../../../../services/routing_service/routes_name.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/input_text_title_widget.dart';
 import '../../main/main_screen.dart';
@@ -173,8 +175,7 @@ class _SignUpCardListState extends State<SignUpCardList> {
   }
 
   void _goToMainScreen(BuildContext context, TextTheme textTheme) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const MainScreen()));
+    context.pushNamed(mainPage);
   }
 
   Widget passwordTextFieldWidget(TextTheme textTheme, String password,

@@ -1,5 +1,7 @@
 const String initialRoute = "/";
 const String loginRoute = "/login";
+const String createProfileRoute = "/create_profile_screen";
+const String signUpScreenRoute = "/signup_screen_page";
 const String mainRoute = "/main";
 const String homeRoute = "/home";
 const String gameCategoriesRoute = "/game_categories_screen";

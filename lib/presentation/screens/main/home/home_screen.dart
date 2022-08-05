@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 3.h,
             ),
             Text('Categories',
-                style: textTheme.headline4?.copyWith(color: textWhiteColor)),
+                style: textTheme.headline3?.copyWith(color: textWhiteColor)),
             SizedBox(
               width: double.infinity,
               height: 3.h,
@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Padding(
                           padding: EdgeInsets.all(1.h),
                           child: Text('Top Games',
-                              style: textTheme.headline4
+                              style: textTheme.headline3
                                   ?.copyWith(color: textWhiteColor))),
                       _buildTopGames(textTheme),
                     ],
@@ -180,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         litems[index],
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
-                        style: textTheme.headline5
+                        style: textTheme.headline4
                             ?.copyWith(color: aquaGreenColor),
                       ),
                     ),

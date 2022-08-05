@@ -22,7 +22,7 @@ class GameCard extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           child: Column(
             children: [
-              Padding(
+              const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: CircleAvatar(
                   radius: 36,
@@ -48,7 +48,7 @@ class GameCard extends StatelessWidget {
                 height: 0.5.h,
               ), //CircleAvatar//SizedBox
               Text(
-                'Bettelground Mobile India',
+                'Battleground Mobile India',
                 maxLines: 2,
                 textAlign: TextAlign.center,
                 style: textTheme.headline6

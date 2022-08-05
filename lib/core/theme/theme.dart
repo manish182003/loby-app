@@ -37,19 +37,19 @@ class ApplicationTheme {
           ),
           headline3: TextStyle(
             fontSize: SizerUtil.deviceType == DeviceType.web ? 3.5.sp : 16,
-            fontWeight: FontWeight.w400,
+            fontWeight: FontWeight.w600,
             color: primaryTextColor,
             fontFamily: 'Inter',
           ),
           headline4: TextStyle(
             fontSize: SizerUtil.deviceType == DeviceType.web ? 3.0.sp : 14,
-            fontWeight: FontWeight.w400,
+            fontWeight: FontWeight.w600,
             color: primaryTextColor,
             fontFamily: 'Inter',
           ),
           headline5: TextStyle(
             fontSize: SizerUtil.deviceType == DeviceType.web ? 2.5.sp : 12,
-            fontWeight: FontWeight.w400,
+            fontWeight: FontWeight.w500,
             color: primaryTextColor,
             fontFamily: 'Inter',
           ),
@@ -85,7 +85,7 @@ class ApplicationTheme {
             fontFamily: 'Inter',
           ),
           button: TextStyle(
-            fontSize: 12,
+            fontSize: 14,
             fontWeight: FontWeight.w700,
             color: primaryTextColor,
             fontFamily: 'Inter',

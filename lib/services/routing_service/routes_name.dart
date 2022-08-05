@@ -1,5 +1,7 @@
 const String initialPage = "initial_page";
 const String loginPage = "login";
+const String signUpScreenPage = "signup_screen_page";
+const String createProfilePage = "create_profile";
 const String mainPage = "main_screen";
 const String homePage = "home_screen";
 const String gameCategoriesPage = "game_categories_screen";
