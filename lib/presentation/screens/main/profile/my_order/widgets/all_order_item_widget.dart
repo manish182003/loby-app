@@ -1,11 +1,8 @@
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../../../../../core/theme/colors.dart';
 import '../../../../../../data/models/ItemModel.dart';
-import '../../../../../../services/routing_service/routes_name.dart';
 import '../../../../../widgets/ConfirmationRiseDisputeBottomDialog.dart';
 import '../../../../../widgets/UpdateStatusDialog.dart';
 
@@ -54,15 +51,14 @@ class _OrderItemState extends State<OrderItem> {
                 children: <Widget>[
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.2,
-                    height: 10.h,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: aquaGreenColor,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Image.asset(
-                        "assets/images/img.png",
-                        fit: BoxFit.fill,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: Container(
+                        height: 55.0,
+                        child: Image.asset(
+                          "assets/images/img.png",
+                          fit: BoxFit.fill,
+                        ),
                       ),
                     ),
                   ),
@@ -84,7 +80,7 @@ class _OrderItemState extends State<OrderItem> {
                           ],
                         ),
                         const SizedBox(
-                          height: 8.0,
+                          height: 10.0,
                         ),
                         SizedBox(
                           child: Text("Battlegrounds Mobile India",
@@ -94,7 +90,7 @@ class _OrderItemState extends State<OrderItem> {
                                   ?.copyWith(color: textInputTitleColor)),
                         ),
                         const SizedBox(
-                          height: 8.0,
+                          height: 10.0,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -108,11 +104,11 @@ class _OrderItemState extends State<OrderItem> {
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 4.0, horizontal: 8.0),
                                 child: Text('Account',
-                                    style: textTheme.subtitle1
+                                    style: textTheme.headline6
                                         ?.copyWith(color: textWhiteColor)),
                               ),
                             ),
-                            const SizedBox(width: 4.0),
+                            const SizedBox(width: 16.0),
                             GestureDetector(
                               onTap: () {
                                 UpdateStatusDialog(
@@ -133,14 +129,16 @@ class _OrderItemState extends State<OrderItem> {
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 4.0, horizontal: 8.0),
                                   child: Text('Update Status',
-                                      style: textTheme.subtitle1
+                                      style: textTheme.headline6
                                           ?.copyWith(color: textWhiteColor)),
                                 ),
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 4.0),
+                        const SizedBox(
+                          height: 16.0,
+                        ),
                         Row(
                           children: [
                             Row(
@@ -176,7 +174,7 @@ class _OrderItemState extends State<OrderItem> {
                   child: CustomPopupMenu(
                     arrowColor: lavaRedColor,
                     menuBuilder: () => ClipRRect(
-                      borderRadius: BorderRadius.circular(5),
+                      borderRadius: BorderRadius.circular(12),
                       child: Container(
                         color: lavaRedColor,
                         child: IntrinsicWidth(
@@ -191,7 +189,7 @@ class _OrderItemState extends State<OrderItem> {
                                       ConfirmationRiseDisputeBottomDialog(
                                         textTheme: textTheme,
                                         contentName:
-                                        "Are you sure you want raise a dispute against this order ?",
+                                            "Are you sure you want raise a dispute against this order ?",
                                       ).showBottomDialog(context);
                                     },
                                     child: Container(
@@ -229,9 +227,9 @@ class _OrderItemState extends State<OrderItem> {
                     verticalMargin: -10,
                     controller: _controller,
                     child: Container(
-                      padding: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(0),
                       child: const Icon(Icons.more_vert,
-                          size: 24.0, color: iconWhiteColor),
+                          size: 18.0, color: iconWhiteColor),
                     ),
                   ))
             ]),

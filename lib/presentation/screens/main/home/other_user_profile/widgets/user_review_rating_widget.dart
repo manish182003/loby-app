@@ -18,7 +18,7 @@ class _UserReviewRatingWidgetState extends State<UserReviewRatingWidget> {
   }
 
   _buildWidget(TextTheme textTheme) {
-    double rating = 3.5;
+    double rating = 2;
     return Column(
       children: <Widget>[
         Card(

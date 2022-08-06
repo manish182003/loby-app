@@ -53,29 +53,30 @@ class _MySocialWidgetState extends State<MySocialWidget> {
         children: <Widget>[
           Text(socialTitle,
               overflow: TextOverflow.ellipsis,
-              style: textTheme.headline5
+              style: textTheme.headline4
                   ?.copyWith(color: textLightColor)),
           const SizedBox(
             width: 8.0,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(socialLink,
                   overflow: TextOverflow.ellipsis,
-                  style: textTheme.headline6
+                  style: textTheme.headline5
                       ?.copyWith(color: textWhiteColor)),
               SizedBox(width: 8),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.4,
-                child: InputTextWidget(
-                  controller: controller,
-                  onChanged: (String value) {
-                    instagram_userName = value;
-                    debugPrint('Hello from input: $instagram_userName');
-                  },
-                  hintName: userName,
-                  keyboardType: TextInputType.name,
+              Expanded(
+                child: Container(
+                  child: InputTextWidget(
+                    controller: controller,
+                    onChanged: (String value) {
+                      instagram_userName = value;
+                      debugPrint('Hello from input: $instagram_userName');
+                    },
+                    hintName: userName,
+                    keyboardType: TextInputType.name,
+                  ),
                 ),
               ),
             ],

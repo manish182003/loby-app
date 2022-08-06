@@ -184,16 +184,17 @@ class _GameItemScreenState extends State<GameItemScreen> {
           ),
           const SizedBox(height: 10.0),
           _buildGames(textTheme),
+          const SizedBox(height: 16.0),
         ],
       ),
     );
   }
 
+  //'In-Game Currency',
   final List<String> bubbles = [
     'Accounts',
     'Buddy',
     'Rank Push',
-    'In-Game Currency',
     'In-Game Items',
     'Coach',
     'Duel',
@@ -209,22 +210,28 @@ class _GameItemScreenState extends State<GameItemScreen> {
   }
 
   _buildGames(TextTheme textTheme) {
-    return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.81,
-        mainAxisSpacing: 0.1,
-        crossAxisSpacing: 0.1,
+    var size = MediaQuery.of(context).size;
+
+    /*24 is for notification bar on Android*/
+    final double itemHeight = (size.height - kToolbarHeight - 24) / 3;
+    final double itemWidth = size.width / 2;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      child: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 0.72,
+          mainAxisSpacing: 0.1,
+          crossAxisSpacing: 0.1,
+        ),
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: 7,
+        itemBuilder: (context, index) {
+          return ItemList(name: 'hello $index');
+        },
       ),
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: 2,
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: ItemList(name: 'hello $index'),
-        );
-      },
     );
   }
 

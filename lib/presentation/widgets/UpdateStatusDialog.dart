@@ -283,7 +283,7 @@ class UpdateStatusDialog {
                                   txtPadding: 8.0,
                                   btnBgColor: purpleLightIndigoColor,
                                   txtColor: textWhiteColor,
-                                  borderRadius: 1.2.h,
+                                  borderRadius: 2.h,
                                   btnName: 'Upload Proofs & Confirm Delivery',
                                 ),
                                 const SizedBox(height: 16.0),

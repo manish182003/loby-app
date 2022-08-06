@@ -71,12 +71,12 @@ class UserSocialWidget extends StatelessWidget {
                     children: <Widget>[
                       Text(socialTitle,
                           overflow: TextOverflow.ellipsis,
-                          style: textTheme.headline5
+                          style: textTheme.headline4
                               ?.copyWith(color: textTunaBlueColor)),
-                      SizedBox(height: 8),
+                      SizedBox(height: 6),
                       Text(socialLink,
                           overflow: TextOverflow.ellipsis,
-                          style: textTheme.subtitle1
+                          style: textTheme.headline6
                               ?.copyWith(color: purpleLightIndigoColor)),
                     ],
                   ),

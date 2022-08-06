@@ -52,6 +52,23 @@ class _MyOrderScreenState extends State<MyOrderScreen> {
                           ),
                         ),
                       ),
+                      Expanded(
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 0.0, horizontal: 8.0),
+                            child: Text(
+                              'My Orders',
+                              maxLines: 2,
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.ellipsis,
+                              style: textTheme.headline2
+                                  ?.copyWith(color: textWhiteColor),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),

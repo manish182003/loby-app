@@ -38,6 +38,7 @@ class UserDuelsWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text('Total WINS',
                               textAlign: TextAlign.center,
@@ -50,6 +51,7 @@ class UserDuelsWidget extends StatelessWidget {
                         ],
                       ),
                       Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text('Total LOSSES',
                               textAlign: TextAlign.center,

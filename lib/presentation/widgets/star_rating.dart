@@ -17,12 +17,12 @@ class StarRating extends StatelessWidget {
     Icon icon;
     if (index >= rating) {
       icon = const Icon(
-        Icons.star_border,
-        color: gambogeOrangeColor,
+        Icons.star,
+        color: lightGreyColor,
       );
     } else if (index > rating - 1 && index < rating) {
       icon = Icon(
-        Icons.star_half,
+        Icons.star_half_rounded,
         color: color,
       );
     } else {
@@ -32,8 +32,8 @@ class StarRating extends StatelessWidget {
       );
     }
     return InkResponse(
-      onTap:
-          onRatingChanged == null ? null : () => onRatingChanged(index + 1.0),
+     /* onTap:
+          onRatingChanged == null ? null : () => onRatingChanged(index + 1.0),*/
       child: icon,
     );
   }

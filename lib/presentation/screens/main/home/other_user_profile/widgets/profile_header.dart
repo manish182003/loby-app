@@ -81,12 +81,12 @@ class _ProfileHeaderState extends State<ProfileHeader> {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: SizedBox(
-                  width: 7.h,
-                  height: 7.h,
+                  width: 42,
+                  height: 42,
                   child: CustomPopupMenu(
                     arrowColor: lavaRedColor,
                     menuBuilder: () => ClipRRect(
-                      borderRadius: BorderRadius.circular(5),
+                      borderRadius: BorderRadius.circular(16),
                       child: Container(
                         color: lavaRedColor,
                         child: IntrinsicWidth(
@@ -135,9 +135,9 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                     verticalMargin: -10,
                     controller: _controller,
                     child: Container(
-                      padding: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(0),
                       child: const Icon(Icons.more_vert,
-                          size: 32.0, color: iconWhiteColor),
+                          size: 24.0, color: iconWhiteColor),
                     ),
                   ),
                 ),
@@ -305,6 +305,8 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                   child: SvgPicture.asset(
                                     'assets/icons/a_check_icon.svg',
                                     color: iconWhiteColor,
+                                    width: 24,
+                                    height: 24,
                                   ),
                                 ),
                               ),

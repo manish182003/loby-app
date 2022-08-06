@@ -14,14 +14,14 @@ class RatingDialog extends StatefulWidget {
 }
 
 class _RatingDialogState extends State<RatingDialog> {
-  int _stars = 3;
+  int _stars = 2;
 
   Widget _buildStar(int starCount) {
     return InkWell(
       child: Icon(
         Icons.star,
-        // size: 30.0,
-        color: _stars >= starCount ? Colors.orange : Colors.grey,
+        size: 30.0,
+        color: _stars >= starCount ? Colors.orange : lightGreyColor,
       ),
       onTap: () {
         setState(() {
@@ -72,21 +72,25 @@ class _RatingDialogState extends State<RatingDialog> {
                   height: 15,
                 ),
                 Text(
+                  textAlign: TextAlign.center,
                   widget.descriptions ?? 'test',
                   style: textTheme.headline5?.copyWith(color: textWhiteColor),
                 ),
                 const SizedBox(
                   height: 22,
                 ),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      _buildStar(1),
-                      _buildStar(2),
-                      _buildStar(3),
-                      _buildStar(4),
-                      _buildStar(5),
-                    ]),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        _buildStar(1),
+                        _buildStar(2),
+                        _buildStar(3),
+                        _buildStar(4),
+                        _buildStar(5),
+                      ]),
+                ),
                 const SizedBox(
                   height: 15,
                 ),
@@ -103,7 +107,7 @@ class _RatingDialogState extends State<RatingDialog> {
                 ),
                 const InputTextWidget(
                   hintName: '',
-                  maxLines: 4,
+                  maxLines: 8,
                 ),
                 const SizedBox(
                   height: 15,

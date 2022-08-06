@@ -18,6 +18,7 @@ const Color backgroundBalticSeaColor = Color(0xFF242731);
 const Color backgroundDarkJungleGreenColor = Color(0xFF1F2128);
 const Color whiteColor = Color(0xFFFFFFFF);
 const Color shipGreyColor = Color(0xFF383B45);
+const Color lightGreyColor = Color(0xFFD9D9D9);
 const Color shipGreyColor1 = Color(0xFF505462);
 const Color limedAshColor = Color(0xFF71796E);
 

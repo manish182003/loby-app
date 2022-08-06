@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../../../../../core/theme/colors.dart';
 import '../../../../../../services/routing_service/routes_name.dart';
@@ -72,13 +71,15 @@ class _MyProfileHeaderState extends State<MyProfileHeader> {
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: SizedBox(
-                      width: 7.h,
-                      height: 7.h,
+                      width: 42,
+                      height: 42,
                       child: Container(
-                        padding: const EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(12),
                         child: SvgPicture.asset(
                           'assets/icons/edit_icon.svg',
                           color: whiteColor,
+                          width: 24,
+                          height: 24,
                         ),
                       ),
                     ),
@@ -270,6 +271,8 @@ class _MyProfileHeaderState extends State<MyProfileHeader> {
                                   child: SvgPicture.asset(
                                     'assets/icons/a_check_icon.svg',
                                     color: iconWhiteColor,
+                                    width: 24,
+                                    height: 24,
                                   ),
                                 ),
                               ),

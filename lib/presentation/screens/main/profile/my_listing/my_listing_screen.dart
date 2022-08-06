@@ -76,22 +76,22 @@ class _MyListingScreenState extends State<MyListingScreen> {
   }
 
   _buildGames(TextTheme textTheme) {
-    return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.65,
-        mainAxisSpacing: 0.1,
-        crossAxisSpacing: 0.1,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      child: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 0.60,
+          crossAxisSpacing: 1,
+          mainAxisSpacing: 1,
+        ),
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: 7,
+        itemBuilder: (context, index) {
+          return MyListingItemList(name: 'hello $index');
+        },
       ),
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: 2,
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: MyListingItemList(name: 'hello $index'),
-        );
-      },
     );
   }
 }

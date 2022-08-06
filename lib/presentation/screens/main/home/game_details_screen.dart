@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loby/presentation/widgets/carousel.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../core/theme/colors.dart';
@@ -16,6 +17,12 @@ class GameDetailScreen extends StatefulWidget {
 }
 
 class _GameDetailScreenState extends State<GameDetailScreen> {
+  List<String>? images = [
+    'assets/images/img.png',
+    'assets/images/img.png',
+    'assets/images/img.png'
+  ];
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -71,82 +78,63 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Card(
-              color: backgroundBalticSeaColor,
-              elevation: 0.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
+          Stack(
+            children: [
+              Carousel(
+                images: images,
               ),
-              child: Stack(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * 1,
-                    decoration: BoxDecoration(
-                      color: saffronMangoOrangeColor,
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Image.asset(
-                      "assets/images/img.png",
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 8,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
-                            SizedBox(
-                              height: 32,
-                              width: 32,
-                              child: CircleAvatar(
-                                backgroundColor: orangeColor,
-                                child: Align(
-                                    alignment: Alignment.center,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(left: 8.0),
-                                      child: Icon(
-                                        Icons.arrow_back_ios,
-                                        color: iconWhiteColor,
-                                        size: 18,
-                                      ),
-                                    )),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            SizedBox(
-                              height: 32,
-                              width: 32,
-                              child: CircleAvatar(
-                                backgroundColor: orangeColor,
-                                child: Align(
-                                    alignment: Alignment.center,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(left: 4.0),
-                                      child: Icon(
-                                        Icons.arrow_forward_ios,
-                                        color: iconWhiteColor,
-                                        size: 18,
-                                      ),
-                                    )),
-                              ),
-                            )
-                          ]),
-                    ),
-                  )
-                ],
-              ),
-            ),
+              Positioned(
+                bottom: 8,
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: const [
+                        SizedBox(
+                          height: 32,
+                          width: 32,
+                          child: CircleAvatar(
+                            backgroundColor: orangeColor,
+                            child: Align(
+                                alignment: Alignment.center,
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 8.0),
+                                  child: Icon(
+                                    Icons.arrow_back_ios,
+                                    color: iconWhiteColor,
+                                    size: 18,
+                                  ),
+                                )),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        SizedBox(
+                          height: 32,
+                          width: 32,
+                          child: CircleAvatar(
+                            backgroundColor: orangeColor,
+                            child: Align(
+                                alignment: Alignment.center,
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 4.0),
+                                  child: Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: iconWhiteColor,
+                                    size: 18,
+                                  ),
+                                )),
+                          ),
+                        )
+                      ]),
+                ),
+              )
+            ],
           ),
           Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
+            padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
             child: Text(
                 "Lvl 78 Account on SALE. Trusted Seller. 100% Guaranteed",
                 style: textTheme.headline5?.copyWith(color: textWhiteColor)),

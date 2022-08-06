@@ -29,9 +29,14 @@ class _DropDownDividerState extends State<DropDownDivider> {
             value: item,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(
-                item,
-                style: textTheme.headline6?.copyWith(color: textWhiteColor),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    item,
+                    style: textTheme.headline6?.copyWith(color: textWhiteColor),
+                  ),
+                ],
               ),
             ),
           ),
