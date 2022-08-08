@@ -8,7 +8,8 @@ import '../game_itm_screen.dart';
 
 class CategoryItemCard extends StatelessWidget {
   int index;
-  CategoryItemCard({Key? key, required this.index}) : super(key: key);
+  String? images;
+  CategoryItemCard({Key? key, required this.index, this.images}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +38,7 @@ class CategoryItemCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Image.asset(
-                    "assets/images/img.png",
+                    images!,
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -48,7 +49,7 @@ class CategoryItemCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text("Lvl 78 Account on SA",
+                  Text("Battlegrounds Mobile India",
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,

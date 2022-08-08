@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:loby/presentation/screens/main/notification/widgets/notification_item_widget.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../../../../core/theme/colors.dart';
+import '../../../../widgets/custom_app_bar.dart';
 
 class TransactionHistoryScreen extends StatefulWidget {
   const TransactionHistoryScreen({Key? key}) : super(key: key);
@@ -25,65 +24,29 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
 
   Widget body() {
     final textTheme = Theme.of(context).textTheme;
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.fromLTRB(15, 15, 15, 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: 42,
-                  height: 42,
-                  child: MaterialButton(
-                    shape: const CircleBorder(),
-                    color: textCharcoalBlueColor,
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Icon(
-                      Icons.arrow_back_ios,
-                      size: 18,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 0.0, horizontal: 8.0),
-                      child: Text(
-                        'Transactions',
-                        maxLines: 2,
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        style: textTheme.headline2
-                            ?.copyWith(color: textWhiteColor),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          _buildNotifications(textTheme),
-        ],
-      ),
+    return Column(
+      children: [
+        CustomAppBar(
+          appBarName: "Transactions",
+        ),
+        _buildNotifications(textTheme),
+      ],
     );
   }
 
   _buildNotifications(TextTheme textTheme) {
-    return ListView.builder(
-      itemCount: 2,
-      shrinkWrap: true,
-      padding: const EdgeInsets.only(top: 16),
-      physics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) {
-        return const NotificationItemWidget();
-      },
+    return Flexible(
+      child: SingleChildScrollView(
+        child: ListView.builder(
+          itemCount: 10,
+          shrinkWrap: true,
+          padding: const EdgeInsets.only(top: 16),
+          physics: const NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) {
+            return const NotificationItemWidget();
+          },
+        ),
+      ),
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../core/theme/colors.dart';
 import '../../../widgets/bottom_dialog_widget.dart';
+import '../../../widgets/custom_app_bar.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/input_text_title_widget.dart';
 import '../../../widgets/input_text_widget.dart';
@@ -28,262 +29,229 @@ class _ProfileVerificationScreenState extends State<ProfileVerificationScreen> {
 
   Widget body() {
     final textTheme = Theme.of(context).textTheme;
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.fromLTRB(15, 15, 15, 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: 42,
-                  height: 42,
-                  child: MaterialButton(
-                    shape: const CircleBorder(),
-                    color: textCharcoalBlueColor,
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Icon(
-                      Icons.arrow_back_ios,
-                      size: 18,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 0.0, horizontal: 8.0),
-                      child: Text(
-                        'Profile Verification',
-                        maxLines: 2,
+    return Column(
+      children: [
+        CustomAppBar(
+          appBarName: "Profile Verification",
+        ),
+        Flexible(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
                         textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        style: textTheme.headline2
-                            ?.copyWith(color: textWhiteColor),
+                        "Get your profile verified if you are an gaming influncer, esports athlete or a content creator",
+                        style: textTheme.headline5?.copyWith(color: orangeColor)),
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 4.h,
+                  ),
+                  const InputTextTitleWidget(
+                      titleName: 'IGN / Display Name',
+                      titleTextColor: textWhiteColor),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 2.h,
+                  ),
+                  const InputTextWidget(hintName: ''),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 4.h,
+                  ),
+                  const InputTextTitleWidget(
+                      titleName: 'Name (as per Official Documents)',
+                      titleTextColor: textWhiteColor),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 2.h,
+                  ),
+                  const InputTextWidget(hintName: ''),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 4.h,
+                  ),
+                  const InputTextTitleWidget(
+                      titleName: 'Message', titleTextColor: textWhiteColor),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 2.h,
+                  ),
+                  const InputTextWidget(
+                    minimumHeight: 96.0,
+                    verticalHeight: 8.0,
+                    hintName: '', maxLines: 5,),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 4.h,
+                  ),
+                  const InputTextTitleWidget(
+                      titleName: 'Youtube Link',
+                      titleTextColor: textWhiteColor),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 2.h,
+                  ),
+                  const InputTextWidget(hintName: ''),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 4.h,
+                  ),
+                  const InputTextTitleWidget(
+                      titleName: 'Twitch Link',
+                      titleTextColor: textWhiteColor),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 2.h,
+                  ),
+                  const InputTextWidget(hintName: ''),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 4.h,
+                  ),
+                  const InputTextTitleWidget(
+                      titleName: 'Instagram Link',
+                      titleTextColor: textWhiteColor),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 2.h,
+                  ),
+                  const InputTextWidget(hintName: ''),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 4.h,
+                  ),
+                  const InputTextTitleWidget(
+                      titleName: 'Upload Documents',
+                      titleTextColor: textWhiteColor),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                        textAlign: TextAlign.start,
+                        "Please upload a photo with your passport / ID & your selfie",
+                        style:
+                            textTheme.headline6?.copyWith(color: textLightColor)),
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 2.h,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        height: MediaQuery.of(context).size.height * 0.2,
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          // This controls the shadow
+                          boxShadow: [
+                            BoxShadow(
+                                spreadRadius: 1,
+                                blurRadius: 5,
+                                color: Colors.black.withAlpha(50))
+                          ],
+                          borderRadius: BorderRadius.circular(12),
+                          color:
+                              textFieldColor, // This would be color of the Badge
+                        ),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                'assets/icons/id_card_icon.svg',
+                                width: 5.h,
+                                height: 5.h,
+                              ),
+                              const SizedBox(
+                                height: 8.0,
+                              ),
+                              Text('Copy of your passport or ID card',
+                                  textAlign: TextAlign.center,
+                                  style: textTheme.subtitle1
+                                      ?.copyWith(color: textLightColor)),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8.0),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        height: MediaQuery.of(context).size.height * 0.2,
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          // This controls the shadow
+                          boxShadow: [
+                            BoxShadow(
+                                spreadRadius: 1,
+                                blurRadius: 5,
+                                color: Colors.black.withAlpha(50))
+                          ],
+                          borderRadius: BorderRadius.circular(12),
+                          color:
+                              textFieldColor, // This would be color of the Badge
+                        ),
+                        // This is your Badge
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                'assets/icons/camera_icon.svg',
+                                width: 5.h,
+                                height: 5.h,
+                              ),
+                              const SizedBox(
+                                height: 8.0,
+                              ),
+                              Text('Selfie',
+                                  textAlign: TextAlign.center,
+                                  style: textTheme.subtitle1
+                                      ?.copyWith(color: textLightColor)),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 8.h,
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.35,
+                      child: CustomButton(
+                        color: aquaGreenColor,
+                        name: "Submit",
+                        textColor: primaryTextColor,
+                        onTap: () {
+                          BottomDialog(
+                                  textTheme: textTheme,
+                                  titleColor: aquaGreenColor,
+                                  contentName:
+                                      "Your profile has been submitted to Team Loby for verification. We will revert back to you shortly",)
+                              .showBottomDialog(context);
+                        },
                       ),
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(
+                    width: double.infinity,
+                    height: 8.h,
+                  ),
+                ],
+              ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                      textAlign: TextAlign.center,
-                      "Get your profile verified if you are an gaming influncer, esports athlete or a content creator",
-                      style: textTheme.headline5?.copyWith(color: orangeColor)),
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  height: 4.h,
-                ),
-                const InputTextTitleWidget(
-                    titleName: 'IGN / Display Name',
-                    titleTextColor: textWhiteColor),
-                SizedBox(
-                  width: double.infinity,
-                  height: 2.h,
-                ),
-                const InputTextWidget(hintName: ''),
-                SizedBox(
-                  width: double.infinity,
-                  height: 4.h,
-                ),
-                const InputTextTitleWidget(
-                    titleName: 'Name (as per Official Documents)',
-                    titleTextColor: textWhiteColor),
-                SizedBox(
-                  width: double.infinity,
-                  height: 2.h,
-                ),
-                const InputTextWidget(hintName: ''),
-                SizedBox(
-                  width: double.infinity,
-                  height: 4.h,
-                ),
-                const InputTextTitleWidget(
-                    titleName: 'Message', titleTextColor: textWhiteColor),
-                SizedBox(
-                  width: double.infinity,
-                  height: 2.h,
-                ),
-                const InputTextWidget(hintName: '', maxLines: 5,),
-                SizedBox(
-                  width: double.infinity,
-                  height: 4.h,
-                ),
-                const InputTextTitleWidget(
-                    titleName: 'Youtube Link',
-                    titleTextColor: textWhiteColor),
-                SizedBox(
-                  width: double.infinity,
-                  height: 2.h,
-                ),
-                const InputTextWidget(hintName: ''),
-                SizedBox(
-                  width: double.infinity,
-                  height: 4.h,
-                ),
-                const InputTextTitleWidget(
-                    titleName: 'Twitch Link',
-                    titleTextColor: textWhiteColor),
-                SizedBox(
-                  width: double.infinity,
-                  height: 2.h,
-                ),
-                const InputTextWidget(hintName: ''),
-                SizedBox(
-                  width: double.infinity,
-                  height: 4.h,
-                ),
-                const InputTextTitleWidget(
-                    titleName: 'Instagram Link',
-                    titleTextColor: textWhiteColor),
-                SizedBox(
-                  width: double.infinity,
-                  height: 2.h,
-                ),
-                const InputTextWidget(hintName: ''),
-                SizedBox(
-                  width: double.infinity,
-                  height: 4.h,
-                ),
-                const InputTextTitleWidget(
-                    titleName: 'Upload Documents',
-                    titleTextColor: textWhiteColor),
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                      textAlign: TextAlign.start,
-                      "Please upload a photo with your passport / ID & your selfie",
-                      style:
-                          textTheme.headline6?.copyWith(color: textLightColor)),
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  height: 2.h,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      height: MediaQuery.of(context).size.height * 0.2,
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        // This controls the shadow
-                        boxShadow: [
-                          BoxShadow(
-                              spreadRadius: 1,
-                              blurRadius: 5,
-                              color: Colors.black.withAlpha(50))
-                        ],
-                        borderRadius: BorderRadius.circular(12),
-                        color:
-                            textFieldColor, // This would be color of the Badge
-                      ),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              'assets/icons/id_card_icon.svg',
-                              width: 5.h,
-                              height: 5.h,
-                            ),
-                            const SizedBox(
-                              height: 8.0,
-                            ),
-                            Text('Copy of your passport or ID card',
-                                textAlign: TextAlign.center,
-                                style: textTheme.subtitle1
-                                    ?.copyWith(color: textLightColor)),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8.0),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      height: MediaQuery.of(context).size.height * 0.2,
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        // This controls the shadow
-                        boxShadow: [
-                          BoxShadow(
-                              spreadRadius: 1,
-                              blurRadius: 5,
-                              color: Colors.black.withAlpha(50))
-                        ],
-                        borderRadius: BorderRadius.circular(12),
-                        color:
-                            textFieldColor, // This would be color of the Badge
-                      ),
-                      // This is your Badge
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              'assets/icons/camera_icon.svg',
-                              width: 5.h,
-                              height: 5.h,
-                            ),
-                            const SizedBox(
-                              height: 8.0,
-                            ),
-                            Text('Selfie',
-                                textAlign: TextAlign.center,
-                                style: textTheme.subtitle1
-                                    ?.copyWith(color: textLightColor)),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  height: 8.h,
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.35,
-                    child: CustomButton(
-                      color: aquaGreenColor,
-                      name: "Submit",
-                      textColor: primaryTextColor,
-                      onTap: () {
-                        BottomDialog(
-                                textTheme: textTheme,
-                                titleColor: aquaGreenColor,
-                                contentName:
-                                    "Your profile has been submitted to Team Loby for verification. We will revert back to you shortly",)
-                            .showBottomDialog(context);
-                      },
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  height: 8.h,
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
+        )
+      ],
     );
   }
 }

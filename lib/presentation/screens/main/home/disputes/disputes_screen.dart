@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../core/theme/colors.dart';
+import '../../../../widgets/custom_app_bar.dart';
 import 'closed_dispute_screen.dart';
 import 'open_dispute_screen.dart';
 
@@ -31,46 +32,8 @@ class _DisputeScreenState extends State<DisputeScreen> {
             child:  SafeArea(
               child: Column(
                 children: <Widget>[
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(15, 15, 15, 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: 42,
-                          height: 42,
-                          child: MaterialButton(
-                            shape: const CircleBorder(),
-                            color: textCharcoalBlueColor,
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Icon(
-                              Icons.arrow_back_ios,
-                              size: 18,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 0.0, horizontal: 8.0),
-                              child: Text(
-                                'My Disputes',
-                                maxLines: 2,
-                                textAlign: TextAlign.center,
-                                overflow: TextOverflow.ellipsis,
-                                style: textTheme.headline2
-                                    ?.copyWith(color: textWhiteColor),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                  CustomAppBar(
+                    appBarName: "My Disputes",
                   ),
                   TabBar(
                     indicatorSize: TabBarIndicatorSize.label,

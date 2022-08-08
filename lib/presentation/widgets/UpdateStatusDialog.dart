@@ -155,6 +155,7 @@ class UpdateStatusDialog {
                                     const SizedBox(width: 8.0),
                                     Expanded(
                                       child: Text("May 26, 2022 18:23:43",
+                                          textAlign: TextAlign.end,
                                           overflow: TextOverflow.ellipsis,
                                           style: textTheme.headline6?.copyWith(
                                               color: textLightColor)),
@@ -180,7 +181,7 @@ class UpdateStatusDialog {
                                         txtPadding: 8.0,
                                         btnBgColor: orangeColor,
                                         txtColor: textWhiteColor,
-                                        borderRadius: 2.h,
+                                        borderRadius: 12.0,
                                         btnName: 'Reject Order',
                                       ),
                                     ),
@@ -198,7 +199,7 @@ class UpdateStatusDialog {
                                         txtPadding: 8.0,
                                         btnBgColor: purpleLightIndigoColor,
                                         txtColor: textWhiteColor,
-                                        borderRadius: 2.h,
+                                        borderRadius: 12,
                                         btnName: 'Accept Order',
                                       ),
                                     ),
@@ -244,10 +245,13 @@ class UpdateStatusDialog {
                                             ?.copyWith(color: textWhiteColor)),
                                     const SizedBox(width: 8.0),
                                     Expanded(
-                                      child: Text("May 26, 2022 18:23:43",
-                                          overflow: TextOverflow.ellipsis,
-                                          style: textTheme.headline6?.copyWith(
-                                              color: textLightColor)),
+                                      child: Text(
+                                        "May 26, 2022 18:23:43",
+                                        textAlign: TextAlign.end,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: textTheme.headline6
+                                            ?.copyWith(color: textLightColor),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -268,6 +272,7 @@ class UpdateStatusDialog {
                                     const SizedBox(width: 8.0),
                                     Expanded(
                                       child: Text("May 26, 2022 18:23:43",
+                                          textAlign: TextAlign.end,
                                           overflow: TextOverflow.ellipsis,
                                           style: textTheme.headline6?.copyWith(
                                               color: textLightColor)),

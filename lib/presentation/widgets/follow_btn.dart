@@ -24,7 +24,7 @@ class Button extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             color: btnBgColor,
-            borderRadius: BorderRadius.circular(borderRadius??4.h),
+            borderRadius: BorderRadius.circular(borderRadius??16.0),
           ),
           child: Padding(
             padding: EdgeInsets.all(txtPadding?? 8.0),

@@ -25,18 +25,24 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
 
   Widget body() {
     final textTheme = Theme.of(context).textTheme;
-    return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          const ProfileHeader(
-            avatar: AssetImage('assets/images/img.png'),
-            title: "mukesh",
-            subtitle: "kumar",
+    return Column(
+      children: [
+        Flexible(
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                const ProfileHeader(
+                  avatar: AssetImage('assets/images/img.png'),
+                  title: "mukesh",
+                  subtitle: "kumar",
+                ),
+                const SizedBox(height: 10.0),
+                UserInfo(),
+              ],
+            ),
           ),
-          const SizedBox(height: 10.0),
-          UserInfo(),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

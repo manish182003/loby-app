@@ -19,11 +19,12 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
   bool visible = false;
+  bool visibleRe = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       body: body(),
     );
   }
@@ -32,12 +33,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final textTheme = Theme.of(context).textTheme;
     return Container(
       color: limedAshColor,
-      /*decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage("assets/images/login_bg_img.png"),
-          fit: BoxFit.cover,
-        ),
-      ),*/
       child: Stack(
         children: [
           Container(
@@ -92,6 +87,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         InputTextWidget(
                           hintName: 'Ex: jhonsingh@gmail.com',
                           keyboardType: TextInputType.emailAddress,
+                          validator: (value) {
+                            return Helpers.validateEmail(value!);
+                          },
                         ),
                         SizedBox(
                           width: double.infinity,
@@ -118,8 +116,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           width: double.infinity,
                           height: 2.h,
                         ),
-                        passwordTextFieldWidget(textTheme, 'Re-Enter Password',
-                            (value) {
+                        RePasswordTextFieldWidget(
+                            textTheme, 'Re-Enter Password', (value) {
                           return Helpers.validateField(value!);
                         }),
                         SizedBox(
@@ -198,49 +196,117 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget passwordTextFieldWidget(TextTheme textTheme, String password,
       FormFieldValidator<String> validator) {
     return Container(
+      constraints: const BoxConstraints(
+        minHeight: 45,
+        minWidth: double.infinity,
+      ),
       decoration: BoxDecoration(
         color: textFieldColor,
-        borderRadius: BorderRadius.circular(1.5.h),
+        borderRadius: BorderRadius.circular(16.0),
       ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 23.0, vertical: 2.0),
-        child: Row(
-          children: [
-            Expanded(
-              child: TextFormField(
-                obscureText: !visible,
-                cursorColor: aquaGreenColor,
-                style: textTheme.headline4?.copyWith(color: textWhiteColor),
-                maxLines: 1,
-                keyboardType: TextInputType.visiblePassword,
-                decoration: InputDecoration(
-                  /*focusedBorder:OutlineInputBorder(
-                    borderSide: const BorderSide(color: aquaGreenColor, width: 0.5),
-                    borderRadius: BorderRadius.circular(1.5.h),
-                  ),*/
-                  border: InputBorder.none,
-                  hintStyle:
-                      textTheme.headline4?.copyWith(color: textInputTitleColor),
-                  hintText: password,
+      child: Row(
+        children: [
+          Expanded(
+            child: TextFormField(
+              obscureText: !visible,
+              cursorColor: aquaGreenColor,
+              style: textTheme.headline4?.copyWith(color: textWhiteColor),
+              maxLines: 1,
+              keyboardType: TextInputType.visiblePassword,
+              decoration: InputDecoration(
+                suffixIcon: InkWell(
+                  onTap: () {
+                    setState(() {
+                      visible = !visible;
+                    });
+                  },
+                  child: Icon(
+                    visible
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined,
+                    color: iconTintColor,
+                    size: 15,
+                  ),
                 ),
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 23.0, vertical: 0.0),
+                focusedBorder: OutlineInputBorder(
+                  borderSide:
+                      const BorderSide(color: aquaGreenColor, width: 0.5),
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide:
+                      const BorderSide(color: textFieldColor, width: 0.0),
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                border: InputBorder.none,
+                hintStyle:
+                    textTheme.headline4?.copyWith(color: textInputTitleColor),
+                hintText: password,
               ),
             ),
-            InkWell(
-              onTap: () {
-                setState(() {
-                  visible = !visible;
-                });
-              },
-              child: Icon(
-                visible
-                    ? Icons.visibility_outlined
-                    : Icons.visibility_off_outlined,
-                color: iconTintColor,
-                size: 15,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget RePasswordTextFieldWidget(TextTheme textTheme, String password,
+      FormFieldValidator<String> validator) {
+    return Container(
+      constraints: const BoxConstraints(
+        minHeight: 45,
+        minWidth: double.infinity,
+      ),
+      decoration: BoxDecoration(
+        color: textFieldColor,
+        borderRadius: BorderRadius.circular(16.0),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextFormField(
+              obscureText: !visibleRe,
+              cursorColor: aquaGreenColor,
+              style: textTheme.headline4?.copyWith(color: textWhiteColor),
+              maxLines: 1,
+              keyboardType: TextInputType.visiblePassword,
+              decoration: InputDecoration(
+                suffixIcon: InkWell(
+                  onTap: () {
+                    setState(() {
+                      visibleRe = !visibleRe;
+                    });
+                  },
+                  child: Icon(
+                    visibleRe
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined,
+                    color: iconTintColor,
+                    size: 15,
+                  ),
+                ),
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 23.0, vertical: 0.0),
+                focusedBorder: OutlineInputBorder(
+                  borderSide:
+                      const BorderSide(color: aquaGreenColor, width: 0.5),
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide:
+                      const BorderSide(color: textFieldColor, width: 0.0),
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                border: InputBorder.none,
+                hintStyle:
+                    textTheme.headline4?.copyWith(color: textInputTitleColor),
+                hintText: password,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

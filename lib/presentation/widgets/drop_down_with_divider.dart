@@ -1,5 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../core/theme/colors.dart';
 
@@ -30,11 +31,12 @@ class _DropDownDividerState extends State<DropDownDivider> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     item,
                     style: textTheme.headline6?.copyWith(color: textWhiteColor),
+                    textAlign: TextAlign.center,
                   ),
                 ],
               ),

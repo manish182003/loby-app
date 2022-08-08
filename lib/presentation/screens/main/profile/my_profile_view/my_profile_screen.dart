@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:loby/presentation/screens/main/home/other_user_profile/widgets/profile_header.dart';
-import 'package:loby/presentation/screens/main/home/other_user_profile/widgets/user_info.dart';
 import 'package:loby/presentation/screens/main/profile/my_profile_view/widgets/my_info.dart';
 import 'package:loby/presentation/screens/main/profile/my_profile_view/widgets/my_profile_header.dart';
 

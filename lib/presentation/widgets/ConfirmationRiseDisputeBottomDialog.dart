@@ -93,7 +93,7 @@ class ConfirmationRiseDisputeBottomDialog {
                             borderRadius: BorderRadius.circular(16.0),
                           )),
                           backgroundColor: MaterialStateProperty.all<Color>(
-                              shipGreyColor),
+                              backgroundDarkJungleGreenColor),
                         ),
                         onPressed: () {
                           Navigator.of(context).pop();

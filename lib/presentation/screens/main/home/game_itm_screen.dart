@@ -6,6 +6,7 @@ import 'package:loby/presentation/screens/main/home/widgets/filter_bottom_sheet_
 import 'package:sizer/sizer.dart';
 
 import '../../../../core/theme/colors.dart';
+import '../../../widgets/custom_app_bar.dart';
 import '../../../widgets/custom_chip.dart';
 import '../../../widgets/drop_down_with_divider.dart';
 
@@ -41,152 +42,123 @@ class _GameItemScreenState extends State<GameItemScreen> {
 
   Widget body(String name) {
     final textTheme = Theme.of(context).textTheme;
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.fromLTRB(15, 15, 15, 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+    return Column(
+      children: [
+        CustomAppBar(
+            appBarName: "Battlegrounds Mobile India",
+            txtColor: aquaGreenColor
+        ),
+
+        Flexible(
+          child: SingleChildScrollView(
+            child: Column (
               children: [
-                SizedBox(
-                  width: 42,
-                  height: 42,
-                  child: MaterialButton(
-                    shape: const CircleBorder(),
-                    color: textCharcoalBlueColor,
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Icon(
-                      Icons.arrow_back_ios,
-                      size: 18,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.7,
-                  alignment: Alignment.center,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 0.0, horizontal: 8.0),
-                    child: Text(
-                      'Battlegrounds Mobile',
-                      maxLines: 2,
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                      style:
-                          textTheme.headline2?.copyWith(color: aquaGreenColor),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          _buildCategories(textTheme),
-          const SizedBox(height: 8),
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  constraints: const BoxConstraints(
-                    minHeight: 45,
-                    minWidth: 45,
-                  ),
-                  decoration: BoxDecoration(
-                    color: textFieldColor,
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
+                _buildCategories(textTheme),
+                const SizedBox(height: 8),
+                Padding(
+                  padding:
+                  const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        width: MediaQuery.of(context).size.width * 0.13,
-                        child: SvgPicture.asset(
-                          'assets/icons/search_icon.svg',
-                          color: iconWhiteColor,
-                          width: 18,
-                          height: 18,
+                        constraints: const BoxConstraints(
+                          minHeight: 45,
+                          minWidth: 45,
+                        ),
+                        decoration: BoxDecoration(
+                          color: textFieldColor,
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.13,
+                              child: SvgPicture.asset(
+                                'assets/icons/search_icon.svg',
+                                color: iconWhiteColor,
+                                width: 18,
+                                height: 18,
+                              ),
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.5,
+                              child: TextField(
+                                style: textTheme.headline4
+                                    ?.copyWith(color: textWhiteColor),
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintStyle: textTheme.headline4
+                                      ?.copyWith(color: textWhiteColor),
+                                  hintText: 'Search',
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        child: TextField(
-                          style: textTheme.headline4
-                              ?.copyWith(color: textWhiteColor),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintStyle: textTheme.headline4
-                                ?.copyWith(color: textWhiteColor),
-                            hintText: 'Search',
+                      const SizedBox(width: 4.0),
+                      SizedBox(
+                        height: 45,
+                        width: 66,
+                        child: MaterialButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          color: backgroundBalticSeaColor,
+                          onPressed: () {
+                            _showDialog(context, textTheme);
+                          },
+                          child: SvgPicture.asset(
+                            'assets/icons/filter_icon.svg',
+                            color: iconTintColor,
+                            height: 18,
+                            width: 18,
                           ),
                         ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(width: 4.0),
-                SizedBox(
-                  height: 45,
-                  width: 66,
-                  child: MaterialButton(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    color: backgroundBalticSeaColor,
-                    onPressed: () {
-                      _showDialog(context, textTheme);
-                    },
-                    child: SvgPicture.asset(
-                      'assets/icons/filter_icon.svg',
-                      color: iconTintColor,
-                      height: 18,
-                      width: 18,
-                    ),
+                const SizedBox(height: 8),
+                Padding(
+                  padding:
+                  const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        child: Text(
+                          "124 Result",
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: textTheme.headline6?.copyWith(color: textWhiteColor),
+                        ),
+                      ),
+                      const SizedBox(width: 4.0),
+                      DropDownDivider(),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 8),
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  child: Text(
-                    "124 Result",
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: textTheme.headline6?.copyWith(color: textWhiteColor),
+                const SizedBox(height: 4.0),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
+                  child: Divider(
+                    color: dividerColor,
+                    height: 4,
+                    thickness: 2,
+                    endIndent: 0,
                   ),
                 ),
-                const SizedBox(width: 4.0),
-                DropDownDivider(),
-              ],
+                const SizedBox(height: 10.0),
+                _buildGames(textTheme),
+                const SizedBox(height: 16.0),
+              ]
             ),
           ),
-          const SizedBox(height: 4.0),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
-            child: Divider(
-              color: dividerColor,
-              height: 4,
-              thickness: 2,
-              endIndent: 0,
-            ),
-          ),
-          const SizedBox(height: 10.0),
-          _buildGames(textTheme),
-          const SizedBox(height: 16.0),
-        ],
-      ),
+        )
+      ],
     );
   }
 
@@ -219,7 +191,7 @@ class _GameItemScreenState extends State<GameItemScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
       child: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 0.72,
           mainAxisSpacing: 0.1,

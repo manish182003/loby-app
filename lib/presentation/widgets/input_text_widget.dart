@@ -13,41 +13,60 @@ class InputTextWidget extends StatelessWidget {
   final TextEditingController? controller;
   final dynamic onChanged;
   final TextAlign? textAlign;
+  final double? minimumHeight;
 
-  const InputTextWidget({Key? key, required this.hintName, this.maxLines, this.validator, this.keyboardType, this.txtHintColor, this.verticalHeight, this.controller, this.onChanged, this.textAlign}) : super(key: key);
+  const InputTextWidget(
+      {Key? key,
+      required this.hintName,
+      this.maxLines,
+      this.validator,
+      this.keyboardType,
+      this.txtHintColor,
+      this.verticalHeight,
+      this.controller,
+      this.onChanged,
+      this.textAlign, this.minimumHeight})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return Container(
-      constraints: const BoxConstraints(
-          minHeight: 45, minWidth: double.infinity,),
-      decoration: BoxDecoration(
-        color: textFieldColor,
-        borderRadius: BorderRadius.circular(1.5.h),
-      ),
-      child: TextFormField(
-        textAlign: textAlign?? TextAlign.start,
-        validator: validator,
-        style: textTheme.headline4?.copyWith(color: textWhiteColor),
-        maxLines: maxLines?? 1,
-        cursorColor: whiteColor,
-        cursorHeight: 20.0,
-        controller: controller,
-        keyboardType: keyboardType?? TextInputType.name,
-        onChanged: onChanged,
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 23.0, vertical: verticalHeight?? 0.0),
-          focusedBorder:OutlineInputBorder(
-            borderSide: const BorderSide(color: aquaGreenColor, width: 0.5),
-            borderRadius: BorderRadius.circular(1.5.h),
+    return Stack(
+      children: [
+        Container(
+          constraints: BoxConstraints(
+            minHeight: minimumHeight ?? 47.0,
+            minWidth: double.infinity,
           ),
-          border: InputBorder.none,
-          hintStyle:
-              textTheme.headline4?.copyWith(color: txtHintColor??textInputTitleColor),
-          hintText: hintName,
+          decoration: BoxDecoration(
+            color: textFieldColor,
+            borderRadius: BorderRadius.circular(16.0),
+          ),
         ),
-      ),
+        TextFormField(
+          textAlign: textAlign ?? TextAlign.start,
+          validator: validator,
+          style: textTheme.headline4?.copyWith(color: textWhiteColor),
+          maxLines: maxLines ?? 1,
+          cursorColor: whiteColor,
+          cursorHeight: 20.0,
+          controller: controller,
+          keyboardType: keyboardType ?? TextInputType.name,
+          onChanged: onChanged,
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                horizontal: 23.0, vertical: verticalHeight ?? 0.0),
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: aquaGreenColor, width: 0.5),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            border: InputBorder.none,
+            hintStyle: textTheme.headline4
+                ?.copyWith(color: txtHintColor ?? textInputTitleColor),
+            hintText: hintName,
+          ),
+        ),
+      ],
     );
   }
 }

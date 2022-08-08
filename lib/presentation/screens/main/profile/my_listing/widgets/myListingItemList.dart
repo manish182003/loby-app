@@ -110,40 +110,46 @@ class _MyListingItemListState extends State<MyListingItemList> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        TextButton(
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  butterflyBlueColor),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0),
-                              ))),
-                          onPressed: () {},
-                          child: Text("Edit",
-                              style: textTheme.headline6
-                                  ?.copyWith(color: textWhiteColor)),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.18,
+                          child: TextButton(
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all<Color>(
+                                    butterflyBlueColor),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ))),
+                            onPressed: () {},
+                            child: Text("Edit",
+                                style: textTheme.headline6
+                                    ?.copyWith(color: textWhiteColor)),
+                          ),
                         ),
-                        TextButton(
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all<Color>(lavaRedColor),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.0),
-                              ))),
-                          onPressed: () {
-                            ConfirmationBottomDialog(
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.18,
+                          child: TextButton(
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(lavaRedColor),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ))),
+                            onPressed: () {
+                              ConfirmationBottomDialog(
+                                  textTheme: textTheme,
+                                  contentName:
+                                  "Are you sure you want delete this listing ?", yesBtnClick: SuccessfullyDeleteListingDialog(
                                 textTheme: textTheme,
                                 contentName:
-                                "Are you sure you want delete this listing ?", yesBtnClick: SuccessfullyDeleteListingDialog(
-                              textTheme: textTheme,
-                              contentName:
-                              "Your listing has been completely deleted. Any ongoing order still needs to be completed",))
-                                .showBottomDialog(context);
-                          },
-                          child: Text("Delete",
-                              style: textTheme.headline6
-                                  ?.copyWith(color: textWhiteColor)),
+                                "Your listing has been completely deleted. Any ongoing order still needs to be completed",))
+                                  .showBottomDialog(context);
+                            },
+                            child: Text("Delete",
+                                style: textTheme.headline6
+                                    ?.copyWith(color: textWhiteColor)),
+                          ),
                         ),
                       ],
                     ),

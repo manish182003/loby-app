@@ -106,9 +106,8 @@ class _RatingDialogState extends State<RatingDialog> {
                   height: 15,
                 ),
                 const InputTextWidget(
-                  hintName: '',
-                  maxLines: 8,
-                ),
+                  verticalHeight: 16.0,
+                    hintName: '', maxLines: 8, minimumHeight: 160.0),
                 const SizedBox(
                   height: 15,
                 ),

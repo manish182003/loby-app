@@ -56,7 +56,7 @@ class _UserReviewRatingWidgetState extends State<UserReviewRatingWidget> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                      vertical: 16.0, horizontal: 16.0),
+                      vertical: 16.0, horizontal: 0.0),
                   child: Text("Good service. Fast delivery. Trusted seller. ",
                       softWrap: true,
                       maxLines: 5,

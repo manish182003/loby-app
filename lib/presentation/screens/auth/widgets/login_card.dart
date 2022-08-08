@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/core/theme/colors.dart';
 import 'package:loby/presentation/screens/auth/sign_up_screen.dart';
+import 'package:loby/presentation/screens/auth/widgets/sign_up_bottom_sheet.dart';
 
 import '../../../../services/routing_service/routes_name.dart';
 import '../../../widgets/custom_button.dart';
@@ -56,7 +57,8 @@ class _LoginCardState extends State<LoginCard> {
                   color: aquaGreenColor,
                   name: "Create New Account",
                   onTap: () {
-                   context.pushNamed(signUpScreenPage);
+                  // context.pushNamed(signUpScreenPage);
+                    _showDialog(context, textTheme);
                   }),
               const SizedBox(
                 width: double.infinity,
@@ -68,6 +70,38 @@ class _LoginCardState extends State<LoginCard> {
       ),
     );
   }
+
+  void _showDialog(BuildContext context, TextTheme textTheme) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) {
+        return DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.93,
+          maxChildSize: 0.93,
+          minChildSize: 0.5,
+          builder: (context, scrollController) {
+            return Column(
+              children: <Widget>[
+                Expanded(
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: backgroundBalticSeaColor,
+                        borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(24)),
+                      ),
+                      child: SignUpCardList(controller: scrollController),
+                    )),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
 
   void _goToMainScreen(BuildContext context, TextTheme textTheme) {
     context.pushNamed(mainPage);

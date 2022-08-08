@@ -156,7 +156,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.01.h,
               child: Align(
-                alignment: Alignment.center,
+                alignment: Alignment.bottomCenter,
                 child: Text(
                   'Version Beta 1.0',
                   textAlign: TextAlign.center,

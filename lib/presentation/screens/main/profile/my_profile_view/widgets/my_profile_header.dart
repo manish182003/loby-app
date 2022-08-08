@@ -95,7 +95,7 @@ class _MyProfileHeaderState extends State<MyProfileHeader> {
             child: Column(
               children: <Widget>[
                 Card(
-                  color: shipGreyColor,
+                  color: backgroundBalticSeaColor,
                   elevation: 0.0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16.0),
@@ -258,13 +258,13 @@ class _MyProfileHeaderState extends State<MyProfileHeader> {
                               ),
                               const SizedBox(width: 4.0),
                               SizedBox(
-                                width: 45,
+                                width: MediaQuery.of(context).size.width * 0.15,
                                 height: 45,
                                 child: MaterialButton(
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8.0),
+                                    borderRadius: BorderRadius.circular(12.0),
                                   ),
-                                  color: backgroundDarkJungleGreenColor,
+                                  color: shipGreyColor,
                                   onPressed: () {
                                     debugPrint("Click Search");
                                   },

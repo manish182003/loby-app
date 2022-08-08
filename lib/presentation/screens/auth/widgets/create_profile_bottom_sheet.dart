@@ -1,9 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
+import 'package:loby/presentation/widgets/custom_chips.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../core/theme/colors.dart';
-import '../../../../core/utils/helpers.dart';
+import '../../../widgets/auto_complete_field.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/drop_down.dart';
 import '../../../widgets/input_text_title_widget.dart';
@@ -21,16 +24,48 @@ class CreateProfileCard extends StatefulWidget {
 
 class _CreateProfileCardState extends State<CreateProfileCard> {
   final _formKey = GlobalKey<FormState>();
+  DateTime? selectedDate;
+
+  var customFormat = DateFormat('dd-MM-yyyy');
+
+  List<String> myProducts = ['Coach', 'Streamer', 'e-Athlete', 'Shout Caster'];
+  List<String> productsResult = [];
+  List<String> selectedProducts = [];
+  TextEditingController selectedProfileTag = TextEditingController();
+
+  Future<Null> showPicker(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1950),
+        lastDate: DateTime.now());
+
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+      });
+  }
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return ListView.builder(
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: ListView.builder(
         controller: widget.controller,
         // assign controller here
         itemCount: 1,
-        itemBuilder: (_, index) => Padding(
-              padding: EdgeInsets.all(4.h),
+        itemBuilder: (_, index) => Container(
+          decoration: const BoxDecoration(
+              color: backgroundBalticSeaColor,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(40.0),
+                topRight: Radius.circular(40.0),
+              )),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(31.5, 16.00, 31.5, 16.00),
+            child: Container(
+              width: double.infinity,
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -67,12 +102,9 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                       width: double.infinity,
                       height: 2.h,
                     ),
-                    InputTextWidget(
+                    const InputTextWidget(
                       hintName: 'Ex: Jhon Singh',
                       keyboardType: TextInputType.name,
-                      validator: (value) {
-                        return Helpers.validateField(value!);
-                      },
                     ),
                     SizedBox(
                       width: double.infinity,
@@ -85,12 +117,9 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                       width: double.infinity,
                       height: 2.h,
                     ),
-                    InputTextWidget(
+                    const InputTextWidget(
                       hintName: 'Ex: Commander',
                       keyboardType: TextInputType.name,
-                      validator: (value) {
-                        return Helpers.validateField(value!);
-                      },
                     ),
                     SizedBox(
                       width: double.infinity,
@@ -114,7 +143,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                       width: double.infinity,
                       height: 2.h,
                     ),
-                    const InputTextWidget(hintName: 'Ex: Bhopal'),
+                    const MyDropDownWidget(),
                     SizedBox(
                       width: double.infinity,
                       height: 4.h,
@@ -126,12 +155,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                       width: double.infinity,
                       height: 2.h,
                     ),
-                    InputTextWidget(
-                      hintName: '15 July 1999',
-                      validator: (value) {
-                        return Helpers.validateField(value!);
-                      },
-                    ),
+                    selectDate(textTheme),
                     SizedBox(
                       width: double.infinity,
                       height: 4.h,
@@ -143,7 +167,34 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                       width: double.infinity,
                       height: 2.h,
                     ),
-                    const InputTextWidget(hintName: 'tag'),
+                    Container(
+                      constraints: const BoxConstraints(
+                        minHeight: 47.0,
+                        minWidth: double.infinity,
+                      ),
+                      padding: const EdgeInsets.all(16.0),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: textFieldColor,
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                      child: Wrap(
+                          spacing: 13.0,
+                          runSpacing: 0.0,
+                          children: List.from(
+                            selectedProducts.map((products) {
+                              return CustomChips(
+                                  chipName: products,
+                                  removeItem: () {
+                                    setState(() {
+                                      final index = selectedProducts.indexWhere(
+                                          (element) => element == products);
+                                      selectedProducts.removeAt(index);
+                                    });
+                                  });
+                            }).toList(),
+                          )),
+                    ),
                     SizedBox(
                       width: double.infinity,
                       height: 4.h,
@@ -186,32 +237,76 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                   ],
                 ),
               ),
-            ));
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildSearchField(TextTheme textTheme) {
-    return Container(
-      constraints: const BoxConstraints(
-        minHeight: 45, minWidth: double.infinity,),
-      decoration: BoxDecoration(
-        color: textFieldColor,
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: TextField(
-        style: textTheme.headline4?.copyWith(color: textWhiteColor),
-        decoration: InputDecoration(
-          prefixIcon: Padding(
-            padding: const EdgeInsets.all(16),
-            child: SvgPicture.asset(
-              'assets/icons/search_icon.svg',
-              color: iconWhiteColor,
-              height: 12,
-              width: 12,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+      child: Container(
+        constraints: const BoxConstraints(
+          minHeight: 45,
+          minWidth: 45,
+        ),
+        decoration: BoxDecoration(
+          color: textFieldColor,
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width * 0.13,
+              child: SvgPicture.asset(
+                'assets/icons/search_icon.svg',
+                color: iconWhiteColor,
+                width: 18,
+                height: 18,
+              ),
             ),
-          ),
-          border: InputBorder.none,
-          hintStyle: textTheme.headline4?.copyWith(color: textWhiteColor),
-          hintText: 'Type Tags',
+            Container(
+              width: MediaQuery.of(context).size.width * 0.6,
+              child: AutoCompleteField(
+                height: 45,
+                selectedSuggestion: selectedProfileTag,
+                hint: 'Search Tag',
+                icon: 'assets/icons/search.svg',
+                suggestionsCallback: (pattern) async {
+                  productsResult = myProducts
+                      .where((suggestion) => suggestion
+                          .toString()
+                          .toLowerCase()
+                          .contains(pattern.toLowerCase()))
+                      .toList();
+
+                  // List finalList = [];
+                  // for (int i = 0; i < productsResult.length; i++) {
+                  //   finalList.add(productsResult[i].product.name);
+                  // }
+                  return productsResult;
+                },
+                onSuggestionSelected: (value) {
+                  setState(() {
+                    final index = productsResult
+                        .indexWhere((element) => element == value);
+                    if (selectedProducts
+                        .toString()
+                        .toLowerCase()
+                        .contains('name: ${value.toLowerCase()}')) {
+                      if (kDebugMode) print('do nothing');
+                    } else {
+                      selectedProducts.add(productsResult[index]);
+                    }
+                  });
+                  selectedProfileTag.clear();
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -302,6 +397,44 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                 textTheme.headline4?.copyWith(color: textInputTitleColor),
             hintText: 'Ex: Jhon Singh',
           ),
+        ),
+      ),
+    );
+  }
+
+  void _goToMainScreen(BuildContext context, TextTheme textTheme) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const MainScreen()));
+  }
+
+  selectDate(TextTheme textTheme) {
+    return GestureDetector(
+      onTap: () {
+        showPicker(context);
+      },
+      child: Container(
+        constraints: const BoxConstraints(
+          minHeight: 45,
+          minWidth: 45,
+        ),
+        decoration: BoxDecoration(
+          color: textFieldColor,
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 23.0),
+              child: Text(
+                selectedDate == null
+                    ? 'Select DOB'
+                    : customFormat.format(selectedDate!),
+                style:
+                    textTheme.headline4?.copyWith(color: textInputTitleColor),
+              ),
+            )
+          ],
         ),
       ),
     );

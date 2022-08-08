@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 
-import '../../widgets/background_image.dart';
+import '../../../core/theme/colors.dart';
 import 'widgets/login_card.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -14,9 +13,14 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: body(),
+    return Container(
+      color: limedAshColor,
+      child: SafeArea(
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: body(),
+        ),
+      ),
     );
   }
 
@@ -25,7 +29,7 @@ class _SignInScreenState extends State<SignInScreen> {
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage("assets/images/login_bg_img.png"),
-          fit: BoxFit.cover,
+          fit: BoxFit.cover
         ),
       ),
       child: Column(

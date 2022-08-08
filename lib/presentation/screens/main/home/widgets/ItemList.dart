@@ -209,6 +209,68 @@ class _ItemListState extends State<ItemList> {
                               ],
                             ),
                           ),
+                          CustomPopupMenu(
+                            arrowColor: lavaRedColor,
+                            menuBuilder: () => ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Container(
+                                color: lavaRedColor,
+                                child: IntrinsicWidth(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: menuItems
+                                        .map(
+                                          (item) => GestureDetector(
+                                        behavior: HitTestBehavior.translucent,
+                                        onTap: () {
+                                          _controller.hideMenu();
+                                          context.pushNamed(createNewDisputePage);
+                                          /* ConfirmationRiseDisputeBottomDialog(
+                              textTheme: textTheme,
+                              contentName:
+                              "Are you sure you want raise a dispute against this order ?",
+                            ).showBottomDialog(context);*/
+                                        },
+                                        child: Container(
+                                          height: 40,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          child: Row(
+                                            children: <Widget>[
+                                              Expanded(
+                                                child: Container(
+                                                  margin: const EdgeInsets.only(
+                                                      left: 10),
+                                                  padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 10),
+                                                  child: Text(
+                                                    item.title,
+                                                    style: textTheme.headline6
+                                                        ?.copyWith(
+                                                        color: textWhiteColor),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                        .toList(),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            pressType: PressType.singleClick,
+                            verticalMargin: 2,
+                            controller: _controller,
+                            child: Container(
+                              padding: const EdgeInsets.all(0),
+                              child: const Icon(Icons.more_vert,
+                                  size: 20.0, color: iconWhiteColor),
+                            ),
+                          )
                           /*SizedBox(
                               height: 4.h,
                               width: 5.w,
@@ -227,71 +289,6 @@ class _ItemListState extends State<ItemList> {
                 ),
               ],
             ),
-            Positioned(
-                bottom: 8.0,
-                right: 0.0,
-                child: CustomPopupMenu(
-                  arrowColor: lavaRedColor,
-                  menuBuilder: () => ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Container(
-                      color: lavaRedColor,
-                      child: IntrinsicWidth(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: menuItems
-                              .map(
-                                (item) => GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onTap: () {
-                                _controller.hideMenu();
-                                context.pushNamed(createNewDisputePage);
-                               /* ConfirmationRiseDisputeBottomDialog(
-                                  textTheme: textTheme,
-                                  contentName:
-                                  "Are you sure you want raise a dispute against this order ?",
-                                ).showBottomDialog(context);*/
-                              },
-                              child: Container(
-                                height: 40,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20),
-                                child: Row(
-                                  children: <Widget>[
-                                    Expanded(
-                                      child: Container(
-                                        margin: const EdgeInsets.only(
-                                            left: 10),
-                                        padding:
-                                        const EdgeInsets.symmetric(
-                                            vertical: 10),
-                                        child: Text(
-                                          item.title,
-                                          style: textTheme.headline6
-                                              ?.copyWith(
-                                              color: textWhiteColor),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          )
-                              .toList(),
-                        ),
-                      ),
-                    ),
-                  ),
-                  pressType: PressType.singleClick,
-                  verticalMargin: 2,
-                  controller: _controller,
-                  child: Container(
-                    padding: const EdgeInsets.all(0),
-                    child: const Icon(Icons.more_vert,
-                        size: 20.0, color: iconWhiteColor),
-                  ),
-                ))
           ],
         ),
       ),

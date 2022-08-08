@@ -2,11 +2,11 @@ import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../../../../../core/theme/colors.dart';
 import '../../../../../../data/models/ItemModel.dart';
 import '../../../../../../services/routing_service/routes_name.dart';
+import '../../../../../widgets/custom_app_bar.dart';
 import '../../../../../widgets/custom_button.dart';
 
 class ProfileHeader extends StatefulWidget {
@@ -57,92 +57,9 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                 fit: BoxFit.cover,
               ),
             ),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <
-                Widget>[
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: SizedBox(
-                  width: 42,
-                  height: 42,
-                  child: MaterialButton(
-                    shape: const CircleBorder(),
-                    color: textCharcoalBlueColor,
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Icon(
-                      Icons.arrow_back_ios,
-                      size: 18,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: SizedBox(
-                  width: 42,
-                  height: 42,
-                  child: CustomPopupMenu(
-                    arrowColor: lavaRedColor,
-                    menuBuilder: () => ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: Container(
-                        color: lavaRedColor,
-                        child: IntrinsicWidth(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: menuItems
-                                .map(
-                                  (item) => GestureDetector(
-                                    behavior: HitTestBehavior.translucent,
-                                    onTap: () {
-                                      _controller.hideMenu();
-                                      context.pushNamed(createNewDisputePage);
-                                    },
-                                    child: Container(
-                                      height: 40,
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 20),
-                                      child: Row(
-                                        children: <Widget>[
-                                          Expanded(
-                                            child: Container(
-                                              margin: const EdgeInsets.only(
-                                                  left: 10),
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 10),
-                                              child: Text(
-                                                item.title,
-                                                style: textTheme.headline6
-                                                    ?.copyWith(
-                                                        color: textWhiteColor),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                )
-                                .toList(),
-                          ),
-                        ),
-                      ),
-                    ),
-                    pressType: PressType.singleClick,
-                    verticalMargin: -10,
-                    controller: _controller,
-                    child: Container(
-                      padding: const EdgeInsets.all(0),
-                      child: const Icon(Icons.more_vert,
-                          size: 24.0, color: iconWhiteColor),
-                    ),
-                  ),
-                ),
-              ),
-            ])
+            CustomAppBar(
+              appBarName: "Mukesh",
+            ),
           ],
         ),
         Padding(
@@ -237,11 +154,23 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                                 children: [
                                                   TextSpan(
                                                     text: '536K ',
-                                                    style: textTheme.headline5?.copyWith(color: selectiveYellowColor, fontWeight: FontWeight.w700,),
+                                                    style: textTheme.headline5
+                                                        ?.copyWith(
+                                                      color:
+                                                          selectiveYellowColor,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                    ),
                                                   ),
                                                   TextSpan(
                                                       text: 'Followers',
-                                                      style: textTheme.headline5?.copyWith(color: selectiveYellowColor, fontWeight: FontWeight.w200,)),
+                                                      style: textTheme.headline5
+                                                          ?.copyWith(
+                                                        color:
+                                                            selectiveYellowColor,
+                                                        fontWeight:
+                                                            FontWeight.w200,
+                                                      )),
                                                 ],
                                               ),
                                             ),
@@ -252,11 +181,23 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                                 children: [
                                                   TextSpan(
                                                     text: '120 ',
-                                                    style: textTheme.headline5?.copyWith(color: selectiveYellowColor, fontWeight: FontWeight.w700,),
+                                                    style: textTheme.headline5
+                                                        ?.copyWith(
+                                                      color:
+                                                          selectiveYellowColor,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                    ),
                                                   ),
                                                   TextSpan(
                                                       text: 'Listing',
-                                                      style: textTheme.headline5?.copyWith(color: selectiveYellowColor, fontWeight: FontWeight.w200,)),
+                                                      style: textTheme.headline5
+                                                          ?.copyWith(
+                                                        color:
+                                                            selectiveYellowColor,
+                                                        fontWeight:
+                                                            FontWeight.w200,
+                                                      )),
                                                 ],
                                               ),
                                             ),
@@ -292,13 +233,13 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                               ),
                               const SizedBox(width: 4.0),
                               SizedBox(
-                                width: 45,
+                                width: MediaQuery.of(context).size.width * 0.15,
                                 height: 45,
                                 child: MaterialButton(
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8.0),
+                                    borderRadius: BorderRadius.circular(12.0),
                                   ),
-                                  color: backgroundDarkJungleGreenColor,
+                                  color: shipGreyColor,
                                   onPressed: () {
                                     debugPrint("Click Search");
                                   },
@@ -333,8 +274,10 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                   const SizedBox(width: 4.0),
                                   Text("4.2",
                                       overflow: TextOverflow.ellipsis,
-                                      style: textTheme.headline4
-                                          ?.copyWith(color: textWhiteColor, fontWeight: FontWeight.w300,)),
+                                      style: textTheme.headline4?.copyWith(
+                                        color: textWhiteColor,
+                                        fontWeight: FontWeight.w300,
+                                      )),
                                 ],
                               ),
                               const SizedBox(
@@ -351,8 +294,10 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                   const SizedBox(width: 4.0),
                                   Text("123 Orders",
                                       overflow: TextOverflow.ellipsis,
-                                      style: textTheme.headline4
-                                          ?.copyWith(color: textWhiteColor, fontWeight: FontWeight.w300,)),
+                                      style: textTheme.headline4?.copyWith(
+                                        color: textWhiteColor,
+                                        fontWeight: FontWeight.w300,
+                                      )),
                                 ],
                               ),
                             ],

@@ -177,7 +177,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   const InputTextTitleWidget(
                       titleName: 'Title', titleTextColor: textInputTitleColor),
                   const SizedBox(height: 16.0),
-                  InputTextWidget(
+                  const InputTextWidget(
                     hintName: 'Enter Title',
                     keyboardType: TextInputType.name,
                   ),
@@ -185,7 +185,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   Align(
                     alignment: Alignment.topCenter,
                     child: RichText(
-                        textAlign: TextAlign.center,
+                        textAlign: TextAlign.justify,
                         text: TextSpan(children: [
                           TextSpan(
                             text:
@@ -204,9 +204,10 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                       titleName: 'Description',
                       titleTextColor: textInputTitleColor),
                   const SizedBox(height: 16.0),
-                  InputTextWidget(
+                  const InputTextWidget(
                     hintName: 'Type Description',
                     maxLines: 5,
+                    minimumHeight: 112.0,
                     verticalHeight: 16.0,
                     keyboardType: TextInputType.name,
                   ),
@@ -224,7 +225,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   const SizedBox(height: 16.0),
                   _buildPrice(textTheme),
                   const SizedBox(height: 16.0),
-                  InputTextWidget(
+                  const InputTextWidget(
                     hintName: 'Available Stock (1 to Infinite)',
                     keyboardType: TextInputType.number,
                   ),
@@ -405,7 +406,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                 decoration: BoxDecoration(
                     color: textFieldColor,
                     borderRadius: BorderRadius.circular(10)),
-                child: HoursDropDownDivider())),
+                child: const HoursDropDownDivider())),
       ],
     );
   }
