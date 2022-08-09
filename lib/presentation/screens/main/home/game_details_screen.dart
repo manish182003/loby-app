@@ -38,7 +38,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
     return Column(
       children: [
         CustomAppBar(
-            appBarName: "Battlegrounds Mobile India",
+            appBarName: "Battlegrounds Mobile",
             txtColor: aquaGreenColor
         ),
        Flexible(
@@ -53,7 +53,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                    Positioned(
                      bottom: 8,
                      child: Container(
-                       width: MediaQuery.of(context).size.width * 0.9,
+                       width: MediaQuery.of(context).size.width * 1,
                        child: Row(
                            mainAxisAlignment: MainAxisAlignment.center,
                            crossAxisAlignment: CrossAxisAlignment.center,

@@ -42,7 +42,7 @@ class _CategoryItemScreenState extends State<CategoryItemScreen> {
     return Column(
       children: [
         CustomAppBar(
-          appBarName: "Account",
+          appBarName: "Accounts",
           txtColor: aquaGreenColor
         ),
         const SearchFieldWidget(textHint: 'Search Game'),

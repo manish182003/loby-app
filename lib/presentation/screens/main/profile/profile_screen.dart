@@ -27,65 +27,65 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const CircleAvatar(
-                    backgroundColor: aquaGreenColor,
-                    radius: 35,
-                    child: Padding(
-                      padding: EdgeInsets.all(2.0),
-                      child: CircleAvatar(
-                        backgroundImage: AssetImage('assets/images/img.png'),
-                        radius: 35,
-                      ),
-                    ), //CircleAvatar
-                  ),
-                  Expanded(
-                    child: Container(
-                      margin: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            crossAxisAlignment:
-                            CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                constraints: BoxConstraints(
-                                    maxWidth: MediaQuery.of(context).size.width * 0.55),
-                                child: Text("Mukesh Kumar",
-                                    overflow: TextOverflow.ellipsis,
-                                    style: textTheme.headline3
-                                        ?.copyWith(
-                                        color: textWhiteColor)),
-                              ),
-                              const SizedBox(width: 8.0),
-                              SvgPicture.asset(
-                                'assets/icons/verified_user_bedge.svg',
-                                height: 15,
-                                width: 15,
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 1.h,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              context.pushNamed(myProfileScreenPage);
-                            },
-                            child: Text(
+              child: GestureDetector(
+                onTap: () {
+                  context.pushNamed(myProfileScreenPage);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const CircleAvatar(
+                      backgroundColor: aquaGreenColor,
+                      radius: 35,
+                      child: Padding(
+                        padding: EdgeInsets.all(2.0),
+                        child: CircleAvatar(
+                          backgroundImage: AssetImage('assets/images/img.png'),
+                          radius: 35,
+                        ),
+                      ), //CircleAvatar
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  constraints: BoxConstraints(
+                                      maxWidth: MediaQuery.of(context).size.width * 0.55),
+                                  child: Text("Mukesh Kumar",
+                                      overflow: TextOverflow.ellipsis,
+                                      style: textTheme.headline3
+                                          ?.copyWith(
+                                          color: textWhiteColor)),
+                                ),
+                                const SizedBox(width: 8.0),
+                                SvgPicture.asset(
+                                  'assets/icons/verified_user_bedge.svg',
+                                  height: 15,
+                                  width: 15,
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 1.h,
+                            ),
+                            Text(
                               "View Profile",
                               style: textTheme.subtitle2?.copyWith(
                                   fontSize: 10.sp, color: textWhiteColor),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
             ),
             Expanded(

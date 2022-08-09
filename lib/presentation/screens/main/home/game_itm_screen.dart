@@ -45,7 +45,7 @@ class _GameItemScreenState extends State<GameItemScreen> {
     return Column(
       children: [
         CustomAppBar(
-            appBarName: "Battlegrounds Mobile India",
+            appBarName: "Battlegrounds Mobile",
             txtColor: aquaGreenColor
         ),
 
@@ -201,7 +201,7 @@ class _GameItemScreenState extends State<GameItemScreen> {
         physics: const NeverScrollableScrollPhysics(),
         itemCount: 7,
         itemBuilder: (context, index) {
-          return ItemList(name: 'hello $index');
+          return ItemList(name: 'hello $index', menuIcon: true,);
         },
       ),
     );

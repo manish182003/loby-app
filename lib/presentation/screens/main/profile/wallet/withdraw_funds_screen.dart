@@ -35,139 +35,144 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
         ),
         Flexible(
           child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Stack(
-                children: [
-                  Card(
-                    color: shipGreyColor,
-                    elevation: 0.0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
-                    child: Container(
-                        width: MediaQuery.of(context).size.width * 1,
-                        height: 140.0,
-                        decoration: BoxDecoration(
-                          color: aquaGreenColor,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Stack(
+                    children: [
+                      Card(
+                        color: shipGreyColor,
+                        elevation: 0.0,
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16.0),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8.0),
-                          child: Column(
-                            children: [
-                              Text('Current Balance',
-                                  textAlign: TextAlign.center,
-                                  style: textTheme.headline3
-                                      ?.copyWith(color: textTunaBlueColor)),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8.0, vertical: 16.0),
-                                child: Text('₹ 25,000',
-                                    textAlign: TextAlign.center,
-                                    style: textTheme.headlineLarge
-                                        ?.copyWith(color: textTunaBlueColor)),
-                              ),
-                            ],
-                          ),
-                        )),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 110.0),
-                    child: Card(
-                      color: shipGreyColor,
-                      elevation: 0.0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 1,
-                        decoration: BoxDecoration(
-                          color: shipGreyColor,
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 24.0, horizontal: 24.0),
-                                child: MyDropDownWidget()),
-                            const Padding(
-                                padding: EdgeInsets.only(
-                                    top: 0.0,
-                                    bottom: 24.0,
-                                    left: 24.0,
-                                    right: 24.0),
-                                child: InputTextWidget(
-                                  hintName: 'Enter Amount (INR)',
-                                  keyboardType: TextInputType.number,
-                                )),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                left: 16.0,
-                                right: 16.0,
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                        child: Container(
+                            width: MediaQuery.of(context).size.width * 1,
+                            height: 140.0,
+                            decoration: BoxDecoration(
+                              color: aquaGreenColor,
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 8.0),
+                              child: Column(
                                 children: [
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.35,
-                                    child: CustomButton(
-                                      color: carminePinkColor,
-                                      textColor: textWhiteColor,
-                                      name: "Withdraw",
-                                      onTap: () {
-                                        BottomDialog(
-                                                textTheme: textTheme,
-                                                contentName:
-                                                    "Are you sure you want to withdraw ",
-                                                contentLinkName: '\nRs. 23,000',
-                                                contentNameLast:
-                                                    ' from you Loby Wallet ?')
-                                            .showBottomDialog(context);
-                                      },
-                                    ),
+                                  Text('Current Balance',
+                                      textAlign: TextAlign.center,
+                                      style: textTheme.headline3
+                                          ?.copyWith(color: textTunaBlueColor)),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0, vertical: 16.0),
+                                    child: Text('₹ 25,000',
+                                        textAlign: TextAlign.center,
+                                        style: textTheme.headlineLarge
+                                            ?.copyWith(color: textTunaBlueColor)),
                                   ),
                                 ],
                               ),
+                            )),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 110.0),
+                        child: Card(
+                          color: shipGreyColor,
+                          elevation: 0.0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 1,
+                            decoration: BoxDecoration(
+                              color: shipGreyColor,
+                              borderRadius: BorderRadius.circular(16.0),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 16.0, horizontal: 16.0),
-                              child: Text(
-                                  'Minimum Account Balance to maintain in your Wallet is Rs. 200',
-                                  textAlign: TextAlign.center,
-                                  style: textTheme.headline5
-                                      ?.copyWith(color: textWhiteColor)),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 24.0, horizontal: 24.0),
+                                    child: MyDropDownWidget()),
+                                const Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 0.0,
+                                        bottom: 24.0,
+                                        left: 24.0,
+                                        right: 24.0),
+                                    child: InputTextWidget(
+                                      hintName: 'Enter Amount (INR)',
+                                      keyboardType: TextInputType.number,
+                                    )),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 16.0,
+                                    right: 16.0,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        width: MediaQuery.of(context).size.width *
+                                            0.35,
+                                        child: CustomButton(
+                                          color: carminePinkColor,
+                                          textColor: textWhiteColor,
+                                          name: "Withdraw",
+                                          onTap: () {
+                                            BottomDialog(
+                                                    textTheme: textTheme,
+                                                    contentName:
+                                                        "Are you sure you want to withdraw ",
+                                                    contentLinkName: '\nRs. 23,000',
+                                                    contentNameLast:
+                                                        ' from you Loby Wallet ?')
+                                                .showBottomDialog(context);
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 16.0, horizontal: 16.0),
+                                  child: Text(
+                                      'Minimum Account Balance to maintain in your Wallet is Rs. 200',
+                                      textAlign: TextAlign.center,
+                                      style: textTheme.headline5
+                                          ?.copyWith(color: textWhiteColor)),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 16.0,
+                    bottom: 32.0,
+                  ),
+                  child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      child: CustomButton(
+                        color: purpleLightIndigoColor,
+                        textColor: textWhiteColor,
+                        name: "Add New Withdraw Method",
+                        onTap: () {
+                          debugPrint('gddfdfdfd');
+                          AddWithWithdrawMethodDialog(context, textTheme);
+                        },
+                      )),
+                ),
+              ],
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(
-            top: 16.0,
-          ),
-          child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.7,
-              child: CustomButton(
-                color: purpleLightIndigoColor,
-                textColor: textWhiteColor,
-                name: "Add New Withdraw Method",
-                onTap: () {
-                  debugPrint('gddfdfdfd');
-                  AddWithWithdrawMethodDialog(context, textTheme);
-                },
-              )),
         ),
       ],
     );

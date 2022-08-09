@@ -286,7 +286,7 @@ class _MyProfileHeaderState extends State<MyProfileHeader> {
                           padding: const EdgeInsets.symmetric(
                               vertical: 0.0, horizontal: 16.0),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
                                 children: [

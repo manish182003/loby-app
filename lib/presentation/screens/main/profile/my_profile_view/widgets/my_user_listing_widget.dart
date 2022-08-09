@@ -46,7 +46,7 @@ class MyUserListingWidget extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       itemCount: 2,
       itemBuilder: (context, index) {
-        return ItemList(name: 'hello $index');
+        return ItemList(name: 'hello $index', menuIcon: false, );
       },
     );
   }

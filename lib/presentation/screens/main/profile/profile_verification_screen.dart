@@ -226,9 +226,9 @@ class _ProfileVerificationScreenState extends State<ProfileVerificationScreen> {
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.35,
+                      width: MediaQuery.of(context).size.width * 0.37,
                       child: CustomButton(
-                        color: aquaGreenColor,
+                        color: butterflyBlueColor,
                         name: "Submit",
                         textColor: primaryTextColor,
                         onTap: () {
