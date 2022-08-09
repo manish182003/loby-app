@@ -29,7 +29,7 @@ class _SignInScreenState extends State<SignInScreen> {
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage("assets/images/login_bg_img.png"),
-          fit: BoxFit.cover
+          fit: BoxFit.fill
         ),
       ),
       child: Column(
