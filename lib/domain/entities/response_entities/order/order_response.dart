@@ -3,7 +3,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:loby/domain/entities/home/category.dart';
-import 'package:loby/domain/entities/orders/order.dart';
+import 'package:loby/domain/entities/order/order.dart';
 
 
 class OrderResponse extends Equatable {

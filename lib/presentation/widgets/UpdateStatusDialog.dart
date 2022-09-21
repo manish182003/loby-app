@@ -64,354 +64,348 @@ class UpdateStatusDialog {
         ),
         child: Stack(
           children: <Widget>[
-            Stack(
-              children: [
-                Card(
-                  color: shipGreyColor,
-                  elevation: 0.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16.0),
-                  ),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * 0.3,
-                    decoration: BoxDecoration(
-                      color: backgroundDarkJungleGreenColor,
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          top: 16.0, left: 24.0, right: 24.0, bottom: 16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            child: Text('Update Status',
-                                textAlign: TextAlign.center,
-                                style: textTheme.headline2
-                                    ?.copyWith(color: textWhiteColor)),
-                          ),
-                          SizedBox(
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: SvgPicture.asset(
-                                  'assets/icons/close_icon.svg',
-                                  height: 14,
-                                  width: 14,
-                                ),
-                              ),
+            Card(
+              color: shipGreyColor,
+              elevation: 0.0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.0),
+              ),
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.3,
+                decoration: BoxDecoration(
+                  color: backgroundDarkJungleGreenColor,
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      top: 16.0, left: 24.0, right: 24.0, bottom: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        child: Text('Update Status',
+                            textAlign: TextAlign.center,
+                            style: textTheme.headline2?.copyWith(color: textWhiteColor)),
+                      ),
+                      SizedBox(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: SvgPicture.asset(
+                              'assets/icons/close_icon.svg',
+                              height: 14,
+                              width: 14,
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: 8.h),
-                  child: Card(
-                    color: shipGreyColor,
-                    elevation: 0.0,
-                    shape: RoundedRectangleBorder(
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 8.h),
+              child: Card(
+                color: Colors.transparent,
+                elevation: 0.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0.0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 1,
+                    decoration: BoxDecoration(
+                      color: shipGreyColor,
                       borderRadius: BorderRadius.circular(16.0),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 0.0),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 1,
-                        decoration: BoxDecoration(
-                          color: shipGreyColor,
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
-                        child: SingleChildScrollView(
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                top: 24.0,
-                                left: 24.0,
-                                right: 24.0,
-                                bottom: 24.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            top: 24.0,
+                            left: 24.0,
+                            right: 24.0,
+                            bottom: 24.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/icons/verified_user_bedge.svg',
-                                      height: 15,
-                                      width: 15,
-                                    ),
-                                    const SizedBox(width: 4.0),
-                                    Text("Order Placed",
-                                        overflow: TextOverflow.ellipsis,
-                                        style: textTheme.headline6
-                                            ?.copyWith(color: textWhiteColor)),
-                                    const SizedBox(width: 8.0),
-                                    Expanded(
-                                      child: Text("May 26, 2022 18:23:43",
-                                          textAlign: TextAlign.end,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: textTheme.headline6?.copyWith(
-                                              color: textLightColor)),
-                                    ),
-                                  ],
+                                SvgPicture.asset(
+                                  'assets/icons/verified_user_bedge.svg',
+                                  height: 15,
+                                  width: 15,
                                 ),
-                                const SizedBox(height: 16.0),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.3,
-                                      child: Button(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.3,
-                                        height: 36,
-                                        onPress: () {
-                                          debugPrint('update');
-                                        },
-                                        txtPadding: 8.0,
-                                        btnBgColor: orangeColor,
-                                        txtColor: textWhiteColor,
-                                        borderRadius: 12.0,
-                                        btnName: 'Reject Order',
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.3,
-                                      child: Button(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.3,
-                                        height: 36,
-                                        onPress: () {
-                                          debugPrint('update');
-                                        },
-                                        txtPadding: 8.0,
-                                        btnBgColor: purpleLightIndigoColor,
-                                        txtColor: textWhiteColor,
-                                        borderRadius: 12,
-                                        btnName: 'Accept Order',
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 16.0),
-                                SizedBox(
-                                    child: RichText(
-                                        textAlign: TextAlign.start,
-                                        text: TextSpan(children: [
-                                          TextSpan(
-                                            text:
-                                                'Sellers are requsted to discuss & freeze all delivery details with buyer on ',
-                                            style: textTheme.subtitle1
-                                                ?.copyWith(
-                                                    color: textLightColor),
-                                          ),
-                                          TextSpan(
-                                              text: 'Loby Chat ',
-                                              style: textTheme.subtitle1
-                                                  ?.copyWith(
-                                                      color: aquaGreenColor)),
-                                          TextSpan(
-                                              text:
-                                                  'before accpecting or declining the Order. Any conversation outside Loby Chat will not be insured/covered by Loby Protection',
-                                              style: textTheme.subtitle1
-                                                  ?.copyWith(
-                                                      color: textLightColor)),
-                                        ]))),
-                                const SizedBox(height: 16.0),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/icons/verified_user_bedge.svg',
-                                      height: 15,
-                                      width: 15,
-                                    ),
-                                    const SizedBox(width: 4.0),
-                                    Text("Seller Accepted",
-                                        overflow: TextOverflow.ellipsis,
-                                        style: textTheme.headline6
-                                            ?.copyWith(color: textWhiteColor)),
-                                    const SizedBox(width: 8.0),
-                                    Expanded(
-                                      child: Text(
-                                        "May 26, 2022 18:23:43",
-                                        textAlign: TextAlign.end,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: textTheme.headline6
-                                            ?.copyWith(color: textLightColor),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 16.0),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/icons/verified_user_bedge.svg',
-                                      height: 15,
-                                      width: 15,
-                                    ),
-                                    const SizedBox(width: 4.0),
-                                    Text("Order in Progress",
-                                        overflow: TextOverflow.ellipsis,
-                                        style: textTheme.headline6
-                                            ?.copyWith(color: textWhiteColor)),
-                                    const SizedBox(width: 8.0),
-                                    Expanded(
-                                      child: Text("May 26, 2022 18:23:43",
-                                          textAlign: TextAlign.end,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: textTheme.headline6?.copyWith(
-                                              color: textLightColor)),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 16.0),
-                                Button(
-                                  width: MediaQuery.of(context).size.width * 1,
-                                  onPress: () {
-                                    debugPrint('update');
-                                  },
-                                  txtPadding: 8.0,
-                                  btnBgColor: purpleLightIndigoColor,
-                                  txtColor: textWhiteColor,
-                                  borderRadius: 2.h,
-                                  btnName: 'Upload Proofs & Confirm Delivery',
-                                ),
-                                const SizedBox(height: 16.0),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/icons/verified_user_bedge.svg',
-                                      height: 15,
-                                      width: 15,
-                                    ),
-                                    const SizedBox(width: 4.0),
-                                    Text("Seller Delivery Confirmed ",
-                                        overflow: TextOverflow.ellipsis,
-                                        style: textTheme.headline6
-                                            ?.copyWith(color: textWhiteColor)),
-                                  ],
-                                ),
-                                const SizedBox(height: 16.0),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/icons/verified_user_bedge.svg',
-                                      height: 15,
-                                      width: 15,
-                                    ),
-                                    const SizedBox(width: 4.0),
-                                    Container(
-                                      constraints: BoxConstraints(
-                                          maxWidth: MediaQuery.of(context)
-                                                  .size
-                                                  .width -
-                                              30.w),
-                                      child: Text(
-                                          "Buyer Declined Delivery. Kindly resolve & ask buyer to re-confirm.",
-                                          style: textTheme.headline6?.copyWith(
-                                              color: textWhiteColor)),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 16.0),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/icons/verified_user_bedge.svg',
-                                      height: 15,
-                                      width: 15,
-                                    ),
-                                    const SizedBox(width: 4.0),
-                                    Text("Buyer Delivery Confirmed",
-                                        overflow: TextOverflow.ellipsis,
-                                        style: textTheme.headline6
-                                            ?.copyWith(color: textWhiteColor)),
-                                  ],
-                                ),
-                                const SizedBox(height: 16.0),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/icons/verified_user_bedge.svg',
-                                      height: 15,
-                                      width: 15,
-                                      color: iconWhiteColor,
-                                    ),
-                                    const SizedBox(width: 4.0),
-                                    Text("Transaction Complete",
-                                        overflow: TextOverflow.ellipsis,
-                                        style: textTheme.headline6
-                                            ?.copyWith(color: textWhiteColor)),
-                                  ],
-                                ),
-                                const SizedBox(height: 16.0),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/icons/verified_user_bedge.svg',
-                                      height: 15,
-                                      width: 15,
-                                      color: iconWhiteColor,
-                                    ),
-                                    const SizedBox(width: 4.0),
-                                    Text("Loby Protection Period - ",
-                                        overflow: TextOverflow.ellipsis,
-                                        style: textTheme.headline6
-                                            ?.copyWith(color: textWhiteColor)),
-                                    Expanded(
-                                      child: Text("6 Days Remaining",
-                                          overflow: TextOverflow.ellipsis,
-                                          style: textTheme.headline6?.copyWith(
-                                              color: textLightColor)),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 16.0),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/icons/verified_user_bedge.svg',
-                                      height: 15,
-                                      width: 15,
-                                      color: iconWhiteColor,
-                                    ),
-                                    const SizedBox(width: 4.0),
-                                    Text("Order Completed",
-                                        overflow: TextOverflow.ellipsis,
-                                        style: textTheme.headline6
-                                            ?.copyWith(color: textWhiteColor)),
-                                  ],
+                                const SizedBox(width: 4.0),
+                                Text("Order Placed",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: textTheme.headline6
+                                        ?.copyWith(color: textWhiteColor)),
+                                const SizedBox(width: 8.0),
+                                Expanded(
+                                  child: Text("May 26, 2022 18:23:43",
+                                      textAlign: TextAlign.end,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: textTheme.headline6?.copyWith(
+                                          color: textLightColor)),
                                 ),
                               ],
                             ),
-                          ),
+                            const SizedBox(height: 16.0),
+                            Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width *
+                                      0.3,
+                                  child: Button(
+                                    width:
+                                        MediaQuery.of(context).size.width *
+                                            0.3,
+                                    height: 36,
+                                    onPress: () {
+                                      debugPrint('update');
+                                    },
+                                    txtPadding: 8.0,
+                                    btnBgColor: orangeColor,
+                                    txtColor: textWhiteColor,
+                                    borderRadius: 12.0,
+                                    btnName: 'Reject Order',
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width *
+                                      0.3,
+                                  child: Button(
+                                    width:
+                                        MediaQuery.of(context).size.width *
+                                            0.3,
+                                    height: 36,
+                                    onPress: () {
+                                      debugPrint('update');
+                                    },
+                                    txtPadding: 8.0,
+                                    btnBgColor: purpleLightIndigoColor,
+                                    txtColor: textWhiteColor,
+                                    borderRadius: 12,
+                                    btnName: 'Accept Order',
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16.0),
+                            SizedBox(
+                                child: RichText(
+                                    textAlign: TextAlign.start,
+                                    text: TextSpan(children: [
+                                      TextSpan(
+                                        text:
+                                            'Sellers are requsted to discuss & freeze all delivery details with buyer on ',
+                                        style: textTheme.subtitle1
+                                            ?.copyWith(
+                                                color: textLightColor),
+                                      ),
+                                      TextSpan(
+                                          text: 'Loby Chat ',
+                                          style: textTheme.subtitle1
+                                              ?.copyWith(
+                                                  color: aquaGreenColor)),
+                                      TextSpan(
+                                          text:
+                                              'before accpecting or declining the Order. Any conversation outside Loby Chat will not be insured/covered by Loby Protection',
+                                          style: textTheme.subtitle1
+                                              ?.copyWith(
+                                                  color: textLightColor)),
+                                    ]))),
+                            const SizedBox(height: 16.0),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/icons/verified_user_bedge.svg',
+                                  height: 15,
+                                  width: 15,
+                                ),
+                                const SizedBox(width: 4.0),
+                                Text("Seller Accepted",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: textTheme.headline6
+                                        ?.copyWith(color: textWhiteColor)),
+                                const SizedBox(width: 8.0),
+                                Expanded(
+                                  child: Text(
+                                    "May 26, 2022 18:23:43",
+                                    textAlign: TextAlign.end,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: textTheme.headline6
+                                        ?.copyWith(color: textLightColor),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16.0),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/icons/verified_user_bedge.svg',
+                                  height: 15,
+                                  width: 15,
+                                ),
+                                const SizedBox(width: 4.0),
+                                Text("Order in Progress",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: textTheme.headline6
+                                        ?.copyWith(color: textWhiteColor)),
+                                const SizedBox(width: 8.0),
+                                Expanded(
+                                  child: Text("May 26, 2022 18:23:43",
+                                      textAlign: TextAlign.end,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: textTheme.headline6?.copyWith(
+                                          color: textLightColor)),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16.0),
+                            Button(
+                              width: MediaQuery.of(context).size.width * 1,
+                              onPress: () {
+                                debugPrint('update');
+                              },
+                              txtPadding: 8.0,
+                              btnBgColor: purpleLightIndigoColor,
+                              txtColor: textWhiteColor,
+                              borderRadius: 2.h,
+                              btnName: 'Upload Proofs & Confirm Delivery',
+                            ),
+                            const SizedBox(height: 16.0),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/icons/verified_user_bedge.svg',
+                                  height: 15,
+                                  width: 15,
+                                ),
+                                const SizedBox(width: 4.0),
+                                Text("Seller Delivery Confirmed ",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: textTheme.headline6
+                                        ?.copyWith(color: textWhiteColor)),
+                              ],
+                            ),
+                            const SizedBox(height: 16.0),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/icons/verified_user_bedge.svg',
+                                  height: 15,
+                                  width: 15,
+                                ),
+                                const SizedBox(width: 4.0),
+                                Container(
+                                  constraints: BoxConstraints(
+                                      maxWidth: MediaQuery.of(context)
+                                              .size
+                                              .width -
+                                          30.w),
+                                  child: Text(
+                                      "Buyer Declined Delivery. Kindly resolve & ask buyer to re-confirm.",
+                                      style: textTheme.headline6?.copyWith(
+                                          color: textWhiteColor)),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16.0),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/icons/verified_user_bedge.svg',
+                                  height: 15,
+                                  width: 15,
+                                ),
+                                const SizedBox(width: 4.0),
+                                Text("Buyer Delivery Confirmed",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: textTheme.headline6
+                                        ?.copyWith(color: textWhiteColor)),
+                              ],
+                            ),
+                            const SizedBox(height: 16.0),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/icons/verified_user_bedge.svg',
+                                  height: 15,
+                                  width: 15,
+                                  color: iconWhiteColor,
+                                ),
+                                const SizedBox(width: 4.0),
+                                Text("Transaction Complete",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: textTheme.headline6
+                                        ?.copyWith(color: textWhiteColor)),
+                              ],
+                            ),
+                            const SizedBox(height: 16.0),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/icons/verified_user_bedge.svg',
+                                  height: 15,
+                                  width: 15,
+                                  color: iconWhiteColor,
+                                ),
+                                const SizedBox(width: 4.0),
+                                Text("Loby Protection Period - ",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: textTheme.headline6
+                                        ?.copyWith(color: textWhiteColor)),
+                                Expanded(
+                                  child: Text("6 Days Remaining",
+                                      overflow: TextOverflow.ellipsis,
+                                      style: textTheme.headline6?.copyWith(
+                                          color: textLightColor)),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16.0),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/icons/verified_user_bedge.svg',
+                                  height: 15,
+                                  width: 15,
+                                  color: iconWhiteColor,
+                                ),
+                                const SizedBox(width: 4.0),
+                                Text("Order Completed",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: textTheme.headline6
+                                        ?.copyWith(color: textWhiteColor)),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ),
                 ),
-              ],
+              ),
             ),
           ],
         ),

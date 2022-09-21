@@ -29,24 +29,24 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
         CustomAppBar(
           appBarName: "Transactions",
         ),
-        _buildNotifications(textTheme),
+        // _buildNotifications(textTheme),
       ],
     );
   }
 
-  _buildNotifications(TextTheme textTheme) {
-    return Flexible(
-      child: SingleChildScrollView(
-        child: ListView.builder(
-          itemCount: 10,
-          shrinkWrap: true,
-          padding: const EdgeInsets.only(top: 16),
-          physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) {
-            return const NotificationItemWidget();
-          },
-        ),
-      ),
-    );
-  }
+  // _buildNotifications(TextTheme textTheme) {
+  //   return Flexible(
+  //     child: SingleChildScrollView(
+  //       child: ListView.builder(
+  //         itemCount: 10,
+  //         shrinkWrap: true,
+  //         padding: const EdgeInsets.only(top: 16),
+  //         physics: const NeverScrollableScrollPhysics(),
+  //         itemBuilder: (context, index) {
+  //           return const NotificationItemWidget();
+  //         },
+  //       ),
+  //     ),
+  //   );
+  // }
 }

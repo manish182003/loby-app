@@ -89,30 +89,30 @@ class _SearchScreenState extends State<SearchScreen> {
                           color: aquaGreenColor,
                           thickness: 1.0,
                         ),
-                        SizedBox(
-                          height: 166,
-                          child: ListView.builder(
-                            itemCount: 5,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) => GestureDetector(
-                              onTap: () {
-                                debugPrint('Battlegrounds Mobile India $index');
-                                FocusManager.instance.primaryFocus?.unfocus();
-                                //  context.pushNamed(gamePage);
-                                /*Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            GameItemScreen(name: 'Battlegrounds Mobile $index')));*/
-                              },
-                              child: SizedBox(
-                                height: 166,
-                                width: 120,
-                                child: Center(
-                                  child: GameCard(index: index),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
+                        // SizedBox(
+                        //   height: 166,
+                        //   child: ListView.builder(
+                        //     itemCount: 5,
+                        //     scrollDirection: Axis.horizontal,
+                        //     itemBuilder: (context, index) => GestureDetector(
+                        //       onTap: () {
+                        //         debugPrint('Battlegrounds Mobile India $index');
+                        //         FocusManager.instance.primaryFocus?.unfocus();
+                        //         //  context.pushNamed(gamePage);
+                        //         /*Navigator.of(context).push(MaterialPageRoute(
+                        // builder: (context) =>
+                        //     GameItemScreen(name: 'Battlegrounds Mobile $index')));*/
+                        //       },
+                        //       child: SizedBox(
+                        //         height: 166,
+                        //         width: 120,
+                        //         child: Center(
+                        //           child: GameCard(index: index),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                         Text("Users",
                             textAlign: TextAlign.start,
                             overflow: TextOverflow.ellipsis,

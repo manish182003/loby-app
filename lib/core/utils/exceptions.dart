@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 ///
 /// [message] field provides reason of the exception in short.
 class ServerException implements Exception {
-  final int code;
-  final String message;
+  final int? code;
+  final String? message;
 
   ServerException({
     this.code = 404,

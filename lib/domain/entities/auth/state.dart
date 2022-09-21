@@ -31,37 +31,6 @@ class State extends Equatable{
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
-  factory State.fromJson(Map<String, dynamic> json) => State(
-    id: json["id"],
-    name: json["name"],
-    countryId: json["country_id"],
-    countryCode: json["country_code"],
-    fipsCode: json["fips_code"],
-    iso2: json["iso2"],
-    type: json["type"],
-    latitude: json["latitude"],
-    longitude: json["longitude"],
-    flag: json["flag"],
-    wikiDataId: json["wikiDataId"],
-    createdAt: DateTime.parse(json["createdAt"]),
-    updatedAt: DateTime.parse(json["updatedAt"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "country_id": countryId,
-    "country_code": countryCode,
-    "fips_code": fipsCode,
-    "iso2": iso2,
-    "type": type,
-    "latitude": latitude,
-    "longitude": longitude,
-    "flag": flag,
-    "wikiDataId": wikiDataId,
-    "createdAt": createdAt?.toIso8601String(),
-    "updatedAt": updatedAt?.toIso8601String(),
-  };
 
   @override
   // TODO: implement props

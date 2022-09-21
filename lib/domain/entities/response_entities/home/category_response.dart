@@ -2,7 +2,7 @@
 
 
 import 'package:equatable/equatable.dart';
-import 'package:loby/domain/entities/auth/category.dart';
+import 'package:loby/domain/entities/home/category.dart';
 
 class CategoryResponse extends Equatable {
 

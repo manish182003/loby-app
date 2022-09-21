@@ -1,34 +1,21 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:loby/domain/entities/order/order.dart';
+import 'package:loby/presentation/screens/main/profile/my_order/widgets/status_bottom_sheet.dart';
+import 'package:loby/presentation/widgets/custom_bottom_sheet.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../../../../core/theme/colors.dart';
 import '../../../../../../data/models/ItemModel.dart';
 import '../../../../../widgets/ConfirmationRiseDisputeBottomDialog.dart';
 import '../../../../../widgets/UpdateStatusDialog.dart';
 
-class OrderItem extends StatefulWidget {
-  final String name;
+class OrderItem extends StatelessWidget {
+  final Order order;
+  OrderItem({super.key, required this.order});
 
-  const OrderItem({Key? key, required this.name});
-
-  @override
-  State<OrderItem> createState() => _OrderItemState();
-}
-
-class _OrderItemState extends State<OrderItem> {
-  late List<ItemModel> menuItems;
   final CustomPopupMenuController _controller = CustomPopupMenuController();
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    menuItems = [
-      ItemModel(
-        'Raise Dispute',
-      ),
-    ];
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +31,8 @@ class _OrderItemState extends State<OrderItem> {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 16.0),
-            child: Stack(children: [
+            child: Stack(
+                children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,11 +41,15 @@ class _OrderItemState extends State<OrderItem> {
                     width: MediaQuery.of(context).size.width * 0.2,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
-                      child: Container(
+                      child: SizedBox(
                         height: 55.0,
-                        child: Image.asset(
-                          "assets/images/img.png",
-                          fit: BoxFit.fill,
+                        child: CachedNetworkImage(
+                          imageUrl: order.userGameService!.game?.image ?? "",
+                          fit: BoxFit.cover,
+                          height: 110,
+                          width: 110,
+                          placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
+                          errorWidget: (context, url, error) => const Icon(Icons.error),
                         ),
                       ),
                     ),
@@ -67,23 +59,16 @@ class _OrderItemState extends State<OrderItem> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.48,
-                              child: Text("Lvl 78 Account on SA",
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: textTheme.headline5
-                                      ?.copyWith(color: textWhiteColor)),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
                         SizedBox(
-                          child: Text("Battlegrounds Mobile India",
+                          width: MediaQuery.of(context).size.width * 0.48,
+                          child: Text(order.userGameService!.title!,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: textTheme.headline5?.copyWith(color: textWhiteColor)),
+                        ),
+                        SizedBox(height: 1.5.h),
+                        SizedBox(
+                          child: Text(order.userGameService!.game?.name! ?? "",
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               style: textTheme.headline6
@@ -101,24 +86,39 @@ class _OrderItemState extends State<OrderItem> {
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 4.0, horizontal: 8.0),
-                                child: Text('Account',
-                                    style: textTheme.headline6
-                                        ?.copyWith(color: textWhiteColor)),
+                                padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                                child: Text(order.userGameService!.category!.name!, style: textTheme.headline6?.copyWith(color: textWhiteColor)),
                               ),
                             ),
                             const SizedBox(width: 16.0),
                             GestureDetector(
                               onTap: () {
-                                UpdateStatusDialog(
-                                        textTheme: textTheme,
-                                        tileName: "Congratulations",
-                                        titleColor: aquaGreenColor,
-                                        contentName:
-                                            "Your service has been successfully listed. You can edit your listings from My Listings.",
-                                        contentLinkName: ' My Listings')
-                                    .showBottomDialog(context);
+
+                                showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  isDismissible: false,
+                                  builder: (BuildContext context) {
+                                    return Padding(
+                                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                      child: CustomBottomSheet(
+                                          isDismissible: false,
+                                          initialChildSize: 0.6,
+                                          maxChildSize: 0.8,
+                                          minChildSize: 0.6,
+                                          horizontalPadding: 0.0,
+                                          child: StatusBottomSheet(order: order)),
+                                    );
+                                  },
+                                );
+
+                                // UpdateStatusDialog(
+                                //         textTheme: textTheme,
+                                //         tileName: "Congratulations",
+                                //         titleColor: aquaGreenColor,
+                                //         contentName: "Your service has been successfully listed. You can edit your listings from My Listings.",
+                                //         contentLinkName: ' My Listings').showBottomDialog(context);
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -129,8 +129,7 @@ class _OrderItemState extends State<OrderItem> {
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 4.0, horizontal: 8.0),
                                   child: Text('Update Status',
-                                      style: textTheme.headline6
-                                          ?.copyWith(color: textWhiteColor)),
+                                      style: textTheme.headline6?.copyWith(color: textWhiteColor)),
                                 ),
                               ),
                             ),
@@ -141,25 +140,20 @@ class _OrderItemState extends State<OrderItem> {
                         ),
                         Row(
                           children: [
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  "Current Status : ",
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: textTheme.headline4?.copyWith(
-                                      fontSize: 11.0, color: textLightColor),
-                                ),
-                                const SizedBox(width: 2.0),
-                                Text(
-                                  "Order in Progress",
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: textTheme.headline4?.copyWith(
-                                      fontSize: 11.0, color: aquaGreenColor),
-                                ),
-                              ],
+                            Text(
+                              "Current Status : ",
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: textTheme.headline4?.copyWith(
+                                  fontSize: 11.0, color: textLightColor),
+                            ),
+                            const SizedBox(width: 2.0),
+                            Text(
+                              order.orderStatuses!.last.status!,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: textTheme.headline4?.copyWith(
+                                  fontSize: 11.0, color: aquaGreenColor),
                             ),
                           ],
                         ),
@@ -180,7 +174,7 @@ class _OrderItemState extends State<OrderItem> {
                         child: IntrinsicWidth(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: menuItems
+                            children: ['Raise Dispute']
                                 .map(
                                   (item) => GestureDetector(
                                     behavior: HitTestBehavior.translucent,
@@ -206,7 +200,7 @@ class _OrderItemState extends State<OrderItem> {
                                                   const EdgeInsets.symmetric(
                                                       vertical: 10),
                                               child: Text(
-                                                item.title,
+                                                item,
                                                 style: textTheme.headline6
                                                     ?.copyWith(
                                                         color: textWhiteColor),

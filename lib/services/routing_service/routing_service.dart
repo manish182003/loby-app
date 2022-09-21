@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
 
-
-
-class Routing extends StatefulWidget {
-
-  const Routing({Key? key}) : super(key: key);
+class RoutingService extends StatefulWidget {
+  const RoutingService({Key? key}) : super(key: key);
 
   @override
-  State<Routing> createState() => _RoutingState();
+  State<RoutingService> createState() => _RoutingServiceState();
 }
 
-class _RoutingState extends State<Routing> {
-
-
-
+class _RoutingServiceState extends State<RoutingService> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +27,4 @@ class _RoutingState extends State<Routing> {
       ),
     );
   }
-
-
-
 }

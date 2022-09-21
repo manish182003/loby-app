@@ -13,19 +13,18 @@ class FirebaseDynamicLinkService{
     final Uri deepLink = initialLink.link;
     bool isSeller = deepLink.pathSegments.contains('sellers-catalog');
     bool isLogin = deepLink.pathSegments.contains('login');
-    if (isSeller) {
-      String id = deepLink.queryParameters['sellerID'];
-      if (deepLink != null) {
-        return context.goNamed(
-            sellersCatalogPage, queryParams: {'sellerID': id});
-      }
-    }else if(isLogin){
-      String token = deepLink.queryParameters['token'];
-      if (deepLink != null) {
-        return context.goNamed(loginPage, extra: token);
-      }
-    }else{
-      return ;
-    }
+    // if (isSeller) {
+    //   String? id = deepLink.queryParameters['sellerID'];
+    //   return context.goNamed(sellersCatalogPage, queryParams: {'sellerID': id});
+    // }else if(isLogin){
+    //   String token = deepLink.queryParameters['token'];
+    //   if (deepLink != null) {
+    //     return context.goNamed(loginPage, extra: token);
+    //   }
+    // }else{
+    //   return ;
+    // }
+
+    return ;
   }
 }

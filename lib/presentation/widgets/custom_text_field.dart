@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:loby/core/theme/colors.dart';
+import 'package:sizer/sizer.dart';
 
-import 'responsive.dart';
 
 class CustomTextField extends StatefulWidget {
-  const CustomTextField({Key key,
+  const CustomTextField({Key? key,
     this.input,
     this.hintText,
     this.length,
@@ -15,12 +16,12 @@ class CustomTextField extends StatefulWidget {
     this.validator,
     this.preFilledValue,
     this.onFieldSubmitted,
-    this.editable,
+    this.isReadableOnly = false,
     this.onChanged,
     this.keyboardType,
     this.inputFormatters,
     this.textInputAction,
-    this.enabled,
+    this.enabled = true,
     this.textSize,
     this.errorText,
     this.maxLines = 1,
@@ -31,27 +32,31 @@ class CustomTextField extends StatefulWidget {
     this.enabledBorderColor = Colors.grey,
     this.onEditingComplete,
     this.focusNode,
-    this.iconButton
+    this.iconButton,
+    this.obscureText = false,
+    this.scrollBottomPadding
   }) : super(key: key);
-  final TextEditingController input;
-  final String hintText, labelText, helperText, preFilledValue, errorText;
-  final TextInputAction textInputAction;
-  final int length, maxLines;
-  final Function onTap;
-  final FormFieldSetter<String> onSaved;
-  final FormFieldValidator<String> validator;
-  final ValueChanged<String> onFieldSubmitted;
-  final Function onEditingComplete;
-  final bool editable, enabled;
-  final double textSize;
-  final Function onChanged;
-  final TextInputType keyboardType;
-  final TextCapitalization textCapitalization;
-  final List<TextInputFormatter> inputFormatters;
+  final TextEditingController? input;
+  final String? hintText, labelText, helperText, preFilledValue, errorText;
+  final TextInputAction? textInputAction;
+  final int? length, maxLines;
+  final Function()? onTap;
+  final FormFieldSetter<String>? onSaved;
+  final FormFieldValidator<String>? validator;
+  final ValueChanged<String>? onFieldSubmitted;
+  final Function()? onEditingComplete;
+  final bool isReadableOnly, enabled;
+  final double? textSize;
+  final Function(String)? onChanged;
+  final TextInputType? keyboardType;
+  final TextCapitalization? textCapitalization;
+  final List<TextInputFormatter>? inputFormatters;
   final double borderRadius;
-  final Color borderColor, focusedBorderColor, enabledBorderColor;
-  final FocusNode focusNode;
-  final IconButton iconButton;
+  final Color? borderColor, focusedBorderColor, enabledBorderColor;
+  final FocusNode? focusNode;
+  final IconButton? iconButton;
+  final bool obscureText;
+  final double? scrollBottomPadding;
 
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
@@ -74,51 +79,54 @@ class _CustomTextFieldState extends State<CustomTextField> {
       onChanged: widget.onChanged,
       initialValue: widget.preFilledValue,
       enabled: widget.enabled,
-      readOnly: widget.editable,
+      readOnly: widget.isReadableOnly,
       maxLength: widget.length,
       textInputAction: widget.textInputAction,
       inputFormatters: widget.inputFormatters,
-      textCapitalization: widget.textCapitalization,
+      textCapitalization: widget.textCapitalization!,
+      obscureText: widget.obscureText,
       // maxLengthEnforced: true,
-      style: textTheme.headline3.copyWith(fontSize: 14, color: Colors.black),
+      style: textTheme.headline4?.copyWith(color: textWhiteColor),
+      scrollPadding: EdgeInsets.only(bottom: widget.scrollBottomPadding!),
+
       decoration: InputDecoration(
           suffixIcon: widget.iconButton,
-        isDense: true,
         counterText: '',
-        focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Color(0xffC2C2C2)),
-            borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius))),
+        filled: true,
+        fillColor: textFieldColor,
 
-        border:  OutlineInputBorder(
-            borderSide: const BorderSide(color: Color(0xffC2C2C2)),
-            borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius))
-        ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: aquaGreenColor, width: 0.5),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          border:  OutlineInputBorder(
+              borderSide: const BorderSide(color: textFieldColor, width: 0),
+              borderRadius: BorderRadius.circular(8.0),
+          ),
 
-        enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Color(0xffC2C2C2)),
-            borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius))),
+          enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color:textFieldColor, width: 0),
+              borderRadius:  BorderRadius.circular(8.0),),
 
-        errorBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.red),
-            borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius))),
+          errorBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: textErrorColor, width: 0.5),
+              borderRadius:  BorderRadius.circular(8.0),),
 
-        focusedErrorBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.red),
-            borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius))),
-        labelStyle: textTheme.headline4.copyWith(fontSize: Responsive.isDesktop(context)
-            ? 15 : 12, color: Colors.black.withOpacity(0.6),),
-        errorStyle: const TextStyle(
-          color: Colors.red,fontSize: 10.0
-        ),
+          focusedErrorBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color:textErrorColor, width: 0.5),
+              borderRadius:  BorderRadius.circular(8.0),),
+
+        labelStyle: textTheme.headline4?.copyWith(color: Colors.black.withOpacity(0.6),),
+        errorStyle: textTheme.headline5?.copyWith(color: Colors.red),
         hintText: widget.hintText,
         errorText: widget.errorText,
-        hintStyle: textTheme.headline4.copyWith(color: Colors.black.withOpacity(0.6), fontSize: Responsive.isDesktop(context)
-            ? 15 : 12),
+        hintStyle: textTheme.headline4?.copyWith(color: textInputTitleColor),
         labelText: widget.labelText,
         helperText: widget.helperText
       ),
       maxLines: widget.maxLines,
-      keyboardType: widget.keyboardType
+      keyboardType: widget.keyboardType,
+      cursorColor: whiteColor,
     );
   }
 }

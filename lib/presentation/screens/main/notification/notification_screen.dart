@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:loby/presentation/getx/controllers/home_controller.dart';
 import 'package:loby/presentation/screens/main/notification/widgets/notification_item_widget.dart';
+import 'package:loby/presentation/widgets/custom_app_bar.dart';
+import 'package:loby/presentation/widgets/custom_loader.dart';
 
 import '../../../../core/theme/colors.dart';
+import '../../../widgets/body_padding_widget.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({Key? key}) : super(key: key);
@@ -11,60 +17,38 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
+
+  HomeController homeController = Get.find<HomeController>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    homeController.getNotifications();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: body(),
-      ),
-    );
-  }
 
-  Widget body() {
-    final textTheme = Theme.of(context).textTheme;
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.fromLTRB(15, 15, 15, 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 0.0, horizontal: 8.0),
-                      child: Text(
-                        'Notifications',
-                        maxLines: 2,
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        style: textTheme.headline2
-                            ?.copyWith(color: textWhiteColor),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          _buildNotifications(textTheme),
-        ],
-      ),
-    );
-  }
-
-  _buildNotifications(TextTheme textTheme) {
-    return ListView.builder(
-      itemCount: 5,
-      shrinkWrap: true,
-      padding: const EdgeInsets.only(top: 16),
-      physics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) {
-        return NotificationItemWidget();
-      },
+    return Scaffold(
+        appBar: appBar(context: context, appBarName: "Notifications", isBackIcon: false),
+        body: Obx(() {
+          if(homeController.isNotificationFetching.value){
+            return const CustomLoader();
+          }else {
+            return BodyPaddingWidget(
+              child: ListView.builder(
+                itemCount: homeController.notifications.length,
+                shrinkWrap: true,
+                padding: const EdgeInsets.only(top: 16),
+                physics: const ClampingScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return NotificationItemWidget(notification: homeController.notifications[index]);
+                },
+              ),
+            );
+          }
+        }),
     );
   }
 }

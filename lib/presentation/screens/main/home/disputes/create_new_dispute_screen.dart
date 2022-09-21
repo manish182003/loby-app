@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../core/theme/colors.dart';
-import '../../../../widgets/custom_button.dart';
+import '../../../../widgets/buttons/custom_button.dart';
 import '../../../../widgets/input_text_widget.dart';
 import '../widgets/dispute_widget.dart';
 

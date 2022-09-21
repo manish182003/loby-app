@@ -4,7 +4,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../core/theme/colors.dart';
 import '../../../widgets/custom_app_bar.dart';
-import '../../../widgets/custom_button.dart';
+import '../../../widgets/buttons/custom_button.dart';
 import '../../../widgets/input_text_title_widget.dart';
 import '../../../widgets/input_text_widget.dart';
 

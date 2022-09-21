@@ -1,5 +1,8 @@
 import 'package:equatable/equatable.dart';
-import 'package:loby/domain/entities/auth/category.dart';
+import 'package:loby/data/models/home/category_games_model.dart';
+import 'package:loby/domain/entities/home/category.dart';
+
+import '../../../domain/entities/home/category.dart';
 // ignore_for_file: overridden_fields, annotate_overrides
 
 
@@ -17,6 +20,7 @@ class CategoryModel extends Category{
     this.settlementTypes,
     this.createdAt,
     this.updatedAt,
+    this.categoryGames,
   });
 
   final int? id;
@@ -31,6 +35,8 @@ class CategoryModel extends Category{
   final int? settlementTypes;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final List<CategoryGamesModel>? categoryGames;
+
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) => CategoryModel(
     id: json["id"],
@@ -45,9 +51,9 @@ class CategoryModel extends Category{
     settlementTypes: json["settlement_types"],
     createdAt: DateTime.parse(json["createdAt"]),
     updatedAt: DateTime.parse(json["updatedAt"]),
+    categoryGames: json["gameCategories"] == null ? null :  List<CategoryGamesModel>.from(json["gameCategories"].map((x) => CategoryGamesModel.fromJson(x))),
   );
 
-  @override
   Map<String, dynamic> toJson() => {
     "id": id,
     "name": name,
@@ -65,5 +71,5 @@ class CategoryModel extends Category{
 
   @override
   // TODO: implement props
-  List<Object?> get props => [id, name];
+  List<Object?> get props => [id, name, categoryGames];
 }

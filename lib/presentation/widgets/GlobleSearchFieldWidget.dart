@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../core/theme/colors.dart';
 
@@ -27,8 +28,8 @@ class GlobalSearchFieldWidget extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 0.13,
+              SizedBox(width: 4.w,),
+              SizedBox(
                 child: SvgPicture.asset(
                   'assets/icons/search_icon.svg',
                   color: iconWhiteColor,
@@ -36,8 +37,8 @@ class GlobalSearchFieldWidget extends StatelessWidget {
                   height: 18,
                 ),
               ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.7,
+              SizedBox(width: 2.w,),
+              SizedBox(
                 child: Text('Search',
                   style: textTheme.headline4?.copyWith(color: textWhiteColor),
                 ),

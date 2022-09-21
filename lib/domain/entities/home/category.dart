@@ -1,4 +1,7 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
+import 'package:loby/domain/entities/home/category_games.dart';
+
 
 class Category extends Equatable{
   const Category({
@@ -14,6 +17,7 @@ class Category extends Equatable{
     this.settlementTypes,
     this.createdAt,
     this.updatedAt,
+    this.categoryGames,
   });
 
   final int? id;
@@ -28,9 +32,11 @@ class Category extends Equatable{
   final int? settlementTypes;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final List<CategoryGames>? categoryGames;
+
 
 
   @override
   // TODO: implement props
-  List<Object?> get props => [id, name];
+  List<Object?> get props => [id, name, categoryGames];
 }

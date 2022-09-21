@@ -1,26 +1,23 @@
 import 'package:loby/data/models/home/category_model.dart';
 import 'package:loby/domain/entities/response_entities/home/category_response.dart';
-import 'package:loby/domain/entities/response_entities/home/game_category_response.dart';
+import 'package:loby/domain/entities/response_entities/home/category_games_response.dart';
 
 import '../../../../domain/entities/home/category.dart';
 // ignore_for_file: overridden_fields, annotate_overrides
 
 
-class GameCategoryResponseModel extends GameCategoryResponse {
+class CategoryGamesResponseModel extends CategoryGamesResponse {
 
-  final List<Category> gameCategories;
+  final Category categoryGames;
 
-  const GameCategoryResponseModel({
-    required this.gameCategories,
-  }) : super(gameCategories: gameCategories);
+  const CategoryGamesResponseModel({
+    required this.categoryGames,
+  }) : super(categoryGames: categoryGames);
 
   @override
-  List<Object> get props => [gameCategories];
+  List<Object> get props => [categoryGames];
 
-  factory GameCategoryResponseModel.fromJSON(Map<String, dynamic> json) =>
-      GameCategoryResponseModel(
-        gameCategories: (json['data'] as List<dynamic>)
-            .map<CategoryModel>((gameCategories) => CategoryModel.fromJson(gameCategories))
-            .toList(),
-      );
+  factory CategoryGamesResponseModel.fromJSON(Map<String, dynamic> json) =>
+      CategoryGamesResponseModel(
+        categoryGames: (CategoryModel.fromJson(json['data'])));
 }

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:loby/domain/entities/profile/user.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../../core/theme/colors.dart';
 import '../../../../../widgets/cusstom_text.dart';
 
 class UserSocialWidget extends StatelessWidget {
-  const UserSocialWidget({Key? key}) : super(key: key);
+  final User user;
+  const UserSocialWidget({Key? key, required this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,21 +19,19 @@ class UserSocialWidget extends StatelessWidget {
   _buildWidget(TextTheme textTheme, BuildContext context) {
     return Column(
       children: <Widget>[
-        Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(height: 8),
-              buildItem(textTheme, context, 'assets/icons/instagram_one_icon.svg', 'Instagram', 'https://www.instagram.com/loby.gg', 38.0, 38.0),
-              const SizedBox(height: 16),
-              buildItem(textTheme, context, 'assets/icons/youtube_icon.svg', 'YouTube', 'https://www.youtube.com/c/jabykoay',32.0, 32.0),
-              const SizedBox(height: 16),
-              buildItem(textTheme, context, 'assets/icons/discord_icon.svg', 'Discord', 'https://discord.com/channels/827464017693769748', 32.0, 32.0),
-              const SizedBox(height: 16),
-              buildItem(textTheme, context, 'assets/icons/twitch_icon.svg', 'Twitch', 'https://www.twitch.tv/shroud', 32.0, 32.0),
-              const SizedBox(height: 16),
-            ],
-          ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const SizedBox(height: 8),
+            buildItem(textTheme, context, 'assets/icons/instagram_one_icon.svg', 'Instagram', user.instagramId ?? "", 38.0, 38.0),
+            const SizedBox(height: 16),
+            buildItem(textTheme, context, 'assets/icons/youtube_icon.svg', 'YouTube', user.youtubeId ?? "", 32.0, 32.0),
+            const SizedBox(height: 16),
+            buildItem(textTheme, context, 'assets/icons/discord_icon.svg', 'Discord', user.discordId ?? "", 32.0, 32.0),
+            const SizedBox(height: 16),
+            buildItem(textTheme, context, 'assets/icons/twitch_icon.svg', 'Twitch', user.twitchId ?? "", 32.0, 32.0),
+            const SizedBox(height: 16),
+          ],
         ),
       ],
     );
@@ -54,17 +54,13 @@ class UserSocialWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 SizedBox(
-                  child: Container(
-                    child: SvgPicture.asset(
-                      socialIcon,
-                      height: width,
-                      width: height,
-                    ),
+                  child: SvgPicture.asset(
+                    socialIcon,
+                    height: width,
+                    width: height,
                   ),
                 ),
-                SizedBox(
-                  width: 8.0,
-                ),
+                const SizedBox(width: 8.0,),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,7 +69,7 @@ class UserSocialWidget extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           style: textTheme.headline4
                               ?.copyWith(color: textTunaBlueColor)),
-                      SizedBox(height: 6),
+                      const SizedBox(height: 6),
                       Text(socialLink,
                           overflow: TextOverflow.ellipsis,
                           style: textTheme.headline6

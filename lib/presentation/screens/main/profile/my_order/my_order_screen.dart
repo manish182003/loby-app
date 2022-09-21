@@ -4,54 +4,43 @@ import '../../../../../core/theme/colors.dart';
 import '../../../../widgets/custom_app_bar.dart';
 import 'all_orders_screen.dart';
 
-class MyOrderScreen extends StatefulWidget {
+class MyOrderScreen extends StatelessWidget {
   const MyOrderScreen({Key? key}) : super(key: key);
-
-  @override
-  State<MyOrderScreen> createState() => _MyOrderScreenState();
-}
-
-class _MyOrderScreenState extends State<MyOrderScreen> {
-  final _tabs = [
-    const Tab(text: 'All Orders'),
-    const Tab(text: 'Bought'),
-    const Tab(text: 'Sold'),
-  ];
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return DefaultTabController(
       length: 3,
-      child: Scaffold(
-        backgroundColor: backgroundDarkJungleGreenColor,
-        appBar: PreferredSize(
-          preferredSize:
-              Size.fromHeight(MediaQuery.of(context).size.height * 0.19),
-          child: SafeArea(
-            child: Column(
-              children: <Widget>[
-                CustomAppBar(
-                  appBarName: "My Orders",
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: backgroundDarkJungleGreenColor,
+          appBar: appBar(context: context, appBarName: "My Orders"),
+          body: Column(
+            children: [
+              TabBar(
+                indicatorSize: TabBarIndicatorSize.label,
+                indicatorColor: butterflyBlueColor,
+                indicatorWeight: 4.0,
+                labelColor: textWhiteColor,
+                labelStyle: textTheme.headline5,
+                tabs: const [
+                  Tab(text: 'All Orders'),
+                  Tab(text: 'Bought'),
+                  Tab(text: 'Sold'),
+                ],
+              ),
+              const Expanded(
+                child: TabBarView(
+                  children: <Widget>[
+                    AllOrdersTabScreen(status: 'ALL',),
+                    AllOrdersTabScreen(status: 'BOUGHT',),
+                    AllOrdersTabScreen(status: 'SOLD',)
+                  ],
                 ),
-                TabBar(
-                  indicatorSize: TabBarIndicatorSize.label,
-                  indicatorColor: butterflyBlueColor,
-                  indicatorWeight: 4.0,
-                  labelColor: textWhiteColor,
-                  labelStyle: textTheme.headline5,
-                  tabs: _tabs,
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ),
-        body: const TabBarView(
-          children: <Widget>[
-            AllOrdersTabScreen(),
-            AllOrdersTabScreen(),
-            AllOrdersTabScreen()
-          ],
         ),
       ),
     );

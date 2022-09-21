@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../../core/theme/colors.dart';
 import '../../../../../../services/routing_service/routes_name.dart';
-import '../../../../../widgets/custom_button.dart';
+import '../../../../../widgets/buttons/custom_button.dart';
 
 class MyProfileHeader extends StatefulWidget {
   final coverImage;

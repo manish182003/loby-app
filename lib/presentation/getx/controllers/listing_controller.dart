@@ -1,0 +1,208 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:loby/core/usecases/listing_params.dart';
+import 'package:loby/core/usecases/usecase.dart';
+import 'package:loby/core/utils/helpers.dart';
+import 'package:loby/domain/entities/listing/configuration.dart';
+import 'package:loby/domain/entities/listing/selected_service_option.dart';
+import 'package:loby/domain/entities/listing/service_listing.dart';
+import 'package:loby/domain/usecases/listing/create_listing.dart';
+import 'package:loby/domain/usecases/listing/get_buyer_listings.dart';
+import 'package:loby/domain/usecases/listing/get_configurations.dart';
+import 'package:loby/domain/usecases/listing/report_listing.dart';
+
+class ListingController extends GetxController{
+  final GetConfigurations _getConfigurations;
+  final CreateListing _createListing;
+  final GetBuyerListings _getBuyerListings;
+  final ReportListing _reportListing;
+
+
+  ListingController({
+    required GetConfigurations getConfigurations,
+    required CreateListing createListing,
+    required GetBuyerListings getBuyerListings,
+    required ReportListing reportListing,
+  }) : _getConfigurations = getConfigurations,
+        _createListing = createListing,
+  _getBuyerListings = getBuyerListings,
+  _reportListing = reportListing;
+
+
+  final errorMessage = ''.obs;
+
+
+  Configuration configuration = const Configuration();
+  final isServicesAvailable = false.obs;
+
+  final title = TextEditingController().obs;
+  final description = TextEditingController().obs;
+  final price = TextEditingController().obs;
+  final stockAvl = TextEditingController().obs;
+  final estimateDeliveryTime = ''.obs;
+  final priceUnitId = 0.obs;
+  final serviceOptionId = <SelectedServiceOption>[].obs;
+  final files = <PlatformFile>[].obs;
+  final fileTypes = <int>[].obs;
+  final optionAnswer = <TextEditingController>[].obs;
+
+
+  final buyerListings = <ServiceListing>[].obs;
+  final isBuyerListingsFetching = false.obs;
+  final areMoreListingAvailable = true.obs;
+  final buyerListingPageNumber = 1.obs;
+
+  final buyerListingsProfile = <ServiceListing>[].obs;
+
+  final quantityCount = 1.obs;
+  final totalPrice = "".obs;
+
+
+
+  Future<bool> getConfigurations({required int? categoryId, required int? gameId}) async {
+
+    final failureOrSuccess = await _getConfigurations(
+      Params(listingParams: ListingParams(
+        categoryId: categoryId,
+        gameId: gameId
+      ),),
+    );
+
+    failureOrSuccess.fold(
+          (failure) {
+        errorMessage.value = Helpers.convertFailureToMessage(failure);
+        debugPrint(errorMessage.value);
+        Helpers.toast(errorMessage.value);
+      },
+          (success) {
+            configuration = success.configuration;
+      },
+    );
+    return failureOrSuccess.isRight() ? true : false;
+  }
+
+
+  Future<bool> createListing({required int categoryId, required int gameId}) async {
+
+    final failureOrSuccess = await _createListing(
+      Params(listingParams: ListingParams(
+        categoryId: categoryId,
+          gameId: gameId,
+          title: title.value.text,
+          description: description.value.text,
+          price: price.value.text,
+          stockAvl: stockAvl.value.text,
+          estimateDeliveryTime: estimateDeliveryTime.value,
+          priceUnitId: priceUnitId.value,
+          serviceOptionId: serviceOptionId,
+          files: files,
+          fileTypes: fileTypes,
+          optionAnswer: optionAnswer,
+      ),),
+    );
+
+    failureOrSuccess.fold(
+          (failure) {
+        errorMessage.value = Helpers.convertFailureToMessage(failure);
+        debugPrint(errorMessage.value);
+        Helpers.toast(errorMessage.value);
+      },
+          (success) {
+
+            title.value.clear();
+            description.value.clear();
+            price.value.clear();
+            stockAvl.value.clear();
+            estimateDeliveryTime.value = "";
+            priceUnitId.value = 0;
+            serviceOptionId.clear();
+            files.clear();
+            fileTypes.clear();
+            optionAnswer.clear();
+            isServicesAvailable.value = false;
+
+
+      },
+    );
+    return failureOrSuccess.isRight() ? true : false;
+  }
+
+
+
+  Future<bool> getBuyerListings({int? categoryId, int? gameId, int? listingId, int? userId, String? search, String? from}) async {
+    buyerListingPageNumber.value == 1 ? isBuyerListingsFetching(true) : isBuyerListingsFetching(false);
+
+    if(areMoreListingAvailable.value){
+      final failureOrSuccess = await _getBuyerListings(
+        Params(listingParams: ListingParams(
+          categoryId: categoryId,
+          gameId: gameId,
+          listingId: listingId,
+          userId: userId,
+          page: buyerListingPageNumber.value,
+          search: search,
+        ),),
+      );
+
+      failureOrSuccess.fold(
+            (failure) {
+          errorMessage.value = Helpers.convertFailureToMessage(failure);
+          debugPrint(errorMessage.value);
+          Helpers.toast(errorMessage.value);
+          isBuyerListingsFetching.value = false;
+        },
+            (success) {
+
+          if(from == 'profile'){
+
+            if (buyerListingPageNumber > 1) {
+              buyerListingsProfile.addAll(success.serviceListings);
+            } else {
+              buyerListingsProfile.value = success.serviceListings;
+            }
+            areMoreListingAvailable.value = buyerListingsProfile.length != success.count;
+
+          }else{
+            if (buyerListingPageNumber > 1) {
+              buyerListings.addAll(success.serviceListings);
+            } else {
+              buyerListings.value = success.serviceListings;
+            }
+            areMoreListingAvailable.value = buyerListings.length != success.count;
+          }
+          buyerListingPageNumber.value++;
+
+          isBuyerListingsFetching.value = false;
+        },
+      );
+      return failureOrSuccess.isRight() ? true : false;
+    }
+    return false;
+  }
+
+  Future<bool> reportListing({int? userId, int? userGameServiceId}) async {
+
+    final failureOrSuccess = await _reportListing(
+      Params(listingParams: ListingParams(
+        userId: userId,
+        userGameServiceId: userGameServiceId
+      ),),
+    );
+
+    failureOrSuccess.fold(
+          (failure) {
+        errorMessage.value = Helpers.convertFailureToMessage(failure);
+        debugPrint(errorMessage.value);
+        Helpers.toast(errorMessage.value);
+      },
+          (success) {
+
+      },
+    );
+    return failureOrSuccess.isRight() ? true : false;
+  }
+
+}

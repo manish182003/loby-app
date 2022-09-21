@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../core/theme/colors.dart';
-import '../../../../widgets/custom_button.dart';
+import '../../../../widgets/buttons/custom_button.dart';
 
 class FilterBottomSheet extends StatefulWidget {
   final ScrollController controller;

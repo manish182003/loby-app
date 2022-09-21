@@ -35,9 +35,9 @@ class MyInfo extends StatelessWidget {
               children: const <Widget>[
                 MyUserListingWidget(),
                 MyUserAboutWidget(),
-                UserReviewRatingWidget(),
-                UserDuelsWidget(),
-                MySocialWidget(),
+                // UserReviewRatingWidget(),
+                // UserDuelsWidget(),
+                // MySocialWidget(),
               ],
             ),
           ),

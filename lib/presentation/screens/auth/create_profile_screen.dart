@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:loby/core/theme/colors.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../widgets/auto_complete_field.dart';
-import '../../widgets/custom_button.dart';
+import '../../widgets/text_fields/auto_complete_field.dart';
+import '../../widgets/buttons/custom_button.dart';
 import '../../widgets/custom_chips.dart';
 import '../../widgets/drop_down.dart';
 import '../../widgets/input_text_title_widget.dart';
@@ -41,10 +41,11 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
         firstDate: DateTime(1950),
         lastDate: DateTime.now());
 
-    if (picked != null && picked != selectedDate)
+    if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
       });
+    }
   }
 
   @override
@@ -193,8 +194,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                                   chipName: products,
                                   removeItem: () {
                                     setState(() {
-                                      final index = selectedProducts.indexWhere(
-                                          (element) => element == products);
+                                      final index = selectedProducts.indexWhere((element) => element == products);
                                       selectedProducts.removeAt(index);
                                     });
                                   });

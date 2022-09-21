@@ -5,7 +5,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../../core/utils/helpers.dart';
 import '../../../services/routing_service/routes_name.dart';
-import '../../widgets/custom_button.dart';
+import '../../widgets/buttons/custom_button.dart';
 import '../../widgets/input_text_title_widget.dart';
 import '../../widgets/input_text_widget.dart';
 

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:loby/core/theme/colors.dart';
 import 'package:sizer/sizer.dart';
-import 'package:vyapar_dost/presentation/widgets/responsive.dart';
 
 class CustomBottomSheet extends StatelessWidget {
   final Widget child;
-  final double initialChildSize;
-  final double maxChildSize;
-  final double minChildSize;
-  final bool isDismissible;
-  const CustomBottomSheet({Key key, this.child, this.initialChildSize, this.maxChildSize, this.minChildSize, this.isDismissible}) : super(key: key);
+  final double? initialChildSize;
+  final double? maxChildSize;
+  final double? minChildSize;
+  final bool? isDismissible;
+  final double? horizontalPadding;
+  const CustomBottomSheet({Key? key, required this.child, this.initialChildSize, this.maxChildSize, this.minChildSize, this.isDismissible, this.horizontalPadding}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +26,19 @@ class CustomBottomSheet extends StatelessWidget {
         minChildSize: minChildSize ?? 0.5,
         builder:(_, controller) => Container(
           decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+              color: backgroundBalticSeaColor,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(40)),
             ),
-            padding: EdgeInsets.only(left: Responsive.isDesktop(context) ? 35.w : 15, right: Responsive.isDesktop(context) ? 35.w : 15, top: 4.h, bottom: 0.h),
-            child: child,
-        ),
+            padding: EdgeInsets.only(left: horizontalPadding ?? 15, right: horizontalPadding ?? 15, top: 3.h, bottom: 0.h),
+            child: ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                controller: controller,
+                // assign controller here
+                itemCount: 1,
+                itemBuilder: (_, index) {
+                  return child;
+                }
       ),
-    );
+    )));
   }
 }

@@ -3,8 +3,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:loby/data/models/listing/service_listing_model.dart';
 import 'package:loby/domain/entities/listing/service_listing.dart';
-import 'package:loby/domain/entities/orders/order.dart';
-import 'package:loby/domain/entities/orders/order_status.dart';
+import 'package:loby/domain/entities/order/order.dart';
+import 'package:loby/domain/entities/order/order_status.dart';
 
 import 'order_status_model.dart';
 
@@ -47,7 +47,7 @@ class OrderModel extends Order{
     disputeId: json["dispute_id"],
     quantity: json["quantity"],
     price: json["price"],
-    cronUpdatedTime: json["cron_updated_time"],
+    cronUpdatedTime: json["cron_updated_time"] == null ? null : DateTime.parse(json["cron_updated_time"]),
     paymentSettlement: json["payment_settlement"],
     transactionFreeze: json["transaction_freeze"],
     createdAt: DateTime.parse(json["createdAt"]),

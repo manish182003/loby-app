@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
 
 import '../../core/theme/colors.dart';
-import 'custom_button.dart';
+import 'buttons/custom_button.dart';
 
 
 class BottomDialog {
@@ -68,9 +68,8 @@ class BottomDialog {
                 width: MediaQuery.of(context).size.width * 0.4,
                 child: CustomButton(
                   onTap: () {
-                    Router.neglect(context, () {
-                      context.goNamed(mainPage);
-                    });
+                    Navigator.pop(context);
+                    context.goNamed(mainPage);
                   },
                   color: aquaGreenColor,
                   name: 'OK',

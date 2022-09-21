@@ -3,16 +3,16 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:loby/domain/entities/home/category.dart';
-import 'package:loby/domain/entities/home/game_category.dart';
 
-class GameCategoryResponse extends Equatable {
 
-  final List<Category> gameCategories;
+class CategoryGamesResponse extends Equatable {
 
-  const GameCategoryResponse({
-    required this.gameCategories,
+  final Category categoryGames;
+
+  const CategoryGamesResponse({
+    required this.categoryGames,
   });
 
   @override
-  List<Object> get props => [gameCategories];
+  List<Object> get props => [categoryGames];
 }

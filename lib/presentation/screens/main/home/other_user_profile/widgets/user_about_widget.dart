@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:loby/domain/entities/profile/user.dart';
 
 import '../../../../../../core/theme/colors.dart';
 import '../../../../../widgets/cusstom_text.dart';
 
 class UserAboutWidget extends StatelessWidget {
-  const UserAboutWidget({Key? key}) : super(key: key);
+  final User user;
+  const UserAboutWidget({Key? key, required this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,7 @@ class UserAboutWidget extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: MyText(
-                  name: "Mukesh Kumar",
+                  name: user.name!,
                   textColor: textWhiteColor,
                   myBackgroundColor: textFieldColor,
                 ),
@@ -50,7 +52,7 @@ class UserAboutWidget extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: MyText(
-                  name: "UNTD * Commander",
+                  name: user.displayName ?? "",
                   textColor: textWhiteColor,
                   myBackgroundColor: textFieldColor,
                 ),
@@ -68,7 +70,7 @@ class UserAboutWidget extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: MyText(
-                  name: "India",
+                  name: "${user.country?.name!}",
                   textColor: textWhiteColor,
                   myBackgroundColor: textFieldColor,
                 ),
@@ -86,7 +88,7 @@ class UserAboutWidget extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: MyText(
-                  name: "Lucknow, Uttar Pradesh",
+                  name: "${user.city?.name!}",
                   textColor: textWhiteColor,
                   myBackgroundColor: textFieldColor,
                 ),
@@ -104,7 +106,7 @@ class UserAboutWidget extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: MyText(
-                  name: "",
+                  name: user.profileTags!.map((e) => e.name).join(", "),
                   textColor: textWhiteColor,
                   myBackgroundColor: textFieldColor,
                 ),
@@ -114,15 +116,14 @@ class UserAboutWidget extends StatelessWidget {
                 width: double.infinity,
                 child: Text(
                   "Bio",
-                  style: textTheme.headline5
-                      ?.copyWith(color: textLightColor),
+                  style: textTheme.headline5?.copyWith(color: textLightColor),
                 ),
               ),
               const SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,
                 child: MyText(
-                  name: "",
+                  name: user.bio ?? '',
                   textColor: textWhiteColor,
                   myBackgroundColor: textFieldColor,
                 ),
@@ -140,7 +141,7 @@ class UserAboutWidget extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: MyText(
-                  name: "August 18, 2022",
+                  name: "${user.createdAt ?? ''}",
                   textColor: textWhiteColor,
                   myBackgroundColor: textFieldColor,
                 ),

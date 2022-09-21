@@ -1,22 +1,22 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
-import 'package:flutter/material.dart';
 import 'package:loby/core/utils/failure.dart';
-import 'package:loby/domain/entities/response_entities/listing/configuration_response.dart';
-import 'package:loby/domain/entities/response_entities/listing/service_listing_response.dart';
-import 'package:loby/domain/entities/response_entities/orders/order_response.dart';
-import 'package:loby/domain/entities/response_entities/profile/bank_detail_response.dart';
-import 'package:loby/domain/entities/response_entities/profile/duel_response.dart';
-import 'package:loby/domain/entities/response_entities/profile/rating_response.dart';
-import 'package:loby/domain/entities/response_entities/profile/user_response.dart';
+import 'package:loby/domain/entities/response_entities/order/order_response.dart';
 
-abstract class OrdersRepository{
+abstract class OrderRepository{
 
   Future<Either<Failure, Map<String, dynamic>>> createOrder({int? listingId, int? quantity, String? price});
 
   Future<Either<Failure, OrderResponse>> getOrders({int? orderId, String? status});
 
+  Future<Either<Failure, Map<String, dynamic>>> changeOrderStatus({int? orderId, String? status});
+
+  Future<Either<Failure, Map<String, dynamic>>> uploadDeliveryProof({int? orderId, List<int>? fileType, List<File>? file});
+
+  Future<Either<Failure, Map<String, dynamic>>> submitRating({int? orderId, double? stars, String? review});
+
+  Future<Either<Failure, Map<String, dynamic>>> selectDuelWinner({int? winnerId, int? orderId});
 
 
 }

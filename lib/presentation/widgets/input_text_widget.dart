@@ -14,6 +14,7 @@ class InputTextWidget extends StatelessWidget {
   final dynamic onChanged;
   final TextAlign? textAlign;
   final double? minimumHeight;
+  final void Function(String)? onEditingComplete;
 
   const InputTextWidget(
       {Key? key,
@@ -25,7 +26,7 @@ class InputTextWidget extends StatelessWidget {
       this.verticalHeight,
       this.controller,
       this.onChanged,
-      this.textAlign, this.minimumHeight})
+      this.textAlign, this.minimumHeight, this.onEditingComplete})
       : super(key: key);
 
   @override
@@ -35,12 +36,12 @@ class InputTextWidget extends StatelessWidget {
       children: [
         Container(
           constraints: BoxConstraints(
-            minHeight: minimumHeight ?? 47.0,
+            minHeight: minimumHeight ?? 6.5.h,
             minWidth: double.infinity,
           ),
           decoration: BoxDecoration(
             color: textFieldColor,
-            borderRadius: BorderRadius.circular(16.0),
+            borderRadius: BorderRadius.circular(8.0),
           ),
         ),
         TextFormField(
@@ -53,16 +54,16 @@ class InputTextWidget extends StatelessWidget {
           controller: controller,
           keyboardType: keyboardType ?? TextInputType.name,
           onChanged: onChanged,
+          onFieldSubmitted : onEditingComplete,
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(
                 horizontal: 23.0, vertical: verticalHeight ?? 0.0),
             focusedBorder: OutlineInputBorder(
               borderSide: const BorderSide(color: aquaGreenColor, width: 0.5),
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(8.0),
             ),
             border: InputBorder.none,
-            hintStyle: textTheme.headline4
-                ?.copyWith(color: txtHintColor ?? textInputTitleColor),
+            hintStyle: textTheme.headline4?.copyWith(color: txtHintColor ?? textInputTitleColor),
             hintText: hintName,
           ),
         ),

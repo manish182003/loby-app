@@ -1,13 +1,12 @@
 import 'package:equatable/equatable.dart';
-import 'package:loby/domain/entities/home/game_category.dart';
-
+import 'package:loby/domain/entities/home/category_games.dart';
 import 'game_model.dart';
 // ignore_for_file: overridden_fields, annotate_overrides
 
 
 
-class GameCategoryModel extends GameCategory{
-  const GameCategoryModel({
+class CategoryGamesModel extends CategoryGames{
+  const CategoryGamesModel({
     this.id,
     this.gameId,
     this.categoryId,
@@ -23,7 +22,7 @@ class GameCategoryModel extends GameCategory{
   final DateTime? updatedAt;
   final GameModel? game;
 
-  factory GameCategoryModel.fromJson(Map<String, dynamic> json) => GameCategoryModel(
+  factory CategoryGamesModel.fromJson(Map<String, dynamic> json) => CategoryGamesModel(
     id: json["id"],
     gameId: json["game_id"],
     categoryId: json["category_id"],

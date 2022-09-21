@@ -1,53 +1,64 @@
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:loby/core/theme/colors.dart';
+import 'package:loby/domain/entities/home/notification.dart' as notify;
+import 'package:loby/presentation/getx/controllers/home_controller.dart';
+import 'package:sizer/sizer.dart';
 
 class NotificationItemWidget extends StatelessWidget {
+  final notify.Notification notification;
 
-  const NotificationItemWidget(
-      {Key? key})
-      : super(key: key);
+  const NotificationItemWidget({Key? key, required this.notification}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
+    HomeController homeController = Get.find<HomeController>();
     final textTheme = Theme.of(context).textTheme;
     return GestureDetector(
         onTap: () {
           debugPrint('hello bhai click hua');
         },
-        child: Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16, bottom: 10),
-          child: Card(
-            elevation: 0,
-            color: backgroundBalticSeaColor,
-            shape: RoundedRectangleBorder(
+        child: Dismissible(
+          key: Key(notification.title!),
+          onDismissed: (direction){
+            homeController.deleteNotification(notificationId: notification.id);
+          },
+          background: Container(
+            alignment: Alignment.centerRight,
+            padding: EdgeInsets.only(right: 6.w),
+            decoration: BoxDecoration(
+                color: Colors.red.withOpacity(0.9),
+                borderRadius: BorderRadius.circular(8.0,)
+            ),
+            child: const Icon(Icons.delete, color: Colors.white,),
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: backgroundBalticSeaColor,
+              border: Border.all(width: 0.2, color: dividerColor),
               borderRadius: BorderRadius.circular(16.0),
             ),
-            child: Container(
-              padding: const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 8),
-              decoration: BoxDecoration(
-                color: backgroundBalticSeaColor,
-                border: Border.all(width: 0.2, color: dividerColor),
-                borderRadius: BorderRadius.circular(16.0),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'Sucessfully withdrawn Rs. 12,400 through UPI from Wallet ',
-                    style: textTheme.headline4?.copyWith(color: textWhiteColor),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  notification.message!,
+                  style: textTheme.headline4?.copyWith(color: textWhiteColor),
+                ),
+                const SizedBox(
+                  height: 6,
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Text(
+                    "${notification.updatedAt}",
+                    style: textTheme.headline6?.copyWith(color: textLightColor),
                   ),
-                  const SizedBox(
-                    height: 6,
-                  ),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: Text(
-                      'May 26, 2022 18:23',
-                      style: textTheme.headline6?.copyWith(color: textLightColor),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ));

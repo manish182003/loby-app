@@ -1,0 +1,43 @@
+import 'dart:io';
+
+import 'package:equatable/equatable.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:loby/domain/entities/listing/selected_service_option.dart';
+
+class ListingParams extends Equatable {
+  final int? categoryId;
+  final int? gameId;
+  final String? title;
+  final String? description;
+  final String? price;
+  final String? stockAvl;
+  final String? estimateDeliveryTime;
+  final int? priceUnitId;
+  final List<SelectedServiceOption>? serviceOptionId;
+  final List<PlatformFile>? files;
+  final List<int>? fileTypes;
+  final List<TextEditingController>? optionAnswer;
+  final int? listingId;
+  final int? userId;
+  final int? page;
+  final int? userGameServiceId;
+  final String? search;
+
+
+
+
+  const ListingParams({
+    this.categoryId,
+    this.gameId,
+    this.listingId,
+    this.userId,
+    this.page,
+    this.title, this.description, this.price, this.stockAvl, this.estimateDeliveryTime, this.priceUnitId, this.serviceOptionId, this.files, this.fileTypes, this.optionAnswer,
+    this.userGameServiceId,
+    this.search
+  });
+
+  @override
+  List<Object> get props => [];
+}

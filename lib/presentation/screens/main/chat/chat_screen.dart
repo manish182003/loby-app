@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:loby/presentation/screens/main/chat/widgets/conversation_list.dart';
-import 'package:sizer/sizer.dart';
+import 'package:get/get.dart';
+import 'package:loby/core/usecases/profile_params.dart';
+import 'package:loby/core/utils/helpers.dart';
+import 'package:loby/presentation/getx/controllers/chat_controller.dart';
+import 'package:loby/presentation/getx/controllers/profile_controller.dart';
+import 'package:loby/presentation/screens/main/chat/widgets/chat_tile.dart';
+import 'package:loby/presentation/widgets/custom_app_bar.dart';
+import 'package:loby/presentation/widgets/custom_loader.dart';
 
-import '../../../../core/theme/colors.dart';
-import '../../../../data/models/ChatUsers.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -13,74 +17,37 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  List<ChatUsers> chatUsers = [
-    ChatUsers(name: "Jane Russel", time: "Now"),
-    ChatUsers(name: "Glady's Murphy", time: "Yesterday"),
-    ChatUsers(name: "Jorge Henry", time: "31 Mar"),
-    ChatUsers(name: "Philip Fox", time: "28 Mar"),
-    ChatUsers(name: "Debra Hawkins", time: "23 Mar"),
-    ChatUsers(name: "Jacob Pena", time: "17 Mar"),
-    ChatUsers(name: "Andrey Jones", time: "24 Feb"),
-    ChatUsers(name: "John Wick", time: "18 Feb"),
-  ];
+
+  ChatController chatController = Get.find<ChatController>();
+  ProfileController profileController = Get.find<ProfileController>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    chatController.socketListener(profileController.profile.id!);
+    chatController.getChats();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: body(),
-      ),
-    );
-  }
-
-  Widget body() {
-    final textTheme = Theme.of(context).textTheme;
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.fromLTRB(15, 15, 15, 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 0.0, horizontal: 8.0),
-                      child: Text(
-                        'Chat',
-                        maxLines: 2,
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        style: textTheme.headline2
-                            ?.copyWith(color: textWhiteColor),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          _buildchatUser(textTheme),
-        ],
-      ),
-    );
-  }
-
-  _buildchatUser(TextTheme textTheme) {
-    return ListView.builder(
-      itemCount: chatUsers.length,
-      shrinkWrap: true,
-      padding: const EdgeInsets.only(top: 16),
-      physics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) {
-        return ConversationList(
-          name: chatUsers[index].name,
-          time: chatUsers[index].time,
-        );
-      },
+    return Scaffold(
+        appBar: appBar(context: context, appBarName: "Chat", isBackIcon: false),
+        body: Obx(() {
+          if(chatController.isChatsFetching.value){
+            return const CustomLoader();
+          }else {
+            return ListView.builder(
+              itemCount: chatController.chats.length,
+              shrinkWrap: true,
+              padding: const EdgeInsets.only(top: 16),
+              physics: const ScrollPhysics(),
+              itemBuilder: (context, index) {
+                return ChatTile(chat: chatController.chats[index]);
+              },
+            );
+          }
+        }),
     );
   }
 }

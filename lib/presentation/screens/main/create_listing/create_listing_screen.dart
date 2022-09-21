@@ -1,16 +1,30 @@
+import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:loby/presentation/screens/main/create_listing/widgets/HoursDropDown.dart';
+import 'package:get/get.dart';
+import 'package:loby/core/utils/helpers.dart';
+import 'package:loby/domain/entities/home/category.dart';
+import 'package:loby/domain/entities/listing/selected_service_option.dart';
+import 'package:loby/domain/entities/listing/unit.dart';
+import 'package:loby/presentation/getx/controllers/auth_controller.dart';
+import 'package:loby/presentation/getx/controllers/home_controller.dart';
+import 'package:loby/presentation/getx/controllers/listing_controller.dart';
+import 'package:loby/presentation/widgets/body_padding_widget.dart';
+import 'package:loby/presentation/widgets/custom_chips.dart';
+import 'package:loby/presentation/widgets/text_fields/auto_complete_field.dart';
+import 'package:loby/presentation/widgets/text_fields/custom_drop_down.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../../../core/theme/colors.dart';
 import '../../../widgets/bottom_dialog_widget.dart';
-import '../../../widgets/custom_button.dart';
+import '../../../widgets/buttons/custom_button.dart';
 import '../../../widgets/custom_checkbox.dart';
 import '../../../widgets/drop_down.dart';
 import '../../../widgets/input_text_title_widget.dart';
 import '../../../widgets/input_text_widget.dart';
+import '../../../widgets/text_fields/text_field_widget.dart';
 
 class CreateListingScreen extends StatefulWidget {
   const CreateListingScreen({Key? key}) : super(key: key);
@@ -20,233 +34,267 @@ class CreateListingScreen extends StatefulWidget {
 }
 
 class _CreateListingScreenState extends State<CreateListingScreen> {
+
+  HomeController homeController = Get.find<HomeController>();
+  AuthController authController = Get.find<AuthController>();
+  ListingController listingController = Get.find<ListingController>();
+
   bool isChecked = false;
   final _formKey = GlobalKey<FormState>();
+  String selectedCategoryName = '';
+  int selectedCategoryId = 0;
+
+  TextEditingController selectedGameName = TextEditingController();
+  int selectedGameId = 0;
+  String selectedUnitName = '';
+
+  List<PlatformFile> _paths = [];
+  List<String?> selectedFilesExtensions = [];
+  TextEditingController fileLink = TextEditingController();
+
+  List<List<SelectedServiceOption>> multiSelectionServices = [];
+  List<SelectedServiceOption> singleSelectionService = [];
+  List<TextEditingController> singleSelectedServiceController = <TextEditingController>[];
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      homeController.getCategories();
+    });
+  }
+
+
+  @override
+  void dispose() {
+    listingController.isServicesAvailable.value = false;
+    super.dispose();
+  }
+
+  void _openFileExplorer() async {
+    // if (_paths.isNotEmpty) _paths.clear();
+    try {
+      _paths = (await FilePicker.platform.pickFiles(
+        allowMultiple: true,
+        onFileLoading: (FilePickerStatus status) => print(status),
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'png', 'mp4'],
+      ))!.files;
+
+      listingController.files.addAll(_paths);
+      selectedFilesExtensions = _paths.map((e) => e.extension).toList();
+
+      for (final i in selectedFilesExtensions) {
+        listingController.fileTypes.add(Helpers.getFileType(i!));
+      }
+    } on PlatformException catch (e) {
+      Helpers.toast('Unsupported operation$e');
+    } catch (e) {
+      Helpers.toast('Something went wrong');
+    }
+    if (!mounted) return;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: body(),
-      ),
-    );
-  }
+    final textTheme = Theme
+        .of(context)
+        .textTheme;
 
-  Widget body() {
-    final textTheme = Theme.of(context).textTheme;
-    return SingleChildScrollView(
-      child: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.fromLTRB(15, 15, 15, 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 0.0, horizontal: 8.0),
-                        child: Text(
-                          'Create New Listing',
-                          maxLines: 2,
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.ellipsis,
-                          style: textTheme.headline2
-                              ?.copyWith(color: textWhiteColor),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: BodyPaddingWidget(
+            child: Form(
+              key: _formKey,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const MyDropDownWidget(),
-                  const SizedBox(height: 16.0),
+                  SizedBox(height: 2.h,),
                   Align(
-                    alignment: Alignment.topLeft,
+                    alignment: Alignment.center,
                     child: Text(
-                        textAlign: TextAlign.start,
-                        "Disclaimer",
-                        style: textTheme.headline4
-                            ?.copyWith(color: textWhiteColor)),
-                  ),
-                  const SizedBox(height: 4.0),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
-                            textAlign: TextAlign.start,
-                            text: TextSpan(children: [
-                              TextSpan(
-                                text:
-                                    '1. For Accounts That Cannot Change Email Address : ',
-                                style: textTheme.headline6?.copyWith(
-                                    color: textLightColor,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              TextSpan(
-                                  text:
-                                      'Sellers must provide the email address to the buyers and make sure they gain full access of the email such as secret questions etc.',
-                                  style: textTheme.headline6?.copyWith(
-                                      color: textLightColor,
-                                      fontWeight: FontWeight.w300)),
-                            ])),
-                        RichText(
-                            textAlign: TextAlign.start,
-                            text: TextSpan(children: [
-                              TextSpan(
-                                text:
-                                    '2. For Accounts That Can Change Email Address : ',
-                                style: textTheme.headline6?.copyWith(
-                                    color: textLightColor,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              TextSpan(
-                                  text:
-                                      'Sellers must assist buyers to change the email address and provide the proof',
-                                  style: textTheme.headline6?.copyWith(
-                                      color: textLightColor,
-                                      fontWeight: FontWeight.w300)),
-                            ])),
-                        RichText(
-                            textAlign: TextAlign.start,
-                            text: TextSpan(children: [
-                              TextSpan(
-                                text: '',
-                                style: textTheme.headline6?.copyWith(
-                                    color: textLightColor,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              TextSpan(
-                                  text:
-                                      '3. Payment will be put on hold if seller did not submit proof for (1) or (2). If seller fails to provide proof, the payment will be deducted to refund buyer when there is a dispute.',
-                                  style: textTheme.headline6?.copyWith(
-                                      color: textLightColor,
-                                      fontWeight: FontWeight.w300)),
-                            ])),
-                        RichText(
-                            textAlign: TextAlign.start,
-                            text: TextSpan(children: [
-                              TextSpan(
-                                text: '',
-                                style: textTheme.headline6?.copyWith(
-                                    color: textLightColor,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              TextSpan(
-                                  text:
-                                      '4. You must be the main owner of the account(s) you intend to sell.',
-                                  style: textTheme.headline6?.copyWith(
-                                      color: textLightColor,
-                                      fontWeight: FontWeight.w300)),
-                            ])),
-                        RichText(
-                            textAlign: TextAlign.start,
-                            text: TextSpan(children: [
-                              TextSpan(
-                                text: '',
-                                style: textTheme.headline6?.copyWith(
-                                    color: textLightColor,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              TextSpan(
-                                  text:
-                                      '5. Visit Accounts Service Rules and Descriptions for more info.',
-                                  style: textTheme.headline6?.copyWith(
-                                      color: textLightColor,
-                                      fontWeight: FontWeight.w300)),
-                            ])),
-                      ],
+                      'Create New Listing',
+                      overflow: TextOverflow.ellipsis,
+                      style: textTheme.headline2?.copyWith(color: textWhiteColor),
                     ),
                   ),
-                  const SizedBox(height: 16.0),
-                  const MyDropDownWidget(),
-                  const SizedBox(height: 16.0),
-                  const MyDropDownWidget(),
-                  const SizedBox(height: 16.0),
-                  const InputTextTitleWidget(
-                      titleName: 'Title', titleTextColor: textInputTitleColor),
-                  const SizedBox(height: 16.0),
-                  const InputTextWidget(
-                    hintName: 'Enter Title',
-                    keyboardType: TextInputType.name,
+                  SizedBox(height: 2.h,),
+                  Obx(() {
+                    return BuildDropdown(
+                      selectedValue: selectedCategoryName,
+                      dropdownHint: "Select Category",
+                      itemsList: homeController.categories.map((item) =>
+                          DropdownMenuItem<Category>(
+                            value: item,
+                            child: Text(
+                                item.name!,
+                                style: textTheme.headline3?.copyWith(color: whiteColor)
+                            ),
+                          )).toList(),
+                      onChanged: (value) {
+                        selectedCategoryName = value.name;
+                        homeController.selectedCategoryId.value = value.id;
+                        homeController.disclaimer.value = value.disclaimer;
+                      },
+                    );
+                  }),
+                  SizedBox(height: 2.h,),
+                  Obx(() {
+                    if(homeController.disclaimer.value.isEmpty){
+                      return const SizedBox();
+                    }else{
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 2.h),
+                          Text(textAlign: TextAlign.start, "Disclaimer",
+                              style: textTheme.headline4?.copyWith(color: textWhiteColor)),
+                          SizedBox(height: 2.h),
+                          Text(textAlign: TextAlign.start,
+                              homeController.disclaimer.value,
+                              style: textTheme.headline6?.copyWith(
+                                fontWeight: FontWeight.w300,
+                                color: textLightColor,
+                              )),
+                          SizedBox(height: 2.h,),
+                        ],
+                      );
+                    }
+                  }),
+                  AutoCompleteField(
+                    selectedSuggestion: selectedGameName,
+                    hint: 'Select Game',
+                    suggestionsCallback: (pattern) async {
+                      await homeController.getGames(name: pattern);
+                      List finalList = [];
+                      for (int i = 0; i < homeController.games.length; i++) {
+                        finalList.add(homeController.games[i].name);
+                      }
+                      return finalList;
+                    },
+                    onSuggestionSelected: (value) async {
+                      final index = homeController.games.indexWhere((element) => element.name == value);
+                      homeController.selectedGameId.value = homeController.games[index].id!;
+                      selectedGameName.text = homeController.games[index].name!;
+                      await listingController.getConfigurations(
+                          categoryId: homeController.selectedCategoryId.value,
+                          gameId: homeController.selectedGameId.value
+                      );
+
+                      int multiFieldsCount = 0;
+                      int singleFieldsCount = 0;
+                      int openFieldsCount = 0;
+
+                      for (final i in listingController.configuration.gameCategoryServices!) {
+                        switch (i.service?.selectionType) {
+                          case 0:
+                            i.service?.index = multiFieldsCount;
+                            multiFieldsCount += 1;
+                            multiSelectionServices.add(<SelectedServiceOption>[]);
+                            break;
+                          case 1:
+                            i.service?.index = singleFieldsCount;
+                            singleFieldsCount += 1;
+                            singleSelectionService.add(SelectedServiceOption());
+                            singleSelectedServiceController.add(TextEditingController());
+                            break;
+                          case 2:
+                            i.service?.index = openFieldsCount;
+                            openFieldsCount += 1;
+                            listingController.optionAnswer.add(TextEditingController());
+                            break;
+                        }
+                      }
+                      listingController.isServicesAvailable.value = true;
+                    },
                   ),
-                  const SizedBox(height: 16.0),
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: RichText(
-                        textAlign: TextAlign.justify,
-                        text: TextSpan(children: [
-                          TextSpan(
-                            text:
-                                "For safety reasons, sellers are not allowed to leave their personal contacts. All communications with the buyers can only be made using Loby chat. Any conversation outside Loby Chat will not be insured/covered by ",
-                            style: textTheme.headline6
-                                ?.copyWith(color: textLightColor),
+                  SizedBox(height: 2.h,),
+                  Obx(() {
+                    if (listingController.isServicesAvailable.value) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+
+                          ListView.separated(
+                            itemCount: listingController.configuration.gameCategoryServices!.length,
+                            shrinkWrap: true,
+                            padding: const EdgeInsets.only(top: 0),
+                            physics: const ClampingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return services2(index);
+                            },
+                            separatorBuilder: (BuildContext context, int index) {
+                              return SizedBox(height: 2.h,);
+                            },
                           ),
-                          TextSpan(
-                              text: " Loby Protection",
-                              style: textTheme.headline6
-                                  ?.copyWith(color: aquaGreenColor)),
-                        ])),
+                        ],
+                      );
+                    } else {
+                      return const SizedBox();
+                    }
+                  }),
+                  SizedBox(height: 2.h),
+                  TextFieldWidget(
+                    textEditingController: listingController.title.value,
+                    title: "Title",
+                    hint: "Enter Title",
                   ),
-                  const SizedBox(height: 16.0),
-                  const InputTextTitleWidget(
-                      titleName: 'Description',
-                      titleTextColor: textInputTitleColor),
-                  const SizedBox(height: 16.0),
-                  const InputTextWidget(
-                    hintName: 'Type Description',
+                  SizedBox(height: 2.h),
+                  RichText(
+                      textAlign: TextAlign.justify,
+                      text: TextSpan(children: [
+                        TextSpan(
+                          text: "For safety reasons, sellers are not allowed to leave their personal contacts. All communications with the buyers can only be made using Loby chat. Any conversation outside Loby Chat will not be insured/covered by ",
+                          style: textTheme.headline6?.copyWith(
+                              color: textLightColor),
+                        ),
+                        TextSpan(
+                            text: "Loby Protection",
+                            style: textTheme.headline6?.copyWith(
+                                color: aquaGreenColor)),
+                      ])),
+                  SizedBox(height: 2.h),
+                  TextFieldWidget(
+                    textEditingController: listingController.description.value,
+                    title: "Description",
+                    hint: "Type Description",
                     maxLines: 5,
-                    minimumHeight: 112.0,
-                    verticalHeight: 16.0,
-                    keyboardType: TextInputType.name,
                   ),
-                  const SizedBox(height: 16.0),
+                  SizedBox(height: 2.h),
                   _buildUploadField(textTheme),
-                  const SizedBox(height: 16.0),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                        textAlign: TextAlign.start,
-                        'Price',
-                        style: textTheme.headline4
-                            ?.copyWith(color: textLightColor)),
-                  ),
-                  const SizedBox(height: 16.0),
+                  SizedBox(height: 2.h),
+                  Text('Price',
+                      style: textTheme.headline4?.copyWith(color: textLightColor)),
+                  SizedBox(height: 2.h),
                   _buildPrice(textTheme),
-                  const SizedBox(height: 16.0),
-                  const InputTextWidget(
-                    hintName: 'Available Stock (1 to Infinite)',
-                    keyboardType: TextInputType.number,
+                  SizedBox(height: 2.h),
+                  TextFieldWidget(
+                    textEditingController: listingController.stockAvl.value,
+                    hint: 'Available Stock',
+                    isNumber: true,
                   ),
-                  const SizedBox(height: 16.0),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(children: [
-                          TextSpan(
-                            text: "‘Loby Protection’",
+                  SizedBox(height: 2.h),
+                  RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(children: [
+                        TextSpan(
+                          text: "‘Loby Protection’",
+                          style: textTheme.headline4
+                              ?.copyWith(color: aquaGreenColor),
+                        ),
+                        TextSpan(
+                            text: " Insurance",
                             style: textTheme.headline4
-                                ?.copyWith(color: aquaGreenColor),
-                          ),
-                          TextSpan(
-                              text: " Insurance",
-                              style: textTheme.headline4
-                                  ?.copyWith(color: textLightColor)),
-                        ])),
-                  ),
-                  const SizedBox(height: 16.0),
+                                ?.copyWith(color: textLightColor)),
+                      ])),
+                  SizedBox(height: 2.h),
                   Row(
                     children: [
                       Container(
@@ -263,7 +311,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 8.0),
+                      SizedBox(height: 2.h),
                       Expanded(
                         child: SizedBox(
                             child: RichText(
@@ -278,61 +326,208 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16.0),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                        textAlign: TextAlign.start,
-                        'Estimated Delivery Time (Days)',
-                        style: textTheme.headline4
-                            ?.copyWith(color: textLightColor)),
+                  SizedBox(height: 2.h),
+                  Text(
+                      textAlign: TextAlign.start,
+                      'Estimated Delivery Time (Days)',
+                      style: textTheme.headline4?.copyWith(
+                          color: textLightColor)),
+                  SizedBox(height: 2.h),
+                  BuildDropdown(
+                    selectedValue: listingController.estimateDeliveryTime.value,
+                    dropdownHint: "Select",
+                    itemsList:  [for(var i = 1; i <= (listingController.configuration.maximumEstimatedDeliveryTimeDays ?? "").length; i++) i].map((item) =>
+                        DropdownMenuItem<String>(
+                          value: "$item",
+                          child: Text("$item",
+                              style: textTheme.headline3?.copyWith(
+                                  color: whiteColor)
+                          ),
+                        )).toList(),
+                    onChanged: (value) {
+                      listingController.estimateDeliveryTime.value = value;
+                      print("estimate delivery ${listingController
+                          .estimateDeliveryTime.value}");
+                    },
                   ),
-                  const SizedBox(height: 16.0),
-                  Container(
-                    child: _buildSearchField(textTheme, 'Select'),
-                  ),
-                  const SizedBox(height: 16.0),
+                  SizedBox(height: 2.h),
                   _buildTermsCheckbox(
                       textTheme,
                       'I have read and agreed to all sellers policy and the ',
                       'Terms of Service.'),
-                  const SizedBox(height: 44.0),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.5,
-                    child: CustomButton(
-                      color: createProfileButtonColor,
-                      name: "Publish",
-                      textColor: textWhiteColor,
-                      onTap: () {
-                        if (_formKey.currentState!.validate()) {
-                          // If the form is valid, display a snackbar. In the real world,
-                          // you'd often call a server or save the information in a database.
+                  SizedBox(height: 5.h),
+                  CustomButton(
+                    color: createProfileButtonColor,
+                    name: "Publish",
+                    textColor: textWhiteColor,
+                    left: 15.w,
+                    right: 15.w,
+                    onTap: () async {
+                      if (_formKey.currentState!.validate()) {
+                        await Helpers.loader();
 
+                        listingController.serviceOptionId.addAll(singleSelectionService);
+                        for (final item in multiSelectionServices) {
+                          listingController.serviceOptionId.addAll(item);
+                        }
+
+                        debugPrint(" final service selection ${listingController.serviceOptionId}");
+
+
+                        final isSuccess = await listingController.createListing(
+                            categoryId: homeController.selectedCategoryId.value,
+                            gameId: homeController.selectedGameId.value
+                        );
+
+                        await Helpers.hideLoader();
+                        if (isSuccess) {
                           BottomDialog(
-                                  textTheme: textTheme,
-                                  tileName: "Congratulations",
-                                  titleColor: aquaGreenColor,
-                                  contentName:
-                                      "Your service has been successfully listed. You can edit your listings from My Listings.",
-                                  contentLinkName: ' My Listings')
+                              textTheme: textTheme,
+                              tileName: "Congratulations",
+                              titleColor: aquaGreenColor,
+                              contentName: "Your service has been successfully listed. You can edit your listings from My Listings.",
+                              contentLinkName: ' My Listings')
                               .showBottomDialog(context);
                         }
-                        /*BottomDialog(
-                                textTheme: textTheme,
-                                tileName: "Congratulations",
-                                titleColor: aquaGreenColor,
-                                contentName:
-                                    "Your service has been successfully listed. You can edit your listings from My Listings.",
-                                contentLinkName: ' My Listings')
-                            .showBottomDialog(context);*/
-                      },
-                    ),
+                      }
+                    },
                   ),
-                  const SizedBox(height: 16.0),
+                  SizedBox(height: 2.h),
                 ],
               ),
-            )
-          ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+
+  Widget services2(int index) {
+    final service = listingController.configuration.gameCategoryServices![index].service;
+
+    switch (service?.selectionType) {
+      case 0:
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Wrap(
+                    spacing: 12.0,
+                    runSpacing: 0.0,
+                    children: List.from(
+                      multiSelectionServices[service!.index].map((services) {
+                        return CustomChips(
+                            chipName: services.name,
+                            removeItem: () {
+                              setState((){
+                                multiSelectionServices[service.index].removeWhere((element) => element.name == services.name);
+                              });
+                              }
+                        );
+                      }).toList(),
+                    )
+                ),
+                AutoCompleteField(
+                  hint: service.name,
+                  isMultiple: true,
+                  suggestionsCallback: (pattern) async {
+                    final result = service.serviceOption?.where((suggestion) =>
+                        suggestion.toString().toLowerCase().contains(pattern.toLowerCase())).toList();
+                    List finalList = [];
+                    for (int i = 0; i < result!.length; i++) {
+                      finalList.add(result[i].serviceOptionName);
+                    }
+                    return finalList;
+                  },
+                  onSuggestionSelected: (value) {
+                    setState(() {
+
+                      final index2 = service.serviceOption?.indexWhere((element) => element.serviceOptionName == value);
+
+                      if (multiSelectionServices[service.index].toString().toLowerCase().contains('${value.toLowerCase()}')) {
+                        debugPrint('do nothing');
+                      } else {
+                        multiSelectionServices[service.index].add(SelectedServiceOption(
+                          id: service.serviceOption?[index2!].id,
+                          name: service.serviceOption?[index2!].serviceOptionName,
+                        ));
+
+                        debugPrint("Multi Selection Array ${multiSelectionServices[service.index]}");
+                      }
+                    });
+                  },
+                ),
+              ],
+            );
+
+      case 1:
+        return AutoCompleteField(
+              hint: service!.name,
+              selectedSuggestion: singleSelectedServiceController[service.index],
+              isMultiple: false,
+              suggestionsCallback: (pattern) async {
+                final result = service.serviceOption?.where((suggestion) =>
+                    suggestion.toString().toLowerCase().contains(
+                        pattern.toLowerCase())).toList();
+                List finalList = [];
+                for (int i = 0; i < result!.length; i++) {
+                  finalList.add(result[i].serviceOptionName);
+                }
+                return finalList;
+              },
+              onSuggestionSelected: (value) {
+                setState(() {
+                  final index2 = service.serviceOption?.indexWhere((element) => element.serviceOptionName == value);
+                  singleSelectedServiceController[service.index].text = service.serviceOption![index2!].serviceOptionName!;
+                  singleSelectionService[service.index].name = service.serviceOption?[index2].serviceOptionName;
+                  singleSelectionService[service.index].id = service.serviceOption?[index2].id;
+                });
+                debugPrint("Single Selection Array ${singleSelectionService[service.index]}");
+              },
+            );
+
+      case 2:
+        return TextFieldWidget(
+          textEditingController: listingController.optionAnswer[service!.index],
+          hint: service.name!,
+        );
+
+      default:
+        return const SizedBox();
+    }
+  }
+
+  Widget selectedFileTile({required File image, required int index}) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      constraints: BoxConstraints(
+          minHeight: MediaQuery.of(context).size.height * 0.08,
+          minWidth: MediaQuery.of(context).size.width * 0.4),
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+              spreadRadius: 1,
+              blurRadius: 5,
+              color: Colors.black.withAlpha(50))
+        ],
+        borderRadius: BorderRadius.circular(12),
+        color: iconWhiteColor,
+        image: DecorationImage(image: FileImage(image), fit: BoxFit.cover),
+      ),
+      child: GestureDetector(
+        onTap: () {
+          listingController.files.removeAt(index);
+          listingController.fileTypes.removeAt(index);
+        },
+        child: Align(
+          alignment: AlignmentDirectional.topEnd,
+          child: SvgPicture.asset(
+            'assets/icons/close_icon.svg',
+            color: selectiveYellowColor,
+            width: 8,
+            height: 8,
+          ),
         ),
       ),
     );
@@ -362,7 +557,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                     TextSpan(
                       text: content,
                       style:
-                          textTheme.subtitle2?.copyWith(color: textLightColor),
+                      textTheme.subtitle2?.copyWith(color: textLightColor),
                     ),
                     TextSpan(
                         text: textSpan,
@@ -378,11 +573,22 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
+        // Container(
+        //   height: 6.7.h,
+        //   alignment: Alignment.center,
+        //   decoration: const BoxDecoration(
+        //     color: textFieldColor,
+        //     borderRadius: BorderRadius.only(topLeft: Radius.circular(10), bottomLeft: Radius.circular(10)),
+        //   ),
+        //   child:
+        // ),
+        Text("₹ ", style: textTheme.headline3?.copyWith(color: textWhiteColor),),
         SizedBox(
-          width: MediaQuery.of(context).size.width * 0.4,
-          child: const InputTextWidget(
-            hintName: '₹ ',
-            keyboardType: TextInputType.number,
+          width: MediaQuery.of(context).size.width * 0.40,
+          child: TextFieldWidget(
+            textEditingController: listingController.price.value,
+            hint: "₹",
+            isNumber: true,
           ),
         ),
         const SizedBox(width: 2.0),
@@ -396,26 +602,27 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
         const SizedBox(width: 2.0),
         SizedBox(
             width: MediaQuery.of(context).size.width * 0.4,
-            child: Container(
-                constraints: const BoxConstraints(
-                  minHeight: 47,
-                  minWidth: double.infinity,
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0.0),
-                decoration: BoxDecoration(
-                    color: textFieldColor,
-                    borderRadius: BorderRadius.circular(10)),
-                child: const HoursDropDownDivider())),
+            child: BuildDropdown(
+              selectedValue: selectedUnitName,
+              dropdownHint: "Select Unit",
+              itemsList: listingController.configuration.units?.map((item) =>
+                  DropdownMenuItem<Unit>(
+                    value: item,
+                    child: Text(
+                        item.name!,
+                        style: textTheme.headline3?.copyWith(color: whiteColor)
+                    ),
+                  )).toList(),
+              onChanged: (value) {
+                selectedUnitName = value.name;
+                listingController.priceUnitId.value = value.id;
+                debugPrint("unit id ${listingController.priceUnitId.value}");
+              },
+            )),
       ],
     );
   }
 
-  _buildSearchField(TextTheme textTheme, String name) {
-    return const MyDropDownWidget(
-      hintTxt: 'Select',
-    );
-  }
 
   _buildUploadField(TextTheme textTheme) {
     return DottedBorder(
@@ -424,184 +631,64 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
       radius: const Radius.circular(24),
       strokeWidth: 1,
       child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0),
           decoration: BoxDecoration(
             color: textFieldColor,
-            borderRadius: BorderRadius.circular(22),
+            borderRadius: BorderRadius.circular(24),
           ),
           child: Column(
             children: [
-              const SizedBox(height: 8.0),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: Text(
-                      textAlign: TextAlign.start,
-                      "Upload Images or Videos",
-                      style:
-                          textTheme.headline4?.copyWith(color: textWhiteColor)),
-                ),
-              ),
-              const SizedBox(height: 8.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    // This is your Badge
-                    padding: const EdgeInsets.all(8),
-                    constraints: BoxConstraints(
-                        minHeight: MediaQuery.of(context).size.height * 0.08,
-                        minWidth: MediaQuery.of(context).size.width * 0.4),
-                    decoration: BoxDecoration(
-                      // This controls the shadow
-                      boxShadow: [
-                        BoxShadow(
-                            spreadRadius: 1,
-                            blurRadius: 5,
-                            color: Colors.black.withAlpha(50))
-                      ],
-                      borderRadius: BorderRadius.circular(12),
-                      color: iconWhiteColor, // This would be color of the Badge
-                    ), // This is your Badge
-                    child: Align(
-                      alignment: AlignmentDirectional.topEnd,
-                      child: SvgPicture.asset(
-                        'assets/icons/close_icon.svg',
-                        color: selectiveYellowColor,
-                        width: 8,
-                        height: 8,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8.0),
-                  Container(
-                    // This is your Badge
-                    padding: const EdgeInsets.all(8),
-                    constraints: BoxConstraints(
-                        minHeight: MediaQuery.of(context).size.height * 0.08,
-                        minWidth: MediaQuery.of(context).size.width * 0.4),
-                    decoration: BoxDecoration(
-                      // This controls the shadow
-                      boxShadow: [
-                        BoxShadow(
-                            spreadRadius: 1,
-                            blurRadius: 5,
-                            color: Colors.black.withAlpha(50))
-                      ],
-                      borderRadius: BorderRadius.circular(12),
-                      color: iconWhiteColor, // This would be color of the Badge
-                    ), // This is your Badge
-                    child: Align(
-                      alignment: AlignmentDirectional.topEnd,
-                      child: SvgPicture.asset(
-                        'assets/icons/close_icon.svg',
-                        color: selectiveYellowColor,
-                        width: 8,
-                        height: 8,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    // This is your Badge
-                    padding: const EdgeInsets.all(8),
-                    constraints: BoxConstraints(
-                        minHeight: MediaQuery.of(context).size.height * 0.08,
-                        minWidth: MediaQuery.of(context).size.width * 0.4),
-                    decoration: BoxDecoration(
-                      // This controls the shadow
-                      boxShadow: [
-                        BoxShadow(
-                            spreadRadius: 1,
-                            blurRadius: 5,
-                            color: Colors.black.withAlpha(50))
-                      ],
-                      borderRadius: BorderRadius.circular(12),
-                      color: iconWhiteColor, // This would be color of the Badge
-                    ), // This is your Badge
-                    child: Align(
-                      alignment: AlignmentDirectional.topEnd,
-                      child: SvgPicture.asset(
-                        'assets/icons/close_icon.svg',
-                        color: selectiveYellowColor,
-                        width: 8,
-                        height: 8,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8.0),
-                  Container(
-                    // This is your Badge
-                    padding: const EdgeInsets.all(8),
-                    constraints: BoxConstraints(
-                        minHeight: MediaQuery.of(context).size.height * 0.08,
-                        minWidth: MediaQuery.of(context).size.width * 0.4),
-                    decoration: BoxDecoration(
-                      // This controls the shadow
-                      boxShadow: [
-                        BoxShadow(
-                            spreadRadius: 1,
-                            blurRadius: 5,
-                            color: Colors.black.withAlpha(50))
-                      ],
-                      borderRadius: BorderRadius.circular(12),
-                      color: iconWhiteColor, // This would be color of the Badge
-                    ), // This is your Badge
-                    child: Align(
-                      alignment: AlignmentDirectional.topEnd,
-                      child: SvgPicture.asset(
-                        'assets/icons/close_icon.svg',
-                        color: selectiveYellowColor,
-                        width: 8,
-                        height: 8,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8.0),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 10.h),
-                child: CustomButton(
-                  color: createProfileButtonColor,
-                  name: "Choose file",
-                  textColor: textWhiteColor,
-                  iconWidget: 'assets/icons/upload_img_icon.svg',
-                  onTap: () {
-                    debugPrint('click chat');
-                  },
-                ),
-              ),
-              const SizedBox(height: 8.0),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: Text(
-                      textAlign: TextAlign.start,
-                      "or",
-                      style:
-                          textTheme.headline4?.copyWith(color: textWhiteColor)),
-                ),
-              ),
-              const SizedBox(height: 8.0),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: InputTextWidget(
+              SizedBox(height: 2.h),
+              Text(
                   textAlign: TextAlign.center,
-                  hintName: 'Paste Youtube/Twitch Link',
-                  txtHintColor: whiteColor,
-                  keyboardType: TextInputType.name,
-                ),
+                  "Upload Images or Videos",
+                  style: textTheme.headline4?.copyWith(color: textWhiteColor)),
+              SizedBox(height: 3.h),
+              Obx(() {
+                return GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 2.5,
+                    mainAxisSpacing: 15.0,
+                    crossAxisSpacing: 15.0,
+                  ),
+                  shrinkWrap: true,
+                  physics: const ClampingScrollPhysics(),
+                  padding: const EdgeInsets.only(bottom: 20),
+                  itemCount: listingController.files.length,
+                  itemBuilder: (context, index) {
+                    return selectedFileTile(
+                        image: File(listingController.files[index].path!),
+                        index: index
+                    );
+                  },
+                );
+              }),
+              CustomButton(
+                top: 0.h,
+                left: 15.w,
+                right: 15.w,
+                bottom: 1.h,
+                color: createProfileButtonColor,
+                name: "Choose file",
+                textColor: textWhiteColor,
+                iconWidget: 'assets/icons/upload_img_icon.svg',
+                onTap: () {
+                  _openFileExplorer();
+                },
               ),
-              const SizedBox(height: 16.0),
+              SizedBox(height: 2.h),
+              Text("or",
+                  style: textTheme.headline4?.copyWith(color: textWhiteColor)),
+              SizedBox(height: 1.h),
+              InputTextWidget(
+                textAlign: TextAlign.center,
+                hintName: 'Paste Youtube/Twitch/Drive Link',
+                txtHintColor: whiteColor,
+                keyboardType: TextInputType.name,
+                controller: fileLink,
+              ),
+              SizedBox(height: 4.h),
             ],
           )),
     );

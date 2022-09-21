@@ -18,24 +18,19 @@ class MyProfileScreenState extends State<MyProfileScreen> {
       child: Scaffold(
         extendBodyBehindAppBar: true,
         backgroundColor: backgroundDarkJungleGreenColor,
-        body: body(),
-      ),
-    );
-  }
-
-  Widget body() {
-    final textTheme = Theme.of(context).textTheme;
-    return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          const MyProfileHeader(
-            avatar: AssetImage('assets/images/img.png'),
-            title: "mukesh",
-            subtitle: "kumar",
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              const MyProfileHeader(
+                avatar: AssetImage('assets/images/img.png'),
+                title: "mukesh",
+                subtitle: "kumar",
+              ),
+              const SizedBox(height: 10.0),
+              MyInfo(),
+            ],
           ),
-          const SizedBox(height: 10.0),
-          MyInfo(),
-        ],
+        ),
       ),
     );
   }

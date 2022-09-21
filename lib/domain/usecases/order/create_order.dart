@@ -7,18 +7,19 @@ import 'package:loby/domain/entities/response_entities/auth/country_response.dar
 import 'package:loby/domain/entities/response_entities/home/category_response.dart';
 import 'package:loby/domain/repositories/auth_repository.dart';
 import 'package:loby/domain/repositories/home_repository.dart';
+import 'package:loby/domain/repositories/order_repository.dart';
 
 class CreateOrder extends UseCase<Map<String, dynamic>, Params> {
-  final HomeRepository _repository;
+  final OrderRepository _repository;
 
   CreateOrder(this._repository);
 
   @override
   Future<Either<Failure, Map<String, dynamic>>> call(Params params) {
     return _repository.createOrder(
-     listingId: params.homeParams?.listingId,
-      quantity: params.homeParams?.quantity,
-      price: params.homeParams?.price,
+     listingId: params.orderParams?.listingId,
+      quantity: params.orderParams?.quantity,
+      price: params.orderParams?.price,
     );
   }
 }

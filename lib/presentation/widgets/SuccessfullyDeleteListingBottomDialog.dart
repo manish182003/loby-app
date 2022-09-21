@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
 
 import '../../core/theme/colors.dart';
-import 'custom_button.dart';
+import 'buttons/custom_button.dart';
 
 
 

@@ -1,29 +1,26 @@
+
+
 import 'package:equatable/equatable.dart';
+import 'package:loby/domain/entities/listing/service_option.dart';
 
 class Service extends Equatable {
   Service({
     this.id,
     this.name,
     this.selectionType,
+    this.index = 0,
     this.serviceOption,
   });
 
-  int id;
-  String name;
-  int selectionType;
-  List<ServiceOption> serviceOption;
+  final int? id;
+  final String? name;
+  final int? selectionType;
+  int index;
+  final List<ServiceOption>? serviceOption;
 
-  factory Service.fromJson(Map<String, dynamic> json) => Service(
-    id: json["id"],
-    name: json["name"],
-    selectionType: json["selection_type"],
-    serviceOption: List<ServiceOption>.from(json["serviceOption"].map((x) => ServiceOption.fromJson(x))),
-  );
 
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "selection_type": selectionType,
-    "serviceOption": List<dynamic>.from(serviceOption.map((x) => x.toJson())),
-  };
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [id, name, selectionType, index];
 }

@@ -4,6 +4,7 @@ const String signUpScreenPage = "signup_screen_page";
 const String createProfilePage = "create_profile";
 const String mainPage = "main_screen";
 const String homePage = "home_screen";
+const String messagePage = "user_chat";
 const String gameCategoriesPage = "game_categories_screen";
 const String gamePage = "game_screen";
 const String gameDetailPage = "game_detail_screen";

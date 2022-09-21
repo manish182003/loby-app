@@ -43,11 +43,10 @@ class CountryModel extends Country{
     wikiDataId: json["wikiDataId"],
     iso2: json["iso2"],
     phonecode: json["phonecode"],
-    createdAt: DateTime.parse(json["createdAt"]),
-    updatedAt: DateTime.parse(json["updatedAt"]),
+    createdAt: json["createdAt"] == null ? null :  DateTime.parse(json["createdAt"]),
+    updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
   );
 
-  @override
   Map<String, dynamic> toJson() => {
     "id": id,
     "name": name,

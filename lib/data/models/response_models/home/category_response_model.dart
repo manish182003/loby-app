@@ -1,7 +1,7 @@
-import 'package:loby/data/models/auth/category_model.dart';
-import 'package:loby/domain/entities/response_entities/auth/category_response.dart';
+import 'package:loby/data/models/home/category_model.dart';
+import 'package:loby/domain/entities/response_entities/home/category_response.dart';
 
-import '../../../../domain/entities/auth/category.dart';
+import '../../../../domain/entities/home/category.dart';
 // ignore_for_file: overridden_fields, annotate_overrides
 
 
@@ -18,7 +18,7 @@ class CategoryResponseModel extends CategoryResponse {
 
   factory CategoryResponseModel.fromJSON(Map<String, dynamic> json) =>
       CategoryResponseModel(
-        categories: (json['data']['rows'] as List<dynamic>)
+        categories: (json['data'] as List<dynamic>)
             .map<CategoryModel>((countries) => CategoryModel.fromJson(countries))
             .toList(),
       );

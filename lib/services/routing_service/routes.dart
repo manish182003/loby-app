@@ -4,6 +4,7 @@ const String createProfileRoute = "/create_profile_screen";
 const String signUpScreenRoute = "/signup_screen_page";
 const String mainRoute = "/main";
 const String homeRoute = "/home";
+const String messageRoute = "/user-chat";
 const String gameCategoriesRoute = "/game_categories_screen";
 const String gameRoute = "/game_screen";
 const String gameDetailRoute = "/game_detail_screen";

@@ -1,15 +1,18 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
+
+import '../../../core/theme/colors.dart';
 
 class BuildDropdown extends StatefulWidget {
 
-  final ValueChanged<String> onChanged;
-  final String defaultValue, selectedValue, dropdownHint;
-  final List<String> itemsList;
-  final double height;
-  final double width;
+  final ValueChanged<dynamic>? onChanged;
+  final String? defaultValue, selectedValue, dropdownHint;
+  final List<DropdownMenuItem<dynamic>>? itemsList;
+  final double? height;
+  final double? width;
 
-  const BuildDropdown({Key key, this.itemsList, this.defaultValue, this.dropdownHint, this.onChanged, this.height, this.selectedValue, this.width}) : super(key: key);
+  const BuildDropdown({Key? key, this.itemsList, this.defaultValue, this.dropdownHint, this.onChanged, this.height, this.selectedValue, this.width}) : super(key: key);
 
   @override
   State<BuildDropdown> createState() => _BuildDropdownState();
@@ -17,7 +20,7 @@ class BuildDropdown extends StatefulWidget {
 
 class _BuildDropdownState extends State<BuildDropdown> {
 
-  String _value;
+  final String _value = '';
 
 
   @override
@@ -25,63 +28,56 @@ class _BuildDropdownState extends State<BuildDropdown> {
     final textTheme = Theme.of(context).textTheme;
 
     return DropdownButtonFormField2(
-      value: _value ?? widget.defaultValue,
-      decoration:
-      InputDecoration(
-        //Add isDense true and zero Padding.
-        //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
-        isDense: true,
-        contentPadding: EdgeInsets.zero,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(4),
-        ),
-        //Add more decoration as you want here
-        //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
-      ),
+
+      value: _value.isEmpty ?  widget.defaultValue : _value,
       isExpanded: true,
       hint: Text(
-        widget.dropdownHint,
-        style: textTheme.headline3,
-      ),
-      icon: const Icon(
-        Icons.arrow_drop_down,
-        color:Colors.black45,
+        widget.dropdownHint ?? 'Select',
+        style: textTheme.headline4?.copyWith(color: textLightColor),
+        overflow: TextOverflow.ellipsis,
       ),
       iconSize: 20,
-      buttonHeight: widget.height ?? 35,
-      buttonWidth:  widget.height ?? 35,
+      buttonHeight: 55,
       buttonPadding: const EdgeInsets.only(left: 10, right: 10),
-      dropdownDecoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
+      items: widget.itemsList,
+      onChanged: widget.onChanged,
+      icon: const Icon(
+        Icons.keyboard_arrow_down,
+        color: iconWhiteColor,
       ),
-      items: widget.itemsList.map((item) =>
-          DropdownMenuItem<String>(
-            value: item,
-            child: Text(
-              item,
-              style: textTheme.headline3
-            ),
-          ))
-          .toList(),
-      // validator: (value) {
-      //   if (value == null) {
-      //     return 'Account Type';
-      //   }
-      // },
-      onChanged: (value) {
-        setState(() {
-          _value = value.toString();
-        });
-        widget.onChanged(value);
-        //Do something when changing the item if you want.
-      },
-      onSaved: (value) {
-        setState(() {
-          _value = value.toString();
-          
-        });
-        widget.onChanged(value);
-      },
+      dropdownDecoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(14),
+        color: shipGreyColor,
+      ),
+      decoration: InputDecoration(
+        isDense: true,
+        filled: true,
+        contentPadding: EdgeInsets.zero,
+        fillColor: textFieldColor,
+        hintStyle: textTheme.headline4?.copyWith(color: textInputTitleColor),
+        labelStyle: textTheme.headline4!.copyWith(color: textWhiteColor),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: aquaGreenColor, width: 0.5),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        border:  OutlineInputBorder(
+          borderSide: const BorderSide(color: textFieldColor, width: 0),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+
+        enabledBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color:textFieldColor, width: 0),
+          borderRadius:  BorderRadius.circular(8.0),),
+
+        errorBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: textErrorColor, width: 0.5),
+          borderRadius:  BorderRadius.circular(8.0),),
+
+        focusedErrorBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color:textErrorColor, width: 0.5),
+          borderRadius:  BorderRadius.circular(8.0),),
+
+      ),
     );
   }
 }

@@ -9,7 +9,7 @@ class Message {
   final String text;
 
   Message({
-     required this.sender,
+    required this.sender,
     required this.avatar,
     required this.time,
     required this.unreadCount,

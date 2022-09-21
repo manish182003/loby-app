@@ -14,6 +14,7 @@ const Color butterflyBlueColor = Color(0xFF33A9FF);
 const Color frenchBlueColor = Color(0xFF006FC2);
 const Color purpleLightIndigoColor = Color(0xFF6C5DD3);
 const Color concordColor = Color(0xFF7B7B7B);
+const Color backgroundColor = Color(0xff1F2128);
 const Color backgroundBalticSeaColor = Color(0xFF242731);
 const Color backgroundDarkJungleGreenColor = Color(0xFF1F2128);
 const Color whiteColor = Color(0xFFFFFFFF);

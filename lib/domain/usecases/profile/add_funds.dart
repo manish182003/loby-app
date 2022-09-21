@@ -7,15 +7,15 @@ import 'package:loby/domain/entities/response_entities/profile/user_response.dar
 import 'package:loby/domain/repositories/listing_repository.dart';
 import 'package:loby/domain/repositories/profile_repository.dart';
 
-class AddFund extends UseCase<Map<String, dynamic>, Params> {
+class AddFunds extends UseCase<Map<String, dynamic>, Params> {
   final ProfileRepository _repository;
 
-  AddFund(this._repository);
+  AddFunds(this._repository);
 
   @override
   Future<Either<Failure, Map<String, dynamic>>> call(Params params) {
-    return _repository.getDuel(
-      userId: params.profileParams?.userId,
+    return _repository.addFunds(
+      amount: params.profileParams?.amount,
     );
   }
 }

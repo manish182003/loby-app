@@ -10,13 +10,16 @@ class Environment {
       log("Running on Production");
       return  '.env.production';
     } 
-
     log("Running on Development");
     return '.env.development';
   }
 
   static String get apiBaseUrl{
     return dotenv.env['API_BASE_URL'] ?? 'API_BASE_URL not found!';
+  }
+
+  static String get apiUrl{
+    return dotenv.env['API_URL'] ?? 'API_URL not found!';
   }
 
   static String get socketUrl{

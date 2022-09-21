@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:loby/domain/entities/home/game.dart';
 import 'package:sizer/sizer.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../../../../core/theme/colors.dart';
 
 class GameCard extends StatelessWidget {
-  int index;
+  final Game game;
 
-  GameCard({Key? key, required this.index}) : super(key: key);
+  const GameCard({Key? key, required this.game}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,24 +24,19 @@ class GameCard extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           child: Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.all(8.0),
+              Padding(
+                padding:  const EdgeInsets.all(8.0),
                 child: CircleAvatar(
                   radius: 36,
-                  backgroundColor: aquaGreenColor,
-                  child: Padding(
-                    padding: EdgeInsets.all(1.0),
-                    child: CircleAvatar(
-                      backgroundColor: backgroundDarkJungleGreenColor,
-                      radius: 36,
-                      child: Padding(
-                        padding: EdgeInsets.all(3.0),
-                        child: CircleAvatar(
-                          backgroundImage: AssetImage('assets/images/img.png'),
-                          radius: 36,
-                          backgroundColor: backgroundDarkJungleGreenColor,
-                        ),
-                      ), //CircleAvatar
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(36),
+                    child: CachedNetworkImage(
+                      imageUrl: game.image!,
+                      fit: BoxFit.cover,
+                      height: 110,
+                      width: 110,
+                      placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
                     ),
                   ),
                 ),
@@ -48,7 +45,7 @@ class GameCard extends StatelessWidget {
                 height: 0.5.h,
               ), //CircleAvatar//SizedBox
               Text(
-                'Battleground Mobile India',
+                game.name!,
                 maxLines: 2,
                 textAlign: TextAlign.center,
                 style: textTheme.headline6

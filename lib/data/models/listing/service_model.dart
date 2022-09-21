@@ -1,26 +1,29 @@
-import 'dart:developer';
+import 'package:loby/data/models/listing/service_option_model.dart';
+import 'package:loby/domain/entities/listing/service.dart';
+// ignore_for_file: overridden_fields, annotate_overrides
 
-import 'package:equatable/equatable.dart';
-import 'package:loby/domain/entities/listing/service_option.dart';
+
 
 class ServiceModel extends Service {
   ServiceModel({
     this.id,
     this.name,
     this.selectionType,
+    this.index = 0,
     this.serviceOption,
   });
 
-  int? id;
-  String? name;
-  int? selectionType;
-  List<ServiceOption>? serviceOption;
+  final int? id;
+  final String? name;
+  final int? selectionType;
+  int index;
+  final List<ServiceOptionModel>? serviceOption;
 
   factory ServiceModel.fromJson(Map<String, dynamic> json) => ServiceModel(
     id: json["id"],
     name: json["name"],
     selectionType: json["selection_type"],
-    serviceOption: List<ServiceOption>.from(json["serviceOption"].map((x) => ServiceOption.fromJson(x))),
+    serviceOption: List<ServiceOptionModel>.from(json["serviceOption"].map((x) => ServiceOptionModel.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -31,5 +34,5 @@ class ServiceModel extends Service {
   };
 
   // TODO: implement props
-  List<Object?> get props => [id, name, selectionType];
+  List<Object?> get props => [id, name, selectionType, index];
 }

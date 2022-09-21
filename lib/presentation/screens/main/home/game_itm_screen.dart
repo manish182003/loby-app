@@ -1,26 +1,36 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:loby/presentation/getx/controllers/home_controller.dart';
+import 'package:loby/presentation/getx/controllers/listing_controller.dart';
 import 'package:loby/presentation/screens/main/home/widgets/ItemList.dart';
 import 'package:loby/presentation/screens/main/home/widgets/filter_bottom_sheet_widget.dart';
-import 'package:sizer/sizer.dart';
-
+import 'package:loby/presentation/widgets/body_padding_widget.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../widgets/custom_app_bar.dart';
 import '../../../widgets/custom_chip.dart';
+import '../../../widgets/custom_loader.dart';
 import '../../../widgets/drop_down_with_divider.dart';
 
 class GameItemScreen extends StatefulWidget {
-  String name;
+  final int categoryId;
+  final int gameId;
+  final String gameName;
 
-  GameItemScreen({Key? key, required this.name}) : super(key: key);
+  const GameItemScreen(
+      {Key? key, required this.categoryId, required this.gameId, required this.gameName})
+      : super(key: key);
 
   @override
   State<GameItemScreen> createState() => _GameItemScreenState();
 }
 
 class _GameItemScreenState extends State<GameItemScreen> {
-  final int _selectedIndex = 0;
+
+  final HomeController homeController = Get.find<HomeController>();
+  final ListingController listingController = Get.find<ListingController>();
+  final controller = ScrollController();
+
   final List<String> items = [
     'Top Rated',
     'Most Recent',
@@ -29,43 +39,73 @@ class _GameItemScreenState extends State<GameItemScreen> {
   ];
   String? selectedValue = 'Top Rated';
 
+
   @override
-  Widget build(BuildContext context) {
-    debugPrint(widget.name);
-    final textTheme = Theme.of(context).textTheme;
-    return SafeArea(
-      child: Scaffold(
-        body: body(widget.name),
-      ),
-    );
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      homeController.getCategoryGames(categoryId: widget.categoryId);
+
+      listingController.buyerListingPageNumber.value = 1;
+      listingController.areMoreListingAvailable.value = true;
+      listingController.getBuyerListings(categoryId: widget.categoryId, gameId: widget.gameId);
+
+
+      controller.addListener(() {
+        if (controller.position.maxScrollExtent == controller.offset) {
+          listingController.getBuyerListings(categoryId: widget.categoryId, gameId: widget.gameId);
+        }
+      });
+    });
   }
 
-  Widget body(String name) {
-    final textTheme = Theme.of(context).textTheme;
-    return Column(
-      children: [
-        CustomAppBar(
-            appBarName: "Battlegrounds Mobile",
-            txtColor: aquaGreenColor
-        ),
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
-        Flexible(
-          child: SingleChildScrollView(
-            child: Column (
-              children: [
-                _buildCategories(textTheme),
-                const SizedBox(height: 8),
-                Padding(
-                  padding:
-                  const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
-                  child: Row(
+
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return SafeArea(
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: const Size(double.infinity, 70),
+          child: CustomAppBar(
+              appBarName: widget.gameName, txtColor: aquaGreenColor),
+        ),
+        body: SingleChildScrollView(
+          controller: controller,
+          child: BodyPaddingWidget(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Obx(() {
+                    if (homeController.isCategoryFetching.value) {
+                      return const CustomLoader();
+                    } else {
+                      return CustomChip(
+                        labelName: homeController.categories.map((element) => element.name!).toList(),
+                        selectedIndex: homeController.categories.indexWhere((element) => element.id == widget.categoryId),
+                        onChanged: (index) {
+                          listingController.getBuyerListings(
+                              categoryId: homeController.categories[index].id,
+                              gameId: widget.gameId);
+                        },
+                      );
+                    }
+                  }),
+                  const SizedBox(height: 8),
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        constraints: const BoxConstraints(
-                          minHeight: 45,
-                          minWidth: 45,
-                        ),
                         decoration: BoxDecoration(
                           color: textFieldColor,
                           borderRadius: BorderRadius.circular(10.0),
@@ -73,8 +113,11 @@ class _GameItemScreenState extends State<GameItemScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.13,
+                            SizedBox(
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width * 0.13,
                               child: SvgPicture.asset(
                                 'assets/icons/search_icon.svg',
                                 color: iconWhiteColor,
@@ -82,9 +125,15 @@ class _GameItemScreenState extends State<GameItemScreen> {
                                 height: 18,
                               ),
                             ),
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.5,
+                            SizedBox(
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width * 0.5,
                               child: TextField(
+                                onChanged: (value){
+                                  listingController.getBuyerListings(categoryId: widget.categoryId, gameId: widget.gameId, search: value);
+                                },
                                 style: textTheme.headline4
                                     ?.copyWith(color: textWhiteColor),
                                 decoration: InputDecoration(
@@ -120,91 +169,80 @@ class _GameItemScreenState extends State<GameItemScreen> {
                       ),
                     ],
                   ),
-                ),
-                const SizedBox(height: 8),
-                Padding(
-                  padding:
-                  const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
-                  child: Row(
+                  const SizedBox(height: 8),
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
-                        child: Text(
-                          "124 Result",
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          style: textTheme.headline6?.copyWith(color: textWhiteColor),
-                        ),
+                        child: Obx(() {
+                          return Text(
+                            "${listingController.buyerListings.length} Result",
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: textTheme.headline6?.copyWith(
+                                color: textWhiteColor),
+                          );
+                        }),
                       ),
                       const SizedBox(width: 4.0),
-                      DropDownDivider(),
+                      const DropDownDivider(),
                     ],
                   ),
-                ),
-                const SizedBox(height: 4.0),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
-                  child: Divider(
+                  const SizedBox(height: 4.0),
+                  const Divider(
                     color: dividerColor,
                     height: 4,
                     thickness: 2,
                     endIndent: 0,
                   ),
-                ),
-                const SizedBox(height: 10.0),
-                _buildGames(textTheme),
-                const SizedBox(height: 16.0),
-              ]
+                  const SizedBox(height: 10.0),
+                  _buildGames(textTheme),
+                  const SizedBox(height: 16.0),
+                ]
             ),
           ),
-        )
-      ],
-    );
-  }
-
-  //'In-Game Currency',
-  final List<String> bubbles = [
-    'Accounts',
-    'Buddy',
-    'Rank Push',
-    'In-Game Items',
-    'Coach',
-    'Duel',
-  ];
-
-  _buildCategories(TextTheme textTheme) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-      child: CustomChip(
-        labelName: bubbles,
+        ),
       ),
     );
   }
+
 
   _buildGames(TextTheme textTheme) {
-    var size = MediaQuery.of(context).size;
-
-    /*24 is for notification bar on Android*/
-    final double itemHeight = (size.height - kToolbarHeight - 24) / 3;
-    final double itemWidth = size.width / 2;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-      child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 0.72,
-          mainAxisSpacing: 0.1,
-          crossAxisSpacing: 0.1,
-        ),
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: 7,
-        itemBuilder: (context, index) {
-          return ItemList(name: 'hello $index', menuIcon: true,);
-        },
-      ),
-    );
+    return Obx(() {
+      if (listingController.isBuyerListingsFetching.value) {
+        return const Center(child: CircularProgressIndicator(),);
+      } else {
+        return GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 0.70,
+            mainAxisSpacing: 0.1,
+            crossAxisSpacing: 0.1,
+          ),
+          shrinkWrap: true,
+          physics: const ClampingScrollPhysics(),
+          itemCount: listingController.buyerListings.length + 1,
+          itemBuilder: (context, index) {
+            if (index < listingController.buyerListings.length) {
+              return ItemList(
+                  name: 'hello $index',
+                  menuIcon: true,
+                  listing: listingController.buyerListings[index]
+              );
+            }else{
+              if (listingController.areMoreListingAvailable.value) {
+                return const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 12.0),
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              } else {
+                return const SizedBox();
+              }
+            }
+          },
+        );
+      }
+    });
   }
 
   void _showDialog(BuildContext context, TextTheme textTheme) {
@@ -223,13 +261,13 @@ class _GameItemScreenState extends State<GameItemScreen> {
               children: <Widget>[
                 Expanded(
                     child: Container(
-                  decoration: const BoxDecoration(
-                    color: backgroundBalticSeaColor,
-                    borderRadius:
+                      decoration: const BoxDecoration(
+                        color: backgroundBalticSeaColor,
+                        borderRadius:
                         BorderRadius.vertical(top: Radius.circular(24)),
-                  ),
-                  child: FilterBottomSheet(controller: scrollController),
-                )),
+                      ),
+                      child: FilterBottomSheet(controller: scrollController),
+                    )),
               ],
             );
           },

@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:loby/core/theme/colors.dart';
 
 class CustomChip extends StatefulWidget {
-  String? label;
-  Color? color;
-  List<String> labelName;
+  final String? label;
+  final Color? color;
+  final List<String> labelName;
+  final ValueChanged<int>? onChanged;
+  final int selectedIndex;
 
-  CustomChip({Key? key, this.label, this.color, required this.labelName})
+  const CustomChip({Key? key, this.label, this.color, required this.labelName, this.onChanged, this.selectedIndex = 0})
       : super(key: key);
 
   @override
@@ -16,17 +18,18 @@ class CustomChip extends StatefulWidget {
 class _CustomChipState extends State<CustomChip> {
   int _selectedIndex = 0;
 
-  @override
+@override
   void initState() {
+    _selectedIndex = widget.selectedIndex;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+
     final textTheme = Theme.of(context).textTheme;
     return Wrap(
       spacing: 8.0,
-      runSpacing: 4.0,
       children: [
         ...List.generate(
             widget.labelName.length,
@@ -40,8 +43,7 @@ class _CustomChipState extends State<CustomChip> {
                       color: widget.color ?? orangeColor,
                       width: 1,
                       style: BorderStyle.solid),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   pressElevation: 1,
                   backgroundColor: backgroundDarkJungleGreenColor,
                   selectedColor: widget.color ?? orangeColor,
@@ -49,10 +51,11 @@ class _CustomChipState extends State<CustomChip> {
                     setState(() {
                       if (selected) {
                         _selectedIndex = index;
+                        widget.onChanged!(index);
                       }
                     });
                   },
-                ),),
+            ),),
       ],
     );
   }

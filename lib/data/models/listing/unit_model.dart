@@ -17,7 +17,6 @@ class UnitModel extends Unit{
     name: json["name"],
   );
 
-  @override
   Map<String, dynamic> toJson() => {
     "id": id,
     "name": name,

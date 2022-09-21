@@ -1,9 +1,15 @@
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/presentation/screens/auth/create_profile_screen.dart';
 import 'package:loby/presentation/screens/auth/sign_up_screen.dart';
+import 'package:loby/presentation/screens/main/chat/chat_page.dart';
+import 'package:loby/presentation/screens/main/chat/message_page.dart';
 import 'package:loby/presentation/screens/main/home/disputes/create_new_dispute_screen.dart';
 import 'package:loby/services/routing_service/routes.dart';
+import 'package:loby/services/routing_service/routing_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../presentation/screens/auth/sign_in_screen.dart';
 import '../../presentation/screens/main/home/category_item_screen.dart';
@@ -26,11 +32,27 @@ import '../../presentation/screens/main/profile/wallet/withdraw_funds_screen.dar
 import 'routes_name.dart';
 
 class MyRouter {
-  Future<GoRouter> appRouter() async {
+  Future<GoRouter> appRouter()async {
+    // final token = await Helpers.getApiToken();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
     final router = GoRouter(
+        redirect: (state){
+          bool? isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+          String? token = prefs.getString('apiToken');
+          debugPrint("Api Token $token");
+
+          final isLogging = state.location == loginRoute;
+
+          if(!isLoggedIn && !isLogging){
+            return loginRoute;
+          }else {
+            return null;
+          }
+        },
         urlPathStrategy: UrlPathStrategy.path,
         debugLogDiagnostics: true,
-        initialLocation: initialRoute,
+
         routes: [
           GoRoute(
             name: initialPage,
@@ -38,7 +60,7 @@ class MyRouter {
             pageBuilder: (context, state) {
               return CupertinoPage(
                 key: state.pageKey,
-                child: const SignInScreen(),
+                child: const MainScreen(),
               );
             },
           ),
@@ -88,7 +110,7 @@ class MyRouter {
                 return CupertinoPage(
                   key: state.pageKey,
                   child: CategoryItemScreen(
-                    name: 'Test',
+                    categoryId: int.tryParse(state.queryParams['categoryId']!),
                   ),
                 );
               }),
@@ -99,7 +121,9 @@ class MyRouter {
                 return CupertinoPage(
                   key: state.pageKey,
                   child: GameItemScreen(
-                    name: 'Test',
+                    categoryId: int.tryParse(state.queryParams['categoryId']!)!,
+                    gameId: int.tryParse(state.queryParams['gameId']!)!,
+                    gameName: state.queryParams['gameName']!,
                   ),
                 );
               }),
@@ -109,7 +133,7 @@ class MyRouter {
               pageBuilder: (context, state) {
                 return CupertinoPage(
                   key: state.pageKey,
-                  child: const GameDetailScreen(),
+                  child: GameDetailScreen(serviceListingId: int.tryParse(state.queryParams['serviceListingId']!)!),
                 );
               }),
 
@@ -119,7 +143,7 @@ class MyRouter {
               pageBuilder: (context, state) {
                 return CupertinoPage(
                   key: state.pageKey,
-                  child: const OtherUserProfileScreen(),
+                  child: OtherUserProfileScreen(userId: int.tryParse(state.queryParams['userId']!)!, from: state.queryParams['from']!, ),
                 );
               }),
 
@@ -250,6 +274,20 @@ class MyRouter {
                 return CupertinoPage(
                   key: state.pageKey,
                   child: const SearchScreen(),
+                );
+              }),
+          GoRoute(
+              name: messagePage,
+              path: messageRoute,
+              pageBuilder: (context, state) {
+                return CupertinoPage(
+                  key: state.pageKey,
+                  child: ChatPage(
+                    chatId: int.tryParse(state.queryParams['chatId']!)!,
+                    senderId: int.tryParse(state.queryParams['senderId']!)!,
+                    receiverId: int.tryParse(state.queryParams['receiverId']!)!,
+                  )
+                  // MessagePage(chatId: int.tryParse(state.queryParams['chatId']!)!, name: state.queryParams['name']!,),
                 );
               }),
         ]);

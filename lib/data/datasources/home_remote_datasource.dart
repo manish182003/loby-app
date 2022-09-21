@@ -1,0 +1,24 @@
+import 'package:dartz/dartz.dart';
+import 'package:loby/core/utils/failure.dart';
+import 'package:loby/data/models/response_models/home/category_games_response_model.dart';
+import 'package:loby/data/models/response_models/home/category_response_model.dart';
+import 'package:loby/data/models/response_models/home/game_response_model.dart';
+import 'package:loby/data/models/response_models/home/notification_response_model.dart';
+import 'package:loby/data/models/response_models/order/order_response_model.dart';
+
+abstract class HomeRemoteDatasource{
+  Future<CategoryResponseModel> getCategories(String? name, int? page, int? categoryId);
+
+  Future<GameResponseModel> getGames(String? name, int? page, int? gameId);
+
+  Future<CategoryGamesResponseModel> getCategoryGames(int? categoryId, String? search);
+
+  Future<NotificationResponseModel> getNotifications(int? notificationId, int? page);
+
+  Future<Map<String, dynamic>> deleteNotification(int? notificationId);
+
+  Future<int> getUnreadCount(String? type);
+
+
+
+}

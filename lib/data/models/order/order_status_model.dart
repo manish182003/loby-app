@@ -1,7 +1,7 @@
 // ignore_for_file: overridden_fields, annotate_overrides
 
 import 'package:equatable/equatable.dart';
-import 'package:loby/domain/entities/orders/order_status.dart';
+import 'package:loby/domain/entities/order/order_status.dart';
 
 class OrderStatusModel extends OrderStatus{
   const OrderStatusModel({

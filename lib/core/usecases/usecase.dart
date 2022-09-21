@@ -1,13 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:vyapar_dost/core/usecases/auth_params.dart';
-import 'package:vyapar_dost/core/usecases/buyer_params.dart';
-import 'package:vyapar_dost/core/usecases/lead_params.dart';
-import 'package:vyapar_dost/core/usecases/core_params.dart';
-import 'package:vyapar_dost/core/usecases/product_params.dart';
-import 'package:vyapar_dost/core/usecases/profile_params.dart';
-
+import 'package:loby/core/usecases/auth_params.dart';
+import 'package:loby/core/usecases/home_params.dart';
+import 'package:loby/core/usecases/listing_params.dart';
+import 'package:loby/core/usecases/profile_params.dart';
 import '../utils/failure.dart';
+import 'chat_params.dart';
+import 'order_params.dart';
 
 /// Abstract UseCase class with contract to implement call method.
 ///
@@ -18,15 +17,15 @@ abstract class UseCase<Type, Params> {
 
 /// Custom class to hold parameters of UseCase's call().
 class Params extends Equatable {
-  final String token;
-  final CoreParams coreParams;
-  final BuyerParams buyerParams;
-  final ProductParams productParams;
-  final LeadParams leadParams;
-  final AuthParams authParams;
-  final ProfileParams profileParams;
+  final String? token;
+  final AuthParams? authParams;
+  final HomeParams? homeParams;
+  final ChatParams? chatParams;
+  final OrderParams? orderParams;
+  final ListingParams? listingParams;
+  final ProfileParams? profileParams;
 
-  const Params({this.token, this.buyerParams, this.productParams, this.leadParams, this.authParams, this.coreParams, this.profileParams});
+  const Params({this.token, this.authParams, this.homeParams,this.chatParams,  this.listingParams, this.profileParams, this.orderParams});
 
   @override
   List<Object> get props => [];

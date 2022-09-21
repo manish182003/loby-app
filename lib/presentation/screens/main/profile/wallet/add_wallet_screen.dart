@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:sizer/sizer.dart';
-
+import 'package:get/get.dart';
+import 'package:loby/core/utils/helpers.dart';
+import 'package:loby/presentation/getx/controllers/profile_controller.dart';
+import 'package:loby/presentation/widgets/body_padding_widget.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import '../../../../../core/theme/colors.dart';
 import '../../../../widgets/custom_app_bar.dart';
-import '../../../../widgets/custom_button.dart';
+import '../../../../widgets/buttons/custom_button.dart';
 import '../../../../widgets/input_text_widget.dart';
 
 class AddFundsScreen extends StatefulWidget {
@@ -15,28 +17,39 @@ class AddFundsScreen extends StatefulWidget {
 }
 
 class _AddFundsScreenState extends State<AddFundsScreen> {
+
+  ProfileController profileController = Get.find<ProfileController>();
+  TextEditingController amount = TextEditingController();
+  final Razorpay _razorpay = Razorpay();
+
   @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: body(),
-      ),
-    );
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
   }
 
-  Widget body() {
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _razorpay.clear();
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        CustomAppBar(
-          appBarName: "Add Funds",
-        ),
-        Flexible(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Stack(
+    return SafeArea(
+      child: Scaffold(
+        appBar: const PreferredSize(preferredSize:Size(double.infinity, 70), child: CustomAppBar(appBarName: "Add Funds")),
+        body: BodyPaddingWidget(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Stack(
                 children: [
                   Card(
                     color: shipGreyColor,
@@ -58,15 +71,11 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
                             children: [
                               Text('Current Balance',
                                   textAlign: TextAlign.center,
-                                  style: textTheme.headline3
-                                      ?.copyWith(color: textTunaBlueColor)),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8.0, vertical: 16.0),
-                                child: Text('₹ 25,000',
+                                  style: textTheme.headline3?.copyWith(color: textTunaBlueColor, fontWeight: FontWeight.w500)),
+                              Padding(padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+                                child: Text('₹ ${profileController.profile.walletMoney}',
                                     textAlign: TextAlign.center,
-                                    style: textTheme.headlineLarge
-                                        ?.copyWith(color: textTunaBlueColor)),
+                                    style: textTheme.headlineLarge?.copyWith(color: textTunaBlueColor)),
                               ),
                             ],
                           ),
@@ -91,11 +100,12 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Padding(
-                                padding: EdgeInsets.only(bottom: 24.0),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 24.0),
                                 child: InputTextWidget(
                                   hintName: 'Enter Amount (INR)',
                                   keyboardType: TextInputType.number,
+                                  controller: amount,
                                 ),
                               ),
                               Padding(
@@ -105,15 +115,12 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.35,
+                                      width: MediaQuery.of(context).size.width * 0.35,
                                       child: CustomButton(
                                         color: purpleLightIndigoColor,
                                         textColor: textWhiteColor,
                                         name: "Add Funds",
-                                        onTap: () {
-                                          debugPrint('click chat');
-                                        },
+                                        onTap: _openCheckout,
                                       ),
                                     ),
                                   ],
@@ -127,10 +134,53 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
                   ),
                 ],
               ),
-            ),
+            ],
           ),
         ),
-      ],
+      ),
     );
+  }
+
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response)async {
+    await profileController.verifyPayment(signature: response.signature, paymentId: response.paymentId, paymentStatus: 'success', orderId: response.orderId);
+    await Helpers.hideLoader();
+    Helpers.toast("SUCCESS : ${response.paymentId}");
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    Helpers.hideLoader();
+    Helpers.toast("ERROR : ${response.message} with ${response.code}");
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    Helpers.hideLoader();
+    Helpers.toast("EXTERNAL WALLET : ${response.walletName}");
+  }
+
+  Future<void> _openCheckout()async{
+    await Helpers.loader();
+    final isSuccess = await profileController.addFunds(amount: int.tryParse(amount.text));
+    if(isSuccess){
+      var options = {
+        'key': 'rzp_test_w3kuff6E1thtE3',
+        'amount': int.tryParse("${amount.text}00"),
+        'name': 'Loby',
+        'order_id': profileController.addFundsResponse['order_id'],
+        'description': 'Add Fund to Wallet',
+        'timeout': 60,
+        'prefill': {
+          'contact': '8888888888',
+          'email': 'test@razorpay.com'
+        }
+      };
+
+      try{
+        _razorpay.open(options);
+      }catch(e){
+        debugPrint("Error : $e");
+      }
+    }
+
   }
 }
