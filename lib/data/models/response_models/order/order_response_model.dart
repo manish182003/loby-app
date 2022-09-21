@@ -1,0 +1,30 @@
+import 'package:loby/data/models/home/category_model.dart';
+import 'package:loby/data/models/home/game_model.dart';
+import 'package:loby/data/models/home/order_model.dart';
+import 'package:loby/domain/entities/home/game.dart';
+import 'package:loby/domain/entities/response_entities/home/category_response.dart';
+import 'package:loby/domain/entities/response_entities/home/game_response.dart';
+import 'package:loby/domain/entities/response_entities/orders/order_response.dart';
+
+import '../../../../domain/entities/home/category.dart';
+// ignore_for_file: overridden_fields, annotate_overrides
+
+
+class OrderResponseModel extends OrderResponse {
+
+  final List<OrderModel> orders;
+
+  const OrderResponseModel({
+    required this.orders,
+  }) : super(orders: orders);
+
+  @override
+  List<Object> get props => [orders];
+
+  factory OrderResponseModel.fromJSON(Map<String, dynamic> json) =>
+      OrderResponseModel(
+        orders: (json['data'] as List<dynamic>)
+            .map<OrderModel>((order) => OrderModel.fromJson(order))
+            .toList(),
+      );
+}
