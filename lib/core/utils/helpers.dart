@@ -64,6 +64,22 @@ class Helpers {
     }
   }
 
+  static validatePassword(String value) {
+    if (value.length < 2) {
+      return 'Password should be minimum 6 characters long';
+    } else {
+      return null;
+    }
+  }
+
+  static validateWalletWithdraw(int value, int balance) {
+    if (balance - value <= 200) {
+      return 'Minimum Balance Left Should be 200';
+    } else {
+      return null;
+    }
+  }
+
   static validateStartDate(DateTime? value) {
     if (value == null) {
       return "Please select policy start date";
@@ -162,7 +178,7 @@ class Helpers {
       if (response.statusCode == 200) {
         logger.i(jsonEncode(response.data as Map<String, dynamic>));
         return response.data as Map<String, dynamic>;
-      }else if (response.statusCode == 400  || response.statusCode == 401) {
+      }else if (response.statusCode == 400  || response.statusCode == 401 || response.statusCode == 202) {
         logger.i('Failed Response ${const JsonEncoder().convert(response.data as Map<String, dynamic>)}');
         throw ServerException(
           message: response.data['message'],
@@ -256,7 +272,6 @@ class Helpers {
         });
   }
 
-
   static getImage(String image){
     return "${Environment.apiUrl}$image";
   }
@@ -268,7 +283,7 @@ class Helpers {
 
   static getUserId() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return int.tryParse(prefs.getString('userId')!);
+    return prefs.getString('userId') == null ? null : int.tryParse(prefs.getString('userId')!);
   }
 
   static saveString(String key, String value) async{

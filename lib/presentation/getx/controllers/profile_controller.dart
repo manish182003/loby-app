@@ -12,14 +12,20 @@ import 'package:loby/domain/usecases/profile/add_bank_details.dart';
 import 'package:loby/domain/usecases/profile/add_funds.dart';
 import 'package:loby/domain/usecases/profile/follow_unfollow.dart';
 import 'package:loby/domain/usecases/profile/get_duel.dart';
+import 'package:loby/domain/usecases/profile/get_payment_transactions.dart';
 import 'package:loby/domain/usecases/profile/get_profile.dart';
 import 'package:loby/domain/usecases/profile/get_ratings.dart';
 import 'package:loby/domain/usecases/profile/profile_verification.dart';
+import 'package:loby/domain/usecases/profile/submit_feedback.dart';
 import 'package:loby/domain/usecases/profile/update_social_links.dart';
 import 'package:loby/domain/usecases/profile/withdraw_money.dart';
 
 import '../../../domain/entities/profile/bank_detail.dart';
+import '../../../domain/entities/profile/payment_transaction.dart';
+import '../../../domain/entities/profile/wallet_transaction.dart';
 import '../../../domain/usecases/profile/get_bank_details.dart';
+import '../../../domain/usecases/profile/get_followers.dart';
+import '../../../domain/usecases/profile/get_wallet_transactions.dart';
 import '../../../domain/usecases/profile/verify_payment.dart';
 
 
@@ -36,6 +42,10 @@ class ProfileController extends GetxController{
   final AddBankDetails _addBankDetails;
   final GetBankDetails _getBankDetails;
   final WithdrawMoney _withdrawMoney;
+  final GetPaymentTransactions _getPaymentTransactions;
+  final GetWalletTransactions _getWalletTransactions;
+  final GetFollowers _getFollowers;
+  final SubmitFeedback _submitFeedback;
   ProfileController({
     required GetProfile getProfile,
     required GetRatings getRatings,
@@ -48,6 +58,10 @@ class ProfileController extends GetxController{
     required AddBankDetails addBankDetails,
     required GetBankDetails getBankDetails,
     required WithdrawMoney withdrawMoney,
+    required GetPaymentTransactions getPaymentTransactions,
+    required GetWalletTransactions getWalletTransactions,
+    required GetFollowers getFollowers,
+    required SubmitFeedback submitFeedback,
   }) : _getProfile = getProfile,
   _getRatings = getRatings,
   _getDuel = getDuel,
@@ -58,7 +72,11 @@ class ProfileController extends GetxController{
   _profileVerification = profileVerification,
         _addBankDetails = addBankDetails,
   _getBankDetails = getBankDetails,
-        _withdrawMoney = withdrawMoney;
+        _withdrawMoney = withdrawMoney,
+        _getPaymentTransactions = getPaymentTransactions,
+        _getWalletTransactions = getWalletTransactions,
+  _getFollowers = getFollowers,
+        _submitFeedback = submitFeedback;
 
 
 
@@ -82,7 +100,24 @@ class ProfileController extends GetxController{
 
   final lastOrderStatus ="".obs;
 
+  final paymentTransactions = <PaymentTransaction>[].obs;
+  final isPaymentTransactionsFetching = false.obs;
+  final areMorePaymentTransactionsAvailable = true.obs;
+  final paymentTransactionsPageNumber = 1.obs;
 
+
+  final walletTransactions = <WalletTransaction>[].obs;
+  final isWalletTransactionsFetching = false.obs;
+  final areMoreWalletTransactionsAvailable = true.obs;
+  final walletTransactionsPageNumber = 1.obs;
+
+
+
+  final followers = <User>[].obs;
+  final isFollowersFetching = false.obs;
+
+  final following = <User>[].obs;
+  final isFollowingFetching = false.obs;
 
 
 
@@ -353,6 +388,139 @@ class ProfileController extends GetxController{
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
         Helpers.toast(errorMessage.value);
+      },
+          (success) {
+
+      },
+    );
+    return failureOrSuccess.isRight() ? true : false;
+  }
+
+
+
+  Future<bool> getPaymentTransactions() async {
+    paymentTransactionsPageNumber.value == 1 ? isPaymentTransactionsFetching(true) : isPaymentTransactionsFetching(false);
+
+    if(areMorePaymentTransactionsAvailable.value){
+      final failureOrSuccess = await _getPaymentTransactions(
+        Params(profileParams: ProfileParams(
+          page: paymentTransactionsPageNumber.value,
+        ),),
+      );
+
+      failureOrSuccess.fold(
+            (failure) {
+          errorMessage.value = Helpers.convertFailureToMessage(failure);
+          debugPrint(errorMessage.value);
+          Helpers.toast(errorMessage.value);
+          isPaymentTransactionsFetching.value = false;
+        },
+            (success) {
+
+
+            if (paymentTransactionsPageNumber > 1) {
+              paymentTransactions.addAll(success.paymentTransactions);
+            } else {
+              paymentTransactions.value = success.paymentTransactions;
+            }
+            areMorePaymentTransactionsAvailable.value = paymentTransactions.length != success.count;
+
+
+            paymentTransactionsPageNumber.value++;
+
+          isPaymentTransactionsFetching.value = false;
+        },
+      );
+      return failureOrSuccess.isRight() ? true : false;
+    }
+    return false;
+  }
+
+
+  Future<bool> getWalletTransactions({String? type}) async {
+    walletTransactionsPageNumber.value == 1 ? isWalletTransactionsFetching(true) : isWalletTransactionsFetching(false);
+
+    if(areMoreWalletTransactionsAvailable.value){
+      final failureOrSuccess = await _getWalletTransactions(
+        Params(profileParams: ProfileParams(
+          page: walletTransactionsPageNumber.value,
+        ),),
+      );
+
+      failureOrSuccess.fold(
+            (failure) {
+          errorMessage.value = Helpers.convertFailureToMessage(failure);
+          debugPrint(errorMessage.value);
+          Helpers.toast(errorMessage.value);
+          isWalletTransactionsFetching.value = false;
+        },
+            (success) {
+
+
+          if (walletTransactionsPageNumber > 1) {
+            walletTransactions.addAll(success.walletTransactions);
+          } else {
+            walletTransactions.value = success.walletTransactions;
+          }
+          areMoreWalletTransactionsAvailable.value = walletTransactions.length != success.count;
+
+
+          walletTransactionsPageNumber.value++;
+
+          isWalletTransactionsFetching.value = false;
+        },
+      );
+      return failureOrSuccess.isRight() ? true : false;
+    }
+    return false;
+  }
+
+
+
+
+
+  Future<bool> getFollowers({String? type}) async {
+    isFollowersFetching(true);
+    final failureOrSuccess = await _getFollowers(
+      Params(profileParams: ProfileParams(
+        type: type,
+      ),),
+    );
+
+    failureOrSuccess.fold(
+          (failure) {
+        errorMessage.value = Helpers.convertFailureToMessage(failure);
+        debugPrint(errorMessage.value);
+        Helpers.toast(errorMessage.value);
+        isBankDetailsFetching(false);
+      },
+          (success) {
+            if(type == 'following'){
+              following.value = success.followers;
+            }else{
+              followers.value = success.followers;
+            }
+            isFollowersFetching(false);
+
+          },
+    );
+    return failureOrSuccess.isRight() ? true : false;
+  }
+
+  Future<bool> submitFeedback({required String feedback, required String email}) async {
+    final failureOrSuccess = await _submitFeedback(
+      Params(profileParams: ProfileParams(
+        feedback: feedback,
+        email: email,
+      ),),
+    );
+
+    failureOrSuccess.fold(
+          (failure) {
+        errorMessage.value = Helpers.convertFailureToMessage(failure);
+        debugPrint(errorMessage.value);
+        Helpers.toast(errorMessage.value);
+        isBankDetailsFetching(false);
       },
           (success) {
 

@@ -68,9 +68,9 @@ class AuthRepositoryImpl extends AuthRepository{
   }
 
   @override
-  Future<Either<Failure, bool>> updateProfile({File? avatar, String? fullName, String? displayName, int? countryId, int? stateId, int? cityId, String? DOB, List<Map<String, dynamic>>? profileTags, String? bio})async {
+  Future<Either<Failure, bool>> updateProfile({File? cover, File? avatar, String? fullName, String? displayName, int? countryId, int? stateId, int? cityId, String? DOB, List<Map<String, dynamic>>? profileTags, String? bio})async {
     try {
-      return Right(await _authRemoteDatasource.updateProfile(avatar, fullName, displayName, countryId, stateId, cityId, DOB, profileTags, bio));
+      return Right(await _authRemoteDatasource.updateProfile(cover, avatar, fullName, displayName, countryId, stateId, cityId, DOB, profileTags, bio));
     } on ServerException catch (e) {
     // Loggers can be added here for analyzation.
     return Left(ServerFailure(message: e.message.toString()));

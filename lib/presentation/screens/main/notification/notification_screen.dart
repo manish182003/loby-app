@@ -5,6 +5,7 @@ import 'package:loby/presentation/getx/controllers/home_controller.dart';
 import 'package:loby/presentation/screens/main/notification/widgets/notification_item_widget.dart';
 import 'package:loby/presentation/widgets/custom_app_bar.dart';
 import 'package:loby/presentation/widgets/custom_loader.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../../core/theme/colors.dart';
 import '../../../widgets/body_padding_widget.dart';
@@ -37,14 +38,16 @@ class _NotificationScreenState extends State<NotificationScreen> {
             return const CustomLoader();
           }else {
             return BodyPaddingWidget(
-              child: ListView.builder(
+              child: ListView.separated(
                 itemCount: homeController.notifications.length,
                 shrinkWrap: true,
                 padding: const EdgeInsets.only(top: 16),
                 physics: const ClampingScrollPhysics(),
                 itemBuilder: (context, index) {
                   return NotificationItemWidget(notification: homeController.notifications[index]);
-                },
+                }, separatorBuilder: (BuildContext context, int index) {
+                  return SizedBox(height: 1.h,);
+              },
               ),
             );
           }

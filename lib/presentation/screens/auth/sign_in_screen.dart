@@ -68,7 +68,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   right: 14.w,
                   bottom: 2.h,
                   onTap: () {
-                    context.pushNamed(mainPage);
+                    // context.pushNamed(mainPage);
                   }),
               CustomButton(
                   name: "Login",

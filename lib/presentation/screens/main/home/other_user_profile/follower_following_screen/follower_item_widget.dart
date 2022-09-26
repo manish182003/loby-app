@@ -1,10 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 
 import '../../../../../../core/theme/colors.dart';
+import '../../../../../../domain/entities/profile/user.dart';
 import '../../../../../widgets/follow_btn.dart';
 
 class FollowerItemWidget extends StatelessWidget {
-  const FollowerItemWidget({Key? key}) : super(key: key);
+  final User user;
+  final String type;
+  const FollowerItemWidget({Key? key, required this.user, required this.type}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,15 +24,15 @@ class FollowerItemWidget extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              _buildUserAvtar(lavaRedColor),
+              _buildUserAvatar(lavaRedColor),
               const SizedBox(
-                width: 4,
+                width: 12,
               ),
               Expanded(
                 child: Text(
-                  'Mukesh',
+                  user.displayName ?? '',
                   overflow: TextOverflow.ellipsis,
-                  style: textTheme.headline6?.copyWith(color: textWhiteColor),
+                  style: textTheme.headline5?.copyWith(color: textWhiteColor),
                   maxLines: 1,
                 ),
               ),
@@ -39,11 +45,12 @@ class FollowerItemWidget extends StatelessWidget {
                   width: MediaQuery.of(context).size.width * 0.31,
                   height: 36,
                   onPress: () {
-                    debugPrint('Hello bhai');
+                    ProfileController profileController = Get.find<ProfileController>();
+                    profileController.followUnfollow(userId: user.id);
                   },
                   btnBgColor: butterflyBlueColor,
                   txtColor: textWhiteColor,
-                  btnName: 'Follow',
+                  btnName: type == 'following' ? 'Unfollow' : 'Follow',
                 ),
               ),
             ],
@@ -51,21 +58,24 @@ class FollowerItemWidget extends StatelessWidget {
         ));
   }
 
-  _buildUserAvtar(Color borderColor) {
-    return const CircleAvatar(
+  _buildUserAvatar(Color borderColor) {
+    return CircleAvatar(
       radius: 28,
       backgroundColor: aquaGreenColor,
       child: Padding(
-        padding: EdgeInsets.all(1.0),
+        padding: const EdgeInsets.all(1.0),
         child: CircleAvatar(
           backgroundColor: backgroundDarkJungleGreenColor,
           radius: 28,
           child: Padding(
-            padding: EdgeInsets.all(2.0),
-            child: CircleAvatar(
-              backgroundImage: AssetImage('assets/images/img.png'),
-              radius: 28,
-              backgroundColor: backgroundBalticSeaColor,
+            padding: const EdgeInsets.all(2.0),
+            child: CachedNetworkImage(
+              imageUrl: user.image ?? '',
+              fit: BoxFit.cover,
+              height: 110,
+              width: 110,
+              placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
           ), //CircleAvatar
         ),

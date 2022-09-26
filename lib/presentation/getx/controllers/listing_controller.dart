@@ -60,6 +60,9 @@ class ListingController extends GetxController{
   final quantityCount = 1.obs;
   final totalPrice = "".obs;
 
+  final rangeSliderDiscreteValues = const RangeValues(0, 235000).obs;
+
+
 
 
   Future<bool> getConfigurations({required int? categoryId, required int? gameId}) async {
@@ -132,7 +135,11 @@ class ListingController extends GetxController{
 
 
 
-  Future<bool> getBuyerListings({int? categoryId, int? gameId, int? listingId, int? userId, String? search, String? from}) async {
+  Future<bool> getBuyerListings({int? categoryId, int? gameId, int? listingId, int? userId, String? search, String? from, int? priceFrom, int? priceTo, String? sortByPrice, String? sortByRating}) async {
+    // print(buyerListingPageNumber);
+    // print(isBuyerListingsFetching);
+    // print(areMoreListingAvailable);
+
     buyerListingPageNumber.value == 1 ? isBuyerListingsFetching(true) : isBuyerListingsFetching(false);
 
     if(areMoreListingAvailable.value){
@@ -144,6 +151,10 @@ class ListingController extends GetxController{
           userId: userId,
           page: buyerListingPageNumber.value,
           search: search,
+          priceFrom: priceFrom,
+          priceTo: priceTo,
+          sortByRating: sortByRating,
+          sortByPrice: sortByPrice,
         ),),
       );
 

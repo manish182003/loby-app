@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -330,15 +331,18 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                 name: "Remove Avatar",
                 outlineBtn: true,
                 borderColor: carminePinkColor,
+                textColor: carminePinkColor,
                 top: 1.h,
                 left: 5.w,
                 right: 5.w,
                 radius: 40.0,
                 height: 4.5.h,
                 onTap: () async {
-                  Helpers.showImagePicker(context: context,
-                      onGallery: _imgFromGallery,
-                      onCamera: _imgFromCamera);
+                  setState(() {
+                    authController.avatarUrl.value = "";
+                    imageFile = File('');
+                  });
+
                 },
               ),
             ],
@@ -361,8 +365,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
   }
 
   _imgFromCamera() async {
-    var image = await _picker.getImage(
-        source: ImageSource.camera, imageQuality: 50);
+    var image = await _picker.getImage(source: ImageSource.camera, imageQuality: 50);
 
     setState(() {
       if (image != null) {
@@ -384,6 +387,22 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
           child: ClipRRect(
               borderRadius: BorderRadius.circular(50),
               child: Image.file(imageFile, fit: BoxFit.cover,)),
+        )
+    ) : authController.avatarUrl.isNotEmpty ? Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: SizedBox(
+          height: 100,
+          width: 100,
+          child: ClipRRect(
+              borderRadius: BorderRadius.circular(50),
+              child: CachedNetworkImage(
+                imageUrl: authController.avatarUrl.value,
+                fit: BoxFit.cover,
+                height: 110,
+                width: 110,
+                placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+              ),),
         )
     ) : Padding(padding: const EdgeInsets.only(bottom: 10),
         child: Container(

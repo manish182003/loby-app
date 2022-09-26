@@ -17,6 +17,7 @@ class UpdateProfile extends UseCase<bool, Params> {
   Future<Either<Failure, bool>> call(Params params) {
 
     return _repository.updateProfile(
+      cover: params.authParams?.cover,
       avatar: params.authParams?.avatar,
       fullName: params.authParams?.fullName,
       displayName: params.authParams?.displayName,

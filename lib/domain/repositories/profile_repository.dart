@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:loby/core/utils/failure.dart';
@@ -9,6 +8,10 @@ import 'package:loby/domain/entities/response_entities/profile/bank_detail_respo
 import 'package:loby/domain/entities/response_entities/profile/duel_response.dart';
 import 'package:loby/domain/entities/response_entities/profile/rating_response.dart';
 import 'package:loby/domain/entities/response_entities/profile/user_response.dart';
+
+import '../entities/response_entities/profile/follower_response.dart';
+import '../entities/response_entities/profile/payment_transaction_response.dart';
+import '../entities/response_entities/profile/wallet_transaction_response.dart';
 
 abstract class ProfileRepository{
 
@@ -33,6 +36,16 @@ abstract class ProfileRepository{
   Future<Either<Failure, BankDetailResponse>> getBankDetails();
 
   Future<Either<Failure, Map<String, dynamic>>> withdrawMoney({int? bankDetailId, int? amount});
+
+  Future<Either<Failure, PaymentTransactionResponse>> getPaymentTransactions({int? page});
+
+  Future<Either<Failure, WalletTransactionResponse>> getWalletTransactions({int? page, String? type});
+
+  Future<Either<Failure, FollowerResponse>> getFollowers({int? page, String? type});
+
+  Future<Either<Failure, Map<String, dynamic>>> submitFeedback({String? feedback, String? email});
+
+
 
 
 }

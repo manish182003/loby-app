@@ -75,7 +75,7 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
                               Padding(padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
                                 child: Text('₹ ${profileController.profile.walletMoney}',
                                     textAlign: TextAlign.center,
-                                    style: textTheme.headlineLarge?.copyWith(color: textTunaBlueColor)),
+                                    style: textTheme.headlineLarge?.copyWith(color: textTunaBlueColor, fontFamily: 'Inter')),
                               ),
                             ],
                           ),

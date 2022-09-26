@@ -35,7 +35,7 @@ class GameCard extends StatelessWidget {
                       fit: BoxFit.cover,
                       height: 110,
                       width: 110,
-                      placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
+                      // placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
                       errorWidget: (context, url, error) => const Icon(Icons.error),
                     ),
                   ),

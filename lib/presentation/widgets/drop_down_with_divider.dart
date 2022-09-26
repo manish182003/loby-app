@@ -1,11 +1,15 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:loby/presentation/getx/controllers/listing_controller.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../core/theme/colors.dart';
 
 class DropDownDivider extends StatefulWidget {
-  const DropDownDivider({Key? key}) : super(key: key);
+  final int categoryId;
+  final int gameId;
+  const DropDownDivider({Key? key, required this.categoryId, required this.gameId}) : super(key: key);
 
   @override
   State<DropDownDivider> createState() => _DropDownDividerState();
@@ -19,6 +23,7 @@ class _DropDownDividerState extends State<DropDownDivider> {
     'High to Low Price',
   ];
   String? selectedValue = 'Top Rated';
+  ListingController listingController = Get.find<ListingController>();
 
   List<DropdownMenuItem<String>> _addDividersAfterItems(
       List<String> items, TextTheme textTheme) {
@@ -89,6 +94,43 @@ class _DropDownDividerState extends State<DropDownDivider> {
           setState(() {
             selectedValue = value as String;
           });
+          listingController.buyerListingPageNumber.value = 1;
+          listingController.areMoreListingAvailable.value = true;
+
+          switch(value){
+            case 'Top Rated':
+              listingController.getBuyerListings(
+                  categoryId: widget.categoryId,
+                  gameId: widget.gameId,
+                  sortByRating: 'desc',
+              );
+              break;
+            case 'Most Recent':
+              listingController.getBuyerListings(
+                categoryId: widget.categoryId,
+                gameId: widget.gameId,
+              );
+              break;
+            case 'Low to High Price':
+              listingController.getBuyerListings(
+                categoryId: widget.categoryId,
+                gameId: widget.gameId,
+                sortByPrice: 'asc'
+              );
+              break;
+            case 'High to Low Price':
+              listingController.getBuyerListings(
+                  categoryId: widget.categoryId,
+                  gameId: widget.gameId,
+                  sortByPrice: 'desc'
+              );
+              break;
+            default:
+              listingController.getBuyerListings(
+                categoryId: widget.categoryId,
+                gameId: widget.gameId,
+              );
+          }
         },
         dropdownDecoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),

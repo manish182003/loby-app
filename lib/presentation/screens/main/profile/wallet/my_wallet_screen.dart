@@ -81,7 +81,7 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                                         textAlign: TextAlign.center,
                                         style: textTheme.headlineLarge
                                             ?.copyWith(
-                                            color: aquaGreenColor)),
+                                            color: aquaGreenColor, fontFamily: 'Inter')),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -126,7 +126,7 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                   onTap: () {
                     /*Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => const TransactionHistoryScreen()));*/
-                    context.pushNamed(transactionHistoryPage);
+                    context.pushNamed(walletTransactionPage);
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(right: 20.0),

@@ -12,6 +12,7 @@ class AuthParams extends Equatable {
   final int? page;
   final String? type;
   final File? avatar;
+  final File? cover;
   final String? fullName;
   final String? displayName;
   final int? countryId;
@@ -24,6 +25,7 @@ class AuthParams extends Equatable {
   final int? socialLoginType;
 
   const AuthParams({
+    this.cover,
     this.name,
     this.email,
     this.password,

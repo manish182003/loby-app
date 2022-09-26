@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:file_picker/file_picker.dart';
@@ -8,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/profile/user.dart';
+import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:sizer/sizer.dart';
 
@@ -40,6 +43,7 @@ class ProfileHeader extends StatefulWidget {
 class _ProfileHeaderState extends State<ProfileHeader> {
 
   ProfileController profileController = Get.find<ProfileController>();
+  AuthController authController = Get.find<AuthController>();
 
   List<PlatformFile> _paths = [];
 
@@ -320,6 +324,11 @@ class _ProfileHeaderState extends State<ProfileHeader> {
         type: FileType.custom,
         allowedExtensions: ['jpg', 'png'],
       ))!.files;
+
+      Helpers.loader();
+      await authController.updateProfile(avatar: _paths.map((e) => File(e.path!)).toList().first);
+      await profileController.getProfile();
+      Helpers.hideLoader();
 
     } on PlatformException catch (e) {
       Helpers.toast('Unsupported operation$e');

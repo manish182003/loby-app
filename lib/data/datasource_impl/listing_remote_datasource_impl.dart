@@ -123,7 +123,7 @@ class ListingRemoteDatasourceImpl extends ListingRemoteDatasource{
   }
 
   @override
-  Future<ServiceListingResponseModel> getBuyerListings(int? categoryId, int? gameId, int? listingId, int? userId, int? page, String? search) async{
+  Future<ServiceListingResponseModel> getBuyerListings(int? categoryId, int? gameId, int? listingId, int? userId, int? page, String? search, int? priceFrom, int? priceTo, String? sortByPrice, String? sortByRating) async{
     try {
       String token = await Helpers.getApiToken();
       final Map<String, dynamic> headers = {
@@ -134,7 +134,19 @@ class ListingRemoteDatasourceImpl extends ListingRemoteDatasource{
         _dio,
         RequestType.get,
         ApiEndpoints.getBuyerListings,
-        queryParams: {'category_id': '${categoryId ?? ''}', 'game_id' : '${gameId ?? ''}', 'listing_id' : '${listingId ?? ''}', 'user_id' : '${userId ?? ''}', 'page' : '${page ?? ''}', 'name': search ?? ''},
+        queryParams: {
+          'category_id': '${categoryId ?? ''}',
+          'game_id' : '${gameId ?? ''}',
+          'listing_id' : '${listingId ?? ''}',
+          'user_id' : '${userId ?? ''}',
+          'page' : '${search != null ? '0' : page ?? ''}',
+          'name': search ?? '',
+          'priceFrom' : '${priceFrom ?? ''}',
+          'priceTo' : '${priceTo ?? ''}',
+          'sortByPrice' : sortByPrice ?? '',
+          'sortByRating' : sortByRating ?? '',
+
+        },
         headers: headers,
       );
 

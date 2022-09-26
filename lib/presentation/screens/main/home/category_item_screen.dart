@@ -39,57 +39,53 @@ class _CategoryItemScreenState extends State<CategoryItemScreen> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: const PreferredSize(
-            preferredSize: Size(double.infinity, 70),
-            child: CustomAppBar(appBarName: "Accounts", txtColor: aquaGreenColor)) ,
-          body: Column(
-            children: [
-              BodyPaddingWidget(
-                child: TextFieldWidget(
-                  textEditingController: search,
-                  hint: "Search...",
-                  onChanged: (value){
-                    homeController.getCategoryGames(categoryId: widget.categoryId, search: value);
-                  },
-                ),
+    return Scaffold(
+      appBar: appBar(context: context, appBarName: "Accounts"),
+        body: Column(
+          children: [
+            BodyPaddingWidget(
+              child: TextFieldWidget(
+                textEditingController: search,
+                hint: "Search...",
+                onChanged: (value){
+                  homeController.getCategoryGames(categoryId: widget.categoryId, search: value);
+                },
               ),
-              Obx(() {
-                if(homeController.isCategoryGamesFetching.value){
-                  return const CustomLoader();
-                }else{
-                  return SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: GridView.builder(
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          childAspectRatio: 6.0 / 7.5,
-                          mainAxisSpacing: 1,
-                          crossAxisSpacing: 1,
-                        ),
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: homeController.categoryGames.length,
-                        itemBuilder: (context, index) {
-                          final game = homeController.categoryGames[index].game;
-                          return CategoryItemCard(
-                              categoryId: widget.categoryId!,
-                              gameId: game!.id!,
-                              index: index,
-                              gameName: game.name!,
-                              images: game.image);
-                        },
+            ),
+            Obx(() {
+              if(homeController.isCategoryGamesFetching.value){
+                return const CustomLoader();
+              }else{
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: GridView.builder(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        childAspectRatio: 6.0 / 7.5,
+                        mainAxisSpacing: 1,
+                        crossAxisSpacing: 1,
                       ),
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: homeController.categoryGames.length,
+                      itemBuilder: (context, index) {
+                        final game = homeController.categoryGames[index].game;
+                        return CategoryItemCard(
+                            categoryId: widget.categoryId!,
+                            gameId: game!.id!,
+                            index: index,
+                            gameName: game.name!,
+                            images: game.image);
+                      },
                     ),
-                  );
-                }
+                  ),
+                );
+              }
 
-              }),
-            ],
-          ),
-      ),
+            }),
+          ],
+        ),
     );
   }
 }

@@ -10,8 +10,11 @@ import 'package:loby/domain/entities/response_entities/listing/configuration_res
 import 'package:loby/domain/entities/response_entities/listing/service_listing_response.dart';
 import 'package:loby/domain/entities/response_entities/profile/bank_detail_response.dart';
 import 'package:loby/domain/entities/response_entities/profile/duel_response.dart';
+import 'package:loby/domain/entities/response_entities/profile/follower_response.dart';
+import 'package:loby/domain/entities/response_entities/profile/payment_transaction_response.dart';
 import 'package:loby/domain/entities/response_entities/profile/rating_response.dart';
 import 'package:loby/domain/entities/response_entities/profile/user_response.dart';
+import 'package:loby/domain/entities/response_entities/profile/wallet_transaction_response.dart';
 import 'package:loby/domain/repositories/listing_repository.dart';
 import 'package:loby/domain/repositories/profile_repository.dart';
 
@@ -124,6 +127,46 @@ class ProfileRepositoryImpl extends ProfileRepository{
   Future<Either<Failure, Map<String, dynamic>>> withdrawMoney({int? bankDetailId, int? amount})async {
     try {
       return Right(await _profileRemoteDatasource.withdrawMoney(bankDetailId, amount));
+    } on ServerException catch (e) {
+    // Loggers can be added here for analyzation.
+    return Left(ServerFailure(message: e.message.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, PaymentTransactionResponse>> getPaymentTransactions({int? page})async {
+    try {
+      return Right(await _profileRemoteDatasource.getPaymentTransactions(page));
+    } on ServerException catch (e) {
+    // Loggers can be added here for analyzation.
+    return Left(ServerFailure(message: e.message.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, WalletTransactionResponse>> getWalletTransactions({int? page, String? type}) async{
+    try {
+      return Right(await _profileRemoteDatasource.getWalletTransactions(page, type));
+    } on ServerException catch (e) {
+    // Loggers can be added here for analyzation.
+    return Left(ServerFailure(message: e.message.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, FollowerResponse>> getFollowers({int? page, String? type}) async{
+    try {
+      return Right(await _profileRemoteDatasource.getFollowers(page, type));
+    } on ServerException catch (e) {
+      // Loggers can be added here for analyzation.
+      return Left(ServerFailure(message: e.message.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> submitFeedback({String? feedback, String? email})async {
+    try {
+      return Right(await _profileRemoteDatasource.submitFeedback(feedback, email));
     } on ServerException catch (e) {
     // Loggers can be added here for analyzation.
     return Left(ServerFailure(message: e.message.toString()));

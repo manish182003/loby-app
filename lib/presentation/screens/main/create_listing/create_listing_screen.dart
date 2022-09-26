@@ -17,6 +17,7 @@ import 'package:loby/presentation/widgets/custom_chips.dart';
 import 'package:loby/presentation/widgets/text_fields/auto_complete_field.dart';
 import 'package:loby/presentation/widgets/text_fields/custom_drop_down.dart';
 import 'package:sizer/sizer.dart';
+import 'package:styled_text/styled_text.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../widgets/bottom_dialog_widget.dart';
 import '../../../widgets/buttons/custom_button.dart';
@@ -66,7 +67,6 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
     });
   }
 
-
   @override
   void dispose() {
     listingController.isServicesAvailable.value = false;
@@ -97,11 +97,10 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
     if (!mounted) return;
   }
 
+
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme
-        .of(context)
-        .textTheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -156,12 +155,37 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                           Text(textAlign: TextAlign.start, "Disclaimer",
                               style: textTheme.headline4?.copyWith(color: textWhiteColor)),
                           SizedBox(height: 2.h),
-                          Text(textAlign: TextAlign.start,
-                              homeController.disclaimer.value,
-                              style: textTheme.headline6?.copyWith(
-                                fontWeight: FontWeight.w300,
-                                color: textLightColor,
-                              )),
+                          StyledText(
+                            text: homeController.disclaimer.value, style: textTheme.headline6?.copyWith(
+                            fontWeight: FontWeight.w300,
+                            color: textLightColor,
+                          ),
+                            tags:  {
+                              'bold': StyledTextTag(style: textTheme.headline6!.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                  color: textLightColor)),
+                              'click': StyledTextActionTag(
+                                    (text, attrs) {
+                                      BottomDialog(
+                                          textTheme: textTheme,
+                                          tileName: text,
+                                          titleColor: aquaGreenColor,
+                                          contentName: attrs['href'],
+                                          contentLinkName: '')
+                                          .showBottomDialog(context);
+                                    },
+                                style: textTheme.headline6!.copyWith(
+                                    fontWeight: FontWeight.w500,
+                                    color: aquaGreenColor),
+                              ),
+                            },
+                          ),
+                          // Text(textAlign: TextAlign.start,
+                          //     homeController.disclaimer.value,
+                          //     style: textTheme.headline6?.copyWith(
+                          //       fontWeight: FontWeight.w300,
+                          //       color: textLightColor,
+                          //     )),
                           SizedBox(height: 2.h,),
                         ],
                       );
@@ -186,7 +210,6 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                           categoryId: homeController.selectedCategoryId.value,
                           gameId: homeController.selectedGameId.value
                       );
-
                       int multiFieldsCount = 0;
                       int singleFieldsCount = 0;
                       int openFieldsCount = 0;
@@ -587,7 +610,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
           width: MediaQuery.of(context).size.width * 0.40,
           child: TextFieldWidget(
             textEditingController: listingController.price.value,
-            hint: "₹",
+            hint: "",
             isNumber: true,
           ),
         ),

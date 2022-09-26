@@ -23,7 +23,7 @@ abstract class AuthRepository{
 
   Future<Either<Failure, ProfileTagResponse>> getProfileTags({required String? search, int? page});
 
-  Future<Either<Failure, bool>> updateProfile({File? avatar, String? fullName, String? displayName, int? countryId, int? stateId, int? cityId, String? DOB, List<Map<String, dynamic>>? profileTags, String? bio});
+  Future<Either<Failure, bool>> updateProfile({File? cover, File? avatar, String? fullName, String? displayName, int? countryId, int? stateId, int? cityId, String? DOB, List<Map<String, dynamic>>? profileTags, String? bio});
 
   Future<Either<Failure, String>> checkUsername({String? username});
 

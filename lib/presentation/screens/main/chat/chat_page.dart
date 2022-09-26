@@ -61,33 +61,39 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) =>
-      Scaffold(
-        body: Obx(() {
-          if(chatController.isMessagesFetching.value || profileController.isProfileFetching.value){
-            return const CustomLoader();
-          }else {
-            chatController.chatMessages.refresh();
-            _user = types.User(id: widget.senderId.toString());
-            return Chat(
-                messages: chatController.chatMessages,
-                onAttachmentPressed: _handleAtachmentPressed,
-                onMessageTap: _handleMessageTap,
-                onPreviewDataFetched: _handlePreviewDataFetched,
-                onSendPressed: _handleSendPressed,
-                showUserAvatars: true,
-                showUserNames: true,
-                user: _user,
-                theme: const DarkChatTheme(
-                  backgroundColor: backgroundColor,
-                  secondaryColor: textFieldColor,
-                  inputBackgroundColor: textFieldColor,
-                ),
-                customMessageBuilder: (message, {messageWidth = 0}) {
-                  return CustomMessage(message: message);
-                }
-            );
-          }
-        }),
+      WillPopScope(
+        onWillPop: (){
+          chatController.getChats();
+          return Future.value(true);
+        },
+        child: Scaffold(
+          body: Obx(() {
+            if(chatController.isMessagesFetching.value || profileController.isProfileFetching.value){
+              return const CustomLoader();
+            }else {
+              chatController.chatMessages.refresh();
+              _user = types.User(id: widget.senderId.toString());
+              return Chat(
+                  messages: chatController.chatMessages,
+                  onAttachmentPressed: _handleAttachmentPressed,
+                  onMessageTap: _handleMessageTap,
+                  onPreviewDataFetched: _handlePreviewDataFetched,
+                  onSendPressed: _handleSendPressed,
+                  showUserAvatars: true,
+                  showUserNames: true,
+                  user: _user,
+                  theme: const DarkChatTheme(
+                    backgroundColor: backgroundColor,
+                    secondaryColor: textFieldColor,
+                    inputBackgroundColor: textFieldColor,
+                  ),
+                  customMessageBuilder: (message, {messageWidth = 0}) {
+                    return CustomMessage(message: message);
+                  }
+              );
+            }
+          }),
+        ),
       );
 
   void _sendMessage(types.Message message) {
@@ -96,7 +102,7 @@ class _ChatPageState extends State<ChatPage> {
     });
   }
 
-  void _handleAtachmentPressed() {
+  void _handleAttachmentPressed() {
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) =>
@@ -123,7 +129,7 @@ class _ChatPageState extends State<ChatPage> {
                     },
                     child: const Align(
                       alignment: AlignmentDirectional.centerStart,
-                      child: Text('File'),
+                      child: Text('File/Video'),
                     ),
                   ),
                   TextButton(

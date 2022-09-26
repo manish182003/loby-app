@@ -1,5 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:loby/presentation/getx/controllers/profile_controller.dart';
+import 'package:loby/presentation/widgets/body_padding_widget.dart';
+import 'package:loby/presentation/widgets/custom_app_bar.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../../core/theme/colors.dart';
 import 'follower_tab.dart';
@@ -13,6 +18,9 @@ class FollowersScreen extends StatefulWidget {
 }
 
 class _FollowersScreenState extends State<FollowersScreen> {
+
+  ProfileController profileController = Get.find<ProfileController>();
+
   final _tabs = [
     const Tab(text: 'Following'),
     const Tab(text: 'Followers'),
@@ -26,128 +34,100 @@ class _FollowersScreenState extends State<FollowersScreen> {
     return DefaultTabController(
       length: 2,
       child:  Scaffold(
-        appBar:  PreferredSize(
-          preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.30),
-          child:  Container(
-            child:  SafeArea(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(15, 15, 15, 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: 42,
-                          height: 42,
-                          child: MaterialButton(
-                            shape: const CircleBorder(),
-                            color: textCharcoalBlueColor,
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Icon(
-                              Icons.arrow_back_ios,
-                              size: 18,
-                              color: Colors.white,
-                            ),
-                          ),
+        appBar: appBar(context: context),
+        body: SafeArea(
+          child: BodyPaddingWidget(
+            child: Column(
+              children: [
+                SizedBox(
+                  child: Column(
+                    children: <Widget>[
+                      Card(
+                        color: backgroundBalticSeaColor,
+                        elevation: 0.0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 12.0),
-                    child: Container(
-                      width: double.infinity,
-                      child: Column(
-                        children: <Widget>[
-                          Card(
-                            color: backgroundBalticSeaColor,
-                            elevation: 0.0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      CircleAvatar(
-                                        backgroundColor: Colors.green[500],
-                                        radius: 36,
-                                        child: const Padding(
-                                          padding: EdgeInsets.all(1.0),
-                                          child: CircleAvatar(
-                                            backgroundImage: AssetImage('assets/images/img.png'),
-                                            radius: 36,
-                                          ),
-                                        ), //CircleAvatar
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor: Colors.green[500],
+                                    radius: 36,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(1.0),
+                                      child: CachedNetworkImage(
+                                        imageUrl: profileController.profile.image ?? '',
+                                        fit: BoxFit.cover,
+                                        height: 110,
+                                        width: 110,
+                                        placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
+                                        errorWidget: (context, url, error) => const Icon(Icons.error),
                                       ),
-                                      GestureDetector(
-                                        onTap: (){
-
-                                        },
-                                        child: Container(
-                                          margin: const EdgeInsets.fromLTRB(4, 0, 0, 0),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                children: [
-                                                  Container(
-                                                    constraints: BoxConstraints(maxWidth: maxWidth),
-                                                    child: Text("Mukesh Kumar",
-                                                        overflow: TextOverflow.ellipsis,
-                                                        style: textTheme.headline3
-                                                            ?.copyWith(
-                                                            fontSize: 16.sp,
-                                                            color: textWhiteColor)),
-                                                  ),
-                                                  const SizedBox(width: 8.0),
-                                                  SvgPicture.asset(
-                                                    'assets/icons/verified_user_bedge.svg',
-                                                    height: 15,
-                                                    width: 15,
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      )
-                                    ],
+                                    ), //CircleAvatar
                                   ),
+                                  GestureDetector(
+                                    onTap: (){
+
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.fromLTRB(16, 0, 0, 0),
+                                      child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            constraints: BoxConstraints(maxWidth: maxWidth),
+                                            child: Text(profileController.profile.displayName!,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: textTheme.headline3
+                                                    ?.copyWith(
+                                                    fontSize: 16.sp,
+                                                    color: textWhiteColor)),
+                                          ),
+                                          const SizedBox(width: 8.0),
+                                          profileController.profile.verifiedProfile ?? false ? SvgPicture.asset(
+                                            'assets/icons/verified_user_bedge.svg',
+                                            height: 15,
+                                            width: 15,
+                                          ) : const SizedBox(),
+                                        ],
+                                      ),
+                                    ),
+                                  )
                                 ],
                               ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
                   ),
-                  TabBar(
-                    indicatorSize: TabBarIndicatorSize.label,
-                    indicatorColor: butterflyBlueColor,
-                    indicatorWeight: 4.0,
-                    labelColor: textWhiteColor,
-                    labelStyle: textTheme.headline5,
-                    tabs: _tabs,
+                ),
+                TabBar(
+                  indicatorSize: TabBarIndicatorSize.label,
+                  indicatorColor: butterflyBlueColor,
+                  indicatorWeight: 4.0,
+                  labelColor: textWhiteColor,
+                  labelStyle: textTheme.headline5,
+                  tabs: _tabs,
+                ),
+                SizedBox(height: 2.h,),
+                const Expanded(
+                  child:  TabBarView(
+                    children: <Widget>[
+                      FollowerTabScreen(type: 'following',),
+                      FollowerTabScreen(type: 'followers',),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-        ),
-        body:  const TabBarView(
-          children: <Widget>[
-            FollowerTabScreen(),
-            FollowingTabScreen(),
-          ],
         ),
       ),
     );

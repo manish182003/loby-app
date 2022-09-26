@@ -30,8 +30,12 @@ class ProfileParams extends Equatable{
   final String? upiID;
   final String? type;
   final int? bankDetailId;
+  final String? feedback;
+  final String? email;
 
   const ProfileParams({
+    this.email,
+    this.feedback,
     this.userId, this.page, this.amount, this.signature, this.paymentId, this.paymentStatus, this.orderId, this.userGameServiceId, this.insta, this.youtube, this.twitch, this.discord,
     this.displayName, this.name, this.message, this.idCard, this.selfie,
     this.bankName, this.branchName, this.accountNumber, this.confirmAccountNumber, this.ifscCode, this.holderName, this.upiID, this.type,

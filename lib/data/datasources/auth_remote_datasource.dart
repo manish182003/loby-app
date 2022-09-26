@@ -20,7 +20,7 @@ abstract class AuthRemoteDatasource{
 
   Future<ProfileTagResponseModel> getProfileTags(String? search, int? page);
 
-  Future<bool> updateProfile(File? avatar, String? fullName, String? displayName, int? countryId, int? stateId, int? cityId, String? DOB, List<Map<String, dynamic>>? profileTags, String? bio);
+  Future<bool> updateProfile(File? cover, File? avatar, String? fullName, String? displayName, int? countryId, int? stateId, int? cityId, String? DOB, List<Map<String, dynamic>>? profileTags, String? bio);
 
   Future<String> checkUsername(String? username);
 

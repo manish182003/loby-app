@@ -80,41 +80,43 @@ PreferredSizeWidget appBar({required BuildContext context, String? appBarName,
   final textTheme = Theme.of(context).textTheme;
   return PreferredSize(
     preferredSize: const Size(double.infinity, 70),
-    child: Container(
-      margin: const EdgeInsets.fromLTRB(15, 15, 15, 15),
-      child: Row(
-        children: [
-          isBackIcon ? SizedBox(
-            width: 42,
-            height: 42,
-            child: MaterialButton(
-              shape: const CircleBorder(),
-              color: textCharcoalBlueColor,
-              onPressed: () {
-                if(onBack == null){
-                  Navigator.pop(context);
-                }else{
-                  onBack();
-                  Navigator.pop(context);
-                }
-              },
-              child: const Icon(
-                Icons.arrow_back_ios,
-                size: 18,
-                color: Colors.white,
+    child: SafeArea(
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(15, 15, 15, 15),
+        child: Row(
+          children: [
+            isBackIcon ? SizedBox(
+              width: 42,
+              height: 42,
+              child: MaterialButton(
+                shape: const CircleBorder(),
+                color: textCharcoalBlueColor,
+                onPressed: () {
+                  if(onBack == null){
+                    Navigator.pop(context);
+                  }else{
+                    onBack();
+                    Navigator.pop(context);
+                  }
+                },
+                child: const Icon(
+                  Icons.arrow_back_ios,
+                  size: 18,
+                  color: Colors.white,
+                ),
+              ),
+            ) : const SizedBox() ,
+            Expanded(
+              child: Text(
+                textAlign: TextAlign.center,
+                appBarName ?? '',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: textTheme.headline2?.copyWith(color: txtColor ?? textWhiteColor),
               ),
             ),
-          ) : const SizedBox() ,
-          Expanded(
-            child: Text(
-              textAlign: TextAlign.center,
-              appBarName!,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: textTheme.headline2?.copyWith(color: txtColor ?? textWhiteColor),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     ),
   );

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:loby/domain/entities/listing/service_listing.dart';
 import 'package:loby/presentation/getx/controllers/home_controller.dart';
 import 'package:loby/presentation/getx/controllers/listing_controller.dart';
 import 'package:loby/presentation/getx/controllers/order_controller.dart';
@@ -62,10 +61,10 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
           child: BodyPaddingWidget(
             child: Column(
               children: [
-                Carousel(
-                  images: images,
+                listing.userGameServiceImages!.isEmpty ? const SizedBox() : Carousel(
+                  images: listing.userGameServiceImages!,
                 ),
-                SizedBox(height: 2.h,),
+                listing.userGameServiceImages!.isEmpty ? const SizedBox() : SizedBox(height: 2.h,),
                 Text(listing.description!, style: textTheme.headline5?.copyWith(
                     color: textWhiteColor)),
                 SizedBox(height: 2.h),
@@ -340,8 +339,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                     child: Text(
                                       textAlign: TextAlign.start,
                                       "Description: ",
-                                      style: textTheme.headline5
-                                          ?.copyWith(color: textLightColor),
+                                      style: textTheme.headline5?.copyWith(color: textLightColor),
                                     ),
                                   ),
                                   Padding(

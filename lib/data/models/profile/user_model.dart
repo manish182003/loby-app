@@ -37,6 +37,7 @@ class UserModel extends User{
         this.youtubeId,
         this.twitchId,
         this.discordId,
+        this.coverImage,
         this.createdAt,
         this.updatedAt,
         this.memberSince,
@@ -78,6 +79,7 @@ class UserModel extends User{
   final String? youtubeId;
   final String? twitchId;
   final String? discordId;
+  final String? coverImage;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final DateTime? memberSince;
@@ -121,6 +123,7 @@ class UserModel extends User{
     youtubeId: json["youtube_id"],
     twitchId: json["twitch_id"],
     discordId: json["discord_id"],
+    coverImage: json["cover_image"],
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
     updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
     followersCount: json["followersCount"],

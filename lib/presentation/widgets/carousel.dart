@@ -4,13 +4,14 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/core/theme/colors.dart';
+import 'package:loby/domain/entities/listing/user_game_service_image.dart';
 import 'package:sizer/sizer.dart';
 import 'package:video_player/video_player.dart';
 
 
 class Carousel extends StatefulWidget {
   final double? height;
-  final List images;
+  final List<UserGameServiceImage> images;
   final bool autoPlay;
   final bool isIndicator;
   const Carousel({Key? key, this.height,required this.images, this.autoPlay = true, this.isIndicator = true}) : super(key: key);
@@ -62,9 +63,6 @@ class _CarouselState extends State<Carousel> {
   }
 
 
-
-
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -87,10 +85,18 @@ class _CarouselState extends State<Carousel> {
           ),
           itemCount: widget.images.length,
           itemBuilder: (context, index, realIndex) {
-            return buildLocalImage(
-              imagePath: widget.images[index],
-              index: index,
-            );
+            final list = widget.images.where((element) => element.type != 3).toList();
+            return list[index].type == 2 ? buildImage(
+              urlImage: widget.images[index].path,
+               index: index,
+            ) : widget.images[index].type == 1 ? chewieController!=null? Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Chewie(
+                controller: chewieController!,
+              ),
+            ) : const Center(
+              child: CircularProgressIndicator(),
+            ) :  const SizedBox();
           }),
         Positioned(
           bottom: 8,
@@ -158,15 +164,17 @@ class _CarouselState extends State<Carousel> {
   Widget buildImage({String? urlImage, int? index, Function()? onTap}){
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        // margin: EdgeInsets.symmetric(horizontal: 12),
-        color: Colors.grey,
-        child:  CachedNetworkImage(
-          imageUrl: urlImage!,
-          fit: BoxFit.cover,
-          width: MediaQuery.of(context).size.width,
-          placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
-          errorWidget: (context, url, error) => const Icon(Icons.error),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16.0),
+          child: CachedNetworkImage(
+            imageUrl: urlImage!,
+            fit: BoxFit.cover,
+            width: MediaQuery.of(context).size.width,
+            placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
+          ),
         ),
       ),
     );

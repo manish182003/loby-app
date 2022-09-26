@@ -62,7 +62,7 @@ class CustomButton extends StatelessWidget {
                   ) : Container()),
               Text(name ?? 'Next',
                   textAlign: TextAlign.center,
-                  style: textTheme.button?.copyWith(color: outlineBtn ? whiteColor : textColor ?? textCharcoalBlueColor)),
+                  style: textTheme.button?.copyWith(color: textColor ?? textCharcoalBlueColor)),
             ],
           ),
         ),

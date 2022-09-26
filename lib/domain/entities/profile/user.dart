@@ -33,6 +33,7 @@ class User extends Equatable{
       this.youtubeId,
       this.twitchId,
       this.discordId,
+      this.coverImage,
       this.createdAt,
       this.updatedAt,
       this.memberSince,
@@ -74,6 +75,7 @@ class User extends Equatable{
   final String? youtubeId;
   final String? twitchId;
   final String? discordId;
+  final String? coverImage;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final DateTime? memberSince;

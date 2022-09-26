@@ -127,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
           return const Center(child: CircularProgressIndicator(),);
         }else {
           return ListView.builder(
-            itemCount: homeController.games.length,
+            itemCount: homeController.games.take(10).length,
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) =>
                 GestureDetector(

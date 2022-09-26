@@ -18,6 +18,10 @@ class GetBuyerListings extends UseCase<ServiceListingResponse, Params> {
       userId: params.listingParams?.userId,
       page: params.listingParams?.page,
       search: params.listingParams?.search,
+      priceFrom: params.listingParams?.priceFrom,
+      priceTo:  params.listingParams?.priceTo,
+      sortByPrice:  params.listingParams?.sortByPrice,
+      sortByRating:  params.listingParams?.sortByRating,
     );
   }
 }

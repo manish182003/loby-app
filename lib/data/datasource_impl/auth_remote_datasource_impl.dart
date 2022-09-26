@@ -128,7 +128,7 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
   }
 
   @override
-  Future<bool> updateProfile(File? avatar, String? fullName, String? displayName, int? countryId, int? stateId, int? cityId, String? DOB, List<Map<String, dynamic>>? profileTags, String? bio)async {
+  Future<bool> updateProfile(File? cover, File? avatar, String? fullName, String? displayName, int? countryId, int? stateId, int? cityId, String? DOB, List<Map<String, dynamic>>? profileTags, String? bio)async {
     try {
 
       String token = await Helpers.getApiToken();
@@ -181,6 +181,13 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
               // contentType: MediaType('image', 'jpg'),
             )));
       }
+
+      // if(cover != null && cover.path.isNotEmpty) {
+      //   formData.files.add(MapEntry('cover_image',
+      //       MultipartFile.fromFileSync(cover.path,
+      //         // contentType: MediaType('image', 'jpg'),
+      //       )));
+      // }
 
       final response = await Helpers.sendRequest(
         _dio,

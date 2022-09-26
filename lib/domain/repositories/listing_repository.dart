@@ -11,7 +11,7 @@ abstract class ListingRepository{
 
   Future<Either<Failure, Map<String, dynamic>>> createListing({int? categoryId, int? gameId, String? title, String? description, String? price, String? stockAvl, String? estimateDeliveryTime, int? priceUnitId, List<SelectedServiceOption>? serviceOptionId, List<dynamic>? files, List<int>? fileTypes, List<TextEditingController>? optionAnswer});
 
-  Future<Either<Failure, ServiceListingResponse>> getBuyerListings({int? categoryId, int? gameId, int? listingId, int? userId, int? page, String? search});
+  Future<Either<Failure, ServiceListingResponse>> getBuyerListings({int? categoryId, int? gameId, int? listingId, int? userId, int? page, String? search, int? priceFrom, int? priceTo, String? sortByPrice, String? sortByRating});
 
   Future<Either<Failure, Map<String, dynamic>>> reportListing({int? userId, int? userGameServiceId});
 

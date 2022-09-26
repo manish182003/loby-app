@@ -23,11 +23,16 @@ class ListingParams extends Equatable {
   final int? page;
   final int? userGameServiceId;
   final String? search;
+  final int? priceFrom;
+  final int? priceTo;
+  final String? sortByPrice;
+  final String? sortByRating;
 
 
 
 
   const ListingParams({
+    this.priceFrom, this.priceTo, this.sortByPrice, this.sortByRating,
     this.categoryId,
     this.gameId,
     this.listingId,

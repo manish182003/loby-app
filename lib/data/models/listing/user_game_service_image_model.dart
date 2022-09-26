@@ -1,5 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:loby/domain/entities/listing/user_game_service_image.dart';
+
+import '../../../core/utils/environment.dart';
+import '../../../core/utils/helpers.dart';
 // ignore_for_file: overridden_fields, annotate_overrides
 
 class UserGameServiceImageModel extends UserGameServiceImage {
@@ -19,7 +22,7 @@ class UserGameServiceImageModel extends UserGameServiceImage {
   factory UserGameServiceImageModel.fromJson(Map<String, dynamic> json) => UserGameServiceImageModel(
     id: json["id"],
     userGameServiceId: json["user_game_service_id"],
-    path: json["path"],
+    path: Helpers.getImage(json["path"]),
     type: json["type"],
   );
 

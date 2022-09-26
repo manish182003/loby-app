@@ -3,8 +3,11 @@ import 'package:get/get.dart';
 import 'package:loby/domain/usecases/profile/add_funds.dart';
 import 'package:loby/domain/usecases/profile/get_bank_details.dart';
 import 'package:loby/domain/usecases/profile/get_duel.dart';
+import 'package:loby/domain/usecases/profile/get_followers.dart';
+import 'package:loby/domain/usecases/profile/get_payment_transactions.dart';
 import 'package:loby/domain/usecases/profile/get_profile.dart';
 import 'package:loby/domain/usecases/profile/get_ratings.dart';
+import 'package:loby/domain/usecases/profile/get_wallet_transactions.dart';
 import 'package:loby/domain/usecases/profile/profile_verification.dart';
 import 'package:loby/domain/usecases/profile/update_social_links.dart';
 import 'package:loby/domain/usecases/profile/verify_payment.dart';
@@ -13,6 +16,7 @@ import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 
 import '../../../domain/usecases/profile/add_bank_details.dart';
 import '../../../domain/usecases/profile/follow_unfollow.dart';
+import '../../../domain/usecases/profile/submit_feedback.dart';
 
 class ProfileBinding extends Bindings {
 
@@ -30,6 +34,10 @@ class ProfileBinding extends Bindings {
     final addBankDetails = Get.find<AddBankDetails>();
     final getBankDetails = Get.find<GetBankDetails>();
     final withdrawMoney = Get.find<WithdrawMoney>();
+    final getPaymentTransaction = Get.find<GetPaymentTransactions>();
+    final getWalletTransaction = Get.find<GetWalletTransactions>();
+    final getFollowers = Get.find<GetFollowers>();
+    final submitFeedback = Get.find<SubmitFeedback>();
 
 
     Get.lazyPut(() => ProfileController(
@@ -43,7 +51,11 @@ class ProfileBinding extends Bindings {
       profileVerification: profileVerification,
         addBankDetails: addBankDetails,
       getBankDetails: getBankDetails,
-      withdrawMoney: withdrawMoney
+      withdrawMoney: withdrawMoney,
+      getPaymentTransactions: getPaymentTransaction,
+      getWalletTransactions: getWalletTransaction,
+      getFollowers: getFollowers,
+      submitFeedback: submitFeedback
     ));
   }
 

@@ -89,13 +89,16 @@ class ChatTile extends StatelessWidget {
         backgroundColor: whiteColor,
         child: Padding(
           padding: const EdgeInsets.all(2.0),
-          child: CachedNetworkImage(
-            imageUrl: chat.receiverInfo!.image ?? "",
-            fit: BoxFit.cover,
-            height: 110,
-            width: 110,
-            placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
-            errorWidget: (context, url, error) => const Icon(Icons.error),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(28),
+            child: CachedNetworkImage(
+              imageUrl: chat.receiverInfo!.image ?? "",
+              fit: BoxFit.cover,
+              height: 110,
+              width: 110,
+              placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
+            ),
           ),
         ),
       ),

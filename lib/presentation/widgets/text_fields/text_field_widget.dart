@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:loby/core/theme/colors.dart';
 import 'package:loby/core/utils/helpers.dart';
+import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/widgets/custom_text_field.dart';
 import 'package:sizer/sizer.dart';
 import 'package:intl/intl.dart';
@@ -71,6 +73,10 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                   return Helpers.validateEmail(value!);
                 case 'phone':
                   return Helpers.validatePhone(value!);
+                case 'password':
+                  return Helpers.validatePassword(value!);
+                case 'withdraw':
+                  return Helpers.validateWalletWithdraw(int.parse(value!), Get.find<ProfileController>().profile.walletMoney!);
                 default:
                   return Helpers.validateField(value!);
               }

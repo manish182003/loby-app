@@ -60,7 +60,7 @@ class _ItemListState extends State<ItemList> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16),
                     child: CachedNetworkImage(
-                      imageUrl: widget.listing.game!.image!,
+                      imageUrl: widget.listing.userGameServiceImages!.isEmpty ? '' : widget.listing.userGameServiceImages?.first.type == 2 ? widget.listing.userGameServiceImages!.first.path! : '',
                       fit: BoxFit.cover,
                       height: 110,
                       width: 110,

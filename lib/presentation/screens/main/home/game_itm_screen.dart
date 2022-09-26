@@ -94,9 +94,9 @@ class _GameItemScreenState extends State<GameItemScreen> {
                         labelName: homeController.categories.map((element) => element.name!).toList(),
                         selectedIndex: homeController.categories.indexWhere((element) => element.id == widget.categoryId),
                         onChanged: (index) {
-                          listingController.getBuyerListings(
-                              categoryId: homeController.categories[index].id,
-                              gameId: widget.gameId);
+                          listingController.buyerListingPageNumber.value = 1;
+                          listingController.areMoreListingAvailable.value = true;
+                          listingController.getBuyerListings(categoryId: homeController.categories[index].id, gameId: widget.gameId);
                         },
                       );
                     }
@@ -114,10 +114,7 @@ class _GameItemScreenState extends State<GameItemScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             SizedBox(
-                              width: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width * 0.13,
+                              width: MediaQuery.of(context).size.width * 0.13,
                               child: SvgPicture.asset(
                                 'assets/icons/search_icon.svg',
                                 color: iconWhiteColor,
@@ -126,20 +123,18 @@ class _GameItemScreenState extends State<GameItemScreen> {
                               ),
                             ),
                             SizedBox(
-                              width: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width * 0.5,
+                              width: MediaQuery.of(context).size.width * 0.5,
                               child: TextField(
                                 onChanged: (value){
+                                  listingController.buyerListingPageNumber.value = 1;
+                                  listingController.areMoreListingAvailable.value = true;
+                                  print("listingController ${listingController.buyerListingPageNumber.value}");
                                   listingController.getBuyerListings(categoryId: widget.categoryId, gameId: widget.gameId, search: value);
-                                },
-                                style: textTheme.headline4
-                                    ?.copyWith(color: textWhiteColor),
+                                  },
+                                style: textTheme.headline4?.copyWith(color: textWhiteColor),
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintStyle: textTheme.headline4
-                                      ?.copyWith(color: textWhiteColor),
+                                  hintStyle: textTheme.headline4?.copyWith(color: textWhiteColor),
                                   hintText: 'Search',
                                 ),
                               ),
@@ -179,13 +174,12 @@ class _GameItemScreenState extends State<GameItemScreen> {
                             "${listingController.buyerListings.length} Result",
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
-                            style: textTheme.headline6?.copyWith(
-                                color: textWhiteColor),
+                            style: textTheme.headline6?.copyWith(color: textWhiteColor),
                           );
                         }),
                       ),
                       const SizedBox(width: 4.0),
-                      const DropDownDivider(),
+                      DropDownDivider(categoryId: widget.categoryId, gameId: widget.gameId),
                     ],
                   ),
                   const SizedBox(height: 4.0),
@@ -266,7 +260,7 @@ class _GameItemScreenState extends State<GameItemScreen> {
                         borderRadius:
                         BorderRadius.vertical(top: Radius.circular(24)),
                       ),
-                      child: FilterBottomSheet(controller: scrollController),
+                      child: FilterBottomSheet(controller: scrollController, categoryId: widget.categoryId, gameId: widget.gameId),
                     )),
               ],
             );

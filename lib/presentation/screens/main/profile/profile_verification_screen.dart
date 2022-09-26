@@ -48,88 +48,91 @@ class _ProfileVerificationScreenState extends State<ProfileVerificationScreen> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return SafeArea(
-      child: Scaffold(
-        appBar: appBar(context: context, appBarName: "Profile Verification"),
-        body: BodyPaddingWidget(
-          child: SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  Text(
-                      textAlign: TextAlign.center,
-                      "Get your profile verified if you are an gaming influencer, sports athlete or a content creator",
-                      style: textTheme.headline5?.copyWith(color: orangeColor)),
-                  SizedBox(height: 4.h,),
-                  TextFieldWidget(
-                    textEditingController: displayName,
-                    title: "IGN / Display Name",
-                    isRequired: true,
-                  ),
-                  SizedBox(height: 3.h,),
-                  TextFieldWidget(
-                    textEditingController: name,
-                    title: "Name (as per Official Documents)",
-                    isRequired: true,
-                  ),
-                  SizedBox(height: 3.h,),
-                  TextFieldWidget(
-                    textEditingController: message,
-                    title: "Message",
-                    isRequired: true,
-                    maxLines: 5,
-                  ),
-                  SizedBox(height: 3.h,),
-                  TextFieldWidget(
-                    textEditingController: youtube,
-                    title: "Youtube Link",
-                    isRequired: true,
-                  ),
-                  SizedBox(height: 3.h,),
-                  TextFieldWidget(
-                    textEditingController: twitch,
-                    title: "Twitch Link",
-                    isRequired: true,
-                  ),
-                  SizedBox(height: 3.h,),
-                  TextFieldWidget(
-                    textEditingController: instagram,
-                    title: "Instagram Link",
-                    isRequired: true,
-                  ),
-                  SizedBox(height: 3.h,),
-                  const InputTextTitleWidget(
-                      titleName: 'Upload Documents',
-                      titleTextColor: textWhiteColor),
-                  SizedBox(height: 1.h,),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                        textAlign: TextAlign.start,
-                        "Please upload a photo with your passport / ID & your selfie",
-                        style:
-                        textTheme.headline6?.copyWith(color: textLightColor)),
-                  ),
-                  SizedBox(height: 3.h,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _documentTile(textTheme, "assets/icons/id_card_icon.svg", "Copy of your passport or ID card", onTap: _openFileExplorer, isSelected: _paths.isEmpty),
-                      SizedBox(width: 1.h),
-                      _documentTile(textTheme, "assets/icons/camera_icon.svg", "Selfie",onTap: (){Helpers.showImagePicker(context: context, onGallery: _imgFromGallery, onCamera: _imgFromCamera);}, isSelected: imageFile.path.isEmpty),
-                    ],
-                  ),
-                  SizedBox(height: 5.h,),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.37,
-                      child: CustomButton(
-                        color: butterflyBlueColor,
-                        name: "Submit",
-                        textColor: primaryTextColor,
-                        onTap: () async{
+    return Scaffold(
+      appBar: appBar(context: context, appBarName: "Profile Verification"),
+      body: BodyPaddingWidget(
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Text(
+                    textAlign: TextAlign.center,
+                    "Get your profile verified if you are an gaming influencer, sports athlete or a content creator",
+                    style: textTheme.headline5?.copyWith(color: orangeColor)),
+                SizedBox(height: 4.h,),
+                TextFieldWidget(
+                  textEditingController: displayName,
+                  title: "IGN / Display Name",
+                  isRequired: true,
+                ),
+                SizedBox(height: 3.h,),
+                TextFieldWidget(
+                  textEditingController: name,
+                  title: "Name (as per Official Documents)",
+                  isRequired: true,
+                ),
+                SizedBox(height: 3.h,),
+                TextFieldWidget(
+                  textEditingController: message,
+                  title: "Message",
+                  isRequired: true,
+                  maxLines: 5,
+                ),
+                SizedBox(height: 3.h,),
+                TextFieldWidget(
+                  textEditingController: youtube,
+                  title: "Youtube Link",
+                  isRequired: true,
+                ),
+                SizedBox(height: 3.h,),
+                TextFieldWidget(
+                  textEditingController: twitch,
+                  title: "Twitch Link",
+                  isRequired: true,
+                ),
+                SizedBox(height: 3.h,),
+                TextFieldWidget(
+                  textEditingController: instagram,
+                  title: "Instagram Link",
+                  isRequired: true,
+                ),
+                SizedBox(height: 3.h,),
+                const InputTextTitleWidget(
+                    titleName: 'Upload Documents',
+                    titleTextColor: textWhiteColor),
+                SizedBox(height: 1.h,),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                      textAlign: TextAlign.start,
+                      "Please upload a photo with your passport / ID & your selfie",
+                      style:
+                      textTheme.headline6?.copyWith(color: textLightColor)),
+                ),
+                SizedBox(height: 3.h,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _documentTile(textTheme, "assets/icons/id_card_icon.svg", "Copy of your passport or ID card", onTap: _openFileExplorer, isSelected: _paths.isEmpty),
+                    SizedBox(width: 1.h),
+                    _documentTile(textTheme, "assets/icons/camera_icon.svg", "Selfie",onTap: (){Helpers.showImagePicker(context: context, onGallery: _imgFromGallery, onCamera: _imgFromCamera);}, isSelected: imageFile.path.isEmpty),
+                  ],
+                ),
+                SizedBox(height: 5.h,),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.37,
+                    child: CustomButton(
+                      color: butterflyBlueColor,
+                      name: "Submit",
+                      textColor: primaryTextColor,
+                      onTap: () async{
+
+                        if(profileController.profile.verifiedProfile ?? false){
+                          Helpers.toast("Your Profile Has Already Been Verified");
+                        }else{
                           if(_formKey.currentState!.validate()){
                             await Helpers.loader();
                             final isSuccess = await profileController.profileVerification(
@@ -142,7 +145,6 @@ class _ProfileVerificationScreenState extends State<ProfileVerificationScreen> {
                               idCard: File(_paths.first.path!),
                               selfie: imageFile,
                             );
-
                             await Helpers.hideLoader();
                             if(isSuccess){
                               BottomDialog(
@@ -153,16 +155,16 @@ class _ProfileVerificationScreenState extends State<ProfileVerificationScreen> {
                                   .showBottomDialog(context);
                             }
                           }
-                        },
-                      ),
+                        }
+                      },
                     ),
                   ),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 8.h,
-                  ),
-                ],
-              ),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  height: 8.h,
+                ),
+              ],
             ),
           ),
         ),

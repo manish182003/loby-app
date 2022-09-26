@@ -22,6 +22,35 @@ const List statuses = [
   'ORDER_COMPLETED',
 ];
 
+
+
+const Map<String, dynamic> statusesName = {
+  'ORDER_PLACED': 'Order Placed',
+  'SELLER_ACCEPTED': 'Seller Accepted',
+  'SELLER_REJECTED': 'Seller Rejected',
+  'ORDER_IN_PROGRESS': 'Order In Progress',
+  'SELLER_DELIVERY_CONFIRMED': 'Seller Delivery Confirmed',
+  'BUYER_DELIVERY_CONFIRMED': 'Buyer Delivery Confirmed',
+  'BUYER_DELIVERY_REJECTED': 'Buyer Delivery Rejected',
+  'TRANSACTION_COMPLETED': 'Transaction Completed',
+  'LOBY_PROTECTION_PERIOD': 'Loby Protection Period',
+  'ORDER_COMPLETED': 'Order Completed'
+};
+
+const Map<String, dynamic> duelStatusesName = {
+  'ORDER_PLACED': 'Duel Placed',
+  'SELLER_ACCEPTED': 'Seller Accepted',
+  'SELLER_REJECTED': 'Seller Rejected',
+  'ORDER_IN_PROGRESS': 'Duel In Progress',
+  'SELLER_DELIVERY_CONFIRMED': 'Select Winner',
+  'BUYER_DELIVERY_CONFIRMED': 'Buyer Delivery Confirmed',
+  'BUYER_DELIVERY_REJECTED': 'Buyer Delivery Rejected',
+  'TRANSACTION_COMPLETED': 'Transaction Completed',
+  'LOBY_PROTECTION_PERIOD': 'Loby Protection Period',
+  'ORDER_COMPLETED': 'Order Completed'
+};
+
+
 const List buyerStatuses = [
   'Order Placed',
   'Seller Accepted',

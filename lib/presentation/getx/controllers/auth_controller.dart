@@ -72,6 +72,7 @@ class AuthController extends GetxController{
   final DOB = TextEditingController().obs;
   final selectedProfileTags = <Map<String, dynamic>>[].obs;
   final bio = TextEditingController().obs;
+  final avatarUrl = "".obs;
 
 
   final errorMessage = ''.obs;
@@ -113,12 +114,14 @@ class AuthController extends GetxController{
 
       await auth.signInWithCredential(credential).then((user)async{
         isGoogleSignInSuccess.value = await login(socialLoginId: googleUser?.id, socialLoginType: 2, name: googleUser?.displayName, email: googleUser?.email);
+        fullName.value.text = googleUser?.displayName ?? '';
+        avatarUrl.value = googleUser?.photoUrl ?? '';
         await Helpers.hideLoader();
       });
 
       return isGoogleSignInSuccess.value;
     }catch(e){
-      Navigator.pop(context);
+      Helpers.hideLoader();
       Helpers.toast("Can't sign in with google at this moment.");
 
       return false;
@@ -280,9 +283,12 @@ class AuthController extends GetxController{
   }
 
 
-  Future<bool> updateProfile({File? avatar}) async {
+  Future<bool> updateProfile({File? cover, File? avatar}) async {
+
+
     final failureOrSuccess = await _updateProfile(
       Params(authParams: AuthParams(
+          cover: cover,
           avatar: avatar,
           fullName: fullName.value.text,
           displayName: displayName.value.text,
@@ -302,7 +308,7 @@ class AuthController extends GetxController{
         Helpers.toast(errorMessage.value);
       },
           (success) {
-
+            avatarUrl.value = "";
             fullName.value.clear();
             displayName.value.clear();
             selectedCountryId.value = 0;

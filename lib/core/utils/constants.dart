@@ -66,6 +66,12 @@ class ApiEndpoints{
   static const String addBankDetails = "/add-bank-details-user";
   static const String getBankDetails = "/get-bank-details-user";
   static const String withdrawMoney = "/request-settlement";
+  static const String getPaymentTransactions = "/get-transaction-history";
+  static const String getWalletTransactions = "/get-wallet-transactions";
+  static const String getFollowers = "/get-followers-users";
+  static const String getFollowing = "/get-following-users";
+  static const String submitFeedback = "/submit-feedback";
+
 
 
 

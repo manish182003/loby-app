@@ -32,25 +32,19 @@ class CategoryItemCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            AspectRatio(
-              aspectRatio: 18.0 / 16.0,
-              child: Padding(
-                padding: const EdgeInsets.all(1.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: aquaGreenColor,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: CachedNetworkImage(
-                      imageUrl: images!,
-                      fit: BoxFit.cover,
-                      height: 110,
-                      width: 110,
-                      placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
-                      errorWidget: (context, url, error) => const Icon(Icons.error),
-                    ),
+            Padding(
+              padding:  const EdgeInsets.all(8.0),
+              child: CircleAvatar(
+                radius: 36,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(36),
+                  child: CachedNetworkImage(
+                    imageUrl: images!,
+                    fit: BoxFit.cover,
+                    height: 110,
+                    width: 110,
+                    placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
+                    errorWidget: (context, url, error) => const Icon(Icons.error),
                   ),
                 ),
               ),

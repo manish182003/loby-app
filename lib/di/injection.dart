@@ -57,9 +57,12 @@ import 'package:loby/domain/usecases/profile/add_funds.dart';
 import 'package:loby/domain/usecases/profile/follow_unfollow.dart';
 import 'package:loby/domain/usecases/profile/get_bank_details.dart';
 import 'package:loby/domain/usecases/profile/get_duel.dart';
+import 'package:loby/domain/usecases/profile/get_followers.dart';
+import 'package:loby/domain/usecases/profile/get_payment_transactions.dart';
 import 'package:loby/domain/usecases/profile/get_profile.dart';
 import 'package:loby/domain/usecases/profile/get_ratings.dart';
 import 'package:loby/domain/usecases/profile/profile_verification.dart';
+import 'package:loby/domain/usecases/profile/submit_feedback.dart';
 import 'package:loby/domain/usecases/profile/update_social_links.dart';
 import 'package:loby/domain/usecases/profile/verify_payment.dart';
 import 'package:loby/domain/usecases/profile/withdraw_money.dart';
@@ -72,6 +75,7 @@ import 'package:loby/presentation/getx/bindings/profile_binding.dart';
 
 import '../data/datasource_impl/order_remote_datasource_impl.dart';
 import '../data/repositories/order_repository_impl.dart';
+import '../domain/usecases/profile/get_wallet_transactions.dart';
 
 class DependencyInjector{
 
@@ -203,7 +207,10 @@ class DependencyInjector{
     Get.lazyPut(() => AddBankDetails(profileRepository));
     Get.lazyPut(() => GetBankDetails(profileRepository));
     Get.lazyPut(() => WithdrawMoney(profileRepository));
-
+    Get.lazyPut(() => GetWalletTransactions(profileRepository));
+    Get.lazyPut(() => GetPaymentTransactions(profileRepository));
+    Get.lazyPut(() => GetFollowers(profileRepository));
+    Get.lazyPut(() => SubmitFeedback(profileRepository));
   }
 
 }

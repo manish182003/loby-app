@@ -100,7 +100,7 @@ class ChatController extends GetxController{
           "uri": message.filePath ??  " ",
           "width": width,
           "metadata": {
-            'image': message.orderId == null ? "" : message.userOrder!.userGameService!.game!.image ?? "",
+            'image': message.orderId == null ? "" : message.userOrder!.userGameService!.userGameServiceImages!.isEmpty ? '' : message.userOrder!.userGameService!.userGameServiceImages?.first.type == 2 ? message.userOrder!.userGameService!.userGameServiceImages!.first.path! : '',
             'name' : message.orderId == null ? "" : message.userOrder!.userGameService!.title,
             'desc' : message.orderId == null ? "" : message.userOrder!.userGameService!.description,
             'category' : message.orderId == null ? "" : message.userOrder!.userGameService!.category!.name,
@@ -109,6 +109,9 @@ class ChatController extends GetxController{
         };
         chatMessages.insert(0, types.Message.fromJson(socketMessageMap));
         chatMessages.refresh();
+
+
+
 
     });
   }

@@ -22,7 +22,7 @@ class StatusBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     ProfileController profileController = Get.find<ProfileController>();
-    final isDuel = order.userGameService!.category!.name == 'Duel';
+    final isDuel = order.userGameService!.category!.name == 'Accounts';
     final isSeller = profileController.profile.id == order.userGameService?.userId;
     return Column(
       children: <Widget>[
@@ -85,7 +85,7 @@ class StatusBottomSheet extends StatelessWidget {
                               challengerId: order.userGameService!.userId!,
                               myId: order.userId!,
                               isDone: isStatic ? false : statuses.contains(order.orderStatuses![index].status),
-                              title: isStatic ? duelStatuses[index] : order.orderStatuses![index].status!,
+                              title: isStatic ? duelStatuses[index] : duelStatusesName[order.orderStatuses![index].status!],
                               date: isStatic ?  '' : order.orderStatuses![index].createdAt!.toString(),
                               isLast: isStatic ?  false : order.orderStatuses![index].status! == order.orderStatuses!.last.status!,
                               lastStatus: order.orderStatuses!.last.status!,
@@ -99,7 +99,7 @@ class StatusBottomSheet extends StatelessWidget {
                               challengerId: order.userGameService!.userId!,
                               myId: order.userId!,
                               isDone: isStatic ? false : statuses.contains(order.orderStatuses![index].status),
-                              title: isStatic ? sellerStatuses[index] : order.orderStatuses![index].status!,
+                              title: isStatic ? sellerStatuses[index] : statusesName[order.orderStatuses![index].status!],
                               date: isStatic ?  '' : order.orderStatuses![index].createdAt!.toString(),
                               isLast: isStatic ?  false : order.orderStatuses![index].status! == order.orderStatuses!.last.status!,
                               lastStatus: order.orderStatuses!.last.status!,
@@ -112,7 +112,7 @@ class StatusBottomSheet extends StatelessWidget {
                               challengerId: order.userGameService!.userId!,
                               myId: order.userId!,
                               isDone: isStatic ? false : statuses.contains(order.orderStatuses![index].status),
-                              title: isStatic ? buyerStatuses[index] : order.orderStatuses![index].status!,
+                              title: isStatic ? buyerStatuses[index] : statusesName[order.orderStatuses![index].status!],
                               date: isStatic ?  '' : order.orderStatuses![index].createdAt!.toString(),
                               isLast: isStatic ?  false : order.orderStatuses![index].status! == order.orderStatuses!.last.status!,
                               lastStatus: order.orderStatuses!.last.status!,

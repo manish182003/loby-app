@@ -66,8 +66,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           radius: 35,
                           child: Padding(
                             padding: const EdgeInsets.all(2.0),
-                            child: CircleAvatar(
-                              radius: 35,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(35),
                               child: CachedNetworkImage(
                                 imageUrl: profileController.profile.image ?? "",
                                 fit: BoxFit.cover,
@@ -157,6 +157,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               name: "Feedback/Suggestions",
                               onTap: () {
                                 context.pushNamed(feedbackScreenPage);
+                              }),
+                          ProfileOptionsWidget(
+                              name: "Payment Transaction",
+                              onTap: () {
+                                context.pushNamed(paymentTransactionPage);
+                              }),
+                          ProfileOptionsWidget(
+                              name: "FAQs",
+                              onTap: () {
+                                context.pushNamed(faqPage);
                               }),
                           ProfileOptionsWidget(
                               name: "App Setting",

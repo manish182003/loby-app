@@ -10,6 +10,7 @@ import '../../../../../../core/theme/colors.dart';
 import '../../../../../../data/models/ItemModel.dart';
 import '../../../../../widgets/ConfirmationRiseDisputeBottomDialog.dart';
 import '../../../../../widgets/UpdateStatusDialog.dart';
+import 'order_status_constants.dart';
 
 class OrderItem extends StatelessWidget {
   final Order order;
@@ -149,7 +150,7 @@ class OrderItem extends StatelessWidget {
                             ),
                             const SizedBox(width: 2.0),
                             Text(
-                              order.orderStatuses!.last.status!,
+                              statusesName[order.orderStatuses!.last.status!],
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               style: textTheme.headline4?.copyWith(

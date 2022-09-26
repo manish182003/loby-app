@@ -34,9 +34,9 @@ class ListingRepositoryImpl extends ListingRepository{
   }
 
   @override
-  Future<Either<Failure, ServiceListingResponse>> getBuyerListings({int? categoryId, int? gameId, int? listingId, int? userId, int? page, String? search})async {
+  Future<Either<Failure, ServiceListingResponse>> getBuyerListings({int? categoryId, int? gameId, int? listingId, int? userId, int? page, String? search, int? priceFrom, int? priceTo, String? sortByPrice, String? sortByRating})async {
     try {
-      return Right(await _listingRemoteDatasource.getBuyerListings(categoryId, gameId, listingId, userId, page, search));
+      return Right(await _listingRemoteDatasource.getBuyerListings(categoryId, gameId, listingId, userId, page, search, priceFrom, priceTo, sortByPrice, sortByRating));
     } on ServerException catch (e) {
     // Loggers can be added here for analyzation.
     return Left(ServerFailure(message: e.message.toString()));

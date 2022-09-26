@@ -7,8 +7,11 @@ import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/data/datasources/profile_remote_datasource.dart';
 import 'package:loby/data/models/response_models/profile/bank_detail_response_model.dart';
 import 'package:loby/data/models/response_models/profile/duel_response_model.dart';
+import 'package:loby/data/models/response_models/profile/follower_response.dart';
+import 'package:loby/data/models/response_models/profile/payment_transaction_response_model.dart';
 import 'package:loby/data/models/response_models/profile/rating_response_model.dart';
 import 'package:loby/data/models/response_models/profile/user_response_model.dart';
+import 'package:loby/data/models/response_models/profile/wallet_transaction_response_model.dart';
 
 
 class ProfileRemoteDatasourceImpl extends ProfileRemoteDatasource{
@@ -269,6 +272,78 @@ class ProfileRemoteDatasourceImpl extends ProfileRemoteDatasource{
         RequestType.post,
         ApiEndpoints.withdrawMoney,
         queryParams: {'total_amount': amount ?? "", 'bank_detail_id' : bankDetailId ?? ""},
+        headers: headers,
+      );
+
+      return response!;
+    } on ServerException catch (e) {
+      throw ServerException(message: e.message);
+    }
+  }
+
+  @override
+  Future<PaymentTransactionResponseModel> getPaymentTransactions(int? page)async {
+    try {
+      final headers = await Helpers.getApiHeaders();
+      final response = await Helpers.sendRequest(
+        _dio,
+        RequestType.get,
+        ApiEndpoints.getPaymentTransactions,
+        queryParams: {'page': page ?? ""},
+        headers: headers,
+      );
+
+      return PaymentTransactionResponseModel.fromJSON(response!);
+    } on ServerException catch (e) {
+      throw ServerException(message: e.message);
+    }
+  }
+
+  @override
+  Future<WalletTransactionResponseModel> getWalletTransactions(int? page, String? type)async {
+    try {
+      final headers = await Helpers.getApiHeaders();
+      final response = await Helpers.sendRequest(
+        _dio,
+        RequestType.get,
+        ApiEndpoints.getWalletTransactions,
+        queryParams: {'page': page ?? "", 'type' : type ?? ""},
+        headers: headers,
+      );
+
+      return WalletTransactionResponseModel.fromJSON(response!);
+    } on ServerException catch (e) {
+      throw ServerException(message: e.message);
+    }
+  }
+
+  @override
+  Future<FollowerResponseModel> getFollowers(int? page, String? type)async {
+    try {
+      final headers = await Helpers.getApiHeaders();
+      final response = await Helpers.sendRequest(
+        _dio,
+        RequestType.get,
+        type == "following" ? ApiEndpoints.getFollowing : ApiEndpoints.getFollowers,
+        // queryParams: {'page': page ?? "", 'type' : type ?? ""},
+        headers: headers,
+      );
+
+      return FollowerResponseModel.fromJSON(response!);
+    } on ServerException catch (e) {
+      throw ServerException(message: e.message);
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> submitFeedback(String? feedback, String? email) async{
+    try {
+      final headers = await Helpers.getApiHeaders();
+      final response = await Helpers.sendRequest(
+        _dio,
+        RequestType.post,
+        ApiEndpoints.submitFeedback,
+        queryParams: {'description': feedback, 'email' : email},
         headers: headers,
       );
 

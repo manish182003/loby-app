@@ -7,6 +7,7 @@ import 'package:loby/presentation/screens/auth/sign_up_screen.dart';
 import 'package:loby/presentation/screens/main/chat/chat_page.dart';
 import 'package:loby/presentation/screens/main/chat/message_page.dart';
 import 'package:loby/presentation/screens/main/home/disputes/create_new_dispute_screen.dart';
+import 'package:loby/presentation/screens/main/profile/faqs.dart';
 import 'package:loby/services/routing_service/routes.dart';
 import 'package:loby/services/routing_service/routing_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,7 +28,8 @@ import '../../presentation/screens/main/profile/my_profile_view/my_profile_scree
 import '../../presentation/screens/main/profile/profile_verification_screen.dart';
 import '../../presentation/screens/main/profile/wallet/add_wallet_screen.dart';
 import '../../presentation/screens/main/profile/wallet/my_wallet_screen.dart';
-import '../../presentation/screens/main/profile/wallet/transaction_history_screen.dart';
+import '../../presentation/screens/main/profile/wallet/paymnet_transaction_history.dart';
+import '../../presentation/screens/main/profile/wallet/wallet_transaction_history.dart';
 import '../../presentation/screens/main/profile/wallet/withdraw_funds_screen.dart';
 import 'routes_name.dart';
 
@@ -249,12 +251,21 @@ class MyRouter {
               }),
 
           GoRoute(
-              name: transactionHistoryPage,
-              path: transactionHistoryRoute,
+              name: paymentTransactionPage,
+              path: paymentTransactionRoute,
               pageBuilder: (context, state) {
                 return CupertinoPage(
                   key: state.pageKey,
-                  child: const TransactionHistoryScreen(),
+                  child: const PaymentTransactionHistory(),
+                );
+              }),
+          GoRoute(
+              name:walletTransactionPage,
+              path: walletTransactionRoute,
+              pageBuilder: (context, state) {
+                return CupertinoPage(
+                  key: state.pageKey,
+                  child: const WalletTransactionHistory(),
                 );
               }),
 
@@ -274,6 +285,15 @@ class MyRouter {
                 return CupertinoPage(
                   key: state.pageKey,
                   child: const SearchScreen(),
+                );
+              }),
+          GoRoute(
+              name: faqPage,
+              path: faqRoute,
+              pageBuilder: (context, state) {
+                return CupertinoPage(
+                  key: state.pageKey,
+                  child: const FAQs(),
                 );
               }),
           GoRoute(
