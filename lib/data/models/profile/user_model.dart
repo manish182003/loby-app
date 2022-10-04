@@ -86,7 +86,7 @@ class UserModel extends User{
   final int? followersCount;
   final int? listingsCount;
   final int? orderCount;
-  final int? avgRatingCount;
+  final String? avgRatingCount;
   final int? commentCount;
   final String? userFollowStatus;
   final StateModel? state;
@@ -129,7 +129,7 @@ class UserModel extends User{
     followersCount: json["followersCount"],
     listingsCount: json["listingsCount"],
     orderCount: json["orderCount"],
-    avgRatingCount: int.tryParse(json["avg_rating_count"].toString()),
+    avgRatingCount: json["avg_rating_count"],
     commentCount: json["comment_count"],
     state: json["state"] == null ? null : StateModel.fromJson(json["state"]),
     country: json["country"] == null ? null : CountryModel.fromJson(json["country"]),

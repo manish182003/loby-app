@@ -1,8 +1,5 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/presentation/getx/controllers/home_controller.dart';
 import 'package:loby/presentation/getx/controllers/listing_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
@@ -56,11 +53,9 @@ class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
-        backgroundColor: backgroundDarkJungleGreenColor,
-        body: Obx(() {
+    return Scaffold(
+      body: SafeArea(
+        child: Obx(() {
           if(profileController.isProfileFetching.value){
             return const Center(child: CircularProgressIndicator(),);
           }else{

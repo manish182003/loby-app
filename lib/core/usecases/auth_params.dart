@@ -23,6 +23,7 @@ class AuthParams extends Equatable {
   final String? bio;
   final String? socialLoginId;
   final int? socialLoginType;
+  final String? fcmToken;
 
   const AuthParams({
     this.cover,
@@ -37,7 +38,7 @@ class AuthParams extends Equatable {
     this.stateId,
     this.cityId,
     this.socialLoginId, this.socialLoginType,
-    this.avatar, this.fullName, this.displayName, this.profileTags, this.bio, this.DOB,
+    this.avatar, this.fullName, this.displayName, this.profileTags, this.bio, this.DOB, this.fcmToken
   });
 
   @override

@@ -5,6 +5,7 @@ import 'package:loby/domain/entities/response_entities/home/category_response.da
 import 'package:loby/domain/entities/response_entities/home/game_response.dart';
 import 'package:loby/domain/entities/response_entities/order/order_response.dart';
 
+import '../entities/response_entities/home/global_search_response.dart';
 import '../entities/response_entities/home/notification_response.dart';
 
 
@@ -20,5 +21,9 @@ abstract class HomeRepository{
   Future<Either<Failure, Map<String, dynamic>>> deleteNotification({int? notificationId});
 
   Future<Either<Failure, int>> getUnreadCount({String? type});
+
+
+  Future<Either<Failure, GlobalSearchResponse>> globalSearch({String? search});
+
 
 }

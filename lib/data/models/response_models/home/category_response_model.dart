@@ -18,7 +18,7 @@ class CategoryResponseModel extends CategoryResponse {
 
   factory CategoryResponseModel.fromJSON(Map<String, dynamic> json) =>
       CategoryResponseModel(
-        categories: (json['data'] as List<dynamic>)
+        categories: (json['data']['rows'] as List<dynamic>)
             .map<CategoryModel>((countries) => CategoryModel.fromJson(countries))
             .toList(),
       );

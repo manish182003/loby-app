@@ -20,6 +20,7 @@ class GetChats extends UseCase<ChatResponse, Params> {
   Future<Either<Failure, ChatResponse>> call(Params params) {
     return _repository.getChats(
       name: params.chatParams?.name,
+      page: params.chatParams?.page,
     );
   }
 }

@@ -14,14 +14,14 @@ class ChatRemoteDatasourceImpl extends ChatRemoteDatasource{
   ChatRemoteDatasourceImpl(this._dio);
 
   @override
-  Future<ChatResponseModel> getChats(String? name)async {
+  Future<ChatResponseModel> getChats(String? name, int? page)async {
     try {
       final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(
         _dio,
         RequestType.get,
         ApiEndpoints.getChats,
-        queryParams: {'name': name},
+        queryParams: {'name': name, 'page' : '${page ?? ''}'},
         headers: headers,
       );
 

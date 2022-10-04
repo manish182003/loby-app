@@ -23,7 +23,7 @@ class BankDetailResponseModel extends BankDetailResponse {
 
   factory BankDetailResponseModel.fromJSON(Map<String, dynamic> json) =>
       BankDetailResponseModel(
-        bankDetails: (json['data'] as List<dynamic>)
+        bankDetails: (json['data']['rows'] as List<dynamic>)
             .map<BankDetailModel>((ratings) => BankDetailModel.fromJson(ratings))
             .toList(),
       );

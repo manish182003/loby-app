@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/screens/main/notification/widgets/notification_item_widget.dart';
 import 'package:loby/presentation/screens/main/profile/wallet/widgets/row_widget.dart';
@@ -49,69 +50,68 @@ class _PaymentTransactionHistoryState extends State<PaymentTransactionHistory> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: appBar(context: context, appBarName: 'Transaction History'),
-        body: Obx(() {
-          if (profileController.isPaymentTransactionsFetching.value) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (profileController.paymentTransactions.isEmpty) {
-            return const Center(
-                child: Text('No Payment Transactions Found',
-                  textAlign: TextAlign.center,));
-          } else {
-            return SafeArea(
-              child: SingleChildScrollView(
-                controller: controller,
-                child: BodyPaddingWidget(
-                  child: Column(
-                      children: [
-                        SizedBox(height: 2.h,),
-                        ListView.separated(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          padding: const EdgeInsets.only(bottom: 20),
-                          itemCount: profileController.paymentTransactions.length + 1,
-                          itemBuilder: (context, index) {
-                            if (index < profileController.paymentTransactions.length) {
-                              final transaction = profileController.paymentTransactions[index];
-                              return transactionTile(
-                                orderID: transaction.orderId!,
-                                amount: transaction.totalAmount.toString(),
-                                date: transaction.createdAt.toString(),
-                              );
-                            } else {
-                              return Obx(() {
-                                if (profileController.areMorePaymentTransactionsAvailable.value) {
-                                  return const Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 32.0),
-                                    child: Center(
-                                        child: CircularProgressIndicator()),
-                                  );
-                                } else {
-                                  return const SizedBox();
-                                }
-                              });
-                            }
-                          }, separatorBuilder: (BuildContext context, int index) {
-                            return SizedBox(height: 1.h,);
-                        },
-                        ),
-                      ]
-                  ),
+    return Scaffold(
+      appBar: appBar(context: context, appBarName: 'Transaction History'),
+      body: Obx(() {
+        if (profileController.isPaymentTransactionsFetching.value) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (profileController.paymentTransactions.isEmpty) {
+          return const Center(
+              child: Text('No Payment Transactions Found',
+                textAlign: TextAlign.center,));
+        } else {
+          return SafeArea(
+            child: SingleChildScrollView(
+              controller: controller,
+              child: BodyPaddingWidget(
+                child: Column(
+                    children: [
+                      SizedBox(height: 2.h,),
+                      ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.only(bottom: 20),
+                        itemCount: profileController.paymentTransactions.length + 1,
+                        itemBuilder: (context, index) {
+                          if (index < profileController.paymentTransactions.length) {
+                            final transaction = profileController.paymentTransactions[index];
+                            return transactionTile(
+                              orderID: transaction.orderId!,
+                              amount: transaction.totalAmount.toString(),
+                              date: Helpers.formatDateTime(dateTime: transaction.createdAt!),
+                              status: transaction.paymentStatus!,
+                            );
+                          } else {
+                            return Obx(() {
+                              if (profileController.areMorePaymentTransactionsAvailable.value) {
+                                return const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 32.0),
+                                  child: Center(
+                                      child: CircularProgressIndicator()),
+                                );
+                              } else {
+                                return const SizedBox();
+                              }
+                            });
+                          }
+                        }, separatorBuilder: (BuildContext context, int index) {
+                          return SizedBox(height: 1.h,);
+                      },
+                      ),
+                    ]
                 ),
               ),
-            );
-          }
-        }),
+            ),
+          );
+        }
+      }),
 
-      ),
     );
   }
 
 
-  Widget transactionTile({String? orderID, String? amount, String? date}) {
+  Widget transactionTile({required String orderID,required  String amount,required  String date,required  String status}) {
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
@@ -121,9 +121,8 @@ class _PaymentTransactionHistoryState extends State<PaymentTransactionHistory> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          RowWidget(
-            text1: '$orderID', text2: 'Rs. $amount', isLast: true,),
-          RowWidget(text1: date, text2: 'Wallet Money', isLast: true,),
+          RowWidget(text1: orderID, text2: 'Rs. $amount', isLast: true,),
+          RowWidget(text1: date, text2: status, isLast: true, textColor: textLightColor,),
         ],
       ),
     );

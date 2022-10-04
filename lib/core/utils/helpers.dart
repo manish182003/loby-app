@@ -10,9 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:loby/core/utils/environment.dart';
 import 'package:logger/logger.dart';
-import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
@@ -273,7 +273,11 @@ class Helpers {
   }
 
   static getImage(String image){
-    return "${Environment.apiUrl}$image";
+    if(image.contains(Environment.apiUrl)){
+      return image;
+    }else{
+      return "${Environment.apiUrl}$image";
+    }
   }
 
   static getDateFormat(String date){
@@ -294,6 +298,22 @@ class Helpers {
   static getString(String string) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(string);
+  }
+
+  static formatDateTime({required DateTime dateTime}){
+    final format = DateFormat.yMd().add_jms().format(dateTime);
+    final dateSplit = format.split(" ")[0].split("/");
+    final timeSplit = format.split(" ")[1].split(":");
+    final result = "${formatDigits(dateSplit[1])}/${formatDigits(dateSplit[0])}/${dateSplit[2]} at ${formatDigits(timeSplit[0])}:${timeSplit[1]} ${format.split(" ")[2]}";
+    return result;
+  }
+
+  static formatDigits(String number){
+    if(number.length < 2) {
+      return '0$number';
+    }else{
+      return number;
+    }
   }
 
 

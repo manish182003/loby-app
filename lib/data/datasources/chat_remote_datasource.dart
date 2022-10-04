@@ -6,7 +6,7 @@ import 'package:loby/domain/entities/response_entities/chat/message_response.dar
 
 abstract class ChatRemoteDatasource{
 
-  Future<ChatResponseModel> getChats(String? name);
+  Future<ChatResponseModel> getChats(String? name, int? page);
 
   Future<MessageResponseModel> getMessages(int? chatId);
 

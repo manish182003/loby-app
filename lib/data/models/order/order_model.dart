@@ -2,9 +2,11 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:loby/data/models/listing/service_listing_model.dart';
+import 'package:loby/data/models/profile/user_model.dart';
 import 'package:loby/domain/entities/listing/service_listing.dart';
 import 'package:loby/domain/entities/order/order.dart';
 import 'package:loby/domain/entities/order/order_status.dart';
+import 'package:loby/domain/entities/profile/user.dart';
 
 import 'order_status_model.dart';
 
@@ -22,6 +24,7 @@ class OrderModel extends Order{
     this.transactionFreeze,
     this.createdAt,
     this.updatedAt,
+    this.user,
     this.userGameService,
     this.orderStatuses,
   });
@@ -34,9 +37,10 @@ class OrderModel extends Order{
   final int? price;
   final DateTime? cronUpdatedTime;
   final String? paymentSettlement;
-  final dynamic transactionFreeze;
+  final String? transactionFreeze;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final UserModel? user;
   final ServiceListingModel? userGameService;
   final List<OrderStatusModel>? orderStatuses;
 
@@ -52,7 +56,8 @@ class OrderModel extends Order{
     transactionFreeze: json["transaction_freeze"],
     createdAt: DateTime.parse(json["createdAt"]),
     updatedAt: DateTime.parse(json["updatedAt"]),
-    userGameService: ServiceListingModel.fromJson(json["userGameService"]),
+    user: json['user'] == null ? null : UserModel.fromJson(json['user']),
+    userGameService: json["userGameService"] == null ? null : ServiceListingModel.fromJson(json["userGameService"]),
     orderStatuses: List<OrderStatusModel>.from(json["orderStatuses"].map((x) => OrderStatusModel.fromJson(x))),
   );
 
@@ -68,6 +73,7 @@ class OrderModel extends Order{
     "transaction_freeze": transactionFreeze,
     "createdAt": createdAt?.toIso8601String(),
     "updatedAt": updatedAt?.toIso8601String(),
+    "user" : user?.toJson(),
     "userGameService": userGameService?.toJson(),
     "orderStatuses": List<dynamic>.from(orderStatuses!.map((x) => x.toJson())),
   };

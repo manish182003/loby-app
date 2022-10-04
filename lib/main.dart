@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/core/utils/environment.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
+import 'package:loby/presentation/getx/controllers/core_controller.dart';
 import 'package:loby/presentation/widgets/custom_loading_widget.dart';
 import 'package:loby/services/routing_service/router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -74,14 +75,14 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-  ChatController chatController = Get.find<ChatController>();
+  CoreController coreController = Get.find<CoreController>();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     initializePushNotification();
-    chatController.connect();
+
   }
 
 

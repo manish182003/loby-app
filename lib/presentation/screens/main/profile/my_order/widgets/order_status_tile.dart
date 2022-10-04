@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -5,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:loby/data/models/order/order_model.dart';
 import 'package:loby/domain/entities/order/order.dart';
+import 'package:loby/presentation/getx/controllers/core_controller.dart';
 import 'package:loby/presentation/getx/controllers/order_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/widgets/rating_dialog.dart';
@@ -17,17 +20,17 @@ import '../../../../../widgets/buttons/custom_button.dart';
 
 class OrderStatusTile extends StatelessWidget {
   final int orderId;
-  final int challengerId;
-  final int myId;
+  final int sellerId;
+  final int buyerId;
   final bool isDone;
   final String title;
   final String date;
   final bool isSeller;
   final bool isDuel;
   final bool isLast;
+  final bool isDisputeRaised;
   final String lastStatus;
-  const OrderStatusTile({Key? key, required this.orderId, required this.isDone, required this.title, required this.date, this.isSeller = false, this.isDuel = false, required this.isLast, required this.lastStatus, required this.challengerId, required this.myId}) : super(key: key);
-
+  const OrderStatusTile({Key? key, required this.orderId, required this.isDone, required this.title, required this.date, this.isSeller = false, this.isDuel = false, required this.isLast, this.isDisputeRaised = false, required this.lastStatus, required this.sellerId, required this.buyerId, }) : super(key: key);
 
 
   @override
@@ -38,34 +41,24 @@ class OrderStatusTile extends StatelessWidget {
 
     return Column(
       children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SvgPicture.asset(
-              'assets/icons/verified_user_bedge.svg',
-              height: 18,
-              width: 18,
-              color: isDone ? null : iconWhiteColor,
-            ),
-            SizedBox(width: 3.w),
-            Text(title,
-                overflow: TextOverflow.ellipsis,
-                style: textTheme.headline5?.copyWith(color: textWhiteColor)),
-            Expanded(
-              child: Text(date,
-                  textAlign: TextAlign.end,
-                  overflow: TextOverflow.ellipsis,
-                  style: textTheme.headline5?.copyWith(
-                      color: textLightColor)),
-            ),
-          ],
-        ),
+        _statusTile(textTheme, isDone: isDone, title: title, date: date),
         SizedBox(height: 2.h),
-        isLast ? isSeller ? isDuel ?
+
+        /// if Dispute is Raised ///
+        isLast ? isDisputeRaised ?
+        Column(
+          children: [
+            _statusTile(textTheme, isDone: true, title: "Seller & Challenger selection doesn’t match. Dispute Raised. Transaction on hold", date: date),
+            SizedBox(height: 2.h),
+          ],
+        ) :
+
+
+        isSeller ? isDuel ?
 
         /// if Duel (Seller) ///
         lastStatus == 'ORDER_PLACED' ? _duelOrderPlaced(context) :
-        lastStatus == 'SELLER_DELIVERY_CONFIRMED' ? _selectDuelWinner(context) :
+        lastStatus == 'ORDER_IN_PROGRESS' ? _selectDuelWinner(context) :
         const SizedBox() :
 
         /// else normal seller ///
@@ -73,13 +66,40 @@ class OrderStatusTile extends StatelessWidget {
 
         /// if Duel (Buyer) ///
         isDuel ?
-        lastStatus == 'SELLER_DELIVERY_CONFIRMED' ? _selectDuelWinner(context) :
+        lastStatus == 'ORDER_IN_PROGRESS' ? _selectDuelWinner(context) :
         const SizedBox() :
 
         /// else normal Buyer ///
        _buyer(context, rating, review) :
         const SizedBox()
       ]
+    );
+  }
+
+  Widget _statusTile(TextTheme textTheme, {required bool isDone, required String title, required String date}){
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SvgPicture.asset(
+          'assets/icons/verified_user_bedge.svg',
+          height: 18,
+          width: 18,
+          color: isDone ? null : iconWhiteColor,
+        ),
+        SizedBox(width: 3.w),
+        Expanded(
+          child: Text(title,
+              // overflow: TextOverflow.ellipsis,
+              style: textTheme.headline5?.copyWith(color: textWhiteColor)),
+        ),
+        Expanded(
+          child: Text(date,
+              textAlign: TextAlign.end,
+              overflow: TextOverflow.ellipsis,
+              style: textTheme.headline5?.copyWith(
+                  color: textLightColor)),
+        ),
+      ],
     );
   }
 
@@ -136,7 +156,11 @@ class OrderStatusTile extends StatelessWidget {
                 right: 0.w,
                 radius: 50,
                 onTap: () async {
-                  selectDuelWinner(context, winnerId: challengerId);
+                  if(isSeller){
+                    selectDuelWinner(context, winnerId: buyerId, status: 'BUYER_DELIVERY_CONFIRMED');
+                  }else{
+                    selectDuelWinner(context, winnerId: sellerId, status: 'SELLER_DELIVERY_CONFIRMED');
+                  }
                 },
               ),
             ),
@@ -148,12 +172,17 @@ class OrderStatusTile extends StatelessWidget {
                 textColor: textWhiteColor,
                 radius: 50,
                 onTap: () async {
-                  selectDuelWinner(context, winnerId: myId);
+                  if(isSeller){
+                    selectDuelWinner(context, winnerId: sellerId, status: 'SELLER_DELIVERY_CONFIRMED');
+                  }else{
+                    selectDuelWinner(context, winnerId: buyerId, status: 'BUYER_DELIVERY_CONFIRMED');
+                  }
                 },
               ),
             ),
           ],
         ),
+        SizedBox(height: 2.h),
         CustomButton(
           color: purpleLightIndigoColor,
           name: "Upload Proofs",
@@ -162,7 +191,8 @@ class OrderStatusTile extends StatelessWidget {
           onTap: () async {
             _openFileExplorer(context);
           },
-        )
+        ),
+        SizedBox(height: 2.h),
       ],
     );
   }
@@ -307,38 +337,64 @@ class OrderStatusTile extends StatelessWidget {
   }
 
 
-  void selectDuelWinner(BuildContext context, {required int winnerId})async{
+  void selectDuelWinner(BuildContext context, {required int winnerId, required String status})async{
     OrderController orderController = Get.find<OrderController>();
     await Helpers.loader();
-    await orderController.selectDuelWinner(winnerId:  winnerId, orderId: orderId);
-    await orderController.getOrders();
-    await Helpers.hideLoader();
-    Navigator.pop(context);
+    final isSuccess = await orderController.selectDuelWinner(winnerId:  winnerId, orderId: orderId);
+    if(isSuccess){
+      await orderController.changeOrderStatus(orderId: orderId, status: status);
+      await orderController.getOrders(status: isSeller ? 'SOLD' : 'BOUGHT');
+      await Helpers.hideLoader();
+      Navigator.pop(context);
+    }else{
+      await Helpers.hideLoader();
+    }
   }
-
 
   void confirmDelivery(BuildContext context, {required String status, required double rating, String? review})async{
     OrderController orderController = Get.find<OrderController>();
+    CoreController coreController = Get.find<CoreController>();
     await Helpers.loader();
-    await orderController.submitRating(orderId: orderId, stars: rating, review: review);
-    await orderController.changeOrderStatus(orderId: orderId, status: status);
-    await orderController.getOrders();
-    await Helpers.hideLoader();
-    Navigator.pop(context);
-    Navigator.pop(context);
+    final isSuccess = await orderController.submitRating(orderId: orderId, stars: rating, review: review);
+    if(isSuccess){
+      await orderController.changeOrderStatus(orderId: orderId, status: status);
+      await getOrders();
+      print("confrm delivery ${orderController.orders.where((p0) => p0.id == orderId).toList().first.userGameService?.userGameServiceImages ?? 'null'}");
+      coreController.socket.emit("loby", {
+        'type' : 'order',
+        'receiverId' : sellerId,
+        'order' : (orderController.orders.where((e) => e.id == orderId).toList().first as OrderModel).toJson(),
+      });
+      await Helpers.hideLoader();
+      Navigator.pop(context);
+      Navigator.pop(context);
+    }else{
+      await Helpers.hideLoader();
+    }
   }
 
   void changeOrderStatus(BuildContext context, {required String status})async{
     OrderController orderController = Get.find<OrderController>();
+    CoreController coreController = Get.find<CoreController>();
     await Helpers.loader();
-    await orderController.changeOrderStatus(orderId: orderId, status: status);
-    await orderController.getOrders();
-    await Helpers.hideLoader();
-    Navigator.pop(context);
+    final isSuccess = await orderController.changeOrderStatus(orderId: orderId, status: status);
+    if(isSuccess){
+      await getOrders();
+      coreController.socket.emit("loby", {
+        'type' : 'order',
+        'receiverId' : buyerId,
+        'order' : (orderController.orders.where((e) => e.id == orderId).toList().first as OrderModel).toJson(),
+      });
+      await Helpers.hideLoader();
+      Navigator.pop(context);
+    }else{
+      await Helpers.hideLoader();
+    }
   }
 
   void _openFileExplorer(BuildContext context, {String? status}) async {
     OrderController orderController = Get.find<OrderController>();
+    CoreController coreController = Get.find<CoreController>();
     List<PlatformFile> paths = [];
     try {
       paths = (await FilePicker.platform.pickFiles(
@@ -354,7 +410,12 @@ class OrderStatusTile extends StatelessWidget {
           files: paths.map((e) => File(e.path!)).toList(),
       );
       if(status != null) await orderController.changeOrderStatus(orderId: orderId, status: status);
-      await orderController.getOrders();
+      await getOrders();
+      coreController.socket.emit("loby", {
+        'type' : 'order',
+        'receiverId' : buyerId,
+        'order' : (orderController.orders.where((e) => e.id == orderId).toList().first as OrderModel).toJson(),
+      });
       await Helpers.hideLoader();
       Navigator.pop(context);
 
@@ -363,5 +424,13 @@ class OrderStatusTile extends StatelessWidget {
     } catch (e) {
       Helpers.toast('Something went wrong');
     }
+  }
+
+
+  Future<void> getOrders() async {
+    OrderController orderController = Get.find<OrderController>();
+    orderController.ordersPageNumber.value = 1;
+    orderController.areMoreOrdersAvailable.value = true;
+    await orderController.getOrders(status: isSeller ? 'SOLD' : 'BOUGHT');
   }
 }

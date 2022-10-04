@@ -9,7 +9,7 @@ import 'package:loby/domain/entities/listing/user_game_service_image.dart';
 import 'package:loby/domain/entities/listing/user_game_service_option.dart';
 
 class ServiceListing extends Equatable{
-  const ServiceListing({
+  ServiceListing({
     this.id,
     this.categoryId,
     this.gameId,
@@ -43,7 +43,7 @@ class ServiceListing extends Equatable{
   final int? edt;
   final int? userId;
   final int? priceUnitId;
-  final String? status;
+  String? status;
   final String? listingNumber;
   final String? shareableLink;
   final DateTime? createdAt;

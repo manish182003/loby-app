@@ -27,5 +27,7 @@ abstract class AuthRepository{
 
   Future<Either<Failure, String>> checkUsername({String? username});
 
+  Future<Either<Failure, Map<String, dynamic>>> addFCMToken({String? fcmToken});
+
 
 }

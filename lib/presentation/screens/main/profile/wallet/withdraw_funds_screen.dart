@@ -52,192 +52,223 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    return SafeArea(
-      child: Scaffold(
-        appBar: appBar(context: context, appBarName: "Withdraw Funds"),
-        body: Obx(() {
-          if(profileController.isBankDetailsFetching.value){
-            return const CustomLoader();
-          }else{
-            return SingleChildScrollView(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Stack(
-                        children: [
-                          Card(
+    final textTheme = Theme
+        .of(context)
+        .textTheme;
+    return Scaffold(
+      appBar: appBar(context: context, appBarName: "Withdraw Funds"),
+      body: Obx(() {
+        if (profileController.isBankDetailsFetching.value) {
+          return const CustomLoader();
+        } else {
+          return SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Stack(
+                      children: [
+                        Card(
+                          color: shipGreyColor,
+                          elevation: 0.0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
+                          child: Container(
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width * 1,
+                              height: 140.0,
+                              decoration: BoxDecoration(
+                                color: aquaGreenColor,
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 8.0),
+                                child: Column(
+                                  children: [
+                                    Text('Current Balance',
+                                        textAlign: TextAlign.center,
+                                        style: textTheme.headline3?.copyWith(
+                                            color: textTunaBlueColor,
+                                            fontWeight: FontWeight.w500)),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0, vertical: 16.0),
+                                      child: Obx(() {
+                                        if(profileController.isProfileFetching.value){
+                                          return const CustomLoader();
+                                        }else{
+                                          return Text(
+                                              '₹ ${profileController.profile
+                                                  .walletMoney}',
+                                              textAlign: TextAlign.center,
+                                              style: textTheme.headlineLarge
+                                                  ?.copyWith(
+                                                  color: textTunaBlueColor,
+                                                  fontFamily: 'Inter'));
+                                        }
+
+                                      }),
+                                    ),
+                                  ],
+                                ),
+                              )),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 110.0),
+                          child: Card(
                             color: shipGreyColor,
                             elevation: 0.0,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16.0),
                             ),
                             child: Container(
-                                width: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width * 1,
-                                height: 140.0,
-                                decoration: BoxDecoration(
-                                  color: aquaGreenColor,
-                                  borderRadius: BorderRadius.circular(16.0),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 8.0),
-                                  child: Column(
-                                    children: [
-                                      Text('Current Balance',
-                                          textAlign: TextAlign.center,
-                                          style: textTheme.headline3?.copyWith(color: textTunaBlueColor, fontWeight: FontWeight.w500)),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
-                                        child: Text('₹ ${profileController.profile.walletMoney}',
-                                            textAlign: TextAlign.center,
-                                            style: textTheme.headlineLarge?.copyWith(color: textTunaBlueColor, fontFamily: 'Inter')),
-                                      ),
-                                    ],
-                                  ),
-                                )),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 110.0),
-                            child: Card(
-                              color: shipGreyColor,
-                              elevation: 0.0,
-                              shape: RoundedRectangleBorder(
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width * 1,
+                              decoration: BoxDecoration(
+                                color: shipGreyColor,
                                 borderRadius: BorderRadius.circular(16.0),
                               ),
-                              child: Container(
-                                width: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width * 1,
-                                decoration: BoxDecoration(
-                                  color: shipGreyColor,
-                                  borderRadius: BorderRadius.circular(16.0),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                        padding: const EdgeInsets.all(24.0),
-                                        child: BuildDropdown(
-                                          selectedValue: selectedBankName,
-                                          dropdownHint: "Select Withdraw Method",
-                                          itemsList: profileController.bankDetails
-                                              .map((item) =>
-                                              DropdownMenuItem<BankDetail>(
-                                                value: item,
-                                                child: Text(
-                                                    item.upiId == null ? "${item.bankName} ${item.bankAccountNumber?.replaceAll("\\w(?=\\w{4})", "X")}" : "UPI ID: ${item.upiId}",
-                                                    style: textTheme.headline3?.copyWith(color: whiteColor)
-                                                ),
-                                              )).toList(),
-                                          onChanged: (value) {
-                                            // selectedBankName = value.name;
-                                            selectedBankId = value.id;
-                                            print(selectedBankId);
-                                          },
-                                        )),
-                                        Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 0.0,
-                                            bottom: 24.0,
-                                            left: 24.0,
-                                            right: 24.0),
-                                        child: TextFieldWidget(
-                                          textEditingController: amount,
-                                          hint: "Enter Amount(INR)",
-                                          type: 'withdraw',
-                                          isRequired: true,
-                                          isNumber: true,
-                                        )),
-                                    Padding(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                      padding: const EdgeInsets.all(24.0),
+                                      child: BuildDropdown(
+                                        selectedValue: selectedBankName,
+                                        dropdownHint: "Select Withdraw Method",
+                                        itemsList: profileController
+                                            .bankDetails
+                                            .map((item) =>
+                                            DropdownMenuItem<BankDetail>(
+                                              value: item,
+                                              child: Text(
+                                                  item.upiId == null
+                                                      ? "${item
+                                                      .bankName} ${item
+                                                      .bankAccountNumber
+                                                      ?.replaceAll(
+                                                      "\\w(?=\\w{4})", "X")}"
+                                                      : "UPI ID: ${item
+                                                      .upiId}",
+                                                  style: textTheme.headline3
+                                                      ?.copyWith(
+                                                      color: whiteColor)
+                                              ),
+                                            )).toList(),
+                                        onChanged: (value) {
+                                          // selectedBankName = value.name;
+                                          selectedBankId = value.id;
+                                          print(selectedBankId);
+                                        },
+                                      )),
+                                  Padding(
                                       padding: const EdgeInsets.only(
-                                        left: 16.0,
-                                        right: 16.0,
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                            width: MediaQuery.of(context).size.width * 0.35,
-                                            child: CustomButton(
-                                              color: carminePinkColor,
-                                              textColor: textWhiteColor,
-                                              name: "Withdraw",
-                                              onTap: () async{
-
-                                                if(_formKey.currentState!.validate()){
-                                                  Helpers.loader();
-                                                  final isSuccess = await profileController.withdrawMoney(bankDetailId: selectedBankId, amount: int.tryParse(amount.text));
-                                                  Helpers.hideLoader();
-                                                  if(isSuccess){
-                                                    BottomDialog(
-                                                        textTheme: textTheme,
-                                                        contentName:
-                                                        "Are you sure you want to withdraw ",
-                                                        contentLinkName: '\nRs. 23,000',
-                                                        contentNameLast:
-                                                        ' from you Loby Wallet ?')
-                                                        .showBottomDialog(context);
-                                                  }
+                                          top: 0.0,
+                                          bottom: 24.0,
+                                          left: 24.0,
+                                          right: 24.0),
+                                      child: TextFieldWidget(
+                                        textEditingController: amount,
+                                        hint: "Enter Amount(INR)",
+                                        type: 'withdraw',
+                                        isRequired: true,
+                                        isNumber: true,
+                                      )),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 16.0,
+                                      right: 16.0,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment
+                                          .center,
+                                      children: [
+                                        SizedBox(
+                                          width: MediaQuery
+                                              .of(context)
+                                              .size
+                                              .width * 0.35,
+                                          child: CustomButton(
+                                            color: carminePinkColor,
+                                            textColor: textWhiteColor,
+                                            name: "Withdraw",
+                                            onTap: () async {
+                                              if (_formKey.currentState!
+                                                  .validate()) {
+                                                Helpers.loader();
+                                                final isSuccess = await profileController
+                                                    .withdrawMoney(
+                                                    bankDetailId: selectedBankId,
+                                                    amount: int.tryParse(
+                                                        amount.text));
+                                                await profileController
+                                                    .getProfile();
+                                                Helpers.hideLoader();
+                                                if (isSuccess) {
+                                                  BottomDialog(
+                                                    textTheme: textTheme,
+                                                    tileName: "Withdraw Success",
+                                                    contentName: "Amount has been successfully withdrawn. It will be credited to your account within 48 hours.",)
+                                                      .showBottomDialog(
+                                                      context);
                                                 }
-
-
-                                              },
-                                            ),
+                                              }
+                                            },
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 16.0, horizontal: 16.0),
-                                      child: Text(
-                                          'Minimum Account Balance to maintain in your Wallet is Rs. 200',
-                                          textAlign: TextAlign.center,
-                                          style: textTheme.headline5?.copyWith(
-                                              color: textWhiteColor)),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 16.0, horizontal: 16.0),
+                                    child: Text(
+                                        'Minimum Account Balance to maintain in your Wallet is Rs. 200',
+                                        textAlign: TextAlign.center,
+                                        style: textTheme.headline5?.copyWith(
+                                            color: textWhiteColor)),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 16.0,
-                        bottom: 32.0,
-                      ),
-                      child: SizedBox(
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width * 0.7,
-                          child: CustomButton(
-                            color: purpleLightIndigoColor,
-                            textColor: textWhiteColor,
-                            name: "Add New Withdraw Method",
-                            onTap: () {
-                              _addNewWithdrawMethodDialog(context, textTheme);
-                            },
-                          )),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      top: 16.0,
+                      bottom: 32.0,
                     ),
-                  ],
-                ),
+                    child: SizedBox(
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 0.7,
+                        child: CustomButton(
+                          color: purpleLightIndigoColor,
+                          textColor: textWhiteColor,
+                          name: "Add New Withdraw Method",
+                          onTap: () {
+                            _addNewWithdrawMethodDialog(context, textTheme);
+                          },
+                        )),
+                  ),
+                ],
               ),
-            );
-          }
-        }),
-      ),
+            ),
+          );
+        }
+      }),
     );
   }
 
@@ -349,15 +380,19 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                       ),
                       SizedBox(height: 2.h),
                       SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.35,
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 0.35,
                         child: CustomButton(
                           color: purpleLightIndigoColor,
                           textColor: textWhiteColor,
                           name: "Add",
                           onTap: () async {
-                            if(_formKey2.currentState!.validate()){
+                            if (_formKey2.currentState!.validate()) {
                               Helpers.loader();
-                              final isSuccess = await profileController.addBankDetails(
+                              final isSuccess = await profileController
+                                  .addBankDetails(
                                 bankName: bankName.text,
                                 branchName: branchName.text,
                                 accountNumber: accountNumber.text,

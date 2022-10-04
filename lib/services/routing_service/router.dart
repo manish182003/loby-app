@@ -6,7 +6,7 @@ import 'package:loby/presentation/screens/auth/create_profile_screen.dart';
 import 'package:loby/presentation/screens/auth/sign_up_screen.dart';
 import 'package:loby/presentation/screens/main/chat/chat_page.dart';
 import 'package:loby/presentation/screens/main/chat/message_page.dart';
-import 'package:loby/presentation/screens/main/home/disputes/create_new_dispute_screen.dart';
+import 'package:loby/presentation/screens/main/profile/my_disputes/create_new_dispute_screen.dart';
 import 'package:loby/presentation/screens/main/profile/faqs.dart';
 import 'package:loby/services/routing_service/routes.dart';
 import 'package:loby/services/routing_service/routing_service.dart';
@@ -14,7 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../presentation/screens/auth/sign_in_screen.dart';
 import '../../presentation/screens/main/home/category_item_screen.dart';
-import '../../presentation/screens/main/home/disputes/disputes_screen.dart';
+import '../../presentation/screens/main/profile/my_disputes/disputes_screen.dart';
 import '../../presentation/screens/main/home/game_details_screen.dart';
 import '../../presentation/screens/main/home/game_itm_screen.dart';
 import '../../presentation/screens/main/home/other_user_profile/follower_following_screen/followers_screen.dart';
@@ -246,7 +246,7 @@ class MyRouter {
               pageBuilder: (context, state) {
                 return CupertinoPage(
                   key: state.pageKey,
-                  child: const CreateNewDispute(),
+                  child: CreateNewDispute(disputeId: int.tryParse(state.queryParams['disputeId']!)!,),
                 );
               }),
 

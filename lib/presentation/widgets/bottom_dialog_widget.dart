@@ -8,13 +8,15 @@ import 'buttons/custom_button.dart';
 
 class BottomDialog {
   final TextTheme? textTheme;
-  String? tileName;
-  Color? titleColor;
-  String? contentName;
-  String? contentLinkName;
-  String? contentNameLast;
+  final String? tileName;
+  final Color? titleColor;
+  final String? contentName;
+  final String? contentLinkName;
+  final String? contentNameLast;
+  final Function()? onOk;
 
-  BottomDialog({this.textTheme, this.tileName, this.titleColor, this.contentName, this.contentLinkName, this.contentNameLast});
+
+  BottomDialog({this.onOk, this.textTheme, this.tileName, this.titleColor, this.contentName, this.contentLinkName, this.contentNameLast});
 
   void showBottomDialog(BuildContext context) {
     showGeneralDialog(
@@ -67,9 +69,8 @@ class BottomDialog {
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.4,
                 child: CustomButton(
-                  onTap: () {
+                  onTap: onOk ?? () {
                     Navigator.pop(context);
-                    context.goNamed(mainPage);
                   },
                   color: aquaGreenColor,
                   name: 'OK',

@@ -11,6 +11,7 @@ import 'package:loby/domain/usecases/home/get_category_games.dart';
 import 'package:loby/domain/usecases/home/get_games.dart';
 import 'package:loby/domain/usecases/home/get_notifications.dart';
 import 'package:loby/domain/usecases/home/get_unread_count.dart';
+import 'package:loby/domain/usecases/home/global_search.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 import 'package:loby/presentation/getx/controllers/home_controller.dart';
 
@@ -25,6 +26,7 @@ class HomeBinding extends Bindings {
     final getNotifications = Get.find<GetNotifications>();
     final deleteNotification = Get.find<DeleteNotification>();
     final getUnreadCount = Get.find<GetUnreadCount>();
+    final globalSearch = Get.find<GlobalSearch>();
 
 
 
@@ -35,6 +37,7 @@ class HomeBinding extends Bindings {
       getNotifications: getNotifications,
       deleteNotification: deleteNotification,
       getUnreadCount: getUnreadCount,
+      globalSearch: globalSearch
     ));
   }
 

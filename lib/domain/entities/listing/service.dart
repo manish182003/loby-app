@@ -9,14 +9,12 @@ class Service extends Equatable {
     this.name,
     this.selectionType,
     this.index = 0,
-    this.serviceOption,
   });
 
   final int? id;
   final String? name;
   final int? selectionType;
   int index;
-  final List<ServiceOption>? serviceOption;
 
 
 

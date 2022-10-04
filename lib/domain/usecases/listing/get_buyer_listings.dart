@@ -22,6 +22,7 @@ class GetBuyerListings extends UseCase<ServiceListingResponse, Params> {
       priceTo:  params.listingParams?.priceTo,
       sortByPrice:  params.listingParams?.sortByPrice,
       sortByRating:  params.listingParams?.sortByRating,
+      from: params.listingParams?.from,
     );
   }
 }

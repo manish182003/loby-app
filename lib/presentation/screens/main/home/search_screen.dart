@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
+import 'package:loby/domain/entities/home/game.dart';
+import 'package:loby/domain/entities/profile/user.dart';
+import 'package:loby/presentation/getx/controllers/home_controller.dart';
 import 'package:loby/presentation/screens/main/home/widgets/game_list_card.dart';
+import 'package:loby/presentation/widgets/body_padding_widget.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../../core/theme/colors.dart';
+import '../../../../domain/entities/listing/service_listing.dart';
+import '../../../../services/routing_service/routes_name.dart';
 import '../../../widgets/SearchFieldWidget.dart';
+import '../../../widgets/custom_app_bar.dart';
+import '../../../widgets/custom_loader.dart';
+import '../../../widgets/text_fields/text_field_widget.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -12,133 +25,151 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+
+  HomeController homeController = Get.find<HomeController>();
+  TextEditingController search = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.fromLTRB(15, 15, 15, 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    width: 42,
-                    height: 42,
-                    child: MaterialButton(
-                      shape: const CircleBorder(),
-                      color: textCharcoalBlueColor,
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Icon(
-                        Icons.arrow_back_ios,
-                        size: 18,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SearchFieldWidget(textHint: 'Search Game'),
-            Flexible(
-              child: Container(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text("Listings",
-                            textAlign: TextAlign.start,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: textTheme.headline4
-                                ?.copyWith(color: aquaGreenColor)),
-                        Divider(
-                          color: aquaGreenColor,
-                          thickness: 1.0,
-                        ),
-                        Flexible(
-                          child: ListView.builder(
-                            itemCount: 15,
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) => GestureDetector(
-                              onTap: () {},
-                              child: buildListItem(textTheme),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 44.0,
-                        ),
-                        Text("Games",
-                            textAlign: TextAlign.start,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: textTheme.headline4
-                                ?.copyWith(color: aquaGreenColor)),
-                        Divider(
-                          color: aquaGreenColor,
-                          thickness: 1.0,
-                        ),
-                        // SizedBox(
-                        //   height: 166,
-                        //   child: ListView.builder(
-                        //     itemCount: 5,
-                        //     scrollDirection: Axis.horizontal,
-                        //     itemBuilder: (context, index) => GestureDetector(
-                        //       onTap: () {
-                        //         debugPrint('Battlegrounds Mobile India $index');
-                        //         FocusManager.instance.primaryFocus?.unfocus();
-                        //         //  context.pushNamed(gamePage);
-                        //         /*Navigator.of(context).push(MaterialPageRoute(
-                        // builder: (context) =>
-                        //     GameItemScreen(name: 'Battlegrounds Mobile $index')));*/
-                        //       },
-                        //       child: SizedBox(
-                        //         height: 166,
-                        //         width: 120,
-                        //         child: Center(
-                        //           child: GameCard(index: index),
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                        Text("Users",
-                            textAlign: TextAlign.start,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: textTheme.headline4
-                                ?.copyWith(color: aquaGreenColor)),
-                        Divider(
-                          color: aquaGreenColor,
-                          thickness: 1.0,
-                        ),
-                        Flexible(
-                          child: ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: 3,
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            itemBuilder: (context, index) => GestureDetector(
-                              onTap: () {},
-                              child: buildUsersListItem(textTheme),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+    return Scaffold(
+      appBar: appBar(context: context),
+      body: SafeArea(
+        child: BodyPaddingWidget(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                TextFieldWidget(
+                  textEditingController: search,
+                  hint: 'Search...',
+                  onChanged: (value) {
+                    if(value.isNotEmpty){
+                      homeController.globalSearch(search: value);
+                    }
+                  },
                 ),
+                SizedBox(height: 4.h),
+                Obx(() {
+                  if(homeController.isGlobalSearchFetching.value){
+                    return const CustomLoader();
+                  }else{
+                    return SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                           Text("Listings", style: textTheme.headline4?.copyWith(
+                               color: aquaGreenColor)),
+                           const Divider(
+                             color: aquaGreenColor,
+                             thickness: 1.0,
+                           ),
+                           SizedBox(height: 2.h),
+                          homeController.serviceListingResults.isEmpty ? const NoDataFoundWidget() : SizedBox(
+                             height: 15.h,
+                             child: ListView.builder(
+                               itemCount: homeController.serviceListingResults.length,
+                               physics: const ClampingScrollPhysics(),
+                               shrinkWrap: true,
+                               itemBuilder: (context, index) =>
+                                   buildListItem(textTheme, listing: homeController.serviceListingResults[index]),
+                             ),
+                           ),
+                           SizedBox(height: 2.h),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Games", style: textTheme.headline4?.copyWith(
+                                  color: aquaGreenColor)),
+                              const Divider(
+                                color: aquaGreenColor,
+                                thickness: 1.0,
+                              ),
+                              SizedBox(height: 2.h),
+                              homeController.gameResults.isEmpty ? const NoDataFoundWidget() : SizedBox(
+                                height: 17.h,
+                                child: ListView.builder(
+                                    itemCount: homeController.gameResults.length,
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (context, index) {
+                                      return GameCard(game: homeController.gameResults[index]);
+                                    }
+                                ),
+                              ),
+                              SizedBox(height: 2.h),
+                            ],
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Users",
+                                  textAlign: TextAlign.start,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: textTheme.headline4
+                                      ?.copyWith(color: aquaGreenColor)),
+                              const Divider(
+                                color: aquaGreenColor,
+                                thickness: 1.0,
+                              ),
+                              SizedBox(height: 2.h),
+                              homeController.userResults.isEmpty ? const NoDataFoundWidget() : SizedBox(
+                                height: 15.h,
+                                child: ListView.builder(
+                                  physics: const ClampingScrollPhysics(),
+                                  itemCount: homeController.userResults.length,
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.vertical,
+                                  itemBuilder: (context, index) =>
+                                      buildUsersListItem(textTheme, user: homeController.userResults[index]),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                        ],
+                      ),
+                    );
+                  }
+                }),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  buildListItem(TextTheme textTheme, {required ServiceListing listing}) {
+    return GestureDetector(
+      onTap: (){
+        context.pushNamed(gameDetailPage, queryParams: {'serviceListingId' : "${listing.id}"});
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Expanded(
+              child: Text(listing.title!,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: textTheme.headline5?.copyWith(color: textWhiteColor)),
+            ),
+            const SizedBox(width: 16.0),
+            Container(
+              decoration: BoxDecoration(
+                color: orangeColor,
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: Padding(
+                padding:
+                const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                child: Text(listing.category?.name ?? '',
+                    style: textTheme.subtitle1?.copyWith(color: textWhiteColor)),
               ),
             ),
           ],
@@ -147,49 +178,27 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  buildListItem(TextTheme textTheme) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Expanded(
-            child: Text("Lvl 78 Account on Sjtyujtt  tt jtyjtyjt tyjtyjtA",
+  buildUsersListItem(TextTheme textTheme, {required User user}) {
+    return GestureDetector(
+      onTap: (){
+        context.pushNamed(otherUserPage, queryParams: {'userId': "${user.id}", 'from': 'other'});
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 8.0),
+        child: Row(
+          children: <Widget>[
+            Text(user.displayName ?? '',
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
                 style: textTheme.headline5?.copyWith(color: textWhiteColor)),
-          ),
-          SizedBox(width: 16.0),
-          Container(
-            decoration: BoxDecoration(
-              color: orangeColor,
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-              child: Text('Account',
-                  style: textTheme.subtitle1?.copyWith(color: textWhiteColor)),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  buildUsersListItem(TextTheme textTheme) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Expanded(
-            child: Text("Mukesh kumar Patel",
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: textTheme.headline5?.copyWith(color: textWhiteColor)),
-          ),
-        ],
+            const SizedBox(width: 8.0),
+            user.verifiedProfile ?? false ? SvgPicture.asset(
+              'assets/icons/verified_user_bedge.svg',
+              height: 15,
+              width: 15,
+            ) : const SizedBox(),
+          ],
+        ),
       ),
     );
   }

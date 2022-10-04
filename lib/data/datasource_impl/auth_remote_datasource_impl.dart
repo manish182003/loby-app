@@ -251,6 +251,24 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
     }
   }
 
+  @override
+  Future<Map<String, dynamic>> addFCMToken(String? fcmToken) async{
+    try {
+      final headers = await Helpers.getApiHeaders();
+      final response = await Helpers.sendRequest(
+        _dio,
+        RequestType.post,
+        ApiEndpoints.addFCMToken,
+        queryParams: {'fcm_token': fcmToken},
+        headers: headers,
+      );
+
+      return response!;
+    } on ServerException catch (e) {
+      throw ServerException(message: e.message);
+    }
+  }
+
 
 
 

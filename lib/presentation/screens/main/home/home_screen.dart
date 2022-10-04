@@ -130,21 +130,11 @@ class _HomeScreenState extends State<HomeScreen> {
             itemCount: homeController.games.take(10).length,
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) =>
-                GestureDetector(
-                  onTap: () {
-                    debugPrint('Battlegrounds Mobile India $index');
-                    FocusManager.instance.primaryFocus?.unfocus();
-                    context.pushNamed(gamePage);
-                    /*Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    GameItemScreen(name: 'Battlegrounds Mobile $index')));*/
-                  },
-                  child: SizedBox(
-                    height: 166,
-                    width: 120,
-                    child: Center(
-                      child: GameCard(game: homeController.games[index]),
-                    ),
+                SizedBox(
+                  height: 166,
+                  width: 120,
+                  child: Center(
+                    child: GameCard(game: homeController.games[index]),
                   ),
                 ),
           );

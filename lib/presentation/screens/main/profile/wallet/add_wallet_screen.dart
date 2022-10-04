@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/widgets/body_padding_widget.dart';
+import 'package:loby/presentation/widgets/custom_loader.dart';
+import 'package:loby/presentation/widgets/text_fields/text_field_widget.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import '../../../../../core/theme/colors.dart';
 import '../../../../widgets/custom_app_bar.dart';
@@ -20,6 +22,7 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
 
   ProfileController profileController = Get.find<ProfileController>();
   TextEditingController amount = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   final Razorpay _razorpay = Razorpay();
 
   @override
@@ -42,71 +45,84 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return SafeArea(
-      child: Scaffold(
-        appBar: const PreferredSize(preferredSize:Size(double.infinity, 70), child: CustomAppBar(appBarName: "Add Funds")),
-        body: BodyPaddingWidget(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Stack(
-                children: [
-                  Card(
+    return Scaffold(
+      appBar: appBar(context: context, appBarName: "Add Funds"),
+      body: BodyPaddingWidget(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Stack(
+              children: [
+                Card(
+                  color: shipGreyColor,
+                  elevation: 0.0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                  child: Container(
+                      width: MediaQuery.of(context).size.width * 1,
+                      height: 140.0,
+                      decoration: BoxDecoration(
+                        color: aquaGreenColor,
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8.0),
+                        child: Column(
+                          children: [
+                            Text('Current Balance',
+                                textAlign: TextAlign.center,
+                                style: textTheme.headline3?.copyWith(
+                                    color: textTunaBlueColor,
+                                    fontWeight: FontWeight.w500)),
+                            Padding(padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0, vertical: 16.0),
+                              child: Obx(() {
+                                if(profileController.isProfileFetching.value){
+                                  return const CustomLoader();
+                                }else{
+                                  return Text('₹ ${profileController.profile.walletMoney}',
+                                      textAlign: TextAlign.center,
+                                      style: textTheme.headlineLarge?.copyWith(
+                                          color: textTunaBlueColor,
+                                          fontFamily: 'Inter'));
+                                }
+
+                              }),
+                            ),
+                          ],
+                        ),
+                      )),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 110.0),
+                  child: Card(
                     color: shipGreyColor,
                     elevation: 0.0,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16.0),
                     ),
                     child: Container(
-                        width: MediaQuery.of(context).size.width * 1,
-                        height: 140.0,
-                        decoration: BoxDecoration(
-                          color: aquaGreenColor,
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8.0),
-                          child: Column(
-                            children: [
-                              Text('Current Balance',
-                                  textAlign: TextAlign.center,
-                                  style: textTheme.headline3?.copyWith(color: textTunaBlueColor, fontWeight: FontWeight.w500)),
-                              Padding(padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
-                                child: Text('₹ ${profileController.profile.walletMoney}',
-                                    textAlign: TextAlign.center,
-                                    style: textTheme.headlineLarge?.copyWith(color: textTunaBlueColor, fontFamily: 'Inter')),
-                              ),
-                            ],
-                          ),
-                        )),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 110.0),
-                    child: Card(
-                      color: shipGreyColor,
-                      elevation: 0.0,
-                      shape: RoundedRectangleBorder(
+                      width: MediaQuery.of(context).size.width * 1,
+                      decoration: BoxDecoration(
+                        color: shipGreyColor,
                         borderRadius: BorderRadius.circular(16.0),
                       ),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 1,
-                        decoration: BoxDecoration(
-                          color: shipGreyColor,
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(24.0),
+                      child: Padding(
+                        padding: const EdgeInsets.all(24.0),
+                        child: Form(
+                          key: _formKey,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 24.0),
-                                child: InputTextWidget(
-                                  hintName: 'Enter Amount (INR)',
-                                  keyboardType: TextInputType.number,
-                                  controller: amount,
-                                ),
+                                child: TextFieldWidget(
+                                  textEditingController: amount,
+                                  hint: "Enter Amount (INR)",
+                                  isRequired: true,
+                                )
                               ),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -132,20 +148,23 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
                       ),
                     ),
                   ),
-                ],
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
   }
 
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response)async {
-    await profileController.verifyPayment(signature: response.signature, paymentId: response.paymentId, paymentStatus: 'success', orderId: response.orderId);
+  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
+    await profileController.verifyPayment(signature: response.signature,
+        paymentId: response.paymentId,
+        paymentStatus: 'success',
+        orderId: response.orderId);
     await Helpers.hideLoader();
-    Helpers.toast("SUCCESS : ${response.paymentId}");
+    Helpers.toast("SUCCESS");
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
@@ -158,29 +177,32 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
     Helpers.toast("EXTERNAL WALLET : ${response.walletName}");
   }
 
-  Future<void> _openCheckout()async{
-    await Helpers.loader();
-    final isSuccess = await profileController.addFunds(amount: int.tryParse(amount.text));
-    if(isSuccess){
-      var options = {
-        'key': 'rzp_test_w3kuff6E1thtE3',
-        'amount': int.tryParse("${amount.text}00"),
-        'name': 'Loby',
-        'order_id': profileController.addFundsResponse['order_id'],
-        'description': 'Add Fund to Wallet',
-        'timeout': 60,
-        'prefill': {
-          'contact': '8888888888',
-          'email': 'test@razorpay.com'
-        }
-      };
+  Future<void> _openCheckout() async {
+    if(_formKey.currentState!.validate()){
+      await Helpers.loader();
+      final isSuccess = await profileController.addFunds(
+          amount: int.tryParse(amount.text));
+      if (isSuccess) {
+        amount.clear();
+        var options = {
+          'key': 'rzp_test_w3kuff6E1thtE3',
+          'amount': int.tryParse("${amount.text}00"),
+          'name': 'Loby',
+          'order_id': profileController.addFundsResponse['order_id'],
+          'description': 'Add Fund to Wallet',
+          'timeout': 60,
+          'prefill': {
+            'contact': '8888888888',
+            'email': 'test@razorpay.com'
+          }
+        };
 
-      try{
-        _razorpay.open(options);
-      }catch(e){
-        debugPrint("Error : $e");
+        try {
+          _razorpay.open(options);
+        } catch (e) {
+          debugPrint("Error : $e");
+        }
       }
     }
-
   }
 }

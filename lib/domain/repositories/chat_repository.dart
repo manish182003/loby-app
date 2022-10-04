@@ -6,7 +6,7 @@ import 'package:loby/domain/entities/response_entities/chat/chat_response.dart';
 import 'package:loby/domain/entities/response_entities/chat/message_response.dart';
 
 abstract class ChatRepository{
-  Future<Either<Failure, ChatResponse>> getChats({String? name});
+  Future<Either<Failure, ChatResponse>> getChats({String? name, int? page});
 
   Future<Either<Failure, MessageResponse>> getMessages({int? chatId});
 

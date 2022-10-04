@@ -15,6 +15,7 @@ class ApiEndpoints{
   static const String getProfileTags = "/get-profile-tags";
   static const String updateProfile = "/edit-user-profile";
   static const String checkUsername = "/check-user-name-availability";
+  static const String addFCMToken = "/add-user-fcm-token";
 
 
   /// Home APIs ///
@@ -34,6 +35,11 @@ class ApiEndpoints{
   static const String uploadDeliveryProof = "/add-delivery-proof";
   static const String submitRating = "/add-ratings";
   static const String selectDuelWinner = "/select-winner-duel";
+  static const String raiseDispute = "/raise-dispute";
+  static const String getDisputes = "/get-disputes";
+  static const String submitDeliveryProof = "/add-dispute-proof";
+
+
 
 
 
@@ -42,7 +48,10 @@ class ApiEndpoints{
   static const String getConfigurations = "/get-congfiguration";
   static const String createListing = "/create-listing-for-user-game-service";
   static const String getBuyerListings = "/get-all-game-service-listing-buyer";
+  static const String getSelfListings = "/get-all-game-service-listing";
   static const String reportListing = "/report-listing-user";
+  static const String changeListingStatus = "/change-user-game-service-listing-status";
+  static const String deleteListing = "/delete-user-game-service";
 
 
   /// Chat APIs ///

@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:loby/domain/entities/listing/service_listing.dart';
+import 'package:loby/domain/entities/profile/user.dart';
 import 'order_status.dart';
 
 class Order extends Equatable{
@@ -15,6 +16,7 @@ class Order extends Equatable{
     this.transactionFreeze,
     this.createdAt,
     this.updatedAt,
+    this.user,
     this.userGameService,
     this.orderStatuses,
   });
@@ -27,11 +29,13 @@ class Order extends Equatable{
   final int? price;
   final DateTime? cronUpdatedTime;
   final String? paymentSettlement;
-  final dynamic transactionFreeze;
+  final String? transactionFreeze;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final User? user;
   final ServiceListing? userGameService;
   final List<OrderStatus>? orderStatuses;
+
 
 
   @override

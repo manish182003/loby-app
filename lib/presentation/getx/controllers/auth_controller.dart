@@ -19,9 +19,11 @@ import 'package:loby/domain/usecases/auth/get_states.dart';
 import 'package:loby/domain/usecases/auth/login.dart';
 import 'package:loby/domain/usecases/auth/signup.dart';
 import 'package:loby/domain/usecases/auth/update_profile.dart';
+import 'package:loby/presentation/getx/controllers/core_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../domain/entities/auth/state.dart' as state;
+import '../../../domain/usecases/auth/add_fcm_token.dart';
 import 'profile_controller.dart';
 
 class AuthController extends GetxController{
@@ -34,6 +36,7 @@ class AuthController extends GetxController{
   final GetProfileTags _getProfileTags;
   final UpdateProfile _updateProfile;
   final CheckUsername _checkUsername;
+  final AddFCMToken _addFCMToken;
 
   AuthController({
     required Signup signup,
@@ -43,6 +46,7 @@ class AuthController extends GetxController{
     required GetCities getCities,
     required GetProfileTags getProfileTags, required UpdateProfile updateProfile,
     required CheckUsername checkUsername,
+    required AddFCMToken addFCMToken,
     }) : _signup = signup,
         _getCountries = getCountries,
         _getStates = getStates,
@@ -50,7 +54,8 @@ class AuthController extends GetxController{
         _getProfileTags = getProfileTags,
         _updateProfile = updateProfile,
         _login = login,
-  _checkUsername = checkUsername;
+  _checkUsername = checkUsername,
+        _addFCMToken = addFCMToken;
 
   final countries = <Country>[].obs;
   final areMoreCountriesAvailable = true.obs;
@@ -86,11 +91,15 @@ class AuthController extends GetxController{
   final usernameString = "".obs;
 
    Future<void> saveProfileDetails()async{
+     CoreController coreController = Get.find<CoreController>();
      final userId = await Helpers.getUserId();
      final apiToken = await Helpers.getString('apiToken');
+     final fcmToken = await Helpers.getString('fcmToken');
      if(userId != null && apiToken != null){
        ProfileController profileController = Get.find<ProfileController>();
        profileController.getProfile();
+       addFCMToken(fcmToken: fcmToken);
+       coreController.connect(userId);
      }
    }
 
@@ -350,6 +359,27 @@ class AuthController extends GetxController{
     return failureOrSuccess.isRight() ? true : false;
   }
 
+  Future<bool> addFCMToken({required String fcmToken}) async {
+
+    final failureOrSuccess = await _addFCMToken(
+      Params(authParams: AuthParams(
+          fcmToken: fcmToken
+      ),),
+    );
+
+    failureOrSuccess.fold(
+          (failure) {
+        errorMessage.value = Helpers.convertFailureToMessage(failure);
+        debugPrint(errorMessage.value);
+        Helpers.toast(errorMessage.value);
+      },
+          (success) {
+
+        // Helpers.toast('Profile Changed');
+      },
+    );
+    return failureOrSuccess.isRight() ? true : false;
+  }
 
 
 }

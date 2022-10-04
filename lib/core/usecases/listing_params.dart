@@ -27,6 +27,8 @@ class ListingParams extends Equatable {
   final int? priceTo;
   final String? sortByPrice;
   final String? sortByRating;
+  final String? from;
+  final String? type;
 
 
 
@@ -40,7 +42,9 @@ class ListingParams extends Equatable {
     this.page,
     this.title, this.description, this.price, this.stockAvl, this.estimateDeliveryTime, this.priceUnitId, this.serviceOptionId, this.files, this.fileTypes, this.optionAnswer,
     this.userGameServiceId,
-    this.search
+    this.search,
+    this.from,
+    this.type
   });
 
   @override

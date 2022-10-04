@@ -29,7 +29,7 @@ class OrderStatusModel extends OrderStatus{
     showBuyer: json["show_buyer"],
     show: json["show"],
     createdAt: DateTime.parse(json["createdAt"]),
-    updatedAt: DateTime.parse(json["updatedAt"]),
+    updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
   );
 
   Map<String, dynamic> toJson() => {

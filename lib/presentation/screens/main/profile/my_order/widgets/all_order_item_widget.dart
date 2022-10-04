@@ -1,13 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
+import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/order/order.dart';
+import 'package:loby/presentation/getx/controllers/order_controller.dart';
 import 'package:loby/presentation/screens/main/profile/my_order/widgets/status_bottom_sheet.dart';
 import 'package:loby/presentation/widgets/custom_bottom_sheet.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../../core/theme/colors.dart';
 import '../../../../../../data/models/ItemModel.dart';
+import '../../../../../../services/routing_service/routes_name.dart';
 import '../../../../../widgets/ConfirmationRiseDisputeBottomDialog.dart';
 import '../../../../../widgets/UpdateStatusDialog.dart';
 import 'order_status_constants.dart';
@@ -17,6 +22,7 @@ class OrderItem extends StatelessWidget {
   OrderItem({super.key, required this.order});
 
   final CustomPopupMenuController _controller = CustomPopupMenuController();
+  final OrderController orderController = Get.find<OrderController>();
 
   @override
   Widget build(BuildContext context) {
@@ -72,8 +78,7 @@ class OrderItem extends StatelessWidget {
                           child: Text(order.userGameService!.game?.name! ?? "",
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
-                              style: textTheme.headline6
-                                  ?.copyWith(color: textInputTitleColor)),
+                              style: textTheme.headline6?.copyWith(color: textInputTitleColor)),
                         ),
                         const SizedBox(
                           height: 10.0,
@@ -109,7 +114,7 @@ class OrderItem extends StatelessWidget {
                                           maxChildSize: 0.8,
                                           minChildSize: 0.6,
                                           horizontalPadding: 0.0,
-                                          child: StatusBottomSheet(order: order)),
+                                          child: StatusBottomSheet(orderId: order.id!)),
                                     );
                                   },
                                 );
@@ -163,7 +168,7 @@ class OrderItem extends StatelessWidget {
                   ),
                 ],
               ),
-              Positioned(
+              order.orderStatuses!.last.status! == 'ORDER_COMPLETED' ? const SizedBox() : Positioned(
                   top: 0.0,
                   right: 0.0,
                   child: CustomPopupMenu(
@@ -183,23 +188,27 @@ class OrderItem extends StatelessWidget {
                                       _controller.hideMenu();
                                       ConfirmationRiseDisputeBottomDialog(
                                         textTheme: textTheme,
-                                        contentName:
-                                            "Are you sure you want raise a dispute against this order ?",
+                                        contentName: "Are you sure you want raise a dispute against this order ?",
+                                        yesBtnClick: ()async{
+                                          Helpers.loader();
+                                          final isSuccess = await orderController.raiseDispute(orderId: order.id!, description: "nothing");
+                                          Helpers.hideLoader();
+                                          if(isSuccess){
+                                            Navigator.of(context).pop();
+                                            context.pushNamed(myDisputePage);
+                                          }
+                                        }
                                       ).showBottomDialog(context);
                                     },
                                     child: Container(
                                       height: 40,
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 20),
+                                      padding: const EdgeInsets.symmetric(horizontal: 20),
                                       child: Row(
                                         children: <Widget>[
                                           Expanded(
                                             child: Container(
-                                              margin: const EdgeInsets.only(
-                                                  left: 10),
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 10),
+                                              margin: const EdgeInsets.only(left: 10),
+                                              padding: const EdgeInsets.symmetric(vertical: 10),
                                               child: Text(
                                                 item,
                                                 style: textTheme.headline6

@@ -20,13 +20,31 @@ class _ChatScreenState extends State<ChatScreen> {
 
   ChatController chatController = Get.find<ChatController>();
   ProfileController profileController = Get.find<ProfileController>();
+  final controller = ScrollController();
+
+
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    chatController.socketListener(profileController.profile.id!);
+
+    chatController.chatsPageNumber.value = 1;
+    chatController.areMoreChatsAvailable.value = true;
     chatController.getChats();
+
+    controller.addListener(() {
+      if (controller.position.maxScrollExtent == controller.offset) {
+        chatController.getChats();
+      }
+    });
+  }
+
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -36,17 +54,37 @@ class _ChatScreenState extends State<ChatScreen> {
         body: Obx(() {
           if(chatController.isChatsFetching.value){
             return const CustomLoader();
-          }else {
-            return ListView.builder(
-              itemCount: chatController.chats.length,
-              shrinkWrap: true,
-              padding: const EdgeInsets.only(top: 16),
-              physics: const ScrollPhysics(),
-              itemBuilder: (context, index) {
-                return ChatTile(chat: chatController.chats[index]);
-              },
-            );
-          }
+          }else if(chatController.chats.isEmpty) {
+            return const Center(
+                child: Text('No Chats Found', textAlign: TextAlign.center,));
+          }else{
+              return ListView.builder(
+                shrinkWrap: true,
+                controller: controller,
+                physics: const ClampingScrollPhysics(),
+                padding: const EdgeInsets.only(bottom: 20),
+                itemCount: chatController.chats.length + 1,
+                itemBuilder: (context, index) {
+                  if (index < chatController.chats.length) {
+                    final chat = chatController.chats[index];
+                    return ChatTile(chat: chat);
+                  } else {
+                    return Obx(() {
+                      if (chatController.areMoreChatsAvailable.value) {
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 32.0),
+                          child: Center(
+                              child: CircularProgressIndicator()),
+                        );
+                      } else {
+                        return const SizedBox();
+                      }
+                    });
+                  }
+                },
+              );
+            }
         }),
     );
   }

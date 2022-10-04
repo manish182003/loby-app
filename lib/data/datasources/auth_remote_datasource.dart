@@ -24,4 +24,7 @@ abstract class AuthRemoteDatasource{
 
   Future<String> checkUsername(String? username);
 
+  Future<Map<String, dynamic>> addFCMToken(String? fcmToken);
+
+
 }

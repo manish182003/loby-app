@@ -68,7 +68,7 @@ class ConfirmationBottomDialog {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
+                  SizedBox(
                     width: MediaQuery.of(context).size.width * 0.35,
                     height: 45,
                     child: ElevatedButton(
@@ -99,7 +99,7 @@ class ConfirmationBottomDialog {
                               textTheme?.button?.copyWith(color: orangeColor)),
                         )),
                   ),
-                  Container(
+                  SizedBox(
                     width: MediaQuery.of(context).size.width * 0.35,
                     height: 45,
                     child: ElevatedButton(
@@ -112,15 +112,7 @@ class ConfirmationBottomDialog {
                           backgroundColor:
                           MaterialStateProperty.all<Color>(aquaGreenColor),
                         ),
-                        onPressed: () {
-                          debugPrint("change");
-                          Navigator.of(context).pop();
-                          SuccessfullyDeleteListingDialog(
-                              textTheme: textTheme,
-                              contentName:
-                              "Your listing has been completely deleted. Any ongoing order still needs to be completed",)
-                              .showBottomDialog(context);
-                        },
+                        onPressed: yesBtnClick,
                         child: Padding(
                           padding:
                           const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),

@@ -11,7 +11,7 @@ import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../core/theme/colors.dart';
 import '../../../../../data/models/ItemModel.dart';
-import '../disputes/create_new_dispute_screen.dart';
+import '../../profile/my_disputes/create_new_dispute_screen.dart';
 import '../game_details_screen.dart';
 
 class ItemList extends StatefulWidget {
@@ -82,7 +82,7 @@ class _ItemListState extends State<ItemList> {
                       style: textTheme.headline5?.copyWith(color: textWhiteColor)),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Text(widget.listing.game!.name!,
+                    child: Text(widget.listing.game?.name! ?? '',
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         style: textTheme.headline6?.copyWith(color: textInputTitleColor)),
@@ -103,7 +103,7 @@ class _ItemListState extends State<ItemList> {
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 4.0, horizontal: 6.0),
-                                child: Text(widget.listing.category!.name!,
+                                child: Text(widget.listing.category?.name! ?? '',
                                     style: textTheme.headline6?.copyWith(color: textWhiteColor)),
                               ),
                             ),
@@ -196,7 +196,7 @@ class _ItemListState extends State<ItemList> {
                                     ),
                                     const SizedBox(width: 2.0),
                                     Text(
-                                      "${widget.listing.user!.commentCount!}",
+                                      "${widget.listing.user?.commentCount ?? 0}",
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                       style: textTheme.headline4?.copyWith(

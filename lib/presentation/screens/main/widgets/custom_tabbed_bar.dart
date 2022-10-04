@@ -32,8 +32,7 @@ class CustomTabbedAppBarState extends State<CustomTabbedAppBar>
     homeController.getUnreadCount(type: 'chat');
     homeController.getUnreadCount(type: 'notification');
 
-    _tabController =
-        TabController(length: 5, vsync: this, initialIndex: _currentTabIndex);
+    _tabController = TabController(length: 5, vsync: this, initialIndex: _currentTabIndex);
     _tabController.addListener(() {
       if (_tabController.animation?.value == _tabController.index) {
         setState(() {
@@ -64,8 +63,7 @@ class CustomTabbedAppBarState extends State<CustomTabbedAppBar>
           ),
         ),
         Container(
-          margin: const EdgeInsets.only(
-              top: 24.0, bottom: 24.0, left: 24.0, right: 24.0),
+          margin: const EdgeInsets.only(top: 24.0, bottom: 24.0, left: 24.0, right: 24.0),
           // width: MediaQuery.of(context).size.width * 1,
           decoration: BoxDecoration(
             color: aquaGreenColor,
@@ -77,8 +75,7 @@ class CustomTabbedAppBarState extends State<CustomTabbedAppBar>
             labelColor: aquaGreenColor,
             labelStyle: textTheme.headline5,
             unselectedLabelColor: whiteColor,
-            padding: const EdgeInsets.only(
-                top: 8.0, bottom: 8.0, left: 8.0, right: 8.0),
+            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0, left: 8.0, right: 8.0),
             labelPadding: const EdgeInsets.all(2.0),
             indicatorColor: Colors.transparent,
             indicator: BoxDecoration(

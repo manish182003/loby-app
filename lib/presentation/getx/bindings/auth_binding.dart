@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:loby/domain/usecases/auth/add_fcm_token.dart';
 import 'package:loby/domain/usecases/auth/check_username.dart';
 import 'package:loby/domain/usecases/auth/get_cities.dart';
 import 'package:loby/domain/usecases/auth/get_countries.dart';
@@ -23,6 +24,7 @@ class AuthBinding extends Bindings {
     final updateProfile = Get.find<UpdateProfile>();
     final login = Get.find<Login>();
     final checkUsername = Get.find<CheckUsername>();
+    final addFCMToken = Get.find<AddFCMToken>();
 
 
     Get.lazyPut(() => AuthController(
@@ -32,6 +34,7 @@ class AuthBinding extends Bindings {
       getCities: getCities,
       getProfileTags: getProfileTags,
       updateProfile: updateProfile, login: login, checkUsername: checkUsername,
+      addFCMToken: addFCMToken,
 
     ));
   }

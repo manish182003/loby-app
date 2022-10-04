@@ -62,9 +62,11 @@ class _LoginState extends State<Login> {
               onTap: () async {
                 if (_formKey.currentState!.validate()) {
                   Helpers.loader();
-                  await authController.login(email: email.text, password: password.text);
+                  final isSuccess = await authController.login(email: email.text, password: password.text);
                   Helpers.hideLoader();
-                  context.goNamed(mainPage);
+                  if(isSuccess){
+                    context.goNamed(mainPage);
+                  }
                   }
                },
             ),

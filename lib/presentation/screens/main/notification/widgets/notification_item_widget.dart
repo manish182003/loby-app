@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loby/core/theme/colors.dart';
+import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/home/notification.dart' as notify;
 import 'package:loby/presentation/getx/controllers/home_controller.dart';
 import 'package:sizer/sizer.dart';
@@ -48,13 +49,11 @@ class NotificationItemWidget extends StatelessWidget {
                   notification.message!,
                   style: textTheme.headline4?.copyWith(color: textWhiteColor),
                 ),
-                const SizedBox(
-                  height: 6,
-                ),
+                SizedBox(height: 1.h,),
                 Align(
                   alignment: Alignment.bottomRight,
                   child: Text(
-                    "${notification.updatedAt}",
+                    Helpers.formatDateTime(dateTime: notification.updatedAt!),
                     style: textTheme.headline6?.copyWith(color: textLightColor),
                   ),
                 ),

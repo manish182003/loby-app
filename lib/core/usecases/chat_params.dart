@@ -10,6 +10,7 @@ class ChatParams extends Equatable {
   final String? message;
   final int? fileType;
   final File? file;
+  final int? page;
 
 
 
@@ -20,6 +21,7 @@ class ChatParams extends Equatable {
     this.message,
     this.fileType,
     this.file,
+    this.page,
   });
 
   @override

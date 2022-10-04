@@ -21,7 +21,7 @@ class GameResponseModel extends GameResponse {
 
   factory GameResponseModel.fromJSON(Map<String, dynamic> json) =>
       GameResponseModel(
-        games: (json['data'] as List<dynamic>)
+        games: (json['data']['rows'] as List<dynamic>)
             .map<GameModel>((games) => GameModel.fromJson(games))
             .toList(),
       );

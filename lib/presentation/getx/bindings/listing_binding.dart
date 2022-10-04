@@ -5,6 +5,7 @@ import 'package:loby/domain/usecases/auth/get_profile_tags.dart';
 import 'package:loby/domain/usecases/auth/get_states.dart';
 import 'package:loby/domain/usecases/auth/signup.dart';
 import 'package:loby/domain/usecases/auth/update_profile.dart';
+import 'package:loby/domain/usecases/listing/change_listing_status.dart';
 import 'package:loby/domain/usecases/listing/create_listing.dart';
 import 'package:loby/domain/usecases/listing/get_buyer_listings.dart';
 import 'package:loby/domain/usecases/listing/get_configurations.dart';
@@ -22,13 +23,15 @@ class ListingBinding extends Bindings {
     final createListing = Get.find<CreateListing>();
     final getBuyerListings = Get.find<GetBuyerListings>();
     final reportListing = Get.find<ReportListing>();
+    final changeListingStatus = Get.find<ChangeListingStatus>();
 
 
     Get.lazyPut(() => ListingController(
       getConfigurations: getConfigurations,
       createListing: createListing,
       getBuyerListings: getBuyerListings,
-      reportListing: reportListing
+      reportListing: reportListing,
+      changeListingStatus: changeListingStatus
     ));
   }
 

@@ -28,7 +28,7 @@ class RatingResponseModel extends RatingResponse {
 
   factory RatingResponseModel.fromJSON(Map<String, dynamic> json) =>
       RatingResponseModel(
-        ratings: (json['data'] as List<dynamic>)
+        ratings: (json['data']['rows'] as List<dynamic>)
             .map<RatingModel>((ratings) => RatingModel.fromJson(ratings))
             .toList(),
       );

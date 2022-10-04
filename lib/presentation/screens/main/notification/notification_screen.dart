@@ -20,38 +20,75 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreenState extends State<NotificationScreen> {
 
   HomeController homeController = Get.find<HomeController>();
+  final controller = ScrollController();
+
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    homeController.notificationPageNumber.value = 1;
+    homeController.areMoreNotificationAvailable.value = true;
     homeController.getNotifications();
+
+    controller.addListener(() {
+      if (controller.position.maxScrollExtent == controller.offset) {
+        homeController.getNotifications();
+      }
+    });
   }
+
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+  
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
         appBar: appBar(context: context, appBarName: "Notifications", isBackIcon: false),
-        body: Obx(() {
-          if(homeController.isNotificationFetching.value){
-            return const CustomLoader();
-          }else {
-            return BodyPaddingWidget(
-              child: ListView.separated(
-                itemCount: homeController.notifications.length,
+        body: BodyPaddingWidget(
+          child: Obx(() {
+            if(homeController.isNotificationFetching.value){
+              return const CustomLoader();
+            }else if(homeController.notifications.isEmpty) {
+              return const Center(
+                  child: Text('No notifications Found', textAlign: TextAlign.center,));
+            }else{
+              return ListView.separated(
                 shrinkWrap: true,
-                padding: const EdgeInsets.only(top: 16),
+                controller: controller,
                 physics: const ClampingScrollPhysics(),
+                padding: const EdgeInsets.only(bottom: 20),
+                itemCount: homeController.notifications.length + 1,
                 itemBuilder: (context, index) {
-                  return NotificationItemWidget(notification: homeController.notifications[index]);
+                  if (index < homeController.notifications.length) {
+                    final notification = homeController.notifications[index];
+                    return NotificationItemWidget(notification: notification);
+                  } else {
+                    return Obx(() {
+                      if (homeController.areMoreNotificationAvailable.value) {
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 32.0),
+                          child: Center(
+                              child: CircularProgressIndicator()),
+                        );
+                      } else {
+                        return const SizedBox();
+                      }
+                    });
+                  }
                 }, separatorBuilder: (BuildContext context, int index) {
-                  return SizedBox(height: 1.h,);
+                  return SizedBox(height: 2.h,);
               },
-              ),
-            );
-          }
-        }),
+              );
+            }
+          }),
+        ),
     );
   }
 }

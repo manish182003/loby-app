@@ -55,9 +55,11 @@ class _CarouselState extends State<Carousel> {
     );
   }
 
+
+
   @override
   void dispose() {
-    videoPlayerController.dispose();
+    // videoPlayerController.dispose();
     chewieController?.dispose();
     super.dispose();
   }
@@ -86,73 +88,83 @@ class _CarouselState extends State<Carousel> {
           itemCount: widget.images.length,
           itemBuilder: (context, index, realIndex) {
             final list = widget.images.where((element) => element.type != 3).toList();
-            return list[index].type == 2 ? buildImage(
-              urlImage: widget.images[index].path,
-               index: index,
-            ) : widget.images[index].type == 1 ? chewieController!=null? Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Chewie(
-                controller: chewieController!,
-              ),
-            ) : const Center(
-              child: CircularProgressIndicator(),
-            ) :  const SizedBox();
+            if(list[index].type == 2){
+              return buildImage(
+                urlImage: widget.images[index].path,
+                index: index,
+              );
+            }else if(list[index].type == 2){
+              _initPlayer(list[index].path!);
+              if(chewieController != null){
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: Chewie(
+                    controller: chewieController!,
+                  ),
+                );
+              }else{
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            }else{
+              return const SizedBox();
+            }
           }),
-        Positioned(
-          bottom: 8,
-          child: SizedBox(
-            width: MediaQuery
-                .of(context)
-                .size
-                .width * 1,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: (){
-                      animateToSlide(activeIndex-1);
-                    },
-                    child: const SizedBox(
-                      height: 32,
-                      width: 32,
-                      child: CircleAvatar(
-                        backgroundColor: orangeColor,
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 8.0),
-                          child: Icon(
-                            Icons.arrow_back_ios,
-                            color: iconWhiteColor,
-                            size: 18,
+        Positioned.fill(
+          bottom: 12.0,
+          child: Align(
+            alignment: FractionalOffset.bottomCenter,
+            child: SizedBox(
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap: (){
+                        animateToSlide(activeIndex-1);
+                      },
+                      child: const SizedBox(
+                        height: 32,
+                        width: 32,
+                        child: CircleAvatar(
+                          backgroundColor: orangeColor,
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 8.0),
+                            child: Icon(
+                              Icons.arrow_back_ios,
+                              color: iconWhiteColor,
+                              size: 18,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  GestureDetector(
-                    onTap: (){
-                      animateToSlide(activeIndex+1);
-                    },
-                    child: const SizedBox(
-                      height: 32,
-                      width: 32,
-                      child: CircleAvatar(
-                        backgroundColor: orangeColor,
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 4.0),
-                          child: Icon(
-                            Icons.arrow_forward_ios,
-                            color: iconWhiteColor,
-                            size: 18,
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    GestureDetector(
+                      onTap: (){
+                        animateToSlide(activeIndex+1);
+                      },
+                      child: const SizedBox(
+                        height: 32,
+                        width: 32,
+                        child: CircleAvatar(
+                          backgroundColor: orangeColor,
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 4.0),
+                            child: Icon(
+                              Icons.arrow_forward_ios,
+                              color: iconWhiteColor,
+                              size: 18,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  )
-                ]),
+                    )
+                  ]),
+            ),
           ),
         )
 

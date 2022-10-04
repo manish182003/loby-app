@@ -64,9 +64,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                 fit: BoxFit.cover,
               ),
             ),
-            CustomAppBar(
-              appBarName: widget.title,
-            ),
+            appBar(context: context, appBarName: widget.title),
             GestureDetector(
               onTap: _openFileExplorer,
               child: Align(

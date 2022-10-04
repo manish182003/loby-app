@@ -8,7 +8,6 @@ import 'package:loby/presentation/widgets/custom_app_bar.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../../core/theme/colors.dart';
 import 'follower_tab.dart';
-import 'following_tab.dart';
 
 class FollowersScreen extends StatefulWidget {
   const FollowersScreen({Key? key}) : super(key: key);
@@ -82,7 +81,7 @@ class _FollowersScreenState extends State<FollowersScreen> {
                                         children: [
                                           Container(
                                             constraints: BoxConstraints(maxWidth: maxWidth),
-                                            child: Text(profileController.profile.displayName!,
+                                            child: Text(profileController.profile.displayName ?? '',
                                                 overflow: TextOverflow.ellipsis,
                                                 style: textTheme.headline3
                                                     ?.copyWith(

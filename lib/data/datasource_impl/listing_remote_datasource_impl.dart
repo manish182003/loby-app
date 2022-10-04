@@ -123,7 +123,7 @@ class ListingRemoteDatasourceImpl extends ListingRemoteDatasource{
   }
 
   @override
-  Future<ServiceListingResponseModel> getBuyerListings(int? categoryId, int? gameId, int? listingId, int? userId, int? page, String? search, int? priceFrom, int? priceTo, String? sortByPrice, String? sortByRating) async{
+  Future<ServiceListingResponseModel> getBuyerListings(int? categoryId, int? gameId, int? listingId, int? userId, int? page, String? search, int? priceFrom, int? priceTo, String? sortByPrice, String? sortByRating, String? from) async{
     try {
       String token = await Helpers.getApiToken();
       final Map<String, dynamic> headers = {
@@ -133,7 +133,7 @@ class ListingRemoteDatasourceImpl extends ListingRemoteDatasource{
       final response = await Helpers.sendRequest(
         _dio,
         RequestType.get,
-        ApiEndpoints.getBuyerListings,
+        from == 'myProfile' ? ApiEndpoints.getSelfListings : ApiEndpoints.getBuyerListings,
         queryParams: {
           'category_id': '${categoryId ?? ''}',
           'game_id' : '${gameId ?? ''}',
@@ -145,7 +145,6 @@ class ListingRemoteDatasourceImpl extends ListingRemoteDatasource{
           'priceTo' : '${priceTo ?? ''}',
           'sortByPrice' : sortByPrice ?? '',
           'sortByRating' : sortByRating ?? '',
-
         },
         headers: headers,
       );
@@ -166,6 +165,28 @@ class ListingRemoteDatasourceImpl extends ListingRemoteDatasource{
         RequestType.post,
         ApiEndpoints.reportListing,
         queryParams: {'account_id': "$userId", 'user_game_service_id': "$userGameServiceId"},
+        headers: headers,
+      );
+
+      return response!;
+    } on ServerException catch (e) {
+      throw ServerException(message: e.message);
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> changeListingStatus(int? listingId, String? type) async{
+    try {
+
+      print(listingId);
+      print(type);
+
+      final headers = await Helpers.getApiHeaders();
+      final response = await Helpers.sendRequest(
+        _dio,
+        type == 'delete' ? RequestType.delete : RequestType.post,
+        type == 'delete' ? ApiEndpoints.deleteListing : ApiEndpoints.changeListingStatus,
+        queryParams: {'user_game_service_id': "$listingId"},
         headers: headers,
       );
 

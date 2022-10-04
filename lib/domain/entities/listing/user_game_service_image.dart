@@ -6,12 +6,16 @@ class UserGameServiceImage extends Equatable {
     this.userGameServiceId,
     this.path,
     this.type,
+    this.createdAt,
+    this.updatedAt,
   });
 
   final int? id;
   final int? userGameServiceId;
   final String? path;
   final int? type;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
 
 

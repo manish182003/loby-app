@@ -18,7 +18,7 @@ class ChatResponseModel extends ChatResponse {
 
   factory ChatResponseModel.fromJSON(Map<String, dynamic> json) =>
       ChatResponseModel(
-        chats: (json['data'] as List<dynamic>)
+        chats: (json['data']['rows'] as List<dynamic>)
             .map<ChatModel>((chat) => ChatModel.fromJson(chat))
             .toList(),
       );

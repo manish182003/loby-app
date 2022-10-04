@@ -423,7 +423,7 @@ class ProfileController extends GetxController{
             } else {
               paymentTransactions.value = success.paymentTransactions;
             }
-            areMorePaymentTransactionsAvailable.value = paymentTransactions.length != success.count;
+            areMorePaymentTransactionsAvailable.value = success.paymentTransactions.length == 10;
 
 
             paymentTransactionsPageNumber.value++;
@@ -455,6 +455,7 @@ class ProfileController extends GetxController{
           isWalletTransactionsFetching.value = false;
         },
             (success) {
+              areMoreWalletTransactionsAvailable.value = success.walletTransactions.length == 10;
 
 
           if (walletTransactionsPageNumber > 1) {
@@ -462,7 +463,6 @@ class ProfileController extends GetxController{
           } else {
             walletTransactions.value = success.walletTransactions;
           }
-          areMoreWalletTransactionsAvailable.value = walletTransactions.length != success.count;
 
 
           walletTransactionsPageNumber.value++;

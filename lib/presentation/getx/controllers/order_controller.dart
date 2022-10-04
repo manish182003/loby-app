@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loby/core/usecases/home_params.dart';
@@ -12,6 +13,7 @@ import 'package:loby/domain/entities/home/category.dart';
 import 'package:loby/domain/entities/home/category_games.dart';
 import 'package:loby/domain/entities/home/game.dart';
 import 'package:loby/domain/entities/home/notification.dart' as notification;
+import 'package:loby/domain/entities/order/dispute.dart';
 import 'package:loby/domain/entities/order/order.dart';
 import 'package:loby/domain/usecases/order/create_order.dart';
 import 'package:loby/domain/usecases/home/delete_notification.dart';
@@ -21,9 +23,12 @@ import 'package:loby/domain/usecases/home/get_games.dart';
 import 'package:loby/domain/usecases/home/get_notifications.dart';
 import 'package:loby/domain/usecases/order/get_orders.dart';
 import 'package:loby/domain/usecases/home/get_unread_count.dart';
+import 'package:loby/domain/usecases/order/raise_dispute.dart';
 import 'package:loby/domain/usecases/order/select_duel_winner.dart';
 
 import '../../../domain/usecases/order/change_order_status.dart';
+import '../../../domain/usecases/order/get_disputes.dart';
+import '../../../domain/usecases/order/submit_dispute_proof.dart';
 import '../../../domain/usecases/order/submit_rating.dart';
 import '../../../domain/usecases/order/upload_delivery_proof.dart';
 
@@ -35,6 +40,10 @@ class OrderController extends GetxController{
   final UploadDeliveryProof _uploadDeliveryProof;
   final SubmitRating _submitRating;
   final SelectDuelWinner _selectDuelWinner;
+  final RaiseDispute _raiseDispute;
+  final GetDisputes _getDisputes;
+  final SubmitDisputeProof _submitDisputeProof;
+
 
   OrderController({
 
@@ -44,6 +53,9 @@ class OrderController extends GetxController{
     required UploadDeliveryProof uploadDeliveryProof,
     required SubmitRating submitRating,
     required SelectDuelWinner selectWinnerDuel,
+    required RaiseDispute raiseDispute,
+    required GetDisputes getDisputes,
+    required SubmitDisputeProof submitDisputeProof,
 
   }) :
         _createOrder = createOrder,
@@ -51,10 +63,25 @@ class OrderController extends GetxController{
   _changeOrderStatus = changeOrderStatus,
         _uploadDeliveryProof = uploadDeliveryProof,
         _submitRating = submitRating,
-        _selectDuelWinner = selectWinnerDuel;
+        _selectDuelWinner = selectWinnerDuel,
+        _raiseDispute = raiseDispute,
+        _getDisputes = getDisputes,
+  _submitDisputeProof = submitDisputeProof;
 
   final orders = <Order>[].obs;
   final isOrdersFetching = false.obs;
+  final areMoreOrdersAvailable = true.obs;
+  final ordersPageNumber = 1.obs;
+  
+
+  final disputes = <Dispute>[].obs;
+  final isDisputesFetching = false.obs;
+  final areMoreDisputesAvailable = true.obs;
+  final disputesPageNumber = 1.obs;
+
+  final files = <PlatformFile>[].obs;
+  final fileTypes = <int>[].obs;
+
 
 
   final errorMessage = ''.obs;
@@ -81,12 +108,15 @@ class OrderController extends GetxController{
     return failureOrSuccess.isRight() ? true : false;
   }
 
+
+
   Future<bool> getOrders({int? orderId, String? status}) async {
-    isOrdersFetching(true);
+    ordersPageNumber.value == 1 ? isOrdersFetching(true) : isOrdersFetching(false);
     final failureOrSuccess = await _getOrders(
       Params(orderParams: OrderParams(
         orderId: orderId,
         status: status,
+        page: ordersPageNumber.value
       ),),
     );
 
@@ -98,8 +128,18 @@ class OrderController extends GetxController{
         isOrdersFetching(false);
       },
           (success) {
-        orders.value = success.orders;
-        isOrdersFetching(false);
+
+            areMoreOrdersAvailable.value = success.orders.length == 10;
+
+            if (ordersPageNumber > 1) {
+              orders.addAll(success.orders);
+            } else {
+              orders.value = success.orders;
+            }
+            ordersPageNumber.value++;
+
+            isOrdersFetching.value = false;
+
         // Helpers.toast('Profile Changed');
       },
     );
@@ -193,5 +233,96 @@ class OrderController extends GetxController{
     );
     return failureOrSuccess.isRight() ? true : false;
   }
+
+
+  Future<bool> raiseDispute({required int orderId, String? description}) async {
+    final failureOrSuccess = await _raiseDispute(
+      Params(orderParams: OrderParams(
+        orderId: orderId,
+        description: description
+      ),),
+    );
+
+    failureOrSuccess.fold(
+          (failure) {
+        errorMessage.value = Helpers.convertFailureToMessage(failure);
+        debugPrint(errorMessage.value);
+        Helpers.toast(errorMessage.value);
+      },
+          (success) {
+        // Helpers.toast('Profile Changed');
+      },
+    );
+    return failureOrSuccess.isRight() ? true : false;
+  }
+
+
+  Future<bool> getDisputes({String? status}) async {
+    disputesPageNumber.value == 1 ? isDisputesFetching(true) : isDisputesFetching(false);
+
+    if(areMoreDisputesAvailable.value){
+      final failureOrSuccess = await _getDisputes(
+        Params(orderParams: OrderParams(
+          page: disputesPageNumber.value,
+          status: status,
+        ),),
+      );
+
+      failureOrSuccess.fold(
+            (failure) {
+          errorMessage.value = Helpers.convertFailureToMessage(failure);
+          debugPrint(errorMessage.value);
+          Helpers.toast(errorMessage.value);
+          isDisputesFetching.value = false;
+        },
+            (success) {
+              areMoreDisputesAvailable.value = success.disputes.length == 10;
+
+              if (disputesPageNumber > 1) {
+            disputes.addAll(success.disputes);
+          } else {
+            disputes.value = success.disputes;
+          }
+
+          disputesPageNumber.value++;
+
+          isDisputesFetching.value = false;
+        },
+      );
+      return failureOrSuccess.isRight() ? true : false;
+    }
+    return false;
+  }
+
+
+  Future<bool> submitDisputeProof({required int disputeId, String? description}) async {
+
+    final failureOrSuccess = await _submitDisputeProof(
+      Params(orderParams: OrderParams(
+        disputeId: disputeId,
+        description: description,
+        files: files,
+        fileTypes: fileTypes,
+      ),),
+    );
+
+    failureOrSuccess.fold(
+          (failure) {
+        errorMessage.value = Helpers.convertFailureToMessage(failure);
+        debugPrint(errorMessage.value);
+        Helpers.toast(errorMessage.value);
+      },
+          (success) {
+
+        files.clear();
+        fileTypes.clear();
+
+
+      },
+    );
+    return failureOrSuccess.isRight() ? true : false;
+  }
+
+
 
 }

@@ -15,7 +15,7 @@ import 'package:loby/domain/entities/listing/user_game_service_option.dart';
 // ignore_for_file: overridden_fields, annotate_overrides
 
 class ServiceListingModel extends ServiceListing{
-  const ServiceListingModel({
+  ServiceListingModel({
     this.id,
     this.categoryId,
     this.gameId,
@@ -49,7 +49,7 @@ class ServiceListingModel extends ServiceListing{
   final int? edt;
   final int? userId;
   final int? priceUnitId;
-  final String? status;
+  String? status;
   final String? listingNumber;
   final String? shareableLink;
   final DateTime? createdAt;
@@ -101,8 +101,8 @@ class ServiceListingModel extends ServiceListing{
     "shareable_link": shareableLink,
     "createdAt": createdAt?.toIso8601String(),
     "updatedAt": updatedAt?.toIso8601String(),
-    "userGameServiceImages": List<UserGameServiceImageModel>.from(userGameServiceImages!.map((x) => x.toJson())),
-    "userGameServiceOptions": List<UserGameServiceOptionModel>.from(userGameServiceOptions!.map((x) => x.toJson())),
+    "userGameServiceImages": userGameServiceImages == null ? null : List<dynamic>.from(userGameServiceImages!.map((x) => x.toJson())),
+    "userGameServiceOptions": userGameServiceOptions == null ? null : List<dynamic>.from(userGameServiceOptions!.map((x) => x.toJson())),
     "user": user?.toJson(),
     "game": game?.toJson(),
     "category": category?.toJson(),

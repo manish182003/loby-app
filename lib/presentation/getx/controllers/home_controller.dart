@@ -7,7 +7,9 @@ import 'package:loby/domain/entities/home/category.dart';
 import 'package:loby/domain/entities/home/category_games.dart';
 import 'package:loby/domain/entities/home/game.dart';
 import 'package:loby/domain/entities/home/notification.dart' as notification;
+import 'package:loby/domain/entities/listing/service_listing.dart';
 import 'package:loby/domain/entities/order/order.dart';
+import 'package:loby/domain/entities/profile/user.dart';
 import 'package:loby/domain/usecases/order/create_order.dart';
 import 'package:loby/domain/usecases/home/delete_notification.dart';
 import 'package:loby/domain/usecases/home/get_categories.dart';
@@ -17,6 +19,8 @@ import 'package:loby/domain/usecases/home/get_notifications.dart';
 import 'package:loby/domain/usecases/order/get_orders.dart';
 import 'package:loby/domain/usecases/home/get_unread_count.dart';
 
+import '../../../domain/usecases/home/global_search.dart';
+
 class HomeController extends GetxController{
   final GetCategories _getCategories;
   final GetGames _getGames;
@@ -24,6 +28,7 @@ class HomeController extends GetxController{
   final GetNotifications _getNotifications;
   final DeleteNotification _deleteNotification;
   final GetUnreadCount _getUnreadCount;
+  final GlobalSearch _globalSearch;
 
   HomeController({
     required GetCategories getCategories,
@@ -32,12 +37,14 @@ class HomeController extends GetxController{
     required GetNotifications getNotifications,
     required DeleteNotification deleteNotification,
     required GetUnreadCount getUnreadCount,
+    required GlobalSearch globalSearch,
   }) : _getCategories = getCategories,
       _getGames = getGames,
         _getCategoryGames = getCategoryGames,
   _getNotifications = getNotifications,
   _deleteNotification = deleteNotification,
-  _getUnreadCount = getUnreadCount;
+  _getUnreadCount = getUnreadCount,
+        _globalSearch = globalSearch;
 
   final categories = <Category>[].obs;
   final isCategoryFetching = false.obs;
@@ -46,8 +53,11 @@ class HomeController extends GetxController{
   final games = <Game>[].obs;
   final isGamesFetching = false.obs;
 
+
   final categoryGames = <CategoryGames>[].obs;
   final isCategoryGamesFetching = false.obs;
+  final areMoreCategoryGamesAvailable = true.obs;
+  final categoriesGamePageNumber = 1.obs;
 
   final profileSelectedOptionIndex = 0.obs;
 
@@ -57,15 +67,19 @@ class HomeController extends GetxController{
   final selectedCategoryId = 0.obs;
   final selectedGameId = 0.obs;
 
-  final orders = <Order>[].obs;
-  final isOrdersFetching = false.obs;
 
   final notifications = <notification.Notification>[].obs;
   final isNotificationFetching = false.obs;
+  final areMoreNotificationAvailable = true.obs;
   final notificationPageNumber = 1.obs;
 
   final chatCount = 0.obs;
   final notificationCount = 0.obs;
+
+  final isGlobalSearchFetching = false.obs;
+  final serviceListingResults = <ServiceListing>[].obs;
+  final userResults = <User>[].obs;
+  final gameResults = <Game>[].obs;
 
 
 
@@ -128,57 +142,77 @@ class HomeController extends GetxController{
     return failureOrSuccess.isRight() ? true : false;
   }
 
+
   Future<bool> getCategoryGames({int? categoryId, String? search}) async {
+    // categoriesGamePageNumber.value == 1 ? isCategoryGamesFetching(true) : isCategoryGamesFetching(false);
+
     isCategoryGamesFetching(true);
 
-    final failureOrSuccess = await _getCategoryGames(
-      Params(homeParams: HomeParams(
-        categoryId: categoryId,
-            search: search
-      ),),
-    );
+    if(areMoreCategoryGamesAvailable.value){
+      final failureOrSuccess = await _getCategoryGames(
+        Params(homeParams: HomeParams(
+            categoryId: categoryId,
+            search: search,
+            page: categoriesGamePageNumber.value
+        ),),
+      );
 
-    failureOrSuccess.fold(
-          (failure) {
-        errorMessage.value = Helpers.convertFailureToMessage(failure);
-        debugPrint(errorMessage.value);
-        Helpers.toast(errorMessage.value);
-        isCategoryGamesFetching(false);
+      failureOrSuccess.fold(
+            (failure) {
+          errorMessage.value = Helpers.convertFailureToMessage(failure);
+          debugPrint(errorMessage.value);
+          Helpers.toast(errorMessage.value);
+          isCategoryGamesFetching(false);
 
-      },
-          (success) {
-            categoryGames.value = success.categoryGames.categoryGames!;
-        isCategoryGamesFetching(false);
+        },
+            (success) {
+          categoryGames.value = success.categoryGames.categoryGames!;
+          isCategoryGamesFetching(false);
 
-      },
-    );
-    return failureOrSuccess.isRight() ? true : false;
+        },
+      );
+      return failureOrSuccess.isRight() ? true : false;
+    }
+    return false;
   }
 
 
   Future<bool> getNotifications({int? notificationId}) async {
-    isNotificationFetching(true);
-    final failureOrSuccess = await _getNotifications(
-      Params(homeParams: HomeParams(
-        page: notificationPageNumber.value,
-        notificationId: notificationId
-      ),),
-    );
+    notificationPageNumber.value == 1 ? isNotificationFetching(true) : isNotificationFetching(false);
 
-    failureOrSuccess.fold(
-          (failure) {
-        errorMessage.value = Helpers.convertFailureToMessage(failure);
-        debugPrint(errorMessage.value);
-        Helpers.toast(errorMessage.value);
-        isNotificationFetching(false);
-      },
-          (success) {
-        notifications.value = success.notifications;
-        isNotificationFetching(false);
-        // Helpers.toast('Profile Changed');
-      },
-    );
-    return failureOrSuccess.isRight() ? true : false;
+    if(areMoreNotificationAvailable.value){
+      final failureOrSuccess = await _getNotifications(
+        Params(homeParams: HomeParams(
+            page: notificationPageNumber.value,
+            notificationId: notificationId
+        ),),
+      );
+
+      failureOrSuccess.fold(
+            (failure) {
+          errorMessage.value = Helpers.convertFailureToMessage(failure);
+          debugPrint(errorMessage.value);
+          Helpers.toast(errorMessage.value);
+          isNotificationFetching(false);
+        },
+            (success) {
+              areMoreNotificationAvailable.value = success.notifications.length == 10;
+
+              if (notificationPageNumber > 1) {
+                notifications.addAll(success.notifications);
+              } else {
+                notifications.value = success.notifications;
+              }
+
+              notificationPageNumber.value++;
+
+              isNotificationFetching.value = false;
+          // Helpers.toast('Profile Changed');
+        },
+      );
+      return failureOrSuccess.isRight() ? true : false;
+    }
+    return false;
   }
 
 
@@ -223,6 +257,37 @@ class HomeController extends GetxController{
             }else{
               notificationCount.value = success;
             }
+
+        // Helpers.toast('Profile Changed');
+      },
+    );
+    return failureOrSuccess.isRight() ? true : false;
+  }
+
+
+
+
+  Future<bool> globalSearch({required String search}) async {
+    isGlobalSearchFetching(true);
+    final failureOrSuccess = await _globalSearch(
+      Params(homeParams: HomeParams(
+          search: search,
+      ),),
+    );
+
+    failureOrSuccess.fold(
+          (failure) {
+        errorMessage.value = Helpers.convertFailureToMessage(failure);
+        debugPrint(errorMessage.value);
+        Helpers.toast(errorMessage.value);
+        isGlobalSearchFetching(false);
+      },
+          (success) {
+
+            serviceListingResults.value = success.userGameServiceDetails;
+            userResults.value = success.userDetails;
+            gameResults.value = success.gameDetails;
+            isGlobalSearchFetching(false);
 
         // Helpers.toast('Profile Changed');
       },

@@ -5,6 +5,7 @@ import 'package:loby/data/datasources/home_remote_datasource.dart';
 import 'package:loby/domain/entities/response_entities/home/category_games_response.dart';
 import 'package:loby/domain/entities/response_entities/home/category_response.dart';
 import 'package:loby/domain/entities/response_entities/home/game_response.dart';
+import 'package:loby/domain/entities/response_entities/home/global_search_response.dart';
 import 'package:loby/domain/entities/response_entities/home/notification_response.dart';
 import 'package:loby/domain/entities/response_entities/order/order_response.dart';
 import 'package:loby/domain/repositories/home_repository.dart';
@@ -72,6 +73,16 @@ class HomeRepositoryImpl extends HomeRepository{
   Future<Either<Failure, int>> getUnreadCount({String? type})async {
     try {
       return Right(await _homeRemoteDatasource.getUnreadCount(type));
+    } on ServerException catch (e) {
+    // Loggers can be added here for analyzation.
+    return Left(ServerFailure(message: e.message.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, GlobalSearchResponse>> globalSearch({String? search}) async{
+    try {
+      return Right(await _homeRemoteDatasource.globalSearch(search));
     } on ServerException catch (e) {
     // Loggers can be added here for analyzation.
     return Left(ServerFailure(message: e.message.toString()));

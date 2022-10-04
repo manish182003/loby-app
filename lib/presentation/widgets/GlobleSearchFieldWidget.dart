@@ -12,39 +12,36 @@ class GlobalSearchFieldWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          constraints: const BoxConstraints(
-            minHeight: 45,
-            minWidth: 45,
-          ),
-          decoration: BoxDecoration(
-            color: textFieldColor,
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(width: 4.w,),
-              SizedBox(
-                child: SvgPicture.asset(
-                  'assets/icons/search_icon.svg',
-                  color: iconWhiteColor,
-                  width: 18,
-                  height: 18,
-                ),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        constraints: const BoxConstraints(
+          minHeight: 55,
+          minWidth: 45,
+        ),
+        decoration: BoxDecoration(
+          color: textFieldColor,
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(width: 4.w,),
+            SizedBox(
+              child: SvgPicture.asset(
+                'assets/icons/search_icon.svg',
+                color: iconWhiteColor,
+                width: 18,
+                height: 18,
               ),
-              SizedBox(width: 2.w,),
-              SizedBox(
-                child: Text('Search',
-                  style: textTheme.headline4?.copyWith(color: textWhiteColor),
-                ),
+            ),
+            SizedBox(width: 2.w,),
+            SizedBox(
+              child: Text('Search',
+                style: textTheme.headline4?.copyWith(color: textWhiteColor),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

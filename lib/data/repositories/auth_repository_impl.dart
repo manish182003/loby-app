@@ -97,4 +97,14 @@ class AuthRepositoryImpl extends AuthRepository{
     }
   }
 
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> addFCMToken({String? fcmToken})async {
+    try {
+      return Right(await _authRemoteDatasource.addFCMToken(fcmToken));
+    } on ServerException catch (e) {
+    // Loggers can be added here for analyzation.
+    return Left(ServerFailure(message: e.message.toString()));
+    }
+  }
+
 }

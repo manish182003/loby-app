@@ -16,9 +16,9 @@ class ChatRepositoryImpl extends ChatRepository{
   ChatRepositoryImpl(this._chatRemoteDatasource);
 
   @override
-  Future<Either<Failure, ChatResponse>> getChats({String? name}) async{
+  Future<Either<Failure, ChatResponse>> getChats({String? name, int? page}) async{
     try {
-      return Right(await _chatRemoteDatasource.getChats(name));
+      return Right(await _chatRemoteDatasource.getChats(name, page));
     } on ServerException catch (e) {
     // Loggers can be added here for analyzation.
     return Left(ServerFailure(message: e.message.toString()));

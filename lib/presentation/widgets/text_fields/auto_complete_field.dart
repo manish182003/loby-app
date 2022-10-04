@@ -83,7 +83,7 @@ class AutoCompleteField extends StatelessWidget {
             ),
           ),
           textFieldConfiguration: TextFieldConfiguration(
-            scrollPadding: EdgeInsets.only(bottom:MediaQuery.of(context).viewInsets.bottom),
+            scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom * 1.5),
             style: textTheme.headline4!.copyWith(color: textWhiteColor),
             decoration: InputDecoration(
               hintText: hint,
@@ -112,6 +112,15 @@ class AutoCompleteField extends StatelessWidget {
               focusedErrorBorder: OutlineInputBorder(
                 borderSide: const BorderSide(color:textErrorColor, width: 0.5),
                 borderRadius:  BorderRadius.circular(8.0),),
+
+              suffixIcon: IconButton(
+                padding: const EdgeInsets.all(0.0),
+                icon: const Icon(
+                  Icons.keyboard_arrow_down,
+                  color: whiteColor,
+                  size: 20,
+                ), onPressed: () {  },
+              )
 
             ),
             controller: selectedSuggestion,

@@ -75,7 +75,6 @@ const List duelStatuses = [
   'Duel Placed',
   'Seller Accepted',
   'Duel in Progress',
-  'Select Winner',
   'Transaction Completed',
   'Loby Protection Period',
   'Order Completed',

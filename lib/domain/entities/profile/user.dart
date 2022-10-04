@@ -82,7 +82,7 @@ class User extends Equatable{
   final int? followersCount;
   final int? listingsCount;
   final int? orderCount;
-  final int? avgRatingCount;
+  final String? avgRatingCount;
   final int? commentCount;
   final String? userFollowStatus;
   final State? state;

@@ -7,6 +7,8 @@ import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/chat/chat.dart';
 import 'package:loby/presentation/screens/main/chat/message_page.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
+import 'package:sizer/sizer.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class ChatTile extends StatelessWidget {
   final Chat chat;
@@ -17,8 +19,6 @@ class ChatTile extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     return GestureDetector(
         onTap: ()async {
-          final userId = await Helpers.getUserId();
-          print("here is userid $userId");
           context.pushNamed(messagePage, queryParams: {'chatId' : "${chat.id}", 'senderId' : "${chat.senderId}", 'receiverId' : "${chat.receiverId}"});
         },
         child: Padding(
@@ -47,9 +47,28 @@ class ChatTile extends StatelessWidget {
                       const SizedBox(
                         height: 6,
                       ),
-                      Text(
-                        chat.chatLatestDate.toString(),
-                        style: textTheme.subtitle2?.copyWith(color: textWhiteColor, fontWeight: FontWeight.w200,),
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              chat.chatLatestMessage ?? '',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: textTheme.subtitle2?.copyWith(color: textWhiteColor, fontWeight: FontWeight.w200,),
+                            ),
+                          ),
+                          chat.chatLatestMessage == null ? const SizedBox() : SizedBox(width: 2.w),
+                          chat.chatLatestMessage == null ? const SizedBox() : Container(
+                            decoration: const BoxDecoration(shape: BoxShape.circle, color: whiteColor),
+                            width: 3,
+                            height: 3,
+                          ),
+                          chat.chatLatestMessage == null ? const SizedBox() : SizedBox(width: 2.w),
+                          Text(
+                              timeago.format(chat.chatLatestDate!),
+                            style: textTheme.subtitle2?.copyWith(color: textWhiteColor, fontWeight: FontWeight.w200,),
+                          ),
+                        ],
                       ),
                     ],
                   ),

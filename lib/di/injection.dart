@@ -23,6 +23,7 @@ import 'package:loby/domain/repositories/home_repository.dart';
 import 'package:loby/domain/repositories/listing_repository.dart';
 import 'package:loby/domain/repositories/order_repository.dart';
 import 'package:loby/domain/repositories/profile_repository.dart';
+import 'package:loby/domain/usecases/auth/add_fcm_token.dart';
 import 'package:loby/domain/usecases/auth/check_username.dart';
 import 'package:loby/domain/usecases/auth/get_cities.dart';
 import 'package:loby/domain/usecases/auth/get_countries.dart';
@@ -34,8 +35,10 @@ import 'package:loby/domain/usecases/auth/update_profile.dart';
 import 'package:loby/domain/usecases/chat/get_chats.dart';
 import 'package:loby/domain/usecases/chat/get_messages.dart';
 import 'package:loby/domain/usecases/chat/send_message.dart';
+import 'package:loby/domain/usecases/home/global_search.dart';
 import 'package:loby/domain/usecases/order/change_order_status.dart';
 import 'package:loby/domain/usecases/order/create_order.dart';
+import 'package:loby/domain/usecases/order/get_disputes.dart';
 import 'package:loby/domain/usecases/order/get_orders.dart';
 import 'package:loby/domain/usecases/order/create_order.dart';
 import 'package:loby/domain/usecases/home/delete_notification.dart';
@@ -49,7 +52,9 @@ import 'package:loby/domain/usecases/listing/create_listing.dart';
 import 'package:loby/domain/usecases/listing/get_buyer_listings.dart';
 import 'package:loby/domain/usecases/listing/get_configurations.dart';
 import 'package:loby/domain/usecases/listing/report_listing.dart';
+import 'package:loby/domain/usecases/order/raise_dispute.dart';
 import 'package:loby/domain/usecases/order/select_duel_winner.dart';
+import 'package:loby/domain/usecases/order/submit_dispute_proof.dart';
 import 'package:loby/domain/usecases/order/submit_rating.dart';
 import 'package:loby/domain/usecases/order/upload_delivery_proof.dart';
 import 'package:loby/domain/usecases/profile/add_bank_details.dart';
@@ -68,6 +73,7 @@ import 'package:loby/domain/usecases/profile/verify_payment.dart';
 import 'package:loby/domain/usecases/profile/withdraw_money.dart';
 import 'package:loby/presentation/getx/bindings/auth_binding.dart';
 import 'package:loby/presentation/getx/bindings/chat_binding.dart';
+import 'package:loby/presentation/getx/bindings/core_binding.dart';
 import 'package:loby/presentation/getx/bindings/home_binding.dart';
 import 'package:loby/presentation/getx/bindings/listing_binding.dart';
 import 'package:loby/presentation/getx/bindings/order_binding.dart';
@@ -75,6 +81,7 @@ import 'package:loby/presentation/getx/bindings/profile_binding.dart';
 
 import '../data/datasource_impl/order_remote_datasource_impl.dart';
 import '../data/repositories/order_repository_impl.dart';
+import '../domain/usecases/listing/change_listing_status.dart';
 import '../domain/usecases/profile/get_wallet_transactions.dart';
 
 class DependencyInjector{
@@ -97,6 +104,7 @@ class DependencyInjector{
     OrderBinding().dependencies();
     ChatBinding().dependencies();
     ProfileBinding().dependencies();
+    CoreBinding().dependencies();
   }
 
 
@@ -147,6 +155,7 @@ class DependencyInjector{
     Get.lazyPut(() => GetProfileTags(authRepository));
     Get.lazyPut(() => UpdateProfile(authRepository));
     Get.lazyPut(() => CheckUsername(authRepository));
+    Get.lazyPut(() => AddFCMToken(authRepository));
 
   }
 
@@ -159,6 +168,7 @@ class DependencyInjector{
     Get.lazyPut(() => GetNotifications(homeRepository));
     Get.lazyPut(() => DeleteNotification(homeRepository));
     Get.lazyPut(() => GetUnreadCount(homeRepository));
+    Get.lazyPut(() => GlobalSearch(homeRepository));
 
   }
 
@@ -169,6 +179,7 @@ class DependencyInjector{
     Get.lazyPut(() => CreateListing(listingRepository));
     Get.lazyPut(() => GetBuyerListings(listingRepository));
     Get.lazyPut(() => ReportListing(listingRepository));
+    Get.lazyPut(() => ChangeListingStatus(listingRepository));
   }
 
 
@@ -190,6 +201,9 @@ class DependencyInjector{
     Get.lazyPut(() => UploadDeliveryProof(orderRepository));
     Get.lazyPut(() => SubmitRating(orderRepository));
     Get.lazyPut(() => SelectDuelWinner(orderRepository));
+    Get.lazyPut(() => RaiseDispute(orderRepository));
+    Get.lazyPut(() => GetDisputes(orderRepository));
+    Get.lazyPut(() => SubmitDisputeProof(orderRepository));
 
   }
 

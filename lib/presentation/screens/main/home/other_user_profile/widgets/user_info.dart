@@ -43,7 +43,7 @@ class UserInfo extends StatelessWidget {
             final index = homeController.profileSelectedOptionIndex.value;
             switch(index){
               case 0:
-                return UserListingWidget(user: user);
+                return UserListingWidget(user: user, from: from,);
               case 1:
                 return UserAboutWidget(user: user);
               case 2:
@@ -57,7 +57,7 @@ class UserInfo extends StatelessWidget {
               case 4:
                 return UserDuelsWidget(user: user);
               default:
-                return UserListingWidget(user: user);
+                return UserListingWidget(user: user, from: from,);
             }
           }),
         ],

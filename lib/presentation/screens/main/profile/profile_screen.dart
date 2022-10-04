@@ -56,7 +56,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
                   child: GestureDetector(
                     onTap: () {
-                      context.pushNamed(otherUserPage, queryParams: {'userId': "${profileController.profile.id}", 'from': 'my'});
+                      context.pushNamed(otherUserPage, queryParams: {'userId': "${profileController.profile.id}", 'from': 'myProfile'});
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,

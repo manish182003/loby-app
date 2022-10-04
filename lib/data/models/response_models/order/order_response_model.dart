@@ -23,7 +23,7 @@ class OrderResponseModel extends OrderResponse {
 
   factory OrderResponseModel.fromJSON(Map<String, dynamic> json) =>
       OrderResponseModel(
-        orders: (json['data'] as List<dynamic>)
+        orders: (json['data']['rows'] as List<dynamic>)
             .map<OrderModel>((order) => OrderModel.fromJson(order))
             .toList(),
       );

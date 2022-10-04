@@ -63,12 +63,6 @@ class CustomAppBar extends StatelessWidget {
       ),
     );
   }
-
-
-
-
-
-
 }
 
 PreferredSizeWidget appBar({required BuildContext context, String? appBarName,
@@ -82,9 +76,19 @@ PreferredSizeWidget appBar({required BuildContext context, String? appBarName,
     preferredSize: const Size(double.infinity, 70),
     child: SafeArea(
       child: Container(
-        margin: const EdgeInsets.fromLTRB(15, 15, 15, 15),
-        child: Row(
+        margin: const EdgeInsets.all(15),
+        child: Stack(
           children: [
+            Align(
+              alignment: Alignment.center,
+              child: Text(
+                textAlign: TextAlign.center,
+                appBarName ?? '',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: textTheme.headline2?.copyWith(color: txtColor ?? textWhiteColor),
+              ),
+            ),
             isBackIcon ? SizedBox(
               width: 42,
               height: 42,
@@ -106,15 +110,6 @@ PreferredSizeWidget appBar({required BuildContext context, String? appBarName,
                 ),
               ),
             ) : const SizedBox() ,
-            Expanded(
-              child: Text(
-                textAlign: TextAlign.center,
-                appBarName ?? '',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: textTheme.headline2?.copyWith(color: txtColor ?? textWhiteColor),
-              ),
-            ),
           ],
         ),
       ),

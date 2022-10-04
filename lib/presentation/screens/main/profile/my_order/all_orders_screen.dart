@@ -16,36 +16,61 @@ class AllOrdersTabScreen extends StatefulWidget {
 class _AllOrdersTabScreenState extends State<AllOrdersTabScreen> {
 
   OrderController orderController = Get.find<OrderController>();
+  final controller = ScrollController();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      orderController.getOrders(status: widget.status);
+
+    controller.addListener(() {
+      if (controller.position.maxScrollExtent == controller.offset) {
+        orderController.getOrders(status: widget.status);
+      }
     });
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Obx(() {
-            if(orderController.isOrdersFetching.value){
-              return const CustomLoader();
-            }else {
-              return ListView.builder(
-                  itemCount: orderController.orders.length,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (context, index) {
+
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Obx(() {
+          if(orderController.isOrdersFetching.value){
+            return const CustomLoader();
+          }else if(orderController.orders.isEmpty){
+            return const NoDataFoundWidget();
+          }else{
+            return ListView.builder(
+                itemCount: orderController.orders.length + 1,
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                controller: controller,
+                itemBuilder: (context, index) {
+                  if (index < orderController.orders.length) {
                     return OrderItem(order: orderController.orders[index]);
+                  }else {
+                    return Obx(() {
+                      if (orderController.areMoreOrdersAvailable.value) {
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 32.0),
+                          child: Center(child: CircularProgressIndicator()),
+                        );
+                      } else {
+                        return const SizedBox();
+                      }
+                    });
                   }
-              );
-            }
-          })
-        )
+                }
+            );
+          }
+        })
     );
   }
 }

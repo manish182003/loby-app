@@ -11,8 +11,8 @@ class ConfirmationRiseDisputeBottomDialog {
   String? contentName;
   String? contentLinkName;
   String? contentNameLast;
-  dynamic yesBtnClick;
-  dynamic cancelBtnClick;
+  Function()? yesBtnClick;
+  Function()? cancelBtnClick;
 
   ConfirmationRiseDisputeBottomDialog(
       {this.textTheme,
@@ -75,7 +75,7 @@ class ConfirmationRiseDisputeBottomDialog {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
+                  SizedBox(
                     width: MediaQuery.of(context).size.width * 0.35,
                     height: 45,
                     child: ElevatedButton(
@@ -87,15 +87,14 @@ class ConfirmationRiseDisputeBottomDialog {
                               width: 1.0,
                             ),
                           ),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16.0),
                           )),
                           backgroundColor: MaterialStateProperty.all<Color>(
                               backgroundDarkJungleGreenColor),
                         ),
-                        onPressed: () {
+                        onPressed: cancelBtnClick ?? () {
                           Navigator.of(context).pop();
                         },
                         child: Padding(
@@ -119,7 +118,7 @@ class ConfirmationRiseDisputeBottomDialog {
                           backgroundColor:
                               MaterialStateProperty.all<Color>(aquaGreenColor),
                         ),
-                        onPressed: () {
+                        onPressed: yesBtnClick ?? () {
                           debugPrint("change");
                           Navigator.of(context).pop();
                           context.pushNamed(createNewDisputePage);

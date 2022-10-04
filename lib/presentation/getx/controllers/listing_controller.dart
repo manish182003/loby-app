@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,11 +12,14 @@ import 'package:loby/domain/usecases/listing/get_buyer_listings.dart';
 import 'package:loby/domain/usecases/listing/get_configurations.dart';
 import 'package:loby/domain/usecases/listing/report_listing.dart';
 
+import '../../../domain/usecases/listing/change_listing_status.dart';
+
 class ListingController extends GetxController{
   final GetConfigurations _getConfigurations;
   final CreateListing _createListing;
   final GetBuyerListings _getBuyerListings;
   final ReportListing _reportListing;
+  final ChangeListingStatus _changeListingStatus;
 
 
   ListingController({
@@ -26,10 +27,12 @@ class ListingController extends GetxController{
     required CreateListing createListing,
     required GetBuyerListings getBuyerListings,
     required ReportListing reportListing,
+    required ChangeListingStatus changeListingStatus,
   }) : _getConfigurations = getConfigurations,
         _createListing = createListing,
   _getBuyerListings = getBuyerListings,
-  _reportListing = reportListing;
+  _reportListing = reportListing,
+  _changeListingStatus = changeListingStatus;
 
 
   final errorMessage = ''.obs;
@@ -155,6 +158,7 @@ class ListingController extends GetxController{
           priceTo: priceTo,
           sortByRating: sortByRating,
           sortByPrice: sortByPrice,
+          from: from
         ),),
       );
 
@@ -167,23 +171,24 @@ class ListingController extends GetxController{
         },
             (success) {
 
-          if(from == 'profile'){
+          if(from == 'other' || from == 'myProfile'){
+            areMoreListingAvailable.value = success.serviceListings.length == 10;
 
             if (buyerListingPageNumber > 1) {
               buyerListingsProfile.addAll(success.serviceListings);
             } else {
               buyerListingsProfile.value = success.serviceListings;
             }
-            areMoreListingAvailable.value = buyerListingsProfile.length != success.count;
 
           }else{
+            areMoreListingAvailable.value = success.serviceListings.length == 10;
+
             if (buyerListingPageNumber > 1) {
               buyerListings.addAll(success.serviceListings);
             } else {
               buyerListings.value = success.serviceListings;
             }
-            areMoreListingAvailable.value = buyerListings.length != success.count;
-          }
+            }
           buyerListingPageNumber.value++;
 
           isBuyerListingsFetching.value = false;
@@ -200,6 +205,28 @@ class ListingController extends GetxController{
       Params(listingParams: ListingParams(
         userId: userId,
         userGameServiceId: userGameServiceId
+      ),),
+    );
+
+    failureOrSuccess.fold(
+          (failure) {
+        errorMessage.value = Helpers.convertFailureToMessage(failure);
+        debugPrint(errorMessage.value);
+        Helpers.toast(errorMessage.value);
+      },
+          (success) {
+
+      },
+    );
+    return failureOrSuccess.isRight() ? true : false;
+  }
+
+  Future<bool> changeListingStatus({required int listingId, required String type}) async {
+
+    final failureOrSuccess = await _changeListingStatus(
+      Params(listingParams: ListingParams(
+          listingId: listingId,
+        type: type,
       ),),
     );
 

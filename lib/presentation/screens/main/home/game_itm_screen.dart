@@ -72,128 +72,121 @@ class _GameItemScreenState extends State<GameItemScreen> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size(double.infinity, 70),
-          child: CustomAppBar(
-              appBarName: widget.gameName, txtColor: aquaGreenColor),
-        ),
-        body: SingleChildScrollView(
-          controller: controller,
-          child: BodyPaddingWidget(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Obx(() {
-                    if (homeController.isCategoryFetching.value) {
-                      return const CustomLoader();
-                    } else {
-                      return CustomChip(
-                        labelName: homeController.categories.map((element) => element.name!).toList(),
-                        selectedIndex: homeController.categories.indexWhere((element) => element.id == widget.categoryId),
-                        onChanged: (index) {
-                          listingController.buyerListingPageNumber.value = 1;
-                          listingController.areMoreListingAvailable.value = true;
-                          listingController.getBuyerListings(categoryId: homeController.categories[index].id, gameId: widget.gameId);
+    return Scaffold(
+      appBar: appBar(context: context, appBarName: widget.gameName),
+      body: SingleChildScrollView(
+        controller: controller,
+        child: BodyPaddingWidget(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Obx(() {
+                  if (homeController.isCategoryFetching.value) {
+                    return const CustomLoader();
+                  } else {
+                    return CustomChip(
+                      labelName: homeController.categories.map((element) => element.name!).toList(),
+                      selectedIndex: homeController.categories.indexWhere((element) => element.id == widget.categoryId),
+                      onChanged: (index) {
+                        listingController.buyerListingPageNumber.value = 1;
+                        listingController.areMoreListingAvailable.value = true;
+                        listingController.getBuyerListings(categoryId: homeController.categories[index].id, gameId: widget.gameId);
+                      },
+                    );
+                  }
+                }),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: textFieldColor,
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.13,
+                            child: SvgPicture.asset(
+                              'assets/icons/search_icon.svg',
+                              color: iconWhiteColor,
+                              width: 18,
+                              height: 18,
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.5,
+                            child: TextField(
+                              onChanged: (value){
+                                listingController.buyerListingPageNumber.value = 1;
+                                listingController.areMoreListingAvailable.value = true;
+                                listingController.getBuyerListings(categoryId: widget.categoryId, gameId: widget.gameId, search: value);
+                                },
+                              style: textTheme.headline4?.copyWith(color: textWhiteColor),
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintStyle: textTheme.headline4?.copyWith(color: textWhiteColor),
+                                hintText: 'Search',
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 4.0),
+                    SizedBox(
+                      height: 45,
+                      width: 66,
+                      child: MaterialButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        color: backgroundBalticSeaColor,
+                        onPressed: () {
+                          _showDialog(context, textTheme);
                         },
-                      );
-                    }
-                  }),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: textFieldColor,
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.13,
-                              child: SvgPicture.asset(
-                                'assets/icons/search_icon.svg',
-                                color: iconWhiteColor,
-                                width: 18,
-                                height: 18,
-                              ),
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.5,
-                              child: TextField(
-                                onChanged: (value){
-                                  listingController.buyerListingPageNumber.value = 1;
-                                  listingController.areMoreListingAvailable.value = true;
-                                  print("listingController ${listingController.buyerListingPageNumber.value}");
-                                  listingController.getBuyerListings(categoryId: widget.categoryId, gameId: widget.gameId, search: value);
-                                  },
-                                style: textTheme.headline4?.copyWith(color: textWhiteColor),
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintStyle: textTheme.headline4?.copyWith(color: textWhiteColor),
-                                  hintText: 'Search',
-                                ),
-                              ),
-                            ),
-                          ],
+                        child: SvgPicture.asset(
+                          'assets/icons/filter_icon.svg',
+                          color: iconTintColor,
+                          height: 18,
+                          width: 18,
                         ),
                       ),
-                      const SizedBox(width: 4.0),
-                      SizedBox(
-                        height: 45,
-                        width: 66,
-                        child: MaterialButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          color: backgroundBalticSeaColor,
-                          onPressed: () {
-                            _showDialog(context, textTheme);
-                          },
-                          child: SvgPicture.asset(
-                            'assets/icons/filter_icon.svg',
-                            color: iconTintColor,
-                            height: 18,
-                            width: 18,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        child: Obx(() {
-                          return Text(
-                            "${listingController.buyerListings.length} Result",
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: textTheme.headline6?.copyWith(color: textWhiteColor),
-                          );
-                        }),
-                      ),
-                      const SizedBox(width: 4.0),
-                      DropDownDivider(categoryId: widget.categoryId, gameId: widget.gameId),
-                    ],
-                  ),
-                  const SizedBox(height: 4.0),
-                  const Divider(
-                    color: dividerColor,
-                    height: 4,
-                    thickness: 2,
-                    endIndent: 0,
-                  ),
-                  const SizedBox(height: 10.0),
-                  _buildGames(textTheme),
-                  const SizedBox(height: 16.0),
-                ]
-            ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      child: Obx(() {
+                        return Text(
+                          "${listingController.buyerListings.length} Result",
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: textTheme.headline6?.copyWith(color: textWhiteColor),
+                        );
+                      }),
+                    ),
+                    const SizedBox(width: 4.0),
+                    DropDownDivider(categoryId: widget.categoryId, gameId: widget.gameId),
+                  ],
+                ),
+                const SizedBox(height: 4.0),
+                const Divider(
+                  color: dividerColor,
+                  height: 4,
+                  thickness: 2,
+                  endIndent: 0,
+                ),
+                const SizedBox(height: 10.0),
+                _buildGames(textTheme),
+                const SizedBox(height: 16.0),
+              ]
           ),
         ),
       ),
@@ -204,8 +197,10 @@ class _GameItemScreenState extends State<GameItemScreen> {
   _buildGames(TextTheme textTheme) {
     return Obx(() {
       if (listingController.isBuyerListingsFetching.value) {
-        return const Center(child: CircularProgressIndicator(),);
-      } else {
+        return const CustomLoader();
+      } else if(listingController.buyerListings.isEmpty){
+        return const NoDataFoundWidget(text: 'No Listings Found');
+      }else{
         return GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,

@@ -21,6 +21,7 @@ class GetOrders extends UseCase<OrderResponse, Params> {
     return _repository.getOrders(
       orderId: params.orderParams?.orderId,
       status: params.orderParams?.status,
+      page: params.orderParams?.page,
     );
   }
 }

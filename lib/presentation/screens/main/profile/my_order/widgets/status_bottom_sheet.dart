@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/order/order.dart';
 import 'package:loby/domain/entities/order/order_status.dart';
+import 'package:loby/presentation/getx/controllers/order_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/widgets/buttons/custom_button.dart';
 import 'package:loby/presentation/widgets/follow_btn.dart';
@@ -14,16 +15,16 @@ import 'order_status_constants.dart';
 import 'order_status_tile.dart';
 
 class StatusBottomSheet extends StatelessWidget {
-  final Order order;
-  const StatusBottomSheet({Key? key, required this.order}) : super(key: key);
+  final int orderId;
+
+  const StatusBottomSheet({Key? key, required this.orderId}) : super(key: key);
 
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     ProfileController profileController = Get.find<ProfileController>();
-    final isDuel = order.userGameService!.category!.name == 'Accounts';
-    final isSeller = profileController.profile.id == order.userGameService?.userId;
+    OrderController orderController = Get.find<OrderController>();
     return Column(
       children: <Widget>[
         Padding(
@@ -32,11 +33,7 @@ class StatusBottomSheet extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                child: Text('Update Status',
-                    textAlign: TextAlign.center,
-                    style: textTheme.headline2?.copyWith(color: textWhiteColor)),
-              ),
+              Text('Update Status', style: textTheme.headline2?.copyWith(color: textWhiteColor)),
               SizedBox(
                 child: GestureDetector(
                   onTap: () {
@@ -71,55 +68,64 @@ class StatusBottomSheet extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ListView.builder(
-                        itemCount: isDuel ? duelStatuses.length : isSeller ? sellerStatuses.length : buyerStatuses.length,
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.only(top: 16),
-                        physics: const ScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          final isStatic = index > order.orderStatuses!.length - 1;
-                          if(isDuel){
-                            print("duel");
-                            return OrderStatusTile(
-                              orderId: order.id!,
-                              challengerId: order.userGameService!.userId!,
-                              myId: order.userId!,
-                              isDone: isStatic ? false : statuses.contains(order.orderStatuses![index].status),
-                              title: isStatic ? duelStatuses[index] : duelStatusesName[order.orderStatuses![index].status!],
-                              date: isStatic ?  '' : order.orderStatuses![index].createdAt!.toString(),
-                              isLast: isStatic ?  false : order.orderStatuses![index].status! == order.orderStatuses!.last.status!,
-                              lastStatus: order.orderStatuses!.last.status!,
-                              isSeller : isSeller,
-                              isDuel : true,
-                            );
-                          }else if(isSeller){
-                            print("seller");
-                            return OrderStatusTile(
-                              orderId: order.id!,
-                              challengerId: order.userGameService!.userId!,
-                              myId: order.userId!,
-                              isDone: isStatic ? false : statuses.contains(order.orderStatuses![index].status),
-                              title: isStatic ? sellerStatuses[index] : statusesName[order.orderStatuses![index].status!],
-                              date: isStatic ?  '' : order.orderStatuses![index].createdAt!.toString(),
-                              isLast: isStatic ?  false : order.orderStatuses![index].status! == order.orderStatuses!.last.status!,
-                              lastStatus: order.orderStatuses!.last.status!,
-                              isSeller : true,
-                            );
-                          }else{
-                            print("buyer");
-                            return OrderStatusTile(
-                              orderId: order.id!,
-                              challengerId: order.userGameService!.userId!,
-                              myId: order.userId!,
-                              isDone: isStatic ? false : statuses.contains(order.orderStatuses![index].status),
-                              title: isStatic ? buyerStatuses[index] : statusesName[order.orderStatuses![index].status!],
-                              date: isStatic ?  '' : order.orderStatuses![index].createdAt!.toString(),
-                              isLast: isStatic ?  false : order.orderStatuses![index].status! == order.orderStatuses!.last.status!,
-                              lastStatus: order.orderStatuses!.last.status!,
-                            );
-                          }
-                        },
-                      ),
+                      Obx(() {
+                        final order = orderController.orders.where((e) => e.id == orderId).toList().first;
+                        final isDuel = order.userGameService!.category!.name == 'Currency';
+                        final isSeller = profileController.profile.id == order.userGameService?.userId;
+
+                        return ListView.builder(
+                          itemCount: isDuel ? duelStatuses.length : isSeller ? sellerStatuses.length : buyerStatuses.length,
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.only(top: 16),
+                          physics: const ScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            final isStatic = index > order.orderStatuses!.length - 1;
+                            if (isDuel) {
+                              debugPrint("duel");
+                              return OrderStatusTile(
+                                orderId: order.id!,
+                                sellerId: order.userGameService!.userId!,
+                                buyerId: order.userId!,
+                                isDone: isStatic ? false : statuses.contains(order.orderStatuses![index].status),
+                                title: isStatic ? duelStatuses[index] : duelStatusesName[order.orderStatuses![index].status!],
+                                date: isStatic ? '' : Helpers.formatDateTime(dateTime: order.orderStatuses![index].createdAt!),
+                                isLast: isStatic ? false : order.orderStatuses![index].status! == order.orderStatuses!.last.status!,
+                                lastStatus: order.orderStatuses!.last.status!,
+                                isSeller: isSeller,
+                                isDuel: true,
+                                isDisputeRaised : order.transactionFreeze == "Y",
+                              );
+                            } else if (isSeller) {
+                              debugPrint("seller");
+                              return OrderStatusTile(
+                                orderId: order.id!,
+                                sellerId: order.userGameService!.userId!,
+                                buyerId: order.userId!,
+                                isDone: isStatic ? false : statuses.contains(order.orderStatuses![index].status),
+                                title: isStatic ? sellerStatuses[index] : statusesName[order.orderStatuses![index].status!],
+                                date: isStatic ? '' : Helpers.formatDateTime(dateTime: order.orderStatuses![index].createdAt!),
+                                isLast: isStatic ? false : order.orderStatuses![index].status! == order.orderStatuses!.last.status!,
+                                lastStatus: order.orderStatuses!.last.status!,
+                                isSeller: true,
+                                isDisputeRaised : order.transactionFreeze == "Y",
+                              );
+                            } else {
+                              debugPrint("buyer");
+                              return OrderStatusTile(
+                                orderId: order.id!,
+                                sellerId: order.userGameService!.userId!,
+                                buyerId: order.userId!,
+                                isDone: isStatic ? false : statuses.contains(order.orderStatuses![index].status),
+                                title: isStatic ? buyerStatuses[index] : statusesName[order.orderStatuses![index].status!],
+                                date: isStatic ? '' : Helpers.formatDateTime(dateTime: order.orderStatuses![index].createdAt!),
+                                isLast: isStatic ? false : order.orderStatuses![index].status! == order.orderStatuses!.last.status!,
+                                lastStatus: order.orderStatuses!.last.status!,
+                                isDisputeRaised : order.transactionFreeze == "Y",
+                              );
+                            }
+                          },
+                        );
+                      }),
                       SizedBox(height: 2.h),
                     ],
                   ),
