@@ -24,7 +24,9 @@ class _FAQsState extends State<FAQs> {
           children: [
             GFAccordion(
               title: "1. What is Loby?",
-              content: "Loby is a great gaming application.",
+              contentChild: Text("Loby is a great gaming application.", style: textTheme.headline5?.copyWith(color: textWhiteColor),),
+              collapsedIcon: const Icon(Icons.add, color: whiteColor,),
+              expandedIcon: const Icon(Icons.minimize, color: whiteColor,),
               collapsedTitleBackgroundColor: backgroundColor,
               expandedTitleBackgroundColor: backgroundColor,
               contentBackgroundColor : backgroundColor,

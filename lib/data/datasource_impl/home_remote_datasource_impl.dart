@@ -8,6 +8,7 @@ import 'package:loby/data/models/response_models/home/category_response_model.da
 import 'package:loby/data/models/response_models/home/game_response_model.dart';
 import 'package:loby/data/models/response_models/home/global_search_response_model.dart';
 import 'package:loby/data/models/response_models/home/notification_response_model.dart';
+import 'package:loby/data/models/response_models/home/static_data_response_model.dart';
 import 'package:loby/data/models/response_models/order/order_response_model.dart';
 
 class HomeRemoteDatasourceImpl extends HomeRemoteDatasource{
@@ -193,6 +194,23 @@ class HomeRemoteDatasourceImpl extends HomeRemoteDatasource{
       );
 
       return GlobalSearchResponseModel.fromJson(response!);
+    } on ServerException catch (e) {
+      throw ServerException(message: e.message);
+    }
+  }
+
+  @override
+  Future<StaticDataResponseModel> getStaticData()async {
+    try {
+      final headers = await Helpers.getApiHeaders();
+      final response = await Helpers.sendRequest(
+        _dio,
+        RequestType.get,
+        ApiEndpoints.getStaticData,
+        headers: headers,
+      );
+
+      return StaticDataResponseModel.fromJSON(response!);
     } on ServerException catch (e) {
       throw ServerException(message: e.message);
     }

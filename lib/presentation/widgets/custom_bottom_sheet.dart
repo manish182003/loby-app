@@ -32,7 +32,7 @@ class CustomBottomSheet extends StatelessWidget {
             padding: EdgeInsets.only(left: horizontalPadding ?? 15, right: horizontalPadding ?? 15, top: 3.h, bottom: 0.h),
             child: ListView.builder(
                 physics: const BouncingScrollPhysics(),
-                controller: controller,
+                controller: dismiss ? controller : null,
                 // assign controller here
                 itemCount: 1,
                 itemBuilder: (_, index) {

@@ -123,7 +123,7 @@ class UserModel extends User{
     youtubeId: json["youtube_id"],
     twitchId: json["twitch_id"],
     discordId: json["discord_id"],
-    coverImage: json["cover_image"],
+    coverImage: json["cover_image"] == null ? null : Helpers.getImage(json["cover_image"]),
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
     updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
     followersCount: json["followersCount"],

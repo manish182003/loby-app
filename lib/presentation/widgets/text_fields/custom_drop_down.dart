@@ -1,5 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:loby/core/utils/helpers.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../core/theme/colors.dart';
@@ -11,8 +12,8 @@ class BuildDropdown extends StatefulWidget {
   final List<DropdownMenuItem<dynamic>>? itemsList;
   final double? height;
   final double? width;
-
-  const BuildDropdown({Key? key, this.itemsList, this.defaultValue, this.dropdownHint, this.onChanged, this.height, this.selectedValue, this.width}) : super(key: key);
+  final bool isRequired;
+  const BuildDropdown({Key? key, this.itemsList, this.defaultValue, this.dropdownHint, this.onChanged, this.height, this.selectedValue, this.width, this.isRequired = false}) : super(key: key);
 
   @override
   State<BuildDropdown> createState() => _BuildDropdownState();
@@ -28,7 +29,6 @@ class _BuildDropdownState extends State<BuildDropdown> {
     final textTheme = Theme.of(context).textTheme;
 
     return DropdownButtonFormField2(
-
       value: _value.isEmpty ?  widget.defaultValue : _value,
       isExpanded: true,
       hint: Text(
@@ -41,6 +41,12 @@ class _BuildDropdownState extends State<BuildDropdown> {
       buttonPadding: const EdgeInsets.only(left: 10, right: 10),
       items: widget.itemsList,
       onChanged: widget.onChanged,
+      validator: (dynamic value) {
+        if(widget.isRequired){
+          return Helpers.validateField(value.toString());
+        }
+        return null;
+        },
       icon: const Icon(
         Icons.keyboard_arrow_down,
         color: iconWhiteColor,

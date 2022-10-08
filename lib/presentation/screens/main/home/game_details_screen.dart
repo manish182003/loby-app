@@ -68,7 +68,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
           return const CustomLoader();
         }else{
           final listing = listingController.buyerListings
-              .where((categoryGame) => categoryGame.id == widget.serviceListingId)
+              .where((listing) => listing.id == widget.serviceListingId)
               .toList()
               .first;
           return SingleChildScrollView(
@@ -206,7 +206,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                   SizedBox(height: 1.h,),
                   GestureDetector(
                     onTap: () {
-                      context.pushNamed(otherUserPage, queryParams: {
+                      context.pushNamed(userProfilePage, queryParams: {
                         'userId': "${listing.user?.id}",
                         'from': 'other'
                       });
@@ -378,8 +378,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                           _rowWidget(textTheme, text1: "Category",
                             text2: listing.category!.name!,),
                           SizedBox(height: 1.h),
-                          _rowWidget(
-                            textTheme, text1: "Service Type", text2: "#46747",),
+                          _rowWidget(textTheme, text1: "Service Type", text2: listing.userGameServiceOptions!.map((e) => e.serviceOptions?.first.serviceOptionName).toList().join(", ")),
                           SizedBox(height: 1.h),
                           _rowWidget(textTheme, text1: "Game Platform",
                             text2: listing.game!.platform!,),
@@ -524,13 +523,16 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
           style: textTheme.headline5
               ?.copyWith(color: textLightColor),
         ),
-        Text(
-            text2,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-            style: isNormal ? textTheme.headline1?.copyWith(
-                color: aquaGreenColor) : textTheme.headline5?.copyWith(
-                color: whiteColor)
+        SizedBox(width: 10.w,),
+        Flexible(
+          child: Text(
+              text2,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+              style: isNormal ? textTheme.headline1?.copyWith(
+                  color: aquaGreenColor) : textTheme.headline5?.copyWith(
+                  color: whiteColor)
+          ),
         ),
       ],
     );

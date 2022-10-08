@@ -8,6 +8,7 @@ import 'package:loby/data/models/response_models/order/order_response_model.dart
 import 'package:loby/domain/entities/response_entities/home/global_search_response.dart';
 
 import '../models/response_models/home/global_search_response_model.dart';
+import '../models/response_models/home/static_data_response_model.dart';
 
 abstract class HomeRemoteDatasource{
   Future<CategoryResponseModel> getCategories(String? name, int? page, int? categoryId);
@@ -24,5 +25,6 @@ abstract class HomeRemoteDatasource{
 
   Future<GlobalSearchResponseModel> globalSearch(String? search);
 
+  Future<StaticDataResponseModel> getStaticData();
 
 }

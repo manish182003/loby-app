@@ -35,6 +35,7 @@ import 'package:loby/domain/usecases/auth/update_profile.dart';
 import 'package:loby/domain/usecases/chat/get_chats.dart';
 import 'package:loby/domain/usecases/chat/get_messages.dart';
 import 'package:loby/domain/usecases/chat/send_message.dart';
+import 'package:loby/domain/usecases/home/get_static_data.dart';
 import 'package:loby/domain/usecases/home/global_search.dart';
 import 'package:loby/domain/usecases/order/change_order_status.dart';
 import 'package:loby/domain/usecases/order/create_order.dart';
@@ -169,6 +170,7 @@ class DependencyInjector{
     Get.lazyPut(() => DeleteNotification(homeRepository));
     Get.lazyPut(() => GetUnreadCount(homeRepository));
     Get.lazyPut(() => GlobalSearch(homeRepository));
+    Get.lazyPut(() => GetStaticData(homeRepository));
 
   }
 

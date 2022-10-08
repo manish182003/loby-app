@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/profile/bank_detail.dart';
+import 'package:loby/presentation/getx/controllers/home_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
+import 'package:loby/presentation/screens/main/profile/wallet/widgets/token_widget.dart';
 import 'package:loby/presentation/widgets/text_fields/custom_drop_down.dart';
 import 'package:loby/presentation/widgets/text_fields/text_field_widget.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../../../../core/theme/colors.dart';
 import '../../../../widgets/bottom_dialog_widget.dart';
 import '../../../../widgets/custom_app_bar.dart';
@@ -26,6 +27,7 @@ class WithdrawFundsScreen extends StatefulWidget {
 class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
 
   ProfileController profileController = Get.find<ProfileController>();
+  HomeController homeController = Get.find<HomeController>();
 
   TextEditingController bankName = TextEditingController();
   TextEditingController branchName = TextEditingController();
@@ -41,6 +43,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
   TextEditingController amount = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final _formKey2 = GlobalKey<FormState>();
+  final _formKey3 = GlobalKey<FormState>();
 
 
   @override
@@ -48,6 +51,16 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
     // TODO: implement initState
     super.initState();
     profileController.getBankDetails();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    amount.clear();
+    profileController.rupeeToToken.value = "0";
+    profileController.tokenToRupee.value = "0";
+    super.dispose();
+
   }
 
   @override
@@ -103,14 +116,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                         if(profileController.isProfileFetching.value){
                                           return const CustomLoader();
                                         }else{
-                                          return Text(
-                                              '₹ ${profileController.profile
-                                                  .walletMoney}',
-                                              textAlign: TextAlign.center,
-                                              style: textTheme.headlineLarge
-                                                  ?.copyWith(
-                                                  color: textTunaBlueColor,
-                                                  fontFamily: 'Inter'));
+                                          return TokenWidget(tokens: '${profileController.profile.walletMoney}');
                                         }
 
                                       }),
@@ -144,23 +150,13 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                       child: BuildDropdown(
                                         selectedValue: selectedBankName,
                                         dropdownHint: "Select Withdraw Method",
-                                        itemsList: profileController
-                                            .bankDetails
-                                            .map((item) =>
+                                        isRequired: true,
+                                        itemsList: profileController.bankDetails.map((item) =>
                                             DropdownMenuItem<BankDetail>(
                                               value: item,
                                               child: Text(
-                                                  item.upiId == null
-                                                      ? "${item
-                                                      .bankName} ${item
-                                                      .bankAccountNumber
-                                                      ?.replaceAll(
-                                                      "\\w(?=\\w{4})", "X")}"
-                                                      : "UPI ID: ${item
-                                                      .upiId}",
-                                                  style: textTheme.headline3
-                                                      ?.copyWith(
-                                                      color: whiteColor)
+                                                  item.upiId == null ? "${item.bankName} ${item.bankAccountNumber?.replaceAll("\\w(?=\\w{4})", "X")}" : "UPI ID: ${item.upiId}",
+                                                  style: textTheme.headline3?.copyWith(color: whiteColor)
                                               ),
                                             )).toList(),
                                         onChanged: (value) {
@@ -177,63 +173,57 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                           right: 24.0),
                                       child: TextFieldWidget(
                                         textEditingController: amount,
-                                        hint: "Enter Amount(INR)",
+                                        hint: "Enter Token Quantity",
                                         type: 'withdraw',
                                         isRequired: true,
                                         isNumber: true,
+                                        onChanged: (value){
+                                          if(value.isNotEmpty){
+                                            profileController.tokenToRupee.value = (int.tryParse(value)! * int.tryParse(homeController.staticData[2].realValue!)!).floor().toString();
+                                            profileController.rupeeToToken.value = (int.tryParse(value)! / int.tryParse(homeController.staticData[2].key!)!).floor().toString();
+                                          }
+                                        },
                                       )),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: 16.0,
-                                      right: 16.0,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .center,
-                                      children: [
-                                        SizedBox(
-                                          width: MediaQuery
-                                              .of(context)
-                                              .size
-                                              .width * 0.35,
-                                          child: CustomButton(
-                                            color: carminePinkColor,
-                                            textColor: textWhiteColor,
-                                            name: "Withdraw",
-                                            onTap: () async {
-                                              if (_formKey.currentState!
-                                                  .validate()) {
-                                                Helpers.loader();
-                                                final isSuccess = await profileController
-                                                    .withdrawMoney(
-                                                    bankDetailId: selectedBankId,
-                                                    amount: int.tryParse(
-                                                        amount.text));
-                                                await profileController
-                                                    .getProfile();
-                                                Helpers.hideLoader();
-                                                if (isSuccess) {
-                                                  BottomDialog(
-                                                    textTheme: textTheme,
-                                                    tileName: "Withdraw Success",
-                                                    contentName: "Amount has been successfully withdrawn. It will be credited to your account within 48 hours.",)
-                                                      .showBottomDialog(
-                                                      context);
-                                                }
-                                              }
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      TokenWidget(tokens: profileController.rupeeToToken.value, textColor: whiteColor, size: 20,),
+                                      Text("₹ ${profileController.tokenToRupee}",
+                                        style: textTheme.headline3?.copyWith(color: whiteColor),),
+                                    ],
+                                  ),
+                                  CustomButton(
+                                    top: 4.h,
+                                    left: 20.w,
+                                    right: 20.w,
+                                    color: carminePinkColor,
+                                    textColor: textWhiteColor,
+                                    name: "Withdraw ₹ ${profileController.tokenToRupee}",
+                                    onTap: () async {
+                                      if (_formKey.currentState!.validate()) {
+                                        Helpers.loader();
+                                        final isSuccess = await profileController.withdrawMoney(
+                                            bankDetailId: selectedBankId,
+                                            amount: int.tryParse(profileController.tokenToRupee.value));
+                                        await profileController.getProfile();
+                                        Helpers.hideLoader();
+                                        if (isSuccess) {
+                                          BottomDialog(
+                                            textTheme: textTheme,
+                                            tileName: "Withdraw Success",
+                                            contentName: "Amount has been successfully withdrawn. It will be credited to your account within 48 hours.",)
+                                              .showBottomDialog(context);
+                                        }
+                                      }
+                                    },
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 16.0, horizontal: 16.0),
                                     child: Text(
-                                        'Minimum Account Balance to maintain in your Wallet is Rs. 200',
+                                        'Attention: Razorpay may charge a fee for receiving the earnings',
                                         textAlign: TextAlign.center,
-                                        style: textTheme.headline5?.copyWith(
+                                        style: textTheme.headline6?.copyWith(
                                             color: textWhiteColor)),
                                   ),
                                 ],
@@ -401,6 +391,8 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                 holderName: holderName.text,
                                 type: "bank_account",
                               );
+                              await profileController.getBankDetails();
+                              clearAddBankDetails();
                               Helpers.hideLoader();
                               if (isSuccess) {
                                 Navigator.of(context).pop();
@@ -430,43 +422,57 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16.0)),
           child: SizedBox(
-            height: 25.h,
+            height: 45.h,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextFieldWidget(
-                    textEditingController: upiId,
-                    title: "Add UPI ID",
-                    titleColor: textWhiteColor,
-                    isRequired: true,
-                  ),
-                  SizedBox(height: 2.h),
-                  SizedBox(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 0.35,
-                    child: CustomButton(
-                      color: purpleLightIndigoColor,
-                      textColor: textWhiteColor,
-                      name: "Add",
-                      onTap: () async {
-                        Helpers.loader();
-                        final isSuccess = await profileController
-                            .addBankDetails(
-                          upiId: upiId.text,
-                          type: "vpa",
-                        );
-                        Helpers.hideLoader();
-                        if (isSuccess) {
-                          Navigator.of(context).pop();
-                        }
-                      },
+              child: Form(
+                key: _formKey3,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextFieldWidget(
+                      textEditingController: holderName,
+                      title: "Name",
+                      titleColor: textWhiteColor,
+                      isRequired: true,
                     ),
-                  ),
-                ],
+                    SizedBox(height: 2.h),
+                    TextFieldWidget(
+                      textEditingController: upiId,
+                      title: "UPI ID",
+                      titleColor: textWhiteColor,
+                      isRequired: true,
+                    ),
+                    SizedBox(height: 2.h),
+                    SizedBox(
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.35,
+                      child: CustomButton(
+                        color: purpleLightIndigoColor,
+                        textColor: textWhiteColor,
+                        name: "Add",
+                        onTap: () async {
+                          if(_formKey3.currentState!.validate()){
+                            Helpers.loader();
+                            final isSuccess = await profileController.addBankDetails(
+                              holderName: holderName.text,
+                              upiId: upiId.text,
+                              type: "vpa",
+                            );
+                            await profileController.getBankDetails();
+                            clearAddBankDetails();
+                            Helpers.hideLoader();
+                            if (isSuccess) {
+                              Navigator.of(context).pop();
+                            }
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -475,8 +481,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
     );
   }
 
-  Widget _addBankDetailOption(TextTheme textTheme, BuildContext context,
-      String title, {Function()? onTap}) {
+  Widget _addBankDetailOption(TextTheme textTheme, BuildContext context, String title, {Function()? onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -492,5 +497,15 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
             style: textTheme.headline6?.copyWith(color: textWhiteColor)),
       ),
     );
+  }
+
+  void clearAddBankDetails(){
+    bankName.clear();
+    branchName.clear();
+    accountNumber.clear();
+    confirmAccountNumber.clear();
+    ifscCode.clear();
+    holderName.clear();
+    upiId.clear();
   }
 }

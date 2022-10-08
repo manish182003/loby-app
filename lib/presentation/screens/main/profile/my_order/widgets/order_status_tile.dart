@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +12,7 @@ import 'package:loby/domain/entities/order/order.dart';
 import 'package:loby/presentation/getx/controllers/core_controller.dart';
 import 'package:loby/presentation/getx/controllers/order_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
+import 'package:loby/presentation/screens/main/profile/my_order/widgets/select_duel_winner_dialog.dart';
 import 'package:loby/presentation/widgets/rating_dialog.dart';
 import 'package:sizer/sizer.dart';
 
@@ -30,53 +32,63 @@ class OrderStatusTile extends StatelessWidget {
   final bool isLast;
   final bool isDisputeRaised;
   final String lastStatus;
-  const OrderStatusTile({Key? key, required this.orderId, required this.isDone, required this.title, required this.date, this.isSeller = false, this.isDuel = false, required this.isLast, this.isDisputeRaised = false, required this.lastStatus, required this.sellerId, required this.buyerId, }) : super(key: key);
+
+  const OrderStatusTile(
+      {Key? key, required this.orderId, required this.isDone, required this.title, required this.date, this.isSeller = false, this.isDuel = false, required this.isLast, this.isDisputeRaised = false, required this.lastStatus, required this.sellerId, required this.buyerId,})
+      : super(key: key);
 
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final textTheme = Theme
+        .of(context)
+        .textTheme;
     double rating = 0.0;
     TextEditingController review = TextEditingController();
 
     return Column(
-      children: [
-        _statusTile(textTheme, isDone: isDone, title: title, date: date),
-        SizedBox(height: 2.h),
+        children: [
+          _statusTile(textTheme, isDone: isDone, title: title, date: date),
+          SizedBox(height: 2.h),
 
-        /// if Dispute is Raised ///
-        isLast ? isDisputeRaised ?
-        Column(
-          children: [
-            _statusTile(textTheme, isDone: true, title: "Seller & Challenger selection doesn’t match. Dispute Raised. Transaction on hold", date: date),
-            SizedBox(height: 2.h),
-          ],
-        ) :
+          /// if Dispute is Raised ///
+          isLast ? isDisputeRaised ?
+          Column(
+            children: [
+              _statusTile(textTheme, isDone: true,
+                  title: isDuel
+                      ? "Seller & Challenger selection doesn’t match. Dispute Raised. Transaction on hold"
+                      : "Dispute Raised. Transaction on hold",
+                  date: date),
+              SizedBox(height: 2.h),
+            ],
+          ) :
 
 
-        isSeller ? isDuel ?
+          isSeller ? isDuel ?
 
-        /// if Duel (Seller) ///
-        lastStatus == 'ORDER_PLACED' ? _duelOrderPlaced(context) :
-        lastStatus == 'ORDER_IN_PROGRESS' ? _selectDuelWinner(context) :
-        const SizedBox() :
+          /// if Duel (Seller) ///
+          lastStatus == 'ORDER_PLACED' ? _duelOrderPlaced(context) :
+          lastStatus == 'ORDER_IN_PROGRESS' ? _selectDuelWinner(context) :
+          const SizedBox() :
 
-        /// else normal seller ///
-        _seller(context, textTheme) :
+          /// else normal seller ///
+          _seller(context, textTheme) :
 
-        /// if Duel (Buyer) ///
-        isDuel ?
-        lastStatus == 'ORDER_IN_PROGRESS' ? _selectDuelWinner(context) :
-        const SizedBox() :
+          /// if Duel (Buyer) ///
+          isDuel ?
+          lastStatus == 'ORDER_IN_PROGRESS' ? _selectDuelWinner(context) :
+          const SizedBox() :
 
-        /// else normal Buyer ///
-       _buyer(context, rating, review) :
-        const SizedBox()
-      ]
+          /// else normal Buyer ///
+          _buyer(context, rating, review) :
+          const SizedBox()
+        ]
     );
   }
 
-  Widget _statusTile(TextTheme textTheme, {required bool isDone, required String title, required String date}){
+  Widget _statusTile(TextTheme textTheme,
+      {required bool isDone, required String title, required String date}) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -103,7 +115,7 @@ class OrderStatusTile extends StatelessWidget {
     );
   }
 
-  Widget _duelOrderPlaced(BuildContext context){
+  Widget _duelOrderPlaced(BuildContext context) {
     return Column(
       children: [
         Row(
@@ -141,55 +153,56 @@ class OrderStatusTile extends StatelessWidget {
     );
   }
 
-  Widget _selectDuelWinner(BuildContext context){
+  Widget _selectDuelWinner(BuildContext context) {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: CustomButton(
-                color: orangeColor,
-                name: "Challenger",
-                textColor: textWhiteColor,
-                left: 0.w,
-                right: 0.w,
-                radius: 50,
-                onTap: () async {
-                  if(isSeller){
-                    selectDuelWinner(context, winnerId: buyerId, status: 'BUYER_DELIVERY_CONFIRMED');
-                  }else{
-                    selectDuelWinner(context, winnerId: sellerId, status: 'SELLER_DELIVERY_CONFIRMED');
-                  }
-                },
-              ),
-            ),
-            SizedBox(width: 4.w),
-            Expanded(
-              child: CustomButton(
-                color: purpleLightIndigoColor,
-                name: "You",
-                textColor: textWhiteColor,
-                radius: 50,
-                onTap: () async {
-                  if(isSeller){
-                    selectDuelWinner(context, winnerId: sellerId, status: 'SELLER_DELIVERY_CONFIRMED');
-                  }else{
-                    selectDuelWinner(context, winnerId: buyerId, status: 'BUYER_DELIVERY_CONFIRMED');
-                  }
-                },
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 2.h),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //   children: [
+        //     Expanded(
+        //       child: CustomButton(
+        //         color: orangeColor,
+        //         name: "Challenger",
+        //         textColor: textWhiteColor,
+        //         left: 0.w,
+        //         right: 0.w,
+        //         radius: 50,
+        //         onTap: () async {
+        //           if(isSeller){
+        //             selectDuelWinner(context, winnerId: buyerId, status: 'BUYER_DELIVERY_CONFIRMED');
+        //           }else{
+        //             selectDuelWinner(context, winnerId: sellerId, status: 'SELLER_DELIVERY_CONFIRMED');
+        //           }
+        //         },
+        //       ),
+        //     ),
+        //     SizedBox(width: 4.w),
+        //     Expanded(
+        //       child: CustomButton(
+        //         color: purpleLightIndigoColor,
+        //         name: "You",
+        //         textColor: textWhiteColor,
+        //         radius: 50,
+        //         onTap: () async {
+        //           if(isSeller){
+        //             selectDuelWinner(context, winnerId: sellerId, status: 'SELLER_DELIVERY_CONFIRMED');
+        //           }else{
+        //             selectDuelWinner(context, winnerId: buyerId, status: 'BUYER_DELIVERY_CONFIRMED');
+        //           }
+        //         },
+        //       ),
+        //     ),
+        //   ],
+        // ),
+        // SizedBox(height: 2.h),
         CustomButton(
           color: purpleLightIndigoColor,
-          name: "Upload Proofs",
+          name: "Select Winner",
           textColor: textWhiteColor,
           radius: 50,
           onTap: () async {
-            _openFileExplorer(context);
+            _selectDuelWinnerDialog(context);
+            // _openFileExplorer(context);
           },
         ),
         SizedBox(height: 2.h),
@@ -197,7 +210,7 @@ class OrderStatusTile extends StatelessWidget {
     );
   }
 
-  Widget _seller(BuildContext context, TextTheme textTheme){
+  Widget _seller(BuildContext context, TextTheme textTheme) {
     return Column(
       children: [
         lastStatus == 'ORDER_PLACED' ? Padding(
@@ -245,7 +258,7 @@ class OrderStatusTile extends StatelessWidget {
           ),
         ) : const SizedBox(),
 
-        lastStatus == "ORDER_PLACED" ?  Padding(
+        lastStatus == "ORDER_PLACED" ? Padding(
           padding: EdgeInsets.only(bottom: 2.h),
           child: RichText(
               textAlign: TextAlign.start,
@@ -256,17 +269,20 @@ class OrderStatusTile extends StatelessWidget {
                 ),
                 TextSpan(
                     text: 'Loby Chat ',
-                    style: textTheme.subtitle1?.copyWith(color: aquaGreenColor)),
+                    style: textTheme.subtitle1?.copyWith(
+                        color: aquaGreenColor)),
                 TextSpan(
                     text: 'before accpecting or declining the Order. Any conversation outside Loby Chat will not be insured/covered by Loby Protection',
-                    style: textTheme.subtitle1?.copyWith(color: textLightColor)),
+                    style: textTheme.subtitle1?.copyWith(
+                        color: textLightColor)),
               ])),
         ) : const SizedBox(),
       ],
     );
   }
 
-  Widget _buyer(BuildContext context, double rating, TextEditingController review){
+  Widget _buyer(BuildContext context, double rating,
+      TextEditingController review) {
     return lastStatus == "SELLER_DELIVERY_CONFIRMED" ? Column(
       children: [
         Row(
@@ -281,7 +297,6 @@ class OrderStatusTile extends StatelessWidget {
                 right: 0.w,
                 radius: 50,
                 onTap: () async {
-
                   showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -290,11 +305,14 @@ class OrderStatusTile extends StatelessWidget {
                           descriptions: "Congratulations on successfully getting your service delivered. Kindly rate thus seller & its service to help us serve you better",
                           text: "OK",
                           review: review,
-                          onChanged: (star){
+                          onChanged: (star) {
                             rating = star;
                           },
-                          onSubmit: () async{
-                            confirmDelivery(context, status: 'BUYER_DELIVERY_REJECTED', rating: rating, review: review.text);
+                          onSubmit: () async {
+                            confirmDelivery(
+                                context, status: 'BUYER_DELIVERY_REJECTED',
+                                rating: rating,
+                                review: review.text);
                           },
                         );
                       });
@@ -309,7 +327,6 @@ class OrderStatusTile extends StatelessWidget {
                 textColor: textWhiteColor,
                 radius: 50,
                 onTap: () async {
-
                   showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -318,11 +335,14 @@ class OrderStatusTile extends StatelessWidget {
                           descriptions: "Congratulations on successfully getting your service delivered. Kindly rate thus seller & its service to help us serve you better",
                           text: "OK",
                           review: review,
-                          onChanged: (star){
+                          onChanged: (star) {
                             rating = star;
                           },
-                          onSubmit: () async{
-                            confirmDelivery(context, status: 'BUYER_DELIVERY_CONFIRMED', rating: rating, review: review.text);
+                          onSubmit: () async {
+                            confirmDelivery(
+                                context, status: 'BUYER_DELIVERY_CONFIRMED',
+                                rating: rating,
+                                review: review.text);
                           },
                         );
                       });
@@ -337,57 +357,80 @@ class OrderStatusTile extends StatelessWidget {
   }
 
 
-  void selectDuelWinner(BuildContext context, {required int winnerId, required String status})async{
+  void selectDuelWinner(BuildContext context, {required int winnerId, required String status}) async {
     OrderController orderController = Get.find<OrderController>();
     await Helpers.loader();
-    final isSuccess = await orderController.selectDuelWinner(winnerId:  winnerId, orderId: orderId);
-    if(isSuccess){
+    final isSuccess = await orderController.selectDuelWinner(winnerId: winnerId, orderId: orderId);
+    if (isSuccess) {
       await orderController.changeOrderStatus(orderId: orderId, status: status);
-      await orderController.getOrders(status: isSeller ? 'SOLD' : 'BOUGHT');
+      await orderController.uploadDeliveryProof(
+        orderId: orderId,
+        fileTypes: orderController.selectedDuelProofs.map((element) => element.fileType).toList(),
+        files: orderController.selectedDuelProofs.map((element) => element.file).toList(),
+      );
+      await getOrders();
+      orderController.selectedUser.value = "";
+      orderController.duelWinner.value = "";
+      orderController.selectedDuelProofs.clear();
       await Helpers.hideLoader();
       Navigator.pop(context);
-    }else{
+      Navigator.pop(context);
+    } else {
       await Helpers.hideLoader();
     }
   }
 
-  void confirmDelivery(BuildContext context, {required String status, required double rating, String? review})async{
+  void confirmDelivery(BuildContext context,
+      {required String status, required double rating, String? review}) async {
     OrderController orderController = Get.find<OrderController>();
     CoreController coreController = Get.find<CoreController>();
     await Helpers.loader();
-    final isSuccess = await orderController.submitRating(orderId: orderId, stars: rating, review: review);
-    if(isSuccess){
+    final isSuccess = await orderController.submitRating(
+        orderId: orderId, stars: rating, review: review);
+    if (isSuccess) {
       await orderController.changeOrderStatus(orderId: orderId, status: status);
       await getOrders();
-      print("confrm delivery ${orderController.orders.where((p0) => p0.id == orderId).toList().first.userGameService?.userGameServiceImages ?? 'null'}");
+      print("confrm delivery ${orderController.orders
+          .where((p0) => p0.id == orderId)
+          .toList()
+          .first
+          .userGameService
+          ?.userGameServiceImages ?? 'null'}");
       coreController.socket.emit("loby", {
-        'type' : 'order',
-        'receiverId' : sellerId,
-        'order' : (orderController.orders.where((e) => e.id == orderId).toList().first as OrderModel).toJson(),
+        'type': 'order',
+        'receiverId': sellerId,
+        'order': (orderController.orders
+            .where((e) => e.id == orderId)
+            .toList()
+            .first as OrderModel).toJson(),
       });
       await Helpers.hideLoader();
       Navigator.pop(context);
       Navigator.pop(context);
-    }else{
+    } else {
       await Helpers.hideLoader();
     }
   }
 
-  void changeOrderStatus(BuildContext context, {required String status})async{
+  void changeOrderStatus(BuildContext context, {required String status}) async {
     OrderController orderController = Get.find<OrderController>();
     CoreController coreController = Get.find<CoreController>();
     await Helpers.loader();
-    final isSuccess = await orderController.changeOrderStatus(orderId: orderId, status: status);
-    if(isSuccess){
+    final isSuccess = await orderController.changeOrderStatus(
+        orderId: orderId, status: status);
+    if (isSuccess) {
       await getOrders();
       coreController.socket.emit("loby", {
-        'type' : 'order',
-        'receiverId' : buyerId,
-        'order' : (orderController.orders.where((e) => e.id == orderId).toList().first as OrderModel).toJson(),
+        'type': 'order',
+        'receiverId': buyerId,
+        'order': (orderController.orders
+            .where((e) => e.id == orderId)
+            .toList()
+            .first as OrderModel).toJson(),
       });
       await Helpers.hideLoader();
       Navigator.pop(context);
-    }else{
+    } else {
       await Helpers.hideLoader();
     }
   }
@@ -402,23 +445,26 @@ class OrderStatusTile extends StatelessWidget {
         onFileLoading: (FilePickerStatus status) => print(status),
       ))!.files;
 
-
       await Helpers.loader();
       await orderController.uploadDeliveryProof(
-          orderId: orderId,
-          fileTypes: paths.map((e) => Helpers.getFileType(e.extension!)).toList(),
-          files: paths.map((e) => File(e.path!)).toList(),
+        orderId: orderId,
+        fileTypes: paths.map((e) => Helpers.getFileType(e.extension!)).toList(),
+        files: paths.map((e) => File(e.path!)).toList(),
       );
-      if(status != null) await orderController.changeOrderStatus(orderId: orderId, status: status);
+      if (status != null) {
+        await orderController.changeOrderStatus(orderId: orderId, status: status);
+      }
       await getOrders();
       coreController.socket.emit("loby", {
-        'type' : 'order',
-        'receiverId' : buyerId,
-        'order' : (orderController.orders.where((e) => e.id == orderId).toList().first as OrderModel).toJson(),
+        'type': 'order',
+        'receiverId': buyerId,
+        'order': (orderController.orders
+            .where((e) => e.id == orderId)
+            .toList()
+            .first as OrderModel).toJson(),
       });
       await Helpers.hideLoader();
       Navigator.pop(context);
-
     } on PlatformException catch (e) {
       Helpers.toast('Unsupported operation$e');
     } catch (e) {
@@ -432,5 +478,54 @@ class OrderStatusTile extends StatelessWidget {
     orderController.ordersPageNumber.value = 1;
     orderController.areMoreOrdersAvailable.value = true;
     await orderController.getOrders(status: isSeller ? 'SOLD' : 'BOUGHT');
+  }
+
+
+  void _selectDuelWinnerDialog(BuildContext context) {
+    OrderController orderController = Get.find<OrderController>();
+    final duelUsers = orderController.duelUsers;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          elevation: 0,
+          backgroundColor: backgroundDarkJungleGreenColor,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.0)),
+          child: SelectDuelWinnerDialog(
+            onSelectWinner: (value){
+              if(value.toString() == duelUsers[0]){
+                if(isSeller){
+                  orderController.duelWinner.value = "$buyerId/BUYER_DELIVERY_CONFIRMED";
+                }else{
+                  orderController.duelWinner.value = "$sellerId/SELLER_DELIVERY_CONFIRMED";
+                }
+              }else{
+                if(isSeller){
+                  orderController.duelWinner.value = "$sellerId/SELLER_DELIVERY_CONFIRMED";
+                }else{
+                  orderController.duelWinner.value = "$buyerId/BUYER_DELIVERY_CONFIRMED";
+                }
+              }
+              orderController.selectedUser.value = value.toString();
+              debugPrint(orderController.duelWinner.value);
+            },
+            onSubmit: () {
+              if(orderController.duelWinner.isEmpty){
+                Helpers.toast("Please Select Winner");
+              }else if(orderController.selectedDuelProofs.isEmpty){
+                Helpers.toast("Please Upload Proofs");
+              }else{
+                selectDuelWinner(
+                    context,
+                    winnerId: int.tryParse(orderController.duelWinner.value.split("/")[0])!,
+                    status: orderController.duelWinner.value.split("/")[1]
+                );
+              }
+            },
+          )
+        );
+      },
+    );
   }
 }

@@ -8,7 +8,7 @@ abstract class ListingRemoteDatasource{
 
   Future<ConfigurationResponseModel> getConfigurations(int? categoryId, int? gameId);
 
-  Future<Map<String, dynamic>> createListing(int? categoryId, int? gameId, String? title, String? description, String? price, String? stockAvl, String? estimateDeliveryTime, int? priceUnitId, List<SelectedServiceOption>? serviceOptionId, List<dynamic>? files, List<int>? fileTypes, List<TextEditingController>? optionAnswer);
+  Future<Map<String, dynamic>> createListing(int? listingId, int? categoryId, int? gameId, String? title, String? description, String? price, String? stockAvl, String? estimateDeliveryTime, int? priceUnitId, List<SelectedServiceOption>? serviceOptionId, List<dynamic>? files, List<int>? fileTypes, List<TextEditingController>? optionAnswer);
 
   Future<ServiceListingResponseModel> getBuyerListings(int? categoryId, int? gameId, int? listingId, int? userId, int? page, String? search, int? priceFrom, int? priceTo, String? sortByPrice, String? sortByRating, String? from);
 

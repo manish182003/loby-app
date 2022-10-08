@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loby/presentation/getx/controllers/home_controller.dart';
-
 import '../../../../core/theme/colors.dart';
 import '../chat/chat_screen.dart';
-import '../create_listing/create_listing_screen.dart';
+import '../listing/create_listing_screen.dart';
 import '../home/home_screen.dart';
 import '../notification/notification_screen.dart';
 import '../profile/profile_screen.dart';

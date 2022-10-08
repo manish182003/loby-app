@@ -8,7 +8,9 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:loby/core/utils/helpers.dart';
+import 'package:loby/domain/entities/auth/selected_option.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
+import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/widgets/body_padding_widget.dart';
 import 'package:loby/presentation/widgets/custom_chips.dart';
 import 'package:loby/presentation/widgets/text_fields/text_field_widget.dart';
@@ -23,7 +25,8 @@ import '../../../widgets/input_text_widget.dart';
 import '../../main/main_screen.dart';
 
 class CreateProfileCard extends StatefulWidget {
-  const CreateProfileCard({Key? key}) : super(key: key);
+  final String from;
+  const CreateProfileCard({Key? key, required this.from}) : super(key: key);
 
 
   @override
@@ -33,11 +36,10 @@ class CreateProfileCard extends StatefulWidget {
 class _CreateProfileCardState extends State<CreateProfileCard> {
 
   AuthController authController = Get.find<AuthController>();
+  ProfileController profileController = Get.find<ProfileController>();
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController selectedCountryName = TextEditingController();
-  TextEditingController selectedStateName = TextEditingController();
-  TextEditingController selectedCityName = TextEditingController();
+
   TextEditingController selectedProfileTag = TextEditingController();
 
 
@@ -83,7 +85,6 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                 ),
                 SizedBox(height: 2.h,),
                 _buildRow(textTheme),
-                SizedBox(height: 2.h,),
                 const Divider(
                   thickness: 1.2,
                   color: dividerColor,
@@ -119,7 +120,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                 }),
                 SizedBox(height: 3.h,),
                 AutoCompleteField(
-                  selectedSuggestion: selectedCountryName,
+                  selectedSuggestion: TextEditingController(text: authController.selectedCountry.value.name),
                   hint: 'Select Countries',
                   title: 'Country',
                   suggestionsCallback: (pattern) async {
@@ -132,50 +133,41 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                   },
                   onSuggestionSelected: (value) {
                     setState(() {
-                      final index = authController.countries.indexWhere((
-                          element) => element.name == value);
-                      authController.selectedCountryId.value =
-                      authController.countries[index].id!;
-                      selectedCountryName.text =
-                      authController.countries[index].name!;
+                      final index = authController.countries.indexWhere((element) => element.name == value);
+                      authController.selectedCountry.value = SelectedOption(id: authController.countries[index].id!, name: authController.countries[index].name!);
+                      print(authController.selectedCountry.value);
                     });
                   },
                 ),
                 SizedBox(height: 3.h,),
                 AutoCompleteField(
-                  selectedSuggestion: selectedStateName,
+                  selectedSuggestion: TextEditingController(text: authController.selectedState.value.name),
                   hint: 'Select State',
                   title: 'State',
                   suggestionsCallback: (pattern) async {
-                    await authController.getStates(search: pattern,
-                        countryId: authController.selectedCountryId.value);
+                    await authController.getStates(search: pattern, countryId: authController.selectedCountry.value.id);
                     List finalList = [];
-                    for (int i = 0; i <
-                        authController.states.length; i++) {
+                    for (int i = 0; i < authController.states.length; i++) {
                       finalList.add(authController.states[i].name);
                     }
                     return finalList;
                   },
                   onSuggestionSelected: (value) {
                     setState(() {
-                      final index = authController.states.indexWhere((
-                          element) => element.name == value);
-                      authController.selectedStateId.value =
-                      authController.states[index].id!;
-                      selectedStateName.text =
-                      authController.states[index].name!;
+                      final index = authController.states.indexWhere((element) => element.name == value);
+                      authController.selectedState.value = SelectedOption(id: authController.states[index].id!, name: authController.states[index].name!);
+                      print(authController.selectedState.value);
                     });
                   },
                 ),
 
                 SizedBox(height: 3.h,),
                 AutoCompleteField(
-                  selectedSuggestion: selectedCityName,
+                  selectedSuggestion: TextEditingController(text: authController.selectedCity.value.name),
                   hint: 'Select City',
                   title: 'City',
                   suggestionsCallback: (pattern) async {
-                    await authController.getCities(search: pattern,
-                        stateId: authController.selectedStateId.value);
+                    await authController.getCities(search: pattern, stateId: authController.selectedState.value.id);
                     List finalList = [];
                     for (int i = 0; i < authController.cities.length; i++) {
                       finalList.add(authController.cities[i].name);
@@ -184,12 +176,9 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                   },
                   onSuggestionSelected: (value) {
                     setState(() {
-                      final index = authController.cities.indexWhere((
-                          element) => element.name == value);
-                      authController.selectedCityId.value =
-                      authController.cities[index].id!;
-                      selectedCityName.text =
-                      authController.cities[index].name!;
+                      final index = authController.cities.indexWhere((element) => element.name == value);
+                      authController.selectedCity.value = SelectedOption(id: authController.cities[index].id!, name: authController.cities[index].name!);
+                      print(authController.selectedCity.value);
                     });
                   },
                 ),
@@ -217,11 +206,8 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                                   chipName: products['name'],
                                   removeItem: () {
                                     setState(() {
-                                      final index = authController
-                                          .selectedProfileTags.indexWhere((
-                                          element) => element == products);
-                                      authController.selectedProfileTags
-                                          .removeAt(index);
+                                      final index = authController.selectedProfileTags.indexWhere((element) => element == products);
+                                      authController.selectedProfileTags.removeAt(index);
                                     });
                                   });
                             }).toList(),
@@ -249,9 +235,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                     setState(() {
                       final index = authController.profileTags.indexWhere((
                           element) => element.name == value);
-                      if (authController.selectedProfileTags.toString()
-                          .toLowerCase()
-                          .contains('name: ${value.toLowerCase()}')) {
+                      if (authController.selectedProfileTags.toString().toLowerCase().contains('name: ${value.toLowerCase()}')) {
                         if (kDebugMode) print('do nothing');
                       } else {
                         authController.selectedProfileTags.add({
@@ -280,12 +264,16 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                     onTap: () async {
                       if (_formKey.currentState!.validate()) {
                         await Helpers.loader();
-                        final isSuccess = await authController.updateProfile(
-                            avatar: imageFile);
+                        final isSuccess = await authController.updateProfile();
                         await Helpers.hideLoader();
                         if (isSuccess) {
-                          Navigator.pop(context);
-                          context.goNamed(mainPage);
+                          if(widget.from == 'signIn'){
+                            Navigator.pop(context);
+                            context.goNamed(mainPage);
+                          }else{
+                            await profileController.getProfile();
+                            Navigator.pop(context);
+                          }
                         }
                       }
                     },
@@ -304,72 +292,94 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
   }
 
   Widget _buildRow(TextTheme textTheme) {
-    return Row(
-      children: <Widget>[
-        Expanded(
-            flex: 3,
-            child: showImage(textTheme: textTheme)),
-        SizedBox(width: 2.w),
-        Expanded(
-          flex: 6,
-          child: Column(
-            children: <Widget>[
-              CustomButton(
-                color: aquaGreenColor,
-                name: "Change Avatar",
-                left: 5.w,
-                right: 5.w,
-                radius: 40.0,
-                height: 4.5.h,
-                onTap: () async {
-                  Helpers.showImagePicker(context: context,
-                      onGallery: _imgFromGallery,
-                      onCamera: _imgFromCamera);
-                },
-              ),
-              CustomButton(
-                name: "Remove Avatar",
-                outlineBtn: true,
-                borderColor: carminePinkColor,
-                textColor: carminePinkColor,
-                top: 1.h,
-                left: 5.w,
-                right: 5.w,
-                radius: 40.0,
-                height: 4.5.h,
-                onTap: () async {
-                  setState(() {
-                    authController.avatarUrl.value = "";
-                    imageFile = File('');
-                  });
-
-                },
-              ),
-            ],
+    return SizedBox(
+      height: 27.h,
+      child: Stack(
+        children: [
+          showCoverImage(textTheme),
+          Positioned.fill(
+            child: Align(
+                alignment: FractionalOffset.bottomCenter,
+                child: showProfileImage(textTheme)
+            ),
           ),
-        ),
-      ],
+          // Row(
+          //   children: <Widget>[
+          //     Expanded(
+          //         flex: 3,
+          //         child: showProfileImage(textTheme)),
+          //     SizedBox(width: 2.w),
+          //     Expanded(
+          //       flex: 6,
+          //       child: Column(
+          //         children: <Widget>[
+          //           CustomButton(
+          //             color: aquaGreenColor,
+          //             name: "Change Avatar",
+          //             left: 5.w,
+          //             right: 5.w,
+          //             radius: 40.0,
+          //             height: 4.5.h,
+          //             onTap: () async {
+          //               Helpers.showImagePicker(context: context,
+          //                   onGallery: _imgFromGallery('profile'),
+          //                   onCamera: _imgFromCamera('profile'));
+          //             },
+          //           ),
+          //           CustomButton(
+          //             name: "Remove Avatar",
+          //             outlineBtn: true,
+          //             borderColor: carminePinkColor,
+          //             textColor: carminePinkColor,
+          //             top: 1.h,
+          //             left: 5.w,
+          //             right: 5.w,
+          //             radius: 40.0,
+          //             height: 4.5.h,
+          //             onTap: () async {
+          //               setState(() {
+          //                 authController.profileImageUrl.value = "";
+          //                 authController.profileImageFile.value = File('');
+          //               });
+          //
+          //             },
+          //           ),
+          //         ],
+          //       ),
+          //     ),
+          //   ],
+          // ),
+        ],
+      ),
     );
   }
 
 
-  _imgFromGallery() async {
+  _imgFromGallery(String type) async {
     var image = await _picker.getImage(source: ImageSource.gallery);
     setState(() {
       if (image != null) {
-        imageFile = File(image.path);
+        if(type == 'cover'){
+          authController.coverImageFile.value = File(image.path);
+        }else{
+          authController.profileImageFile.value = File(image.path);
+        }
       } else {
         if (kDebugMode) print('No image selected.');
       }
     });
   }
 
-  _imgFromCamera() async {
+  _imgFromCamera(String type) async {
     var image = await _picker.getImage(source: ImageSource.camera, imageQuality: 50);
 
     setState(() {
       if (image != null) {
-        imageFile = File(image.path);
+        if(type == 'cover'){
+          authController.coverImageFile.value = File(image.path);
+        }else{
+          authController.profileImageFile.value = File(image.path);
+        }
       } else {
         if (kDebugMode) print('No image selected.');
       }
@@ -377,51 +387,141 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
   }
 
 
-  Widget showImage({required TextTheme textTheme}) {
-    return imageFile.path.isNotEmpty ?
-    Padding(
-        padding: const EdgeInsets.only(bottom: 10),
-        child: SizedBox(
-          height: 100,
-          width: 100,
-          child: ClipRRect(
+  Widget showProfileImage(TextTheme textTheme) {
+    return GestureDetector(
+      onTap: (){
+        Helpers.showImagePicker(context: context,
+            onGallery: _imgFromGallery('profile'),
+            onCamera: _imgFromCamera('profile'));
+      },
+      child: authController.profileImageFile.value.path.isNotEmpty ?
+      Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: Container(
+            height: 100,
+            width: 100,
+            decoration: BoxDecoration(
+              border: Border.all(width: 2.0, color: aquaGreenColor),
               borderRadius: BorderRadius.circular(50),
-              child: Image.file(imageFile, fit: BoxFit.cover,)),
+            ),
+            child: ClipRRect(
+                borderRadius: BorderRadius.circular(50),
+                child: Image.file(authController.profileImageFile.value, fit: BoxFit.cover,)),
+          )
+      )
+
+
+      //   : authController.profileImageUrl.isNotEmpty ? Padding(
+      //     padding: const EdgeInsets.only(bottom: 10),
+      //     child: Container(
+      //       height: 100,
+      //       width: 100,
+      //       decoration: BoxDecoration(
+      //         border: Border.all(width: 2.0, color: aquaGreenColor),
+      //         borderRadius: BorderRadius.circular(50),
+      //       ),
+      //       child: ClipRRect(
+      //           borderRadius: BorderRadius.circular(50),
+      //           child: CachedNetworkImage(
+      //             imageUrl: authController.profileImageUrl.value,
+      //             fit: BoxFit.cover,
+      //             height: 110,
+      //             width: 110,
+      //             placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
+      //             errorWidget: (context, url, error) => const Icon(Icons.error),
+      //           ),),
+      //     )
+      // )
+
+        : Padding(padding: const EdgeInsets.only(bottom: 10),
+          child: Container(
+            height: 100,
+            width: 100,
+            decoration:  BoxDecoration(
+              color: const Color(0xffCDDDDF),
+              border: Border.all(width: 2.0, color: aquaGreenColor),
+              borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.add_a_photo, color: Color(0xff337077),
+                  size: 25,),
+                Text('Image', style: textTheme.headline4?.copyWith(fontSize: 14))
+              ],),
+          )),
+    );
+  }
+
+  Widget showCoverImage(TextTheme textTheme) {
+    return GestureDetector(
+      onTap: (){
+        Helpers.showImagePicker(
+            context: context,
+            onGallery: _imgFromGallery('cover'),
+            onCamera: _imgFromCamera('cover')
+        );
+      },
+      child: Opacity(
+        opacity: 0.7,
+        child: authController.coverImageFile.value.path.isNotEmpty ?
+        Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Container(
+              height: 150,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.black45.withOpacity(0.3),
+              ),
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Image.file(authController.coverImageFile.value, fit: BoxFit.cover,)),
+            )
         )
-    ) : authController.avatarUrl.isNotEmpty ? Padding(
-        padding: const EdgeInsets.only(bottom: 10),
-        child: SizedBox(
-          height: 100,
-          width: 100,
-          child: ClipRRect(
-              borderRadius: BorderRadius.circular(50),
-              child: CachedNetworkImage(
-                imageUrl: authController.avatarUrl.value,
-                fit: BoxFit.cover,
-                height: 110,
-                width: 110,
-                placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
-              ),),
-        )
-    ) : Padding(padding: const EdgeInsets.only(bottom: 10),
-        child: Container(
-          height: 100,
-          width: 100,
-          decoration: const BoxDecoration(
-            color: Color(0xffCDDDDF),
-            // shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.all(Radius.circular(50.0)),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.add_a_photo, color: Color(0xff337077),
-                size: 25,),
-              Text('Image', style: textTheme.headline4?.copyWith(fontSize: 14))
-            ],),
-        ));
+
+        //     : authController.coverImageUrl.isNotEmpty ? Padding(
+        //     padding: const EdgeInsets.only(bottom: 10),
+        //     child: Container(
+        //       height: 150,
+        //       width: double.infinity,
+        //       decoration: BoxDecoration(
+        //         color: Colors.black45.withOpacity(0.3),
+        //       ),
+        //       child: ClipRRect(
+        //         borderRadius: BorderRadius.circular(16),
+        //         child: CachedNetworkImage(
+        //           imageUrl: authController.profileImageUrl.value,
+        //           fit: BoxFit.cover,
+        //           height: 110,
+        //           width: 110,
+        //           placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
+        //           errorWidget: (context, url, error) => const Icon(Icons.error),
+        //         ),),
+        //     )
+        // )
+
+          : Padding(padding: const EdgeInsets.only(bottom: 10),
+            child: Container(
+              height: 150,
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                color: Color(0xffCDDDDF),
+                // shape: BoxShape.rectangle,
+                borderRadius:  BorderRadius.all(Radius.circular(16)),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.add_a_photo, color: Color(0xff337077),
+                    size: 25,),
+                  Text('Upload Cover Image', style: textTheme.headline4?.copyWith(fontSize: 14))
+                ],),
+            )),
+      ),
+    );
   }
 }

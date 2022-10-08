@@ -4,12 +4,14 @@ import 'package:get/get.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/listing/service_listing.dart';
 import 'package:loby/presentation/getx/controllers/listing_controller.dart';
+import 'package:loby/presentation/widgets/custom_bottom_sheet.dart';
 
 import '../../../../../../core/theme/colors.dart';
 import '../../../../../widgets/CustomSwitch.dart';
 import '../../../../../widgets/SuccessfullyDeleteListingBottomDialog.dart';
 import '../../../../../widgets/bottom_dialog_widget.dart';
 import '../../../../../widgets/confirmation_dialog.dart';
+import 'edit_listing.dart';
 
 class MyListingTile extends StatefulWidget {
   final ServiceListing listing;
@@ -119,12 +121,13 @@ class _MyListingTileState extends State<MyListingTile> {
                   children: [
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.18,
-                      child: _actionButton(textTheme, title: "Edit", onTap: (){}, color: butterflyBlueColor)
+                      child: _actionButton(textTheme, title: "Edit", onTap: (){
+                        _showEditListingBottomSheet(context, widget.listing);
+                      }, color: butterflyBlueColor)
                     ),
                     SizedBox(
                         width: MediaQuery.of(context).size.width * 0.18,
                         child: _actionButton(textTheme, title: "Delete", color: lavaRedColor, onTap: (){
-                          print("clicking");
                           ConfirmationBottomDialog(
                               textTheme: textTheme,
                               contentName: "Are you sure you want delete this listing ?",
@@ -195,6 +198,28 @@ class _MyListingTileState extends State<MyListingTile> {
       child: Text(title,
           style: textTheme.headline6
               ?.copyWith(color: textWhiteColor)),
+    );
+  }
+
+
+  void _showEditListingBottomSheet(BuildContext context, ServiceListing listing) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      isDismissible: false,
+      enableDrag: false,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: CustomBottomSheet(
+              isDismissible: false,
+              initialChildSize: 0.90,
+              maxChildSize: 0.90,
+              minChildSize: 0.5,
+              child: EditListing(listing: listing)),
+        );
+      },
     );
   }
 }

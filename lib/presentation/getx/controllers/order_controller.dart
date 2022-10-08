@@ -26,6 +26,7 @@ import 'package:loby/domain/usecases/home/get_unread_count.dart';
 import 'package:loby/domain/usecases/order/raise_dispute.dart';
 import 'package:loby/domain/usecases/order/select_duel_winner.dart';
 
+import '../../../domain/entities/auth/selected_file.dart';
 import '../../../domain/usecases/order/change_order_status.dart';
 import '../../../domain/usecases/order/get_disputes.dart';
 import '../../../domain/usecases/order/submit_dispute_proof.dart';
@@ -81,6 +82,13 @@ class OrderController extends GetxController{
 
   final files = <PlatformFile>[].obs;
   final fileTypes = <int>[].obs;
+
+  List<String> duelUsers = ['Challenger', 'You'];
+  final selectedUser = "".obs;
+  final selectedDuelProofs = <SelectedFile>[].obs;
+  final duelWinner = ''.obs;
+
+
 
 
 

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loby/core/utils/helpers.dart';
+import 'package:loby/presentation/getx/controllers/home_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
+import 'package:loby/presentation/screens/main/profile/wallet/widgets/token_widget.dart';
 import 'package:loby/presentation/widgets/body_padding_widget.dart';
 import 'package:loby/presentation/widgets/custom_loader.dart';
 import 'package:loby/presentation/widgets/text_fields/text_field_widget.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:sizer/sizer.dart';
 import '../../../../../core/theme/colors.dart';
 import '../../../../widgets/custom_app_bar.dart';
 import '../../../../widgets/buttons/custom_button.dart';
@@ -21,6 +25,7 @@ class AddFundsScreen extends StatefulWidget {
 class _AddFundsScreenState extends State<AddFundsScreen> {
 
   ProfileController profileController = Get.find<ProfileController>();
+  HomeController homeController = Get.find<HomeController>();
   TextEditingController amount = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final Razorpay _razorpay = Razorpay();
@@ -37,123 +42,132 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
   @override
   void dispose() {
     // TODO: implement dispose
-    super.dispose();
     _razorpay.clear();
+    amount.clear();
+    profileController.rupeeToToken.value = "0";
+    profileController.tokenToRupee.value = "0";
+    super.dispose();
+
   }
+
+
 
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
       appBar: appBar(context: context, appBarName: "Add Funds"),
       body: BodyPaddingWidget(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Stack(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Card(
-                  color: shipGreyColor,
-                  elevation: 0.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16.0),
-                  ),
-                  child: Container(
-                      width: MediaQuery.of(context).size.width * 1,
-                      height: 140.0,
-                      decoration: BoxDecoration(
-                        color: aquaGreenColor,
+                Stack(
+                  children: [
+                    Card(
+                      color: shipGreyColor,
+                      elevation: 0.0,
+                      shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16.0),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8.0),
-                        child: Column(
-                          children: [
-                            Text('Current Balance',
-                                textAlign: TextAlign.center,
-                                style: textTheme.headline3?.copyWith(
-                                    color: textTunaBlueColor,
-                                    fontWeight: FontWeight.w500)),
-                            Padding(padding: const EdgeInsets.symmetric(
-                                horizontal: 8.0, vertical: 16.0),
-                              child: Obx(() {
-                                if(profileController.isProfileFetching.value){
-                                  return const CustomLoader();
-                                }else{
-                                  return Text('₹ ${profileController.profile.walletMoney}',
-                                      textAlign: TextAlign.center,
-                                      style: textTheme.headlineLarge?.copyWith(
-                                          color: textTunaBlueColor,
-                                          fontFamily: 'Inter'));
-                                }
-
-                              }),
-                            ),
-                          ],
-                        ),
-                      )),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 110.0),
-                  child: Card(
-                    color: shipGreyColor,
-                    elevation: 0.0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 1,
-                      decoration: BoxDecoration(
-                        color: shipGreyColor,
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(24.0),
-                        child: Form(
-                          key: _formKey,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 24.0),
-                                child: TextFieldWidget(
-                                  textEditingController: amount,
-                                  hint: "Enter Amount (INR)",
-                                  isRequired: true,
-                                )
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 0.0, horizontal: 16.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width * 0.35,
-                                      child: CustomButton(
-                                        color: purpleLightIndigoColor,
-                                        textColor: textWhiteColor,
-                                        name: "Add Funds",
-                                        onTap: _openCheckout,
-                                      ),
-                                    ),
-                                  ],
+                      child: Container(
+                          width: MediaQuery.of(context).size.width * 1,
+                          height: 140.0,
+                          decoration: BoxDecoration(
+                            color: aquaGreenColor,
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8.0),
+                            child: Column(
+                              children: [
+                                Text('Current Balance',
+                                    textAlign: TextAlign.center,
+                                    style: textTheme.headline3?.copyWith(
+                                        color: textTunaBlueColor,
+                                        fontWeight: FontWeight.w500)),
+                                Padding(padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0, vertical: 16.0),
+                                  child: Obx(() {
+                                    if (profileController.isProfileFetching.value) {
+                                      return const CustomLoader();
+                                    } else {
+                                      return TokenWidget(tokens: "${profileController.profile.walletMoney}",);
+                                    }
+                                  }),
                                 ),
+                              ],
+                            ),
+                          )),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 110.0),
+                      child: Card(
+                        color: shipGreyColor,
+                        elevation: 0.0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.0),
+                        ),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 1,
+                          decoration: BoxDecoration(
+                            color: shipGreyColor,
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(24.0),
+                            child: Form(
+                              key: _formKey,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 24.0),
+                                      child: TextFieldWidget(
+                                        textEditingController: amount,
+                                        hint: "Enter Token Quantity",
+                                        isNumber: true,
+                                        isRequired: true,
+                                        onChanged: (value){
+                                          if(value.isNotEmpty){
+                                            profileController.tokenToRupee.value = (int.tryParse(value)! * int.tryParse(homeController.staticData[2].realValue!)!).floor().toString();
+                                            profileController.rupeeToToken.value = (int.tryParse(value)! / int.tryParse(homeController.staticData[2].key!)!).floor().toString();
+                                          }
+                                        },
+                                      )
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      TokenWidget(tokens: profileController.rupeeToToken.value, textColor: whiteColor, size: 20,),
+                                      Text("₹ ${profileController.tokenToRupee}",
+                                      style: textTheme.headline3?.copyWith(color: whiteColor),),
+                                    ],
+                                  ),
+                                  CustomButton(
+                                    top: 4.h,
+                                    left: 15.w,
+                                    right: 15.w,
+                                    color: purpleLightIndigoColor,
+                                    textColor: textWhiteColor,
+                                    name: "Pay  ₹ ${profileController.tokenToRupee}",
+                                    onTap: _openCheckout,
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
-      ),
+      )
     );
   }
 
@@ -178,15 +192,17 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
   }
 
   Future<void> _openCheckout() async {
-    if(_formKey.currentState!.validate()){
+    if (_formKey.currentState!.validate()) {
       await Helpers.loader();
       final isSuccess = await profileController.addFunds(
           amount: int.tryParse(amount.text));
       if (isSuccess) {
         amount.clear();
+        profileController.rupeeToToken.value = "0";
+        profileController.tokenToRupee.value = "0";
         var options = {
           'key': 'rzp_test_w3kuff6E1thtE3',
-          'amount': int.tryParse("${amount.text}00"),
+          'amount': int.tryParse(profileController.addFundsResponse['total_amount'],),
           'name': 'Loby',
           'order_id': profileController.addFundsResponse['order_id'],
           'description': 'Add Fund to Wallet',
@@ -205,4 +221,7 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
       }
     }
   }
+
+
+
 }

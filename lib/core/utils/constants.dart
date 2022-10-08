@@ -25,6 +25,7 @@ class ApiEndpoints{
   static const String getNotifications = "/get-notifications";
   static const String deleteNotification = "/delete-notification";
   static const String getUnreadNotificationCount = "/get-unread-notification-count";
+  static const String getStaticData = "/get-static-content";
 
 
 
@@ -47,6 +48,7 @@ class ApiEndpoints{
   /// Listing APIs ///
   static const String getConfigurations = "/get-congfiguration";
   static const String createListing = "/create-listing-for-user-game-service";
+  static const String editListing = "/edit-user-game-service";
   static const String getBuyerListings = "/get-all-game-service-listing-buyer";
   static const String getSelfListings = "/get-all-game-service-listing";
   static const String reportListing = "/report-listing-user";

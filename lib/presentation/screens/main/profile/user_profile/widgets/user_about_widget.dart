@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/profile/user.dart';
 
 import '../../../../../../core/theme/colors.dart';
@@ -141,7 +142,7 @@ class UserAboutWidget extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: MyText(
-                  name: "${user.createdAt ?? ''}",
+                  name: Helpers.formatDateTime(dateTime: user.createdAt!),
                   textColor: textWhiteColor,
                   myBackgroundColor: textFieldColor,
                 ),

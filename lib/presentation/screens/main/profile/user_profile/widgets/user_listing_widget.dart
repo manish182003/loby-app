@@ -6,7 +6,7 @@ import 'package:loby/presentation/getx/controllers/listing_controller.dart';
 import 'package:loby/presentation/widgets/text_fields/auto_complete_field.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../widgets/drop_down.dart';
-import '../../widgets/ItemList.dart';
+import '../../../home/widgets/ItemList.dart';
 
 class UserListingWidget extends StatefulWidget {
   final User user;
@@ -31,6 +31,7 @@ class _UserListingWidgetState extends State<UserListingWidget> {
     WidgetsBinding.instance.addPostFrameCallback((_){
       listingController.buyerListingPageNumber.value = 1;
       listingController.areMoreListingAvailable.value = true;
+      listingController.buyerListingsProfile.clear();
       listingController.getBuyerListings(userId: widget.user.id, from: widget.from);
 
       controller.addListener(() {
@@ -99,10 +100,8 @@ class _UserListingWidgetState extends State<UserListingWidget> {
           onSuggestionSelected: (value) async {
             final index = homeController.games.indexWhere((element) =>
             element.name == value);
-            homeController.selectedGameId.value =
-            homeController.games[index].id!;
-            homeController.selectedGameName.value.text =
-            homeController.games[index].name!;
+            homeController.selectedGameId.value = homeController.games[index].id!;
+            homeController.selectedGameName.value.text = homeController.games[index].name!;
 
             listingController.getBuyerListings(
               categoryId: homeController.selectedCategoryId.value,

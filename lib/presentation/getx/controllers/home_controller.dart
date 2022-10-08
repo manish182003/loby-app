@@ -7,6 +7,7 @@ import 'package:loby/domain/entities/home/category.dart';
 import 'package:loby/domain/entities/home/category_games.dart';
 import 'package:loby/domain/entities/home/game.dart';
 import 'package:loby/domain/entities/home/notification.dart' as notification;
+import 'package:loby/domain/entities/home/static_data.dart';
 import 'package:loby/domain/entities/listing/service_listing.dart';
 import 'package:loby/domain/entities/order/order.dart';
 import 'package:loby/domain/entities/profile/user.dart';
@@ -19,6 +20,7 @@ import 'package:loby/domain/usecases/home/get_notifications.dart';
 import 'package:loby/domain/usecases/order/get_orders.dart';
 import 'package:loby/domain/usecases/home/get_unread_count.dart';
 
+import '../../../domain/usecases/home/get_static_data.dart';
 import '../../../domain/usecases/home/global_search.dart';
 
 class HomeController extends GetxController{
@@ -29,6 +31,7 @@ class HomeController extends GetxController{
   final DeleteNotification _deleteNotification;
   final GetUnreadCount _getUnreadCount;
   final GlobalSearch _globalSearch;
+  final GetStaticData _getStaticData;
 
   HomeController({
     required GetCategories getCategories,
@@ -38,13 +41,15 @@ class HomeController extends GetxController{
     required DeleteNotification deleteNotification,
     required GetUnreadCount getUnreadCount,
     required GlobalSearch globalSearch,
+    required GetStaticData getStaticData,
   }) : _getCategories = getCategories,
       _getGames = getGames,
         _getCategoryGames = getCategoryGames,
   _getNotifications = getNotifications,
   _deleteNotification = deleteNotification,
   _getUnreadCount = getUnreadCount,
-        _globalSearch = globalSearch;
+        _globalSearch = globalSearch,
+  _getStaticData = getStaticData;
 
   final categories = <Category>[].obs;
   final isCategoryFetching = false.obs;
@@ -80,6 +85,11 @@ class HomeController extends GetxController{
   final serviceListingResults = <ServiceListing>[].obs;
   final userResults = <User>[].obs;
   final gameResults = <Game>[].obs;
+
+
+  final staticData = <StaticData>[].obs;
+  final isStaticDataFetching = false.obs;
+
 
 
 
@@ -295,6 +305,32 @@ class HomeController extends GetxController{
     return failureOrSuccess.isRight() ? true : false;
   }
 
+
+
+  Future<bool> getStaticData() async {
+    isStaticDataFetching(true);
+    final failureOrSuccess = await _getStaticData(
+      const Params(homeParams: HomeParams(
+
+      ),),
+    );
+
+    failureOrSuccess.fold(
+          (failure) {
+        errorMessage.value = Helpers.convertFailureToMessage(failure);
+        debugPrint(errorMessage.value);
+        Helpers.toast(errorMessage.value);
+        isStaticDataFetching(false);
+      },
+          (success) {
+            staticData.value = success.staticData;
+            isStaticDataFetching(false);
+
+        // Helpers.toast('Profile Changed');
+      },
+    );
+    return failureOrSuccess.isRight() ? true : false;
+  }
 
 
 

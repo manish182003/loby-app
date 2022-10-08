@@ -136,6 +136,7 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
         'Authorization': 'Bearer $token',
       };
 
+      print(cover);
       print(avatar);
       print(fullName);
       print(displayName);
@@ -178,6 +179,13 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
       if(avatar != null && avatar.path.isNotEmpty) {
         formData.files.add(MapEntry('image',
             MultipartFile.fromFileSync(avatar.path,
+              // contentType: MediaType('image', 'jpg'),
+            )));
+      }
+
+      if(cover != null && cover.path.isNotEmpty) {
+        formData.files.add(MapEntry('cover_image',
+            MultipartFile.fromFileSync(cover.path,
               // contentType: MediaType('image', 'jpg'),
             )));
       }

@@ -73,9 +73,9 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
   void dispose() {
     listingController.isServicesAvailable.value = false;
     homeController.disclaimer.value = "";
+    listingController.clearListing();
     super.dispose();
   }
-
 
 
   @override
@@ -205,6 +205,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                       }
                     }
                     listingController.isServicesAvailable.value = true;
+                    setState((){});
                     Helpers.hideLoader();
                   },
                 ),
@@ -313,10 +314,12 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                               text: TextSpan(children: [
                                 TextSpan(
                                   text: '7 Days Insurance',
-                                  style: textTheme.subtitle2
-                                      ?.copyWith(color: textLightColor),
+                                  style: textTheme.subtitle2?.copyWith(color: textLightColor
+                                  ),
                                 ),
-                              ]))),
+                              ])
+                          )
+                      ),
                     ),
                   ],
                 ),
@@ -333,9 +336,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   itemsList:  [for(var i = 1; i <= (listingController.configuration.maximumEstimatedDeliveryTimeDays ?? "").length; i++) i].map((item) =>
                       DropdownMenuItem<String>(
                         value: "$item",
-                        child: Text("$item",
-                            style: textTheme.headline3?.copyWith(
-                                color: whiteColor)
+                        child: Text("$item", style: textTheme.headline3?.copyWith(color: whiteColor)
                         ),
                       )).toList(),
                   onChanged: (value) {
@@ -451,6 +452,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                       }).toList(),
                     )
                 ),
+                SizedBox(height: 2.h,),
                 AutoCompleteField(
                   hint: service.name,
                   isMultiple: true,

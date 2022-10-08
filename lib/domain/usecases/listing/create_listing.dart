@@ -11,6 +11,7 @@ class CreateListing extends UseCase<Map<String, dynamic>, Params> {
   @override
   Future<Either<Failure, Map<String, dynamic>>> call(Params params) {
     return _repository.createListing(
+      listingId: params.listingParams?.listingId,
       categoryId: params.listingParams?.categoryId,
       gameId: params.listingParams?.gameId,
       title: params.listingParams?.title,

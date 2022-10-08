@@ -143,7 +143,7 @@ class _CreateAccountState extends State<CreateAccount> {
               initialChildSize: 0.97,
               maxChildSize: 0.97,
               minChildSize: 0.5,
-              child: CreateProfileCard()),
+              child: CreateProfileCard(from: 'signIn',)),
         );
       },
     );

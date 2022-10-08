@@ -1,40 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 import 'package:loby/presentation/getx/controllers/home_controller.dart';
 import 'package:loby/presentation/getx/controllers/listing_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
-import 'package:loby/presentation/screens/main/home/other_user_profile/widgets/profile_header.dart';
-import 'package:loby/presentation/screens/main/home/other_user_profile/widgets/user_info.dart';
+import 'package:loby/presentation/screens/main/profile/user_profile/widgets/profile_header.dart';
+import 'package:loby/presentation/screens/main/profile/user_profile/widgets/user_info.dart';
 
 import '../../../../../core/theme/colors.dart';
 
-class OtherUserProfileScreen extends StatefulWidget {
+class UserProfileScreen extends StatefulWidget {
   final int userId;
   final String from;
 
-  const OtherUserProfileScreen({Key? key, required this.userId, required this.from}) : super(key: key);
+  const UserProfileScreen({Key? key, required this.userId, required this.from}) : super(key: key);
 
   @override
-  State<OtherUserProfileScreen> createState() => _OtherUserProfileScreenState();
+  State<UserProfileScreen> createState() => _UserProfileScreenState();
 }
 
-class _OtherUserProfileScreenState extends State<OtherUserProfileScreen> {
+class _UserProfileScreenState extends State<UserProfileScreen> {
 
   final HomeController homeController = Get.find<HomeController>();
   final ProfileController profileController = Get.find<ProfileController>();
   final ListingController listingController = Get.find<ListingController>();
+  final AuthController authController = Get.find<AuthController>();
 
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_){
+    asyncFunctions();
+  }
+
+
+  Future<void> asyncFunctions()async{
+    WidgetsBinding.instance.addPostFrameCallback((_)async{
       if(widget.from == 'other'){
         profileController.getProfile(userId: widget.userId);
       }else{
         listingController.buyerListings.clear();
-        profileController.getProfile();
+        await profileController.getProfile();
+        authController.getProfileDetails();
       }
     });
   }

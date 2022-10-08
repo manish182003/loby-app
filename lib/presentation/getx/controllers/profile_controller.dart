@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:loby/core/usecases/profile_params.dart';
 import 'package:loby/core/usecases/usecase.dart';
 import 'package:loby/core/utils/helpers.dart';
+import 'package:loby/domain/entities/auth/selected_file.dart';
 import 'package:loby/domain/entities/profile/duel_details.dart';
 import 'package:loby/domain/entities/profile/rating.dart';
 import 'package:loby/domain/entities/profile/user.dart';
@@ -112,12 +114,14 @@ class ProfileController extends GetxController{
   final walletTransactionsPageNumber = 1.obs;
 
 
-
   final followers = <User>[].obs;
   final isFollowersFetching = false.obs;
 
   final following = <User>[].obs;
   final isFollowingFetching = false.obs;
+
+  final tokenToRupee = "0".obs;
+  final rupeeToToken = "0".obs;
 
 
 
@@ -344,6 +348,8 @@ class ProfileController extends GetxController{
         Helpers.toast(errorMessage.value);
       },
           (success) {
+
+
 
 
       },

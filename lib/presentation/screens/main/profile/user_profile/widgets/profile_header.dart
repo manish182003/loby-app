@@ -12,6 +12,8 @@ import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/profile/user.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
+import 'package:loby/presentation/screens/auth/widgets/create_profile_bottom_sheet.dart';
+import 'package:loby/presentation/widgets/custom_bottom_sheet.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../../core/theme/colors.dart';
@@ -65,8 +67,10 @@ class _ProfileHeaderState extends State<ProfileHeader> {
               ),
             ),
             appBar(context: context, appBarName: widget.title),
-            GestureDetector(
-              onTap: _openFileExplorer,
+            widget.from == 'myProfile' ? GestureDetector(
+              onTap: (){
+                _showCreateProfileBottomSheet(context);
+              },
               child: Align(
                 alignment: Alignment.topRight,
                 child: Container(
@@ -79,7 +83,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                   ),
                 ),
               ),
-            ),
+            ) : const SizedBox(),
           ],
         ),
         Padding(
@@ -324,7 +328,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
       ))!.files;
 
       Helpers.loader();
-      await authController.updateProfile(avatar: _paths.map((e) => File(e.path!)).toList().first);
+      await authController.updateProfile();
       await profileController.getProfile();
       Helpers.hideLoader();
 
@@ -334,5 +338,27 @@ class _ProfileHeaderState extends State<ProfileHeader> {
       Helpers.toast('Something went wrong');
     }
     if (!mounted) return;
+  }
+
+
+  void _showCreateProfileBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      isDismissible: false,
+      enableDrag: false,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: const CustomBottomSheet(
+              isDismissible: false,
+              initialChildSize: 0.97,
+              maxChildSize: 0.97,
+              minChildSize: 0.5,
+              child: CreateProfileCard(from: 'profile')),
+        );
+      },
+    );
   }
 }

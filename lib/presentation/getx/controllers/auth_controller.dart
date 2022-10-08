@@ -11,6 +11,7 @@ import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/auth/city.dart';
 import 'package:loby/domain/entities/auth/country.dart';
 import 'package:loby/domain/entities/auth/profile_tag.dart';
+import 'package:loby/domain/entities/auth/selected_option.dart';
 import 'package:loby/domain/usecases/auth/check_username.dart';
 import 'package:loby/domain/usecases/auth/get_cities.dart';
 import 'package:loby/domain/usecases/auth/get_countries.dart';
@@ -68,16 +69,17 @@ class AuthController extends GetxController{
 
   final profileTags = <ProfileTag>[].obs;
 
-
+  final coverImageFile = File('').obs;
+  final profileImageFile = File('').obs;
   final fullName = TextEditingController().obs;
   final displayName = TextEditingController().obs;
-  final selectedCountryId = 0.obs;
-  final selectedStateId = 0.obs;
-  final selectedCityId = 0.obs;
+  final selectedCountry = SelectedOption(id: 0, name: "").obs;
+  final selectedState = SelectedOption(id: 0, name: "").obs;
+  final selectedCity = SelectedOption(id: 0, name: "").obs;
   final DOB = TextEditingController().obs;
   final selectedProfileTags = <Map<String, dynamic>>[].obs;
   final bio = TextEditingController().obs;
-  final avatarUrl = "".obs;
+
 
 
   final errorMessage = ''.obs;
@@ -89,6 +91,8 @@ class AuthController extends GetxController{
 
   final isUsernameAvailable = false.obs;
   final usernameString = "".obs;
+
+
 
    Future<void> saveProfileDetails()async{
      CoreController coreController = Get.find<CoreController>();
@@ -124,7 +128,7 @@ class AuthController extends GetxController{
       await auth.signInWithCredential(credential).then((user)async{
         isGoogleSignInSuccess.value = await login(socialLoginId: googleUser?.id, socialLoginType: 2, name: googleUser?.displayName, email: googleUser?.email);
         fullName.value.text = googleUser?.displayName ?? '';
-        avatarUrl.value = googleUser?.photoUrl ?? '';
+        profileImageFile.value = await Helpers.urlToFile(googleUser?.photoUrl ?? '');
         await Helpers.hideLoader();
       });
 
@@ -292,18 +296,16 @@ class AuthController extends GetxController{
   }
 
 
-  Future<bool> updateProfile({File? cover, File? avatar}) async {
-
-
+  Future<bool> updateProfile({String? from}) async {
     final failureOrSuccess = await _updateProfile(
       Params(authParams: AuthParams(
-          cover: cover,
-          avatar: avatar,
+          cover: coverImageFile.value,
+          avatar: profileImageFile.value,
           fullName: fullName.value.text,
           displayName: displayName.value.text,
-          countryId: selectedCountryId.value,
-          stateId: selectedStateId.value,
-          cityId: selectedCityId.value,
+          countryId: selectedCountry.value.id,
+          stateId: selectedState.value.id,
+          cityId: selectedCity.value.id,
           DOB: Helpers.getDateFormat(DOB.value.text),
           profileTags: selectedProfileTags,
           bio: bio.value.text
@@ -317,22 +319,42 @@ class AuthController extends GetxController{
         Helpers.toast(errorMessage.value);
       },
           (success) {
-            avatarUrl.value = "";
-            fullName.value.clear();
-            displayName.value.clear();
-            selectedCountryId.value = 0;
-            selectedStateId.value = 0;
-            selectedCityId.value = 0;
-            DOB.value.clear();
-            selectedProfileTags.clear();
-            bio.value.clear();
+            if(from == 'signIn'){
+              profileImageFile.value = File('');
+              coverImageFile.value = File('');
+              fullName.value.clear();
+              displayName.value.clear();
+              selectedCountry.value = SelectedOption(id: 0, name: "");
+              selectedState.value = SelectedOption(id: 0, name: "");
+              selectedCity.value = SelectedOption(id: 0, name: "");
+              DOB.value.clear();
+              selectedProfileTags.clear();
+              bio.value.clear();
 
-            saveProfileDetails();
-
+              saveProfileDetails();
+            }
             // Helpers.toast('Profile Changed');
       },
     );
     return failureOrSuccess.isRight() ? true : false;
+  }
+
+
+  Future<void> getProfileDetails()async{
+     ProfileController profileController = Get.find<ProfileController>();
+     final profile = profileController.profile;
+     profileController.isProfileFetching(true);
+     coverImageFile.value = (profile.coverImage == null ? File('') : await Helpers.urlToFile(profile.coverImage!));
+     profileImageFile.value = (profile.image == null ? File('') : await Helpers.urlToFile(profile.image!));
+     fullName.value.text = profile.name ?? '';
+     displayName.value.text = profile.displayName ?? '';
+     selectedCountry.value = SelectedOption(id: profile.country!.id!, name: profile.country!.name!);
+     selectedState.value = SelectedOption(id: profile.state!.id!, name: profile.state!.name!);
+     selectedCity.value = SelectedOption(id: profile.city!.id!, name: profile.city!.name!);
+     DOB.value.text = (Helpers.formatDateTime(dateTime: profile.dob!)).split(" ")[0];
+    profileTags.value = profile.profileTags!;
+    bio.value.text = profile.bio!;
+     profileController.isProfileFetching(false);
   }
 
 

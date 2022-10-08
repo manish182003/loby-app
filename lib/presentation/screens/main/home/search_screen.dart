@@ -181,7 +181,7 @@ class _SearchScreenState extends State<SearchScreen> {
   buildUsersListItem(TextTheme textTheme, {required User user}) {
     return GestureDetector(
       onTap: (){
-        context.pushNamed(otherUserPage, queryParams: {'userId': "${user.id}", 'from': 'other'});
+        context.pushNamed(userProfilePage, queryParams: {'userId': "${user.id}", 'from': 'other'});
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 8.0),

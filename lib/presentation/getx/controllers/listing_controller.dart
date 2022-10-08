@@ -91,11 +91,12 @@ class ListingController extends GetxController{
   }
 
 
-  Future<bool> createListing({required int categoryId, required int gameId}) async {
+  Future<bool> createListing({int? listingId, int? categoryId, int? gameId}) async {
 
     final failureOrSuccess = await _createListing(
       Params(listingParams: ListingParams(
-        categoryId: categoryId,
+        listingId: listingId,
+          categoryId: categoryId,
           gameId: gameId,
           title: title.value.text,
           description: description.value.text,
@@ -107,6 +108,8 @@ class ListingController extends GetxController{
           files: files,
           fileTypes: fileTypes,
           optionAnswer: optionAnswer,
+
+
       ),),
     );
 
@@ -118,22 +121,27 @@ class ListingController extends GetxController{
       },
           (success) {
 
-            title.value.clear();
-            description.value.clear();
-            price.value.clear();
-            stockAvl.value.clear();
-            estimateDeliveryTime.value = "";
-            priceUnitId.value = 0;
-            serviceOptionId.clear();
-            files.clear();
-            fileTypes.clear();
-            optionAnswer.clear();
-            isServicesAvailable.value = false;
-
+            clearListing();
 
       },
     );
     return failureOrSuccess.isRight() ? true : false;
+  }
+
+
+  void clearListing(){
+    title.value.clear();
+    description.value.clear();
+    price.value.clear();
+    stockAvl.value.clear();
+    estimateDeliveryTime.value = "";
+    priceUnitId.value = 0;
+    serviceOptionId.clear();
+    files.clear();
+    fileTypes.clear();
+    optionAnswer.clear();
+    isServicesAvailable.value = false;
+
   }
 
 

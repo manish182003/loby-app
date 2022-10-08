@@ -15,7 +15,10 @@ import 'package:loby/core/utils/environment.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
+import 'dart:math';
 import 'exceptions.dart';
 import 'failure.dart';
 
@@ -50,7 +53,9 @@ class Helpers {
   }
 
   static validateField(String value) {
-    if (value.isEmpty) {
+    print(value);
+
+    if (value.isEmpty || value == 'null') {
       return "field required";
     }
     return null;
@@ -72,11 +77,15 @@ class Helpers {
     }
   }
 
-  static validateWalletWithdraw(int value, int balance) {
-    if (balance - value <= 200) {
-      return 'Minimum Balance Left Should be 200';
-    } else {
-      return null;
+  static validateWalletWithdraw(String value, int balance) {
+    if(value != ''){
+      if (balance - int.parse(value) <= 200) {
+        return 'Minimum Balance Left Should be 200';
+      } else {
+        return null;
+      }
+    }else{
+      return 'Field Required';
     }
   }
 
@@ -316,5 +325,13 @@ class Helpers {
     }
   }
 
-
+  static Future<File> urlToFile(String imageUrl) async {
+    var rng = Random();
+    Directory tempDir = await getTemporaryDirectory();
+    String tempPath = tempDir.path;
+    File file = File('$tempPath${rng.nextInt(100)}.png');
+    http.Response response = await http.get(Uri.parse(imageUrl));
+    await file.writeAsBytes(response.bodyBytes);
+    return file;
+  }
 }

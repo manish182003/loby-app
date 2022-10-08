@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:get/get.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:loby/data/models/chat/chat_model.dart';
 import 'package:loby/data/models/chat/message_model.dart';
 import 'package:loby/data/models/order/order_model.dart';
 import 'package:loby/presentation/getx/controllers/chat_controller.dart';
@@ -29,6 +30,7 @@ class CoreController extends GetxController{
     });
     debugPrint('socket status is connected? ${socket.connected}');
   }
+
 
   void socketListener(int userId){
     socket.on("$userId", (data) {
@@ -96,6 +98,16 @@ class CoreController extends GetxController{
     };
     chatController.chatMessages.insert(0, types.Message.fromJson(socketMessageMap));
     chatController.chatMessages.refresh();
+
+    final chat = chatController.chats.where((element) => element.id == data['message']['contact']['id']).toList();
+    if(chat.isEmpty){
+      chatController.chats.insert(0, ChatModel.fromJson(data['message']['contact']));
+    }else{
+      chatController.chats.removeWhere((element) => element.id == data['message']['contact']['id']);
+      chatController.chats.insert(0, ChatModel.fromJson(data['message']['contact']));
+    }
+    chatController.chats.refresh();
+
   }
 
 

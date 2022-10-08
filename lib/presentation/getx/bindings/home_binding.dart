@@ -10,6 +10,7 @@ import 'package:loby/domain/usecases/home/get_categories.dart';
 import 'package:loby/domain/usecases/home/get_category_games.dart';
 import 'package:loby/domain/usecases/home/get_games.dart';
 import 'package:loby/domain/usecases/home/get_notifications.dart';
+import 'package:loby/domain/usecases/home/get_static_data.dart';
 import 'package:loby/domain/usecases/home/get_unread_count.dart';
 import 'package:loby/domain/usecases/home/global_search.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
@@ -27,6 +28,7 @@ class HomeBinding extends Bindings {
     final deleteNotification = Get.find<DeleteNotification>();
     final getUnreadCount = Get.find<GetUnreadCount>();
     final globalSearch = Get.find<GlobalSearch>();
+    final getStaticData = Get.find<GetStaticData>();
 
 
 
@@ -37,7 +39,8 @@ class HomeBinding extends Bindings {
       getNotifications: getNotifications,
       deleteNotification: deleteNotification,
       getUnreadCount: getUnreadCount,
-      globalSearch: globalSearch
+      globalSearch: globalSearch,
+      getStaticData: getStaticData,
     ));
   }
 

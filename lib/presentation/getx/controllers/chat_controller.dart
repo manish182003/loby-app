@@ -70,7 +70,7 @@ class ChatController extends GetxController{
           areMoreChatsAvailable.value = success.chats.length == 10;
 
           if (chatsPageNumber > 1) {
-            chats.addAll(success.chats);
+            chats.addAll(success.chats.where((a) => chats.every((b) => a.id != b.id)));
           } else {
             chats.value = success.chats;
           }

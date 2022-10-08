@@ -24,9 +24,9 @@ class ListingRepositoryImpl extends ListingRepository{
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> createListing({int? categoryId, int? gameId, String? title, String? description, String? price, String? stockAvl, String? estimateDeliveryTime, int? priceUnitId, List<SelectedServiceOption>? serviceOptionId, List? files, List<int>? fileTypes, List<TextEditingController>? optionAnswer})async {
+  Future<Either<Failure, Map<String, dynamic>>> createListing({int? listingId, int? categoryId, int? gameId, String? title, String? description, String? price, String? stockAvl, String? estimateDeliveryTime, int? priceUnitId, List<SelectedServiceOption>? serviceOptionId, List? files, List<int>? fileTypes, List<TextEditingController>? optionAnswer})async {
     try {
-      return Right(await _listingRemoteDatasource.createListing(categoryId, gameId, title, description, price, stockAvl, estimateDeliveryTime, priceUnitId, serviceOptionId, files, fileTypes, optionAnswer ));
+      return Right(await _listingRemoteDatasource.createListing(listingId, categoryId, gameId, title, description, price, stockAvl, estimateDeliveryTime, priceUnitId, serviceOptionId, files, fileTypes, optionAnswer ));
     } on ServerException catch (e) {
     // Loggers can be added here for analyzation.
     return Left(ServerFailure(message: e.message.toString()));

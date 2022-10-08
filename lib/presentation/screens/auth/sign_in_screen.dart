@@ -114,6 +114,7 @@ class _SignInScreenState extends State<SignInScreen> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       isDismissible: false,
+      enableDrag: false,
       builder: (BuildContext context) {
         return const CustomBottomSheet(
           initialChildSize: 0.97,
@@ -132,6 +133,7 @@ class _SignInScreenState extends State<SignInScreen> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       isDismissible: false,
+      enableDrag: false,
       builder: (BuildContext context) {
         return Padding(
           padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -153,16 +155,16 @@ class _SignInScreenState extends State<SignInScreen> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       isDismissible: false,
+      enableDrag: false,
       builder: (BuildContext context) {
         return Padding(
           padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-
           child: const CustomBottomSheet(
             isDismissible: false,
               initialChildSize: 0.97,
               maxChildSize: 0.97,
               minChildSize: 0.5,
-              child: CreateProfileCard()),
+              child: CreateProfileCard(from: 'signIn',)),
         );
       },
     );

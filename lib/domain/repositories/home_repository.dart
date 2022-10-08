@@ -3,6 +3,7 @@ import 'package:loby/core/utils/failure.dart';
 import 'package:loby/domain/entities/response_entities/home/category_games_response.dart';
 import 'package:loby/domain/entities/response_entities/home/category_response.dart';
 import 'package:loby/domain/entities/response_entities/home/game_response.dart';
+import 'package:loby/domain/entities/response_entities/home/static_data_response.dart';
 import 'package:loby/domain/entities/response_entities/order/order_response.dart';
 
 import '../entities/response_entities/home/global_search_response.dart';
@@ -22,8 +23,9 @@ abstract class HomeRepository{
 
   Future<Either<Failure, int>> getUnreadCount({String? type});
 
-
   Future<Either<Failure, GlobalSearchResponse>> globalSearch({String? search});
+
+  Future<Either<Failure, StaticDataResponse>> getStaticData();
 
 
 }

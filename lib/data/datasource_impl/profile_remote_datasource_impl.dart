@@ -96,6 +96,7 @@ class ProfileRemoteDatasourceImpl extends ProfileRemoteDatasource{
     try {
 
       print(signature);
+      print(signature);
       print(paymentId);
       print(paymentStatus);
       print(orderId);
@@ -233,6 +234,7 @@ class ProfileRemoteDatasourceImpl extends ProfileRemoteDatasource{
           'full_registered_name' : holderName ?? "",
           'bank_account_type' : type ?? "",
         } : {
+          'full_registered_name' : holderName ?? "",
           'upi_id' : upiId ?? "",
           'bank_account_type' : type ?? "",
         },

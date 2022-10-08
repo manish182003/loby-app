@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loby/presentation/getx/controllers/home_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
+import 'package:loby/presentation/screens/main/profile/wallet/widgets/token_widget.dart';
 import 'package:loby/presentation/widgets/body_padding_widget.dart';
 import 'package:sizer/sizer.dart';
 
@@ -21,6 +23,14 @@ class MyWalletScreen extends StatefulWidget {
 class _MyWalletScreenState extends State<MyWalletScreen> {
 
   ProfileController profileController = Get.find<ProfileController>();
+  HomeController homeController = Get.find<HomeController>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    homeController.getStaticData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,11 +91,7 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                                     if(profileController.isProfileFetching.value){
                                       return const CustomLoader();
                                     }else{
-                                      return Text('₹ ${profileController.profile.walletMoney}',
-                                          textAlign: TextAlign.center,
-                                          style: textTheme.headlineLarge?.copyWith(
-                                              color: aquaGreenColor,
-                                              fontFamily: 'Inter'));
+                                      return TokenWidget(tokens: "${profileController.profile.walletMoney}", textColor: aquaGreenColor,);
                                     }
 
                                   }),
@@ -101,7 +107,7 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                                         child: CustomButton(
                                           color: purpleLightIndigoColor,
                                           textColor: textWhiteColor,
-                                          name: "Add Funds",
+                                          name: "Add Token",
                                           onTap: () {
                                             context.pushNamed(addFundScreenPage);
                                           },

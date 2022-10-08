@@ -36,12 +36,13 @@ class ListingRemoteDatasourceImpl extends ListingRemoteDatasource{
   }
 
   @override
-  Future<Map<String, dynamic>> createListing(int? categoryId, int? gameId, String? title, String? description, String? price, String? stockAvl, String? estimateDeliveryTime, int? priceUnitId, List<SelectedServiceOption>? serviceOptionId, List? files, List<int>? fileTypes, List<TextEditingController>? optionAnswer)async {
+  Future<Map<String, dynamic>> createListing(int? listingId, int? categoryId, int? gameId, String? title, String? description, String? price, String? stockAvl, String? estimateDeliveryTime, int? priceUnitId, List<SelectedServiceOption>? serviceOptionId, List? files, List<int>? fileTypes, List<TextEditingController>? optionAnswer)async {
     try {
       String token = await Helpers.getApiToken();
       final Map<String, dynamic> headers = {
         'Authorization': 'Bearer $token',
       };
+      print(listingId);
       print(categoryId);
       print(gameId);
       print(title);
@@ -57,40 +58,65 @@ class ListingRemoteDatasourceImpl extends ListingRemoteDatasource{
       print(stockAvl);
 
 
-      FormData formData = FormData()
-        ..fields.add(
+
+
+      FormData formData = FormData();
+
+      if(listingId == null){
+        formData.fields.add(
           MapEntry('category_id', "$categoryId"),
-        )
-        ..fields.add(
+        );
+        formData.fields.add(
           MapEntry('game_id', "$gameId"),
-        )
-        ..fields.add(
+        );
+        formData.fields.add(
           MapEntry('title', title!),
-        )
-        ..fields.add(
+        );
+        formData.fields.add(
           MapEntry('description', description!),
-        )
-        ..fields.add(
+        );
+        formData.fields.add(
           MapEntry('price', "$price"),
-        )
-        ..fields.add(
+        );
+        formData.fields.add(
           MapEntry('stock_avl', "$stockAvl"),
-        )
-        ..fields.add(
+        );
+        formData.fields.add(
           MapEntry('edt', "$estimateDeliveryTime"),
-        )
-        ..fields.add(
+        );
+        formData.fields.add(
           MapEntry('price_unit_id', "$priceUnitId"),
-        )
-        ..fields.add(
-          MapEntry('service_option_id', serviceOptionId.map((e) => e.id).toList().join(",")),
-        )
-        ..fields.add(
-            MapEntry('option_answer', optionAnswer.map((e) => e.text).toList().join(","))
         );
 
+        if(serviceOptionId.isNotEmpty){
+          formData.fields.add(
+            MapEntry('service_option_id', serviceOptionId.map((e) => e.id).toList().join(",")),
+          );
+        }
 
+        if(optionAnswer.isNotEmpty){
+          formData.fields.add(
+              MapEntry('option_answer', optionAnswer.map((e) => e.text).toList().join(","))
+          );
+        }
 
+      }else{
+        formData.fields.add(
+          MapEntry('user_game_service_id', '$listingId'),
+        );
+        formData.fields.add(
+          MapEntry('title', title!),
+        );
+        formData.fields.add(
+          MapEntry('description', description!),
+        );
+        formData.fields.add(
+          MapEntry('price', "$price"),
+        );
+        formData.fields.add(
+          MapEntry('stock_avl', "$stockAvl"),
+        );
+      }
 
 
 
@@ -111,7 +137,7 @@ class ListingRemoteDatasourceImpl extends ListingRemoteDatasource{
       final response = await Helpers.sendRequest(
         _dio,
         RequestType.post,
-        ApiEndpoints.createListing,
+        listingId == null ? ApiEndpoints.createListing : ApiEndpoints.editListing,
         data: formData,
         headers: headers,
       );

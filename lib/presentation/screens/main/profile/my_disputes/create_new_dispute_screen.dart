@@ -40,46 +40,44 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final dispute = orderController.disputes.where((e) => e.id == widget.disputeId).toList().first;
-    return SafeArea(
-      child: Scaffold(
-        appBar: appBar(context: context, appBarName: "My Disputes"),
-        body: SingleChildScrollView(
-          child: BodyPaddingWidget(
-            child: Column(
-              children: [
-                DisputeWidget(
-                    disputeType: "Open",
-                    currentStatus: '',
-                    dispute: dispute,
+    return Scaffold(
+      appBar: appBar(context: context, appBarName: "My Disputes"),
+      body: SingleChildScrollView(
+        child: BodyPaddingWidget(
+          child: Column(
+            children: [
+              DisputeWidget(
+                  disputeType: "Open",
+                  currentStatus: '',
+                  dispute: dispute,
+              ),
+              const SizedBox(height: 16.0),
+              _buildUploadField(textTheme),
+              const SizedBox(height: 16.0),
+              TextFieldWidget(
+                textEditingController: comments,
+                hint: "Write your comments",
+                maxLines: 5,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 10.h),
+                child: CustomButton(
+                  color: aquaGreenColor,
+                  name: "Submit",
+                  textColor: textCharcoalBlueColor,
+                  onTap: () async {
+                    Helpers.loader();
+                    final isSuccess = await orderController.submitDisputeProof(disputeId: widget.disputeId, description: comments.text);
+                    Helpers.hideLoader();
+                    if(isSuccess){
+                      Helpers.toast("dispute successfully created");
+                      Navigator.pop(context);
+                    }
+                  },
                 ),
-                const SizedBox(height: 16.0),
-                _buildUploadField(textTheme),
-                const SizedBox(height: 16.0),
-                TextFieldWidget(
-                  textEditingController: comments,
-                  hint: "Write your comments",
-                  maxLines: 5,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 10.h),
-                  child: CustomButton(
-                    color: aquaGreenColor,
-                    name: "Submit",
-                    textColor: textCharcoalBlueColor,
-                    onTap: () async {
-                      Helpers.loader();
-                      final isSuccess = await orderController.submitDisputeProof(disputeId: widget.disputeId, description: comments.text);
-                      Helpers.hideLoader();
-                      if(isSuccess){
-                        Helpers.toast("dispute successfully created");
-                        Navigator.pop(context);
-                      }
-                    },
-                  ),
-                ),
-                const SizedBox(height: 16.0),
-              ],
-            ),
+              ),
+              const SizedBox(height: 16.0),
+            ],
           ),
         ),
       ),
@@ -108,24 +106,28 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
                   style: textTheme.headline4?.copyWith(color: textWhiteColor)),
               SizedBox(height: 3.h),
               Obx(() {
-                return GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 2.5,
-                    mainAxisSpacing: 15.0,
-                    crossAxisSpacing: 15.0,
-                  ),
-                  shrinkWrap: true,
-                  physics: const ClampingScrollPhysics(),
-                  padding: const EdgeInsets.only(bottom: 20),
-                  itemCount: orderController.files.length,
-                  itemBuilder: (context, index) {
-                    return selectedFileTile(
-                        image: File(orderController.files[index].path!),
-                        index: index
-                    );
-                  },
-                );
+                if(orderController.files.isEmpty){
+                  return const SizedBox();
+                }else{
+                  return GridView.builder(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 2.5,
+                      mainAxisSpacing: 15.0,
+                      crossAxisSpacing: 15.0,
+                    ),
+                    shrinkWrap: true,
+                    physics: const ClampingScrollPhysics(),
+                    padding: const EdgeInsets.only(bottom: 20),
+                    itemCount: orderController.files.length,
+                    itemBuilder: (context, index) {
+                      return selectedFileTile(
+                          image: File(orderController.files[index].path!),
+                          index: index
+                      );
+                    },
+                  );
+                }
               }),
               CustomButton(
                 top: 0.h,
