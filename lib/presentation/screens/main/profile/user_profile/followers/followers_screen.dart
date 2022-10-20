@@ -60,13 +60,16 @@ class _FollowersScreenState extends State<FollowersScreen> {
                                     radius: 36,
                                     child: Padding(
                                       padding: const EdgeInsets.all(1.0),
-                                      child: CachedNetworkImage(
-                                        imageUrl: profileController.profile.image ?? '',
-                                        fit: BoxFit.cover,
-                                        height: 110,
-                                        width: 110,
-                                        placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
-                                        errorWidget: (context, url, error) => const Icon(Icons.error),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(36),
+                                        child: CachedNetworkImage(
+                                          imageUrl: profileController.profile.image ?? '',
+                                          fit: BoxFit.cover,
+                                          height: 110,
+                                          width: 110,
+                                          placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
+                                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                                        ),
                                       ),
                                     ), //CircleAvatar
                                   ),

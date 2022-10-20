@@ -39,23 +39,9 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
   ProfileController profileController = Get.find<ProfileController>();
   final _formKey = GlobalKey<FormState>();
 
-
   TextEditingController selectedProfileTag = TextEditingController();
-
-
-  List<Map<String, dynamic>> selectedProducts = [];
-
-  File imageFile = File('');
   final _picker = ImagePicker();
-  late Future<Image> profileImage;
 
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    authController.getCountries(search: 'india');
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -233,8 +219,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                   },
                   onSuggestionSelected: (value) {
                     setState(() {
-                      final index = authController.profileTags.indexWhere((
-                          element) => element.name == value);
+                      final index = authController.profileTags.indexWhere((element) => element.name == value);
                       if (authController.selectedProfileTags.toString().toLowerCase().contains('name: ${value.toLowerCase()}')) {
                         if (kDebugMode) print('do nothing');
                       } else {
@@ -293,7 +278,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
 
   Widget _buildRow(TextTheme textTheme) {
     return SizedBox(
-      height: 27.h,
+      height: 28.h,
       child: Stack(
         children: [
           showCoverImage(textTheme),
@@ -303,52 +288,6 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                 child: showProfileImage(textTheme)
             ),
           ),
-          // Row(
-          //   children: <Widget>[
-          //     Expanded(
-          //         flex: 3,
-          //         child: showProfileImage(textTheme)),
-          //     SizedBox(width: 2.w),
-          //     Expanded(
-          //       flex: 6,
-          //       child: Column(
-          //         children: <Widget>[
-          //           CustomButton(
-          //             color: aquaGreenColor,
-          //             name: "Change Avatar",
-          //             left: 5.w,
-          //             right: 5.w,
-          //             radius: 40.0,
-          //             height: 4.5.h,
-          //             onTap: () async {
-          //               Helpers.showImagePicker(context: context,
-          //                   onGallery: _imgFromGallery('profile'),
-          //                   onCamera: _imgFromCamera('profile'));
-          //             },
-          //           ),
-          //           CustomButton(
-          //             name: "Remove Avatar",
-          //             outlineBtn: true,
-          //             borderColor: carminePinkColor,
-          //             textColor: carminePinkColor,
-          //             top: 1.h,
-          //             left: 5.w,
-          //             right: 5.w,
-          //             radius: 40.0,
-          //             height: 4.5.h,
-          //             onTap: () async {
-          //               setState(() {
-          //                 authController.profileImageUrl.value = "";
-          //                 authController.profileImageFile.value = File('');
-          //               });
-          //
-          //             },
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          //   ],
-          // ),
         ],
       ),
     );
@@ -391,67 +330,70 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
     return GestureDetector(
       onTap: (){
         Helpers.showImagePicker(context: context,
-            onGallery: _imgFromGallery('profile'),
-            onCamera: _imgFromCamera('profile'));
+            onCamera: (){
+              _imgFromCamera('profile');
+            },
+            onGallery: (){
+              _imgFromGallery('profile');
+            });
+
       },
-      child: authController.profileImageFile.value.path.isNotEmpty ?
-      Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: Container(
-            height: 100,
-            width: 100,
-            decoration: BoxDecoration(
-              border: Border.all(width: 2.0, color: aquaGreenColor),
-              borderRadius: BorderRadius.circular(50),
-            ),
-            child: ClipRRect(
-                borderRadius: BorderRadius.circular(50),
-                child: Image.file(authController.profileImageFile.value, fit: BoxFit.cover,)),
-          )
-      )
-
-
-      //   : authController.profileImageUrl.isNotEmpty ? Padding(
-      //     padding: const EdgeInsets.only(bottom: 10),
-      //     child: Container(
-      //       height: 100,
-      //       width: 100,
-      //       decoration: BoxDecoration(
-      //         border: Border.all(width: 2.0, color: aquaGreenColor),
-      //         borderRadius: BorderRadius.circular(50),
-      //       ),
-      //       child: ClipRRect(
-      //           borderRadius: BorderRadius.circular(50),
-      //           child: CachedNetworkImage(
-      //             imageUrl: authController.profileImageUrl.value,
-      //             fit: BoxFit.cover,
-      //             height: 110,
-      //             width: 110,
-      //             placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
-      //             errorWidget: (context, url, error) => const Icon(Icons.error),
-      //           ),),
-      //     )
-      // )
-
-        : Padding(padding: const EdgeInsets.only(bottom: 10),
-          child: Container(
-            height: 100,
-            width: 100,
-            decoration:  BoxDecoration(
-              color: const Color(0xffCDDDDF),
-              border: Border.all(width: 2.0, color: aquaGreenColor),
-              borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.add_a_photo, color: Color(0xff337077),
-                  size: 25,),
-                Text('Image', style: textTheme.headline4?.copyWith(fontSize: 14))
-              ],),
-          )),
+      child: Stack(
+        children: [
+          authController.profileImageFile.value.path.isNotEmpty ?
+          Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Container(
+                height: 100,
+                width: 100,
+                decoration: BoxDecoration(
+                  border: Border.all(width: 2.0, color: aquaGreenColor),
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: Image.file(authController.profileImageFile.value, fit: BoxFit.cover,)),
+              )
+          ) : Padding(padding: const EdgeInsets.only(bottom: 10),
+              child: Container(
+                height: 100,
+                width: 100,
+                decoration:  BoxDecoration(
+                  color: const Color(0xffCDDDDF),
+                  border: Border.all(width: 2.0, color: aquaGreenColor),
+                  borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.add_a_photo, color: Color(0xff337077),
+                      size: 25,),
+                    Text('Image', style: textTheme.headline4?.copyWith(fontSize: 14))
+                  ],),
+              )),
+          Positioned(bottom: 10, right: 0, left: 60, height: 35,
+              child: GestureDetector(
+                onTap: () {
+                  Helpers.showImagePicker(context: context,
+                      onCamera: (){
+                        _imgFromCamera('profile');
+                      },
+                      onGallery: (){
+                        _imgFromGallery('profile');
+                      });
+                },
+                child: const CircleAvatar(
+                    radius: 20,
+                    backgroundColor: aquaGreenColor,
+                    child: Icon(
+                      Icons.add_a_photo, color: Colors.white,
+                      size: 16,)
+                ),
+              ))
+        ],
+      ),
     );
   }
 
@@ -460,67 +402,72 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
       onTap: (){
         Helpers.showImagePicker(
             context: context,
-            onGallery: _imgFromGallery('cover'),
-            onCamera: _imgFromCamera('cover')
+            onCamera: (){
+              _imgFromCamera('cover');
+            },
+            onGallery: (){
+              _imgFromGallery('cover');
+            }
         );
       },
-      child: Opacity(
-        opacity: 0.7,
-        child: authController.coverImageFile.value.path.isNotEmpty ?
-        Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: Container(
-              height: 150,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.black45.withOpacity(0.3),
-              ),
-              child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: Image.file(authController.coverImageFile.value, fit: BoxFit.cover,)),
-            )
-        )
+      child: Stack(
+        children: [
+          Opacity(
+            opacity: 0.7,
+            child: authController.coverImageFile.value.path.isNotEmpty ?
+            Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Container(
+                  height: 150,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.black45.withOpacity(0.3),
+                  ),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Image.file(authController.coverImageFile.value, fit: BoxFit.cover,)),
+                )
+            ) : Padding(padding: const EdgeInsets.only(bottom: 10),
+                child: Container(
+                  height: 150,
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    color: Color(0xffCDDDDF),
+                    // shape: BoxShape.rectangle,
+                    borderRadius:  BorderRadius.all(Radius.circular(16)),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.add_a_photo, color: Color(0xff337077),
+                        size: 25,),
+                      Text('Upload Cover Image', style: textTheme.headline4?.copyWith(fontSize: 14))
+                    ],),
+                )),
+          ),
+          Positioned(bottom: 2.h, right: 0, left: 70.w, height: 35,
+              child: GestureDetector(
+                onTap: () {
+                  Helpers.showImagePicker(context: context,
+                      onCamera: (){
+                        _imgFromCamera('profile');
+                      },
+                      onGallery: (){
+                        _imgFromGallery('profile');
+                      });
+                },
+                child: const CircleAvatar(
+                    radius: 20,
+                    backgroundColor: aquaGreenColor,
+                    child: Icon(
+                      Icons.add_a_photo, color: Colors.white,
+                      size: 16,)
 
-        //     : authController.coverImageUrl.isNotEmpty ? Padding(
-        //     padding: const EdgeInsets.only(bottom: 10),
-        //     child: Container(
-        //       height: 150,
-        //       width: double.infinity,
-        //       decoration: BoxDecoration(
-        //         color: Colors.black45.withOpacity(0.3),
-        //       ),
-        //       child: ClipRRect(
-        //         borderRadius: BorderRadius.circular(16),
-        //         child: CachedNetworkImage(
-        //           imageUrl: authController.profileImageUrl.value,
-        //           fit: BoxFit.cover,
-        //           height: 110,
-        //           width: 110,
-        //           placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
-        //           errorWidget: (context, url, error) => const Icon(Icons.error),
-        //         ),),
-        //     )
-        // )
-
-          : Padding(padding: const EdgeInsets.only(bottom: 10),
-            child: Container(
-              height: 150,
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                color: Color(0xffCDDDDF),
-                // shape: BoxShape.rectangle,
-                borderRadius:  BorderRadius.all(Radius.circular(16)),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.add_a_photo, color: Color(0xff337077),
-                    size: 25,),
-                  Text('Upload Cover Image', style: textTheme.headline4?.copyWith(fontSize: 14))
-                ],),
-            )),
+                ),
+              ))
+        ],
       ),
     );
   }

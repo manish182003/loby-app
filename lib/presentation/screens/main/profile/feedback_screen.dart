@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/widgets/text_fields/text_field_widget.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../core/theme/colors.dart';
 import '../../../../core/utils/helpers.dart';
+import '../../../../services/routing_service/routes_name.dart';
+import '../../../widgets/bottom_dialog.dart';
 import '../../../widgets/custom_app_bar.dart';
 import '../../../widgets/buttons/custom_button.dart';
 import '../../../widgets/input_text_title_widget.dart';
@@ -88,6 +91,18 @@ class FeedbackScreenState extends State<FeedbackScreen> {
                             Helpers.loader();
                             final isSuccess = await profileController.submitFeedback(feedback: feedback.text, email: email.text);
                             Helpers.hideLoader();
+                            if(isSuccess){
+                              BottomDialog(
+                                  textTheme: textTheme,
+                                  titleColor: aquaGreenColor,
+                                  contentName: "Thank you for your feedback.",
+                                  onOk: (){
+                                    Navigator.pop(context);
+                                    context.pushNamed(mainPage);
+                                  }
+                              )
+                                  .showBottomDialog(context);
+                            }
                           }
                         },
                       ),

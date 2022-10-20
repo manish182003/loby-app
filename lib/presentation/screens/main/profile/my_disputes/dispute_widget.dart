@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/order/dispute.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../../../core/theme/colors.dart';
 import '../my_order/widgets/order_status_constants.dart';
@@ -48,83 +50,96 @@ class DisputeWidget extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.5,
-                          decoration: BoxDecoration(
-                            color: orangeColor,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 4.0, horizontal: 8.0),
-                            child: Text('Battlegrounds Mobile India',
-                                maxLines: 1,
-                                textAlign: TextAlign.center,
-                                overflow: TextOverflow.ellipsis,
-                                style: textTheme.headline6
-                                    ?.copyWith(color: textWhiteColor)),
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: orangeColor,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 4.0, horizontal: 8.0),
+                              child: Text(dispute.userOrder!.userGameService!.game!.name!,
+                                  maxLines: 1,
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: textTheme.headline6?.copyWith(color: textWhiteColor)),
+                            ),
                           ),
                         ),
-                        const SizedBox(width: 4.0),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.2,
-                          decoration: BoxDecoration(
-                            color: butterflyBlueColor,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 4.0, horizontal: 8.0),
-                            child: Text(dispute.userOrder!.userGameService!.title!,
-                                maxLines: 1,
-                                textAlign: TextAlign.center,
-                                overflow: TextOverflow.ellipsis,
-                                style: textTheme.headline6
-                                    ?.copyWith(color: textWhiteColor)),
+                        SizedBox(width: 4.w),
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: butterflyBlueColor,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 4.0, horizontal: 8.0),
+                              child: Text(dispute.userOrder!.userGameService!.title!,
+                                  maxLines: 1,
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: textTheme.headline6
+                                      ?.copyWith(color: textWhiteColor)),
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
                   const SizedBox(height: 8),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
-                  child: Align(
+                Align(
+                  alignment: Alignment.center,
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Listing ID : ',
+                          style: textTheme.headline6?.copyWith(color: textLightColor),
+                        ),
+                        TextSpan(
+                            text: dispute.userOrder!.userGameService!.id.toString(),
+                            style: textTheme.headline6?.copyWith(color: textWhiteColor)),
+                      ],
+                    ),
+                  ),
+                ),
+                  const SizedBox(height: 8),
+                  Align(
                     alignment: Alignment.center,
                     child: RichText(
-                      textAlign: TextAlign.start,
+                      textAlign: TextAlign.center,
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: 'Listing ID : ',
+                            text: 'Listing Name : ',
                             style: textTheme.headline6?.copyWith(color: textLightColor),
                           ),
                           TextSpan(
-                              text: dispute.userOrder!.userGameService!.id.toString(),
+                              text: dispute.userOrder!.userGameService!.title.toString(),
                               style: textTheme.headline6?.copyWith(color: textWhiteColor)),
                         ],
                       ),
                     ),
                   ),
-                ),
                   const SizedBox(height: 8),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: RichText(
-                      textAlign: TextAlign.start,
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'Current Status : ',
-                            style: textTheme.headline6?.copyWith(color: textLightColor),
-                          ),
-                          TextSpan(
-                              text: "${dispute.result} on ${dispute.updatedAt}",
-                              style: textTheme.headline6?.copyWith(color: disputeType == 'PENDING' ? lavaRedColor : aquaGreenColor)),
-                        ],
-                      ),
+                Align(
+                  alignment: Alignment.center,
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Current Status : ',
+                          style: textTheme.headline6?.copyWith(color: textLightColor),
+                        ),
+                        TextSpan(
+                            text: "${dispute.result} on ${Helpers.formatDateTime(dateTime: dispute.updatedAt!)}",
+                            style: textTheme.headline6?.copyWith(color: disputeType == 'PENDING' ? lavaRedColor : aquaGreenColor)),
+                      ],
                     ),
                   ),
                 ),

@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:loby/domain/entities/profile/user.dart';
 
+import 'message.dart';
+
 class Chat extends Equatable{
   const Chat({
     this.id,
@@ -11,6 +13,7 @@ class Chat extends Equatable{
     this.chatLatestMessage,
     this.senderInfo,
     this.receiverInfo,
+    this.message,
   });
 
   final int? id;
@@ -21,6 +24,7 @@ class Chat extends Equatable{
   final String? chatLatestMessage;
   final User? senderInfo;
   final User? receiverInfo;
+  final Message? message;
 
 
   @override

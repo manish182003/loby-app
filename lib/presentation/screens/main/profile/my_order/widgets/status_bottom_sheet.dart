@@ -70,7 +70,7 @@ class StatusBottomSheet extends StatelessWidget {
                     children: [
                       Obx(() {
                         final order = orderController.orders.where((e) => e.id == orderId).toList().first;
-                        final isDuel = order.userGameService!.category!.name == 'Currency';
+                        final isDuel = order.userGameService!.category!.name == 'Duel';
                         final isSeller = profileController.profile.id == order.userGameService?.userId;
 
                         return ListView.builder(
@@ -93,7 +93,7 @@ class StatusBottomSheet extends StatelessWidget {
                                 lastStatus: order.orderStatuses!.last.status!,
                                 isSeller: isSeller,
                                 isDuel: true,
-                                isDisputeRaised : order.transactionFreeze == "Y",
+                                isDisputeRaised : order.disputeId != null,
                               );
                             } else if (isSeller) {
                               debugPrint("seller");
@@ -107,7 +107,7 @@ class StatusBottomSheet extends StatelessWidget {
                                 isLast: isStatic ? false : order.orderStatuses![index].status! == order.orderStatuses!.last.status!,
                                 lastStatus: order.orderStatuses!.last.status!,
                                 isSeller: true,
-                                isDisputeRaised : order.transactionFreeze == "Y",
+                                isDisputeRaised : order.disputeId != null,
                               );
                             } else {
                               debugPrint("buyer");
@@ -120,7 +120,7 @@ class StatusBottomSheet extends StatelessWidget {
                                 date: isStatic ? '' : Helpers.formatDateTime(dateTime: order.orderStatuses![index].createdAt!),
                                 isLast: isStatic ? false : order.orderStatuses![index].status! == order.orderStatuses!.last.status!,
                                 lastStatus: order.orderStatuses!.last.status!,
-                                isDisputeRaised : order.transactionFreeze == "Y",
+                                isDisputeRaised : order.disputeId != null,
                               );
                             }
                           },

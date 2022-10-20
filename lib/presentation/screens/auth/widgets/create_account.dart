@@ -1,19 +1,24 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/core/theme/colors.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
+import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/widgets/buttons/custom_button.dart';
 import 'package:loby/presentation/widgets/custom_bottom_sheet.dart';
 import 'package:loby/presentation/widgets/input_text_title_widget.dart';
 import 'package:loby/presentation/widgets/input_text_widget.dart';
 import 'package:loby/presentation/widgets/text_fields/text_field_widget.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../widgets/body_padding_widget.dart';
 import 'create_profile_bottom_sheet.dart';
+import 'otp_dialog.dart';
 
 
 class CreateAccount extends StatefulWidget {
@@ -25,13 +30,16 @@ class CreateAccount extends StatefulWidget {
 class _CreateAccountState extends State<CreateAccount> {
 
   AuthController authController = Get.find<AuthController>();
-
+  ProfileController profileController = Get.find<ProfileController>();
   final _formKey = GlobalKey<FormState>();
+
 
   TextEditingController name = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
+
+  TextEditingController otp = TextEditingController();
 
 
   @override
@@ -87,11 +95,12 @@ class _CreateAccountState extends State<CreateAccount> {
                   await Helpers.loader();
                   final result = await authController.signup(name: name.text, email: email.text, password: password.text, confirmPassword: confirmPassword.text);
                   if (!mounted) return;
-                  await Helpers.hideLoader();
                   if(result){
-                    if (!mounted) return;
-                    Navigator.pop(context);
-                    _showCreateProfileBottomSheet(context);
+                    final isSuccess = await authController.sendAndVerifyOTP(email: email.text);
+                    Helpers.hideLoader();
+                    if(isSuccess){
+                      _otpDialog(context);
+                    }
                   }
                 }
               },
@@ -121,13 +130,33 @@ class _CreateAccountState extends State<CreateAccount> {
                 right: 10.w,
                 bottom: 3.h,
                 onTap: () {
-                  context.pushNamed(mainPage);
+
                 }),
           ],
         ),
       ),
     );
   }
+
+  void _otpDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return OTPDialog(
+            otp: otp,
+            onVerify: () async{
+              Helpers.loader();
+              final isSuccess = await authController.sendAndVerifyOTP(email: email.text, otp: otp.text);
+              Helpers.hideLoader();
+              if (!mounted) return;
+              if(isSuccess) {
+                _showCreateProfileBottomSheet(context);
+              }
+            });
+      },
+    );
+  }
+
 
   void _showCreateProfileBottomSheet(BuildContext context) {
     showModalBottomSheet(

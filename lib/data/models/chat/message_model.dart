@@ -48,7 +48,7 @@ class MessageModel extends Message{
     createdAt: DateTime.parse(json["createdAt"]),
     updatedAt: DateTime.parse(json["updatedAt"]),
     userOrder: json["userOrder"] == null ? null : OrderModel.fromJson(json["userOrder"]),
-    user: UserModel.fromJson(json["user"]),
+    user: json["user"] == null ? null : UserModel.fromJson(json["user"]),
   );
 
   Map<String, dynamic> toJson() => {

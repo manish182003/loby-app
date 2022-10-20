@@ -1,4 +1,5 @@
 const String initialRoute = "/";
+const String onBoardingRoute = "/on-boarding";
 const String loginRoute = "/login";
 const String createProfileRoute = "/create_profile_screen";
 const String signUpScreenRoute = "/signup_screen_page";
@@ -24,3 +25,5 @@ const String withdrawFundScreenRoute = "/withdraw_funds_screen";
 const String myProfileScreenRoute = "/my_profile_screen";
 const String searchScreenRoute = "/search_screen";
 const String faqRoute = "/faq";
+const String legalTermsRoute = "/legal_terms";
+const String staticContentRoute = "/static_content";

@@ -62,7 +62,7 @@ class _CategoryItemScreenState extends State<CategoryItemScreen> {
                     child: GridView.builder(
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
-                        childAspectRatio: 6.0 / 7.5,
+                        childAspectRatio: 6.0 / 7.65,
                         mainAxisSpacing: 1,
                         crossAxisSpacing: 1,
                       ),
@@ -76,7 +76,9 @@ class _CategoryItemScreenState extends State<CategoryItemScreen> {
                             gameId: game!.id!,
                             index: index,
                             gameName: game.name!,
-                            images: game.image);
+                            images: game.image,
+                            game: game,
+                        );
                       },
                     ),
                   ),

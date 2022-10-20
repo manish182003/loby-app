@@ -49,8 +49,8 @@ class CategoryModel extends Category{
     govtCommission: json["govt_commission"],
     edtDays: json["edt_days"],
     settlementTypes: json["settlement_types"],
-    createdAt: DateTime.parse(json["createdAt"]),
-    updatedAt: DateTime.parse(json["updatedAt"]),
+    createdAt: json["createdAt"] == null ? null :  DateTime.parse(json["createdAt"]),
+    updatedAt: json["updatedAt"] == null ? null :  DateTime.parse(json["updatedAt"]),
     categoryGames: json["gameCategories"] == null ? null :  List<CategoryGamesModel>.from(json["gameCategories"].map((x) => CategoryGamesModel.fromJson(x))),
   );
 

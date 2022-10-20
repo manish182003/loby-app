@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loby/domain/entities/home/game.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../../../core/theme/colors.dart';
 import '../../../../../services/routing_service/routes.dart';
@@ -13,8 +15,9 @@ class CategoryItemCard extends StatelessWidget {
   final int gameId;
   final String gameName;
   final String? images;
+  final Game game;
 
-  const CategoryItemCard({Key? key, required this.index, this.images, required this.categoryId, required this.gameId, required this.gameName}) : super(key: key);
+  const CategoryItemCard({Key? key, required this.index, this.images, required this.categoryId, required this.gameId, required this.gameName, required this.game}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -55,9 +58,15 @@ class CategoryItemCard extends StatelessWidget {
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
-                  style:
-                  textTheme.headline6?.copyWith(color: textWhiteColor)),
+                  style: textTheme.headline6?.copyWith(color: textWhiteColor)),
+
             ),
+            SizedBox(height: 1.h,),
+            Text("${game.listingCount} Listings",
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+                style: textTheme.headline6?.copyWith(color: lavaRedColor)),
           ],
         ),
       ),

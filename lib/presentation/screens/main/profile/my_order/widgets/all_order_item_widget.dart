@@ -8,6 +8,7 @@ import 'package:loby/domain/entities/order/order.dart';
 import 'package:loby/presentation/getx/controllers/order_controller.dart';
 import 'package:loby/presentation/screens/main/profile/my_order/widgets/status_bottom_sheet.dart';
 import 'package:loby/presentation/widgets/custom_bottom_sheet.dart';
+import 'package:loby/presentation/widgets/custom_cached_network_image.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../../core/theme/colors.dart';
@@ -50,13 +51,9 @@ class OrderItem extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10.0),
                       child: SizedBox(
                         height: 55.0,
-                        child: CachedNetworkImage(
-                          imageUrl: order.userGameService!.game?.image ?? "",
-                          fit: BoxFit.cover,
-                          height: 110,
-                          width: 110,
-                          placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
-                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                        child: CustomCachedNetworkImage(
+                          imageUrl: Helpers.getListingImage(order.userGameService!),
+                          placeHolder: const SizedBox(),
                         ),
                       ),
                     ),
@@ -74,6 +71,11 @@ class OrderItem extends StatelessWidget {
                               style: textTheme.headline5?.copyWith(color: textWhiteColor)),
                         ),
                         SizedBox(height: 1.5.h),
+                        Text("Created By ${order.userGameService!.user?.displayName ?? " "}",
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: textTheme.headline6?.copyWith(color: textInputTitleColor)),
+                        SizedBox(height: 1.0.h),
                         SizedBox(
                           child: Text(order.userGameService!.game?.name! ?? "",
                               overflow: TextOverflow.ellipsis,
@@ -99,7 +101,6 @@ class OrderItem extends StatelessWidget {
                             const SizedBox(width: 16.0),
                             GestureDetector(
                               onTap: () {
-
                                 showModalBottomSheet(
                                   context: context,
                                   isScrollControlled: true,

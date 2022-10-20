@@ -1,12 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:get/get.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:go_router/go_router.dart';
+import 'package:loby/core/utils/environment.dart';
+import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/data/models/chat/chat_model.dart';
 import 'package:loby/data/models/chat/message_model.dart';
 import 'package:loby/data/models/order/order_model.dart';
 import 'package:loby/presentation/getx/controllers/chat_controller.dart';
+import 'package:loby/presentation/getx/controllers/home_controller.dart';
 import 'package:loby/presentation/getx/controllers/order_controller.dart';
+import 'package:loby/services/routing_service/routes_name.dart';
 import 'dart:ui' as ui;
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
@@ -15,10 +22,13 @@ class CoreController extends GetxController{
 
   late io.Socket socket;
   ChatController chatController = Get.find<ChatController>();
+  HomeController homeController = Get.find<HomeController>();
+  OrderController orderController = Get.find<OrderController>();
 
 
   Future<void> connect(int userId)async{
-    socket = io.io("http://192.168.52.210:5000", <String, dynamic>{
+    socket = io.io(Environment.socketUrl, <String, dynamic>{
+      "path": Environment.socketPath == "" ? null : Environment.socketPath,
       "transports": ["websocket"],
       "autoConnect": false,
       },
@@ -57,6 +67,9 @@ class CoreController extends GetxController{
 
 
   void _chatAction({required Map<String, dynamic> data}){
+
+
+    homeController.getUnreadCount(type: 'chat');
     int height = 0;
     int width = 0;
     final message = MessageModel.fromJson(data['message']);
@@ -89,7 +102,7 @@ class CoreController extends GetxController{
       "uri": message.filePath ??  " ",
       "width": width,
       "metadata": {
-        'image': message.orderId == null ? "" : message.userOrder!.userGameService!.userGameServiceImages!.isEmpty ? '' : message.userOrder!.userGameService!.userGameServiceImages?.first.type == 2 ? message.userOrder!.userGameService!.userGameServiceImages!.first.path! : '',
+        'image': message.orderId == null ? "" : Helpers.getListingImage(message.userOrder!.userGameService!),
         'name' : message.orderId == null ? "" : message.userOrder!.userGameService!.title,
         'desc' : message.orderId == null ? "" : message.userOrder!.userGameService!.description,
         'category' : message.orderId == null ? "" : message.userOrder!.userGameService!.category!.name,
@@ -112,7 +125,8 @@ class CoreController extends GetxController{
 
 
   void _orderAction({required Map<String, dynamic> data}){
-    OrderController orderController = Get.find<OrderController>();
+
+    homeController.getUnreadCount(type: 'notification');
     final index = orderController.orders.indexWhere((element) => element.id == data['order']['id']);
 
     print("orderController.orders before ${orderController.orders[index].userGameService!.game!.image}");
@@ -123,6 +137,44 @@ class CoreController extends GetxController{
     print("orderController.orders after ${orderController.orders[index].userGameService!.game!.image}");
 
   }
+
+
+
+  Future<void> onNotificationClick(String json, BuildContext context) async {
+    final data = jsonDecode(json);
+
+    print("Notification data $data");
+
+
+    switch(data['notification_type']){
+      case 'SERVICE_BOUGHT':
+        context.pushNamed(myOrderPage);
+        break;
+
+      case 'STATUS_CHANGED':
+        context.pushNamed(myOrderPage);
+        break;
+
+      case 'DISPUTE_RAISED':
+        context.pushNamed(myDisputePage);
+        break;
+
+      case 'MESSAGE_SENT':
+        context.pushNamed(myDisputePage);
+        // final chat = ChatModel.fromJson(jsonDecode(data['chat_obj']));
+        // context.pushNamed(messagePage, queryParams: {'chatId' : "${chat.id}", 'senderId' : "${chat.senderId}", 'receiverId' : "${chat.receiverId}"});
+        break;
+
+      case 'DISPUTE_RESOLVED':
+        context.pushNamed(myDisputePage);
+        break;
+
+      case 'PROFILE_VERIFICATION':
+        context.pushNamed(userProfilePage, queryParams: {'userId': "71", 'from': 'myProfile'});
+        break;
+    }
+  }
+
 
 
 }

@@ -13,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../core/theme/colors.dart';
+import '../../../widgets/custom_cached_network_image.dart';
 import '../../../widgets/rating_dialog.dart';
 import '../profile/widgets/profile_options.dart';
 
@@ -65,16 +66,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           backgroundColor: aquaGreenColor,
                           radius: 35,
                           child: Padding(
-                            padding: const EdgeInsets.all(2.0),
+                            padding: const EdgeInsets.all(1.0),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(35),
-                              child: CachedNetworkImage(
-                                imageUrl: profileController.profile.image ?? "",
-                                fit: BoxFit.cover,
-                                height: 110,
-                                width: 110,
-                                placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
-                                errorWidget: (context, url, error) => const Icon(Icons.error),
+                              child: CustomCachedNetworkImage(
+                                imageUrl: profileController.profile.image,
+                                name: profileController.profile.displayName,
+                                // placeHolder: Image.asset('assets/images/user_placeholder.png'),
                               ),
                             ),
                           ), //CircleAvatar
@@ -191,7 +189,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ProfileOptionsWidget(
                               name: "Terms & Conditions",
                               onTap: () {
-                                debugPrint('check data');
+                                context.pushNamed(legalTermsPage);
                               }),
                           ProfileOptionsWidget(
                               name: "Logout",

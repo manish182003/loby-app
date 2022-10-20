@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:loby/core/usecases/profile_params.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/presentation/getx/controllers/chat_controller.dart';
+import 'package:loby/presentation/getx/controllers/home_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/screens/main/chat/widgets/chat_tile.dart';
 import 'package:loby/presentation/widgets/custom_app_bar.dart';
@@ -20,6 +21,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   ChatController chatController = Get.find<ChatController>();
   ProfileController profileController = Get.find<ProfileController>();
+  HomeController homeController = Get.find<HomeController>();
   final controller = ScrollController();
 
 
@@ -44,6 +46,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void dispose() {
     controller.dispose();
+    homeController.getUnreadCount(type: 'chat');
     super.dispose();
   }
 
@@ -55,8 +58,7 @@ class _ChatScreenState extends State<ChatScreen> {
           if(chatController.isChatsFetching.value){
             return const CustomLoader();
           }else if(chatController.chats.isEmpty) {
-            return const Center(
-                child: Text('No Chats Found', textAlign: TextAlign.center,));
+            return const NoDataFoundWidget();
           }else{
               return ListView.builder(
                 shrinkWrap: true,

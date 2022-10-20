@@ -105,9 +105,9 @@ class OrderRepositoryImpl extends OrderRepository{
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> submitDisputeProof({int? disputeId, String? description, List<int>? fileTypes, List<PlatformFile>? files})async {
+  Future<Either<Failure, Map<String, dynamic>>> submitDisputeProof({int? disputeId, String? description, List<int>? fileTypes, List<PlatformFile>? files, String? link})async {
     try {
-      return Right(await _orderRemoteDatasource.submitDisputeProof(disputeId, description, fileTypes, files));
+      return Right(await _orderRemoteDatasource.submitDisputeProof(disputeId, description, fileTypes, files, link));
     } on ServerException catch (e) {
     // Loggers can be added here for analyzation.
     return Left(ServerFailure(message: e.message.toString()));

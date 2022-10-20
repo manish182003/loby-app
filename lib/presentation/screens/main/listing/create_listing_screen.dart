@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -21,11 +22,9 @@ import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
 import 'package:styled_text/styled_text.dart';
 import '../../../../core/theme/colors.dart';
-import '../../../widgets/bottom_dialog_widget.dart';
+import '../../../widgets/bottom_dialog.dart';
 import '../../../widgets/buttons/custom_button.dart';
 import '../../../widgets/custom_checkbox.dart';
-import '../../../widgets/drop_down.dart';
-import '../../../widgets/input_text_title_widget.dart';
 import '../../../widgets/input_text_widget.dart';
 import '../../../widgets/text_fields/text_field_widget.dart';
 
@@ -41,6 +40,8 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
   HomeController homeController = Get.find<HomeController>();
   AuthController authController = Get.find<AuthController>();
   ListingController listingController = Get.find<ListingController>();
+
+  bool showErrorMessage = false;
 
   bool isChecked = false;
   final _formKey = GlobalKey<FormState>();
@@ -82,322 +83,349 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: BodyPaddingWidget(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 2.h,),
-                Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    'Create New Listing',
-                    overflow: TextOverflow.ellipsis,
-                    style: textTheme.headline2?.copyWith(color: textWhiteColor),
-                  ),
+    return SingleChildScrollView(
+      child: BodyPaddingWidget(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 2.h,),
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  'Create New Listing',
+                  overflow: TextOverflow.ellipsis,
+                  style: textTheme.headline2?.copyWith(color: textWhiteColor),
                 ),
-                SizedBox(height: 2.h,),
-                Obx(() {
-                  return BuildDropdown(
-                    selectedValue: selectedCategoryName,
-                    dropdownHint: "Select Category",
-                    itemsList: homeController.categories.map((item) =>
-                        DropdownMenuItem<Category>(
-                          value: item,
-                          child: Text(
-                              item.name!,
-                              style: textTheme.headline3?.copyWith(color: whiteColor)
-                          ),
-                        )).toList(),
-                    onChanged: (value) {
-                      selectedCategoryName = value.name;
-                      homeController.selectedCategoryId.value = value.id;
-                      homeController.disclaimer.value = value.disclaimer;
-                    },
-                  );
-                }),
-                SizedBox(height: 2.h,),
-                Obx(() {
-                  if(homeController.disclaimer.value.isEmpty){
-                    return const SizedBox();
-                  }else{
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 2.h),
-                        Text(textAlign: TextAlign.start, "Disclaimer",
-                            style: textTheme.headline4?.copyWith(color: textWhiteColor)),
-                        SizedBox(height: 2.h),
-                        StyledText(
-                          text: homeController.disclaimer.value, style: textTheme.headline6?.copyWith(
-                          fontWeight: FontWeight.w300,
-                          color: textLightColor,
-                        ),
-                          tags:  {
-                            'bold': StyledTextTag(style: textTheme.headline6!.copyWith(fontWeight: FontWeight.w500, color: textLightColor)),
-                            'click': StyledTextActionTag((text, attrs) {
-                                    BottomDialog(
-                                        textTheme: textTheme,
-                                        tileName: text,
-                                        titleColor: aquaGreenColor,
-                                        contentName: attrs['href'],
-                                        contentLinkName: '')
-                                        .showBottomDialog(context);
-                                  },
-                              style: textTheme.headline6!.copyWith(fontWeight: FontWeight.w500, color: aquaGreenColor),
-                            ),
-                          },
-                        ),
-                        SizedBox(height: 2.h,),
-                      ],
-                    );
-                  }
-                }),
-                AutoCompleteField(
-                  selectedSuggestion: selectedGameName,
-                  hint: 'Select Game',
-                  suggestionsCallback: (pattern) async {
-                    await homeController.getGames(name: pattern);
-                    List finalList = [];
-                    for (int i = 0; i < homeController.games.length; i++) {
-                      finalList.add(homeController.games[i].name);
-                    }
-                    return finalList;
-                  },
-                  onSuggestionSelected: (value) async {
-
-                    Helpers.loader();
-
-                    final index = homeController.games.indexWhere((element) => element.name == value);
-                    homeController.selectedGameId.value = homeController.games[index].id!;
-                    selectedGameName.text = homeController.games[index].name!;
-                    await listingController.getConfigurations(
-                        categoryId: homeController.selectedCategoryId.value,
-                        gameId: homeController.selectedGameId.value
-                    );
-                    int multiFieldsCount = 0;
-                    int singleFieldsCount = 0;
-                    int openFieldsCount = 0;
-
-                    for (final i in listingController.configuration.gameCategoryServices!) {
-                      switch (i.service?.selectionType) {
-                        case 0:
-                          i.service?.index = multiFieldsCount;
-                          multiFieldsCount += 1;
-                          multiSelectionServices.add(<SelectedServiceOption>[]);
-                          break;
-                        case 1:
-                          i.service?.index = singleFieldsCount;
-                          singleFieldsCount += 1;
-                          singleSelectionService.add(SelectedServiceOption());
-                          singleSelectedServiceController.add(TextEditingController());
-                          break;
-                        case 2:
-                          i.service?.index = openFieldsCount;
-                          openFieldsCount += 1;
-                          listingController.optionAnswer.add(TextEditingController());
-                          break;
-                      }
-                    }
-                    listingController.isServicesAvailable.value = true;
-                    setState((){});
-                    Helpers.hideLoader();
-                  },
-                ),
-                SizedBox(height: 2.h,),
-                Obx(() {
-                  if (listingController.isServicesAvailable.value) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-
-                        ListView.separated(
-                          itemCount: listingController.configuration.gameCategoryServices!.length,
-                          shrinkWrap: true,
-                          padding: const EdgeInsets.only(top: 0),
-                          physics: const ClampingScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            return services2(index);
-                          },
-                          separatorBuilder: (BuildContext context, int index) {
-                            return SizedBox(height: 2.h,);
-                          },
-                        ),
-                      ],
-                    );
-                  } else {
-                    return const SizedBox();
-                  }
-                }),
-                SizedBox(height: 2.h),
-                TextFieldWidget(
-                  textEditingController: listingController.title.value,
-                  title: "Title",
-                  hint: "Enter Title",
-                ),
-                SizedBox(height: 2.h),
-                RichText(
-                    textAlign: TextAlign.justify,
-                    text: TextSpan(children: [
-                      TextSpan(
-                        text: "For safety reasons, sellers are not allowed to leave their personal contacts. All communications with the buyers can only be made using Loby chat. Any conversation outside Loby Chat will not be insured/covered by ",
-                        style: textTheme.headline6?.copyWith(
-                            color: textLightColor),
-                      ),
-                      TextSpan(
-                          text: "Loby Protection",
-                          style: textTheme.headline6?.copyWith(
-                              color: aquaGreenColor)),
-                    ])),
-                SizedBox(height: 2.h),
-                TextFieldWidget(
-                  textEditingController: listingController.description.value,
-                  title: "Description",
-                  hint: "Type Description",
-                  maxLines: 5,
-                  textInputAction: TextInputAction.newline,
-                ),
-                SizedBox(height: 2.h),
-                _buildUploadField(textTheme),
-                SizedBox(height: 2.h),
-                Text('Price', style: textTheme.headline4?.copyWith(color: textLightColor)),
-                SizedBox(height: 2.h),
-                _buildPrice(textTheme),
-                SizedBox(height: 2.h),
-                TextFieldWidget(
-                  textEditingController: listingController.stockAvl.value,
-                  hint: 'Available Stock',
-                  isNumber: true,
-                ),
-                SizedBox(height: 2.h),
-                RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(children: [
-                      TextSpan(
-                        text: "‘Loby Protection’",
-                        style: textTheme.headline4
-                            ?.copyWith(color: aquaGreenColor),
-                      ),
-                      TextSpan(
-                          text: " Insurance",
-                          style: textTheme.headline4
-                              ?.copyWith(color: textLightColor)),
-                    ])),
-                SizedBox(height: 2.h),
-                Row(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16.0),
-                          color: aquaGreenColor,
-                          border: Border.all(color: aquaGreenColor)),
-                      child: const Padding(
-                        padding: EdgeInsets.all(2.0),
-                        child: Icon(
-                          Icons.check,
-                          color: Colors.white,
-                          size: 9.5,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 2.w),
-                    Expanded(
-                      child: SizedBox(
-                          child: RichText(
-                              textAlign: TextAlign.start,
-                              text: TextSpan(children: [
-                                TextSpan(
-                                  text: '7 Days Insurance',
-                                  style: textTheme.subtitle2?.copyWith(color: textLightColor
-                                  ),
-                                ),
-                              ])
-                          )
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 2.h),
-                Text(
-                    textAlign: TextAlign.start,
-                    'Estimated Delivery Time (Days)',
-                    style: textTheme.headline4?.copyWith(
-                        color: textLightColor)),
-                SizedBox(height: 2.h),
-                BuildDropdown(
-                  selectedValue: listingController.estimateDeliveryTime.value,
-                  dropdownHint: "Select",
-                  itemsList:  [for(var i = 1; i <= (listingController.configuration.maximumEstimatedDeliveryTimeDays ?? "").length; i++) i].map((item) =>
-                      DropdownMenuItem<String>(
-                        value: "$item",
-                        child: Text("$item", style: textTheme.headline3?.copyWith(color: whiteColor)
+              ),
+              SizedBox(height: 2.h,),
+              Obx(() {
+                return BuildDropdown(
+                  selectedValue: selectedCategoryName,
+                  dropdownHint: "Select Category",
+                  isRequired: true,
+                  itemsList: homeController.categories.map((item) =>
+                      DropdownMenuItem<Category>(
+                        value: item,
+                        child: Text(
+                            item.name!,
+                            style: textTheme.headline3?.copyWith(color: whiteColor)
                         ),
                       )).toList(),
                   onChanged: (value) {
-                    listingController.estimateDeliveryTime.value = value;
-                     },
-                ),
-                SizedBox(height: 2.h),
-                _buildTermsCheckbox(
-                    textTheme,
-                    'I have read and agreed to all sellers policy and the ',
-                    'Terms of Service.'),
-                SizedBox(height: 5.h),
-                CustomButton(
-                  color: createProfileButtonColor,
-                  name: "Publish",
-                  textColor: textWhiteColor,
-                  left: 15.w,
-                  right: 15.w,
-                  onTap: () async {
-                    if (_formKey.currentState!.validate()) {
-                      Helpers.loader();
+                    selectedCategoryName = value.name;
+                    homeController.selectedCategoryId.value = value.id;
+                    homeController.disclaimer.value = value.disclaimer;
 
-                      listingController.serviceOptionId.clear();
-
-                      listingController.serviceOptionId.addAll(singleSelectionService);
-                      for (final item in multiSelectionServices) {
-                        listingController.serviceOptionId.addAll(item);
-                      }
-
-                      debugPrint("final service selection ${listingController.serviceOptionId}");
-
-
-                      final isSuccess = await listingController.createListing(
-                          categoryId: homeController.selectedCategoryId.value,
-                          gameId: homeController.selectedGameId.value
-                      );
-
-                      Helpers.hideLoader();
-                      if (isSuccess) {
-                        BottomDialog(
-                            textTheme: textTheme,
-                            tileName: "Congratulations",
-                            titleColor: aquaGreenColor,
-                            contentName: "Your service has been successfully listed. You can edit your listings from My Listings.",
-                            contentLinkName: ' My Listings',
-                            onOk: (){
-                              Navigator.pop(context);
-                              context.pushNamed(myListingPage);
-                            })
-                            .showBottomDialog(context);
-                      }
-                    }
+                    _getConfigurations();
                   },
-                ),
-                SizedBox(height: 2.h),
-              ],
-            ),
+                );
+              }),
+              SizedBox(height: 2.h,),
+              Obx(() {
+                if(homeController.disclaimer.value.isEmpty){
+                  return const SizedBox();
+                }else{
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 2.h),
+                      Text(textAlign: TextAlign.start, "Disclaimer", style: textTheme.headline4?.copyWith(color: textWhiteColor)),
+                      SizedBox(height: 2.h),
+                      StyledText(
+                        text: homeController.disclaimer.value, style: textTheme.headline6?.copyWith(
+                        fontWeight: FontWeight.w300,
+                        color: textLightColor,
+                      ),
+                        tags:  {
+                          'bold': StyledTextTag(style: textTheme.headline6!.copyWith(fontWeight: FontWeight.w500, color: textLightColor)),
+                          'click': StyledTextActionTag((text, attrs) {
+                            BottomDialog(
+                                textTheme: textTheme,
+                                tileName: text,
+                                titleColor: aquaGreenColor,
+                                contentName: attrs['href'],
+                                contentLinkName: '')
+                                .showBottomDialog(context);
+                          },
+                            style: textTheme.headline6!.copyWith(fontWeight: FontWeight.w500, color: aquaGreenColor),
+                          ),
+                        },
+                      ),
+                      SizedBox(height: 2.h,),
+                    ],
+                  );
+                }
+              }),
+              AutoCompleteField(
+                selectedSuggestion: selectedGameName,
+                hint: 'Select Game',
+                isRequired: true,
+                suggestionsCallback: (pattern) async {
+                  await homeController.getGames(name: pattern);
+                  List finalList = [];
+                  for (int i = 0; i < homeController.games.length; i++) {
+                    finalList.add(homeController.games[i].name);
+                  }
+                  return finalList;
+                },
+                onSuggestionSelected: (value) {
+                  final index = homeController.games.indexWhere((element) => element.name == value);
+                  homeController.selectedGameId.value = homeController.games[index].id!;
+                  selectedGameName.text = homeController.games[index].name!;
+                  _getConfigurations();
+                },
+              ),
+              SizedBox(height: 2.h,),
+              Obx(() {
+                if (listingController.isServicesAvailable.value) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+
+                      ListView.separated(
+                        itemCount: listingController.configuration.gameCategoryServices!.length,
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.only(top: 0),
+                        physics: const ClampingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return services2(index);
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
+                          return SizedBox(height: 2.h,);
+                        },
+                      ),
+                    ],
+                  );
+                } else {
+                  return const SizedBox();
+                }
+              }),
+              SizedBox(height: 2.h),
+              TextFieldWidget(
+                textEditingController: listingController.title.value,
+                title: "Title",
+                hint: "Enter Title",
+                isRequired: true,
+              ),
+              SizedBox(height: 2.h),
+              RichText(
+                  textAlign: TextAlign.justify,
+                  text: TextSpan(children: [
+                    TextSpan(
+                      text: "For safety reasons, sellers are not allowed to leave their personal contacts. All communications with the buyers can only be made using Loby chat. Any conversation outside Loby Chat will not be insured/covered by ",
+                      style: textTheme.headline6?.copyWith(
+                          color: textLightColor),
+                    ),
+                    TextSpan(
+                        text: "Loby Protection",
+                        recognizer: TapGestureRecognizer()..onTap = () => context.pushNamed(staticContentPage, queryParams: {'termName' : 'Loby Protection'}),
+                        style: textTheme.headline6?.copyWith(
+                            color: aquaGreenColor)),
+                  ])),
+              SizedBox(height: 2.h),
+              TextFieldWidget(
+                textEditingController: listingController.description.value,
+                title: "Description",
+                hint: "Type Description",
+                maxLines: 5,
+                isRequired: true,
+                textInputAction: TextInputAction.newline,
+              ),
+              SizedBox(height: 2.h),
+              _buildUploadField(textTheme),
+              SizedBox(height: 2.h),
+              Text('Token', style: textTheme.headline4?.copyWith(color: textLightColor)),
+              SizedBox(height: 2.h),
+              _buildPrice(textTheme),
+              SizedBox(height: 2.h),
+              TextFieldWidget(
+                textEditingController: listingController.stockAvl.value,
+                hint: 'Available Stock',
+                isNumber: true,
+                isRequired: true,
+              ),
+              SizedBox(height: 2.h),
+              RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(children: [
+                    TextSpan(
+                      text: "‘Loby Protection’",
+                      recognizer: TapGestureRecognizer()..onTap = () => context.pushNamed(staticContentPage, queryParams: {'termName' : 'Loby Protection'}),
+                      style: textTheme.headline4
+                          ?.copyWith(color: aquaGreenColor),
+                    ),
+                    TextSpan(
+                        text: " Insurance",
+                        style: textTheme.headline4
+                            ?.copyWith(color: textLightColor)),
+                  ])),
+              SizedBox(height: 2.h),
+              Row(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16.0),
+                        color: aquaGreenColor,
+                        border: Border.all(color: aquaGreenColor)),
+                    child: const Padding(
+                      padding: EdgeInsets.all(2.0),
+                      child: Icon(
+                        Icons.check,
+                        color: Colors.white,
+                        size: 9.5,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 2.w),
+                  Expanded(
+                    child: SizedBox(
+                        child: RichText(
+                            textAlign: TextAlign.start,
+                            text: TextSpan(children: [
+                              TextSpan(
+                                text: '7 Days Insurance',
+                                style: textTheme.subtitle2?.copyWith(color: textLightColor),
+                              ),
+                            ])
+                        )
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 2.h),
+              Text(
+                  textAlign: TextAlign.start,
+                  'Estimated Delivery Time (Days)',
+                  style: textTheme.headline4?.copyWith(
+                      color: textLightColor)),
+              SizedBox(height: 2.h),
+              BuildDropdown(
+                selectedValue: listingController.estimateDeliveryTime.value,
+                dropdownHint: "Select",
+                isRequired: true,
+                itemsList:  [for(var i = 1; i <= (listingController.configuration.maximumEstimatedDeliveryTimeDays ?? "").length; i++) i].map((item) =>
+                    DropdownMenuItem<String>(
+                      value: "$item",
+                      child: Text("$item", style: textTheme.headline3?.copyWith(color: whiteColor)
+                      ),
+                    )).toList(),
+                onChanged: (value) {
+                  listingController.estimateDeliveryTime.value = value;
+                },
+              ),
+              SizedBox(height: 2.h),
+              _buildTermsCheckbox(
+                  textTheme,
+                  'I have read and agreed to all sellers policy and the ',
+                  'Terms of Service.'),
+              SizedBox(height: showErrorMessage ? 1.h : 0),
+              showErrorMessage ?
+              Text('Please accept the terms of use and privacy policy to proceed...',
+                  style: textTheme.headline5?.copyWith(color: Colors.red)) : const SizedBox(),
+              SizedBox(height: 5.h),
+              CustomButton(
+                color: createProfileButtonColor,
+                name: "Publish",
+                textColor: textWhiteColor,
+                left: 15.w,
+                right: 15.w,
+                onTap: () async {
+                  if (_formKey.currentState!.validate()) {
+                    if (isChecked != true) {
+                      setState(() => showErrorMessage = true);
+                    } else {
+                      setState(() => showErrorMessage = false);
+                      await _createListing(textTheme);
+                    }
+                  }
+                },
+              ),
+              SizedBox(height: 2.h),
+            ],
           ),
         ),
       ),
     );
+  }
+
+
+  Future<void> _getConfigurations()async{
+
+    if(homeController.selectedCategoryId.value != 0 && homeController.selectedGameId.value != 0){
+      Helpers.loader();
+
+      await listingController.getConfigurations(
+          categoryId: homeController.selectedCategoryId.value,
+          gameId: homeController.selectedGameId.value
+      );
+      int multiFieldsCount = 0;
+      int singleFieldsCount = 0;
+      int openFieldsCount = 0;
+
+      for (final i in listingController.configuration.gameCategoryServices!) {
+        switch (i.service?.selectionType) {
+          case 0:
+            i.service?.index = multiFieldsCount;
+            multiFieldsCount += 1;
+            multiSelectionServices.add(<SelectedServiceOption>[]);
+            break;
+          case 1:
+            i.service?.index = singleFieldsCount;
+            singleFieldsCount += 1;
+            singleSelectionService.add(SelectedServiceOption());
+            singleSelectedServiceController.add(TextEditingController());
+            break;
+          case 2:
+            i.service?.index = openFieldsCount;
+            openFieldsCount += 1;
+            listingController.optionAnswer.add(TextEditingController());
+            break;
+        }
+      }
+      listingController.isServicesAvailable.value = true;
+      setState((){});
+      Helpers.hideLoader();
+    }
+  }
+
+
+  Future<void> _createListing(TextTheme textTheme)async{
+    Helpers.loader();
+
+    listingController.serviceOptionId.clear();
+
+    listingController.serviceOptionId.addAll(singleSelectionService);
+    for (final item in multiSelectionServices) {
+      listingController.serviceOptionId.addAll(item);
+    }
+
+    debugPrint("final service selection ${listingController.serviceOptionId}");
+
+
+    final isSuccess = await listingController.createListing(
+        categoryId: homeController.selectedCategoryId.value,
+        gameId: homeController.selectedGameId.value
+    );
+
+    Helpers.hideLoader();
+    if (isSuccess) {
+      BottomDialog(
+          textTheme: textTheme,
+          tileName: "Congratulations",
+          titleColor: aquaGreenColor,
+          contentName: "Your service has been successfully listed. You can edit your listings from My Listings.",
+          contentLinkName: ' My Listings',
+          onOk: (){
+            Navigator.pop(context);
+            context.pushNamed(myListingPage);
+          })
+          .showBottomDialog(context);
+    }
   }
 
 
@@ -433,7 +461,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
     switch (service?.selectionType) {
       case 0:
         return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Wrap(
@@ -450,12 +478,14 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                               }
                         );
                       }).toList(),
-                    )
+                    ),
                 ),
-                SizedBox(height: 2.h,),
+                SizedBox(height: multiSelectionServices[service.index].isNotEmpty ? 2.h : 0.h,),
                 AutoCompleteField(
                   hint: service.name,
                   isMultiple: true,
+                  isRequired: true,
+                  selectedValuesList: multiSelectionServices[service.index],
                   suggestionsCallback: (pattern) async {
                     final result = serviceOption?.where((suggestion) => suggestion.toString().toLowerCase().contains(pattern.toLowerCase())).toList();
                     List finalList = [];
@@ -469,7 +499,10 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
 
                       final index2 = serviceOption?.indexWhere((element) => element.serviceOption?.serviceOptionName == value);
 
-                      if (multiSelectionServices[service.index].toString().toLowerCase().contains('${value.toLowerCase()}')) {
+                      print(multiSelectionServices[service.index]);
+                      print(value);
+
+                      if (multiSelectionServices[service.index].toString().contains(value)) {
                         debugPrint('do nothing');
                       } else {
                         multiSelectionServices[service.index].add(SelectedServiceOption(
@@ -490,6 +523,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
               hint: service!.name,
               selectedSuggestion: singleSelectedServiceController[service.index],
               isMultiple: false,
+              isRequired: true,
               suggestionsCallback: (pattern) async {
                 final result = serviceOption?.where((suggestion) =>
                     suggestion.toString().toLowerCase().contains(
@@ -515,6 +549,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
         return TextFieldWidget(
           textEditingController: listingController.optionAnswer[service!.index],
           hint: service.name!,
+          isRequired: true,
         );
 
       default:
@@ -582,13 +617,13 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   text: TextSpan(children: [
                     TextSpan(
                       text: content,
-                      style:
-                      textTheme.subtitle2?.copyWith(color: textLightColor),
+                      style: textTheme.subtitle2?.copyWith(color: textLightColor),
                     ),
                     TextSpan(
                         text: textSpan,
-                        style: textTheme.subtitle2
-                            ?.copyWith(color: aquaGreenColor)),
+                        recognizer: TapGestureRecognizer()..onTap = () => context.pushNamed(staticContentPage, queryParams: {'termName' : 'Terms Of Use'}),
+                        style: textTheme.subtitle2?.copyWith(color: aquaGreenColor)
+                    ),
                   ]))),
         ),
       ],
@@ -599,29 +634,29 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text("₹ ", style: textTheme.headline3?.copyWith(color: textWhiteColor),),
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.40,
+        Image.asset("assets/images/token.png", height: 20, width: 20,),
+        SizedBox(width: 2.w),
+        Expanded(
           child: TextFieldWidget(
             textEditingController: listingController.price.value,
-            hint: "",
+            hint: "Enter Token",
             isNumber: true,
+            isRequired: true,
           ),
         ),
-        const SizedBox(width: 2.0),
+        SizedBox(width: 2.w),
         Text(
           "per",
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
-          style: textTheme.headline4
-              ?.copyWith(fontSize: 13.0, color: textLightColor),
+          style: textTheme.headline4?.copyWith(fontSize: 13.0, color: textLightColor),
         ),
-        const SizedBox(width: 2.0),
-        SizedBox(
-            width: MediaQuery.of(context).size.width * 0.4,
+        SizedBox(width: 2.w),
+        Expanded(
             child: BuildDropdown(
               selectedValue: selectedUnitName,
               dropdownHint: "Select Unit",
+              isRequired: true,
               itemsList: listingController.configuration.units?.map((item) =>
                   DropdownMenuItem<Unit>(
                     value: item,
@@ -700,12 +735,9 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
               Text("or",
                   style: textTheme.headline4?.copyWith(color: textWhiteColor)),
               SizedBox(height: 1.h),
-              InputTextWidget(
-                textAlign: TextAlign.center,
-                hintName: 'Paste Youtube/Twitch/Drive Link',
-                txtHintColor: whiteColor,
-                keyboardType: TextInputType.name,
-                controller: fileLink,
+              TextFieldWidget(
+                  textEditingController: fileLink,
+                hint: 'Paste Youtube/Twitch/Drive Link',
               ),
               SizedBox(height: 4.h),
             ],

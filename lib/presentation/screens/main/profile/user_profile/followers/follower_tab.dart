@@ -34,7 +34,9 @@ class _FollowerTabScreenState extends State<FollowerTabScreen> {
     return Obx(() {
       if(profileController.isFollowersFetching.value){
         return const CustomLoader();
-      }else{
+      }else if(widget.type == 'following' ? profileController.following.isEmpty :  profileController.followers.isEmpty){
+        return const NoDataFoundWidget();
+      }{
         return SingleChildScrollView(
           child: Column(
             children: [

@@ -176,7 +176,7 @@ class HomeController extends GetxController{
 
         },
             (success) {
-          categoryGames.value = success.categoryGames.categoryGames!;
+          categoryGames.value = success.categoryGames.categoryGames ?? [];
           isCategoryGamesFetching(false);
 
         },

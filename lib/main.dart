@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -19,24 +18,21 @@ import 'core/theme/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'di/injection.dart';
 import 'firebase_options.dart';
-import 'presentation/getx/controllers/chat_controller.dart';
 
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =   FlutterLocalNotificationsPlugin();
 GlobalKey<ScaffoldState> contextKey = GlobalKey<ScaffoldState>();
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-
   debugPrint('Handling a background message ${message.messageId}');
   debugPrint('${message.data}');
-
 }
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'high_importance_channel', // id
   'High Importance Notifications', // title
   description : 'This channel is used for important notifications.', // description
-  importance: Importance.high,
+  importance: Importance.max,
 );
 
 void main() async {
@@ -104,16 +100,19 @@ class _MyAppState extends State<MyApp> {
   }
 
 
-
   Future<void> initializePushNotification()async{
 
     var initializationSettingsAndroid = const AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettingsIOs = const IOSInitializationSettings();
     var initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOs);
 
-    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: (data){
+      Get.find<CoreController>().onNotificationClick(data!, contextKey.currentContext!);
+    });
 
     FirebaseMessaging.onMessage.listen(_showNotification);
+    FirebaseMessaging.onMessageOpenedApp.listen(_showNotification);
+    FirebaseMessaging.instance.getInitialMessage();
     getToken();
   }
 
@@ -142,6 +141,7 @@ class _MyAppState extends State<MyApp> {
             channel.name,
             channelDescription : channel.description,
             icon: android.smallIcon,
+            importance: Importance.high,
           ),
           iOS: const IOSNotificationDetails(),
         ),

@@ -56,9 +56,7 @@ class OrderStatusTile extends StatelessWidget {
           Column(
             children: [
               _statusTile(textTheme, isDone: true,
-                  title: isDuel
-                      ? "Seller & Challenger selection doesn’t match. Dispute Raised. Transaction on hold"
-                      : "Dispute Raised. Transaction on hold",
+                  title: isDuel ? "Seller & Challenger selection doesn’t match. Dispute Raised. Transaction on hold" : "Dispute Raised. Transaction on hold",
                   date: date),
               SizedBox(height: 2.h),
             ],
@@ -70,6 +68,7 @@ class OrderStatusTile extends StatelessWidget {
           /// if Duel (Seller) ///
           lastStatus == 'ORDER_PLACED' ? _duelOrderPlaced(context) :
           lastStatus == 'ORDER_IN_PROGRESS' ? _selectDuelWinner(context) :
+          lastStatus == 'BUYER_DELIVERY_CONFIRMED' ? _selectDuelWinner(context) :
           const SizedBox() :
 
           /// else normal seller ///
@@ -78,6 +77,7 @@ class OrderStatusTile extends StatelessWidget {
           /// if Duel (Buyer) ///
           isDuel ?
           lastStatus == 'ORDER_IN_PROGRESS' ? _selectDuelWinner(context) :
+          lastStatus == 'SELLER_DELIVERY_CONFIRMED' ? _selectDuelWinner(context) :
           const SizedBox() :
 
           /// else normal Buyer ///
@@ -91,26 +91,32 @@ class OrderStatusTile extends StatelessWidget {
       {required bool isDone, required String title, required String date}) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        SvgPicture.asset(
-          'assets/icons/verified_user_bedge.svg',
-          height: 18,
-          width: 18,
-          color: isDone ? null : iconWhiteColor,
+        Flexible(
+          child: Row(
+            children: [
+              SvgPicture.asset(
+                'assets/icons/verified_user_bedge.svg',
+                height: 18,
+                width: 18,
+                color: isDone ? null : iconWhiteColor,
+              ),
+              SizedBox(width: 3.w),
+              Expanded(
+                child: Text(title,
+                    // maxLines: 3,
+                    // overflow: TextOverflow.ellipsis,
+                    style: textTheme.headline5?.copyWith(color: textWhiteColor)),
+              ),
+            ],
+          ),
         ),
-        SizedBox(width: 3.w),
-        Expanded(
-          child: Text(title,
-              // overflow: TextOverflow.ellipsis,
-              style: textTheme.headline5?.copyWith(color: textWhiteColor)),
-        ),
-        Expanded(
-          child: Text(date,
-              textAlign: TextAlign.end,
-              overflow: TextOverflow.ellipsis,
-              style: textTheme.headline5?.copyWith(
-                  color: textLightColor)),
-        ),
+        Text(date,
+            textAlign: TextAlign.end,
+            overflow: TextOverflow.ellipsis,
+            style: textTheme.headline5?.copyWith(
+                color: textLightColor)),
       ],
     );
   }

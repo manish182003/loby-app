@@ -1,5 +1,9 @@
 import 'package:equatable/equatable.dart';
+import 'package:loby/data/models/order/order_model.dart';
+import 'package:loby/data/models/profile/user_model.dart';
+import 'package:loby/domain/entities/order/order.dart';
 import 'package:loby/domain/entities/profile/rating.dart';
+import 'package:loby/domain/entities/profile/user.dart';
 // ignore_for_file: overridden_fields, annotate_overrides
 
 class RatingModel extends Rating{
@@ -12,7 +16,7 @@ class RatingModel extends Rating{
     this.userId,
     this.createdAt,
     this.updatedAt,
-    this.userOrder,
+    this.user,
   });
 
   final int? id;
@@ -23,7 +27,7 @@ class RatingModel extends Rating{
   final int? userId;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-  final dynamic userOrder;
+  final UserModel? user;
 
   factory RatingModel.fromJson(Map<String, dynamic> json) => RatingModel(
     id: json["id"],
@@ -34,7 +38,7 @@ class RatingModel extends Rating{
     userId: json["user_id"],
     createdAt: DateTime.parse(json["createdAt"]),
     updatedAt: DateTime.parse(json["updatedAt"]),
-    userOrder: json["userOrder"],
+    user: UserModel.fromJson(json["userOrder"]['user']),
   );
 
   Map<String, dynamic> toJson() => {
@@ -46,7 +50,7 @@ class RatingModel extends Rating{
     "user_id": userId,
     "createdAt": createdAt?.toIso8601String(),
     "updatedAt": updatedAt?.toIso8601String(),
-    "userOrder": userOrder,
+    "userOrder": user,
   };
 
   @override

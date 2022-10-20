@@ -1,4 +1,5 @@
 const String initialPage = "initial_page";
+const String onBoardingPage = "on-boarding-page";
 const String loginPage = "login";
 const String signUpScreenPage = "signup_screen_page";
 const String createProfilePage = "create_profile";
@@ -24,3 +25,5 @@ const String withdrawFundScreenPage = "withdraw_funds_screen";
 const String myProfileScreenPage = "my_profile_screen";
 const String searchScreenPage = "search_screen";
 const String faqPage = "faq-screen";
+const String legalTermsPage = "/legal-terms";
+const String staticContentPage = "/static-content";

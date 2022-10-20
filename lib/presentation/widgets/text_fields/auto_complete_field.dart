@@ -18,8 +18,10 @@ class AutoCompleteField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final FutureOr<Iterable<Object?>> Function(String)? suggestionsCallback;
   final Function(dynamic)? onSuggestionSelected;
-  final bool? isRequired;
-  final bool? isMultiple;
+  final bool isRequired;
+  final bool isMultiple;
+  final List? selectedValuesList;
+
 
 
   const AutoCompleteField(
@@ -32,14 +34,13 @@ class AutoCompleteField extends StatelessWidget {
       this.height,
       this.suggestionsCallback,
       this.onSuggestionSelected,
-      this.isRequired, this.isMultiple, this.title})
+        this.selectedValuesList,
+      this.isRequired = false, this.isMultiple = false, this.title})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final required = isRequired ?? false;
-    final multiple = isMultiple ?? false;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -52,7 +53,18 @@ class AutoCompleteField extends StatelessWidget {
         SizedBox(height: title == null ? 0.h : 2.h,),
         TypeAheadFormField(
           validator: (value) {
-            return required ? Helpers.validateField(value!) : null;
+            if(isRequired){
+              if(isMultiple){
+                if(selectedValuesList!.isEmpty){
+                  return Helpers.validateField(value!);
+                }else{
+                  return null;
+                }
+              }else{
+                return Helpers.validateField(value!);
+              }
+            }
+            return null;
           },
           itemBuilder: (context, item) => ListTile(
               title: Text(
@@ -70,6 +82,9 @@ class AutoCompleteField extends StatelessWidget {
           suggestionsBoxDecoration: SuggestionsBoxDecoration(
             borderRadius: BorderRadius.circular(14),
             color: shipGreyColor,
+            constraints: BoxConstraints(
+              minHeight: 10.h,
+                )
           ),
           getImmediateSuggestions: false,
           hideSuggestionsOnKeyboardHide: true,
@@ -119,7 +134,7 @@ class AutoCompleteField extends StatelessWidget {
                   Icons.keyboard_arrow_down,
                   color: whiteColor,
                   size: 20,
-                ), onPressed: () {  },
+                ), onPressed: () { },
               )
 
             ),

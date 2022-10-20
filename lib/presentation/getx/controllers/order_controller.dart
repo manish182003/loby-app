@@ -303,7 +303,7 @@ class OrderController extends GetxController{
   }
 
 
-  Future<bool> submitDisputeProof({required int disputeId, String? description}) async {
+  Future<bool> submitDisputeProof({required int disputeId, String? description, String? link}) async {
 
     final failureOrSuccess = await _submitDisputeProof(
       Params(orderParams: OrderParams(
@@ -311,6 +311,7 @@ class OrderController extends GetxController{
         description: description,
         files: files,
         fileTypes: fileTypes,
+        link: link,
       ),),
     );
 

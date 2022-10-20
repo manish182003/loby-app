@@ -7,6 +7,8 @@ import 'package:go_router/go_router.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/listing/service_listing.dart';
 import 'package:loby/presentation/getx/controllers/listing_controller.dart';
+import 'package:loby/presentation/screens/main/profile/wallet/widgets/token_widget.dart';
+import 'package:loby/presentation/widgets/custom_cached_network_image.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../core/theme/colors.dart';
@@ -59,13 +61,9 @@ class _ItemListState extends State<ItemList> {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16),
-                    child: CachedNetworkImage(
-                      imageUrl: widget.listing.userGameServiceImages!.isEmpty ? '' : widget.listing.userGameServiceImages?.first.type == 2 ? widget.listing.userGameServiceImages!.first.path! : '',
-                      fit: BoxFit.cover,
-                      height: 110,
-                      width: 110,
-                      placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
-                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                    child: CustomCachedNetworkImage(
+                      imageUrl: Helpers.getListingImage(widget.listing),
+                      placeHolder: Image.asset("assets/images/listing_placeholder.jpg", fit: BoxFit.cover,),
                     ),
                   ),
                 ),
@@ -92,7 +90,7 @@ class _ItemListState extends State<ItemList> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Container(
-                        margin: const EdgeInsets.only(right: 4.0),
+                        margin: const EdgeInsets.only(right: 0),
                         child: Column(
                           children: <Widget>[
                             Container(
@@ -114,10 +112,14 @@ class _ItemListState extends State<ItemList> {
                         margin: const EdgeInsets.only(left: 4.0),
                         child: Column(
                           children: <Widget>[
-                            Text(
-                              "₹${widget.listing.price!}",
-                              style: textTheme.headline2?.copyWith(color: aquaGreenColor),
+                            TokenWidget(
+                              text: Text(
+                                "${widget.listing.price!}",
+                                style: textTheme.headline2?.copyWith(color: aquaGreenColor),
                               ),
+                              size: 20,
+                            )
+
                           ],
                         ),
                       ),
@@ -141,19 +143,16 @@ class _ItemListState extends State<ItemList> {
                           padding: const EdgeInsets.all(1.0),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(15),
-                            child: CachedNetworkImage(
-                              imageUrl: widget.listing.user?.image ?? "",
-                              fit: BoxFit.cover,
-                              height: 110,
-                              width: 110,
-                              placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
-                              errorWidget: (context, url, error) => const Icon(Icons.error),
+                            child: CustomCachedNetworkImage(
+                              imageUrl: widget.listing.user?.image,
+                              name: widget.listing.user?.displayName,
+                              // placeHolder: Image.asset('assets/images/user_placeholder.png'),
                             ),
                           ),
                         ), //CircleAvatar
                       ),
                       const SizedBox(
-                        width: 2.0,
+                        width: 8.0,
                       ),
                       Expanded(
                         child: Column(
@@ -226,7 +225,7 @@ class _ItemListState extends State<ItemList> {
                                       behavior: HitTestBehavior.translucent,
                                       onTap: ()async {
                                         await Helpers.loader();
-                                        await listingController.reportListing(userId: widget.listing.id, userGameServiceId: widget.listing.userGameServiceOptions![0].userGameServiceId);
+                                        await listingController.reportListing(userId: widget.listing.id, userGameServiceId: widget.listing.id);
                                         await Helpers.hideLoader();
                                         _controller.hideMenu();
                                         /* ConfirmationRiseDisputeBottomDialog(

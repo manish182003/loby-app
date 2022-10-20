@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:loby/domain/entities/profile/user.dart';
 
 class Rating extends Equatable{
   const Rating({
@@ -10,7 +11,7 @@ class Rating extends Equatable{
     this.userId,
     this.createdAt,
     this.updatedAt,
-    this.userOrder,
+    this.user,
   });
 
   final int? id;
@@ -21,7 +22,7 @@ class Rating extends Equatable{
   final int? userId;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-  final dynamic userOrder;
+  final User? user;
 
   @override
   // TODO: implement props

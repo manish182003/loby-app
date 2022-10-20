@@ -29,6 +29,6 @@ abstract class OrderRemoteDatasource{
 
   Future<DisputeResponseModel> getDisputes(int? page, String? status);
 
-  Future<Map<String, dynamic>> submitDisputeProof(int? disputeId, String? description, List<int>? fileTypes, List<PlatformFile>? files);
+  Future<Map<String, dynamic>> submitDisputeProof(int? disputeId, String? description, List<int>? fileTypes, List<PlatformFile>? files, String? link);
 
 }

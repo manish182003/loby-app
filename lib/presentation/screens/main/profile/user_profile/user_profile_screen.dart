@@ -38,9 +38,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Future<void> asyncFunctions()async{
     WidgetsBinding.instance.addPostFrameCallback((_)async{
       if(widget.from == 'other'){
+        listingController.buyerListingsProfile.clear();
         profileController.getProfile(userId: widget.userId);
       }else{
-        listingController.buyerListings.clear();
+        listingController.buyerListingsProfile.clear();
         await profileController.getProfile();
         authController.getProfileDetails();
       }

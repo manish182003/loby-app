@@ -5,15 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/widgets/body_padding_widget.dart';
 import 'package:loby/presentation/widgets/text_fields/text_field_widget.dart';
+import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../core/theme/colors.dart';
-import '../../../widgets/bottom_dialog_widget.dart';
+import '../../../widgets/bottom_dialog.dart';
 import '../../../widgets/custom_app_bar.dart';
 import '../../../widgets/buttons/custom_button.dart';
 import '../../../widgets/input_text_title_widget.dart';
@@ -38,7 +40,7 @@ class _ProfileVerificationScreenState extends State<ProfileVerificationScreen> {
   TextEditingController twitch = TextEditingController();
   TextEditingController instagram = TextEditingController();
 
-  List<PlatformFile> _paths = [];
+  List<File> _paths = [];
   File imageFile = File('');
   final _picker = ImagePicker();
 
@@ -51,7 +53,23 @@ class _ProfileVerificationScreenState extends State<ProfileVerificationScreen> {
     return Scaffold(
       appBar: appBar(context: context, appBarName: "Profile Verification"),
       body: BodyPaddingWidget(
-        child: SingleChildScrollView(
+        child: profileController.profile.verifiedProfile ?? false ? Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                'assets/icons/tick.svg',
+                width: 10.h,
+                height: 10.h,
+              ),
+              SizedBox(height: 2.h,),
+              Text('Your Profile is Verified',
+                  textAlign: TextAlign.center,
+                  style: textTheme.subtitle1?.copyWith(color: whiteColor)),
+            ],
+          ),
+        ) : SingleChildScrollView(
           child: Form(
             key: _formKey,
             child: Column(
@@ -82,18 +100,21 @@ class _ProfileVerificationScreenState extends State<ProfileVerificationScreen> {
                 SizedBox(height: 3.h,),
                 TextFieldWidget(
                   textEditingController: youtube,
+                  type: 'link',
                   title: "Youtube Link",
                   isRequired: true,
                 ),
                 SizedBox(height: 3.h,),
                 TextFieldWidget(
                   textEditingController: twitch,
+                  type: 'link',
                   title: "Twitch Link",
                   isRequired: true,
                 ),
                 SizedBox(height: 3.h,),
                 TextFieldWidget(
                   textEditingController: instagram,
+                  type: 'link',
                   title: "Instagram Link",
                   isRequired: true,
                 ),
@@ -107,16 +128,15 @@ class _ProfileVerificationScreenState extends State<ProfileVerificationScreen> {
                   child: Text(
                       textAlign: TextAlign.start,
                       "Please upload a photo with your passport / ID & your selfie",
-                      style:
-                      textTheme.headline6?.copyWith(color: textLightColor)),
+                      style: textTheme.headline6?.copyWith(color: textLightColor)),
                 ),
                 SizedBox(height: 3.h,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _documentTile(textTheme, "assets/icons/id_card_icon.svg", "Copy of your passport or ID card", onTap: _openFileExplorer, isSelected: _paths.isEmpty),
+                    _documentTile(textTheme, "assets/icons/id_card_icon.svg", "Copy of your passport or ID card", onTap: (){Helpers.showImagePicker(context: context, onGallery: _openFileExplorer, onCamera: _docFromCamera);}, isSelected: _paths.isEmpty, type: 'Document'),
                     SizedBox(width: 1.h),
-                    _documentTile(textTheme, "assets/icons/camera_icon.svg", "Selfie",onTap: (){Helpers.showImagePicker(context: context, onGallery: _imgFromGallery, onCamera: _imgFromCamera);}, isSelected: imageFile.path.isEmpty),
+                    _documentTile(textTheme, "assets/icons/camera_icon.svg", "Selfie", onTap: (){Helpers.showImagePicker(context: context, onGallery: _imgFromGallery, onCamera: _imgFromCamera);}, isSelected: imageFile.path.isEmpty, type: 'Selfie'),
                   ],
                 ),
                 SizedBox(height: 5.h,),
@@ -134,26 +154,35 @@ class _ProfileVerificationScreenState extends State<ProfileVerificationScreen> {
                           Helpers.toast("Your Profile Has Already Been Verified");
                         }else{
                           if(_formKey.currentState!.validate()){
-                            await Helpers.loader();
-                            final isSuccess = await profileController.profileVerification(
-                              displayName: displayName.text,
-                              name: name.text,
-                              message: message.text,
-                              youtube: youtube.text,
-                              twitch: twitch.text,
-                              instagram: instagram.text,
-                              idCard: File(_paths.first.path!),
-                              selfie: imageFile,
-                            );
-                            await Helpers.hideLoader();
-                            if(isSuccess){
-                              BottomDialog(
-                                textTheme: textTheme,
-                                titleColor: aquaGreenColor,
-                                contentName:
-                                "Your profile has been submitted to Team Loby for verification. We will revert back to you shortly",)
-                                  .showBottomDialog(context);
+                            if( _paths.isEmpty || imageFile.path.isEmpty){
+                              Helpers.toast("Please Upload Documents and Selfie");
+                            }else{
+                              await Helpers.loader();
+                              final isSuccess = await profileController.profileVerification(
+                                displayName: displayName.text,
+                                name: name.text,
+                                message: message.text,
+                                youtube: youtube.text,
+                                twitch: twitch.text,
+                                instagram: instagram.text,
+                                idCard: _paths.first,
+                                selfie: imageFile,
+                              );
+                              await Helpers.hideLoader();
+                              if(isSuccess){
+                                BottomDialog(
+                                  textTheme: textTheme,
+                                  titleColor: aquaGreenColor,
+                                  contentName: "Your profile has been submitted to Team Loby for verification. We will revert back to you shortly",
+                                    onOk: (){
+                                      Navigator.pop(context);
+                                      context.pushNamed(mainPage);
+                                    }
+                                )
+                                    .showBottomDialog(context);
+                              }
                             }
+
                           }
                         }
                       },
@@ -172,7 +201,7 @@ class _ProfileVerificationScreenState extends State<ProfileVerificationScreen> {
     );
   }
 
-  Widget _documentTile(TextTheme textTheme, String icon, String title, {Function()? onTap, required bool isSelected}){
+  Widget _documentTile(TextTheme textTheme, String icon, String title, {Function()? onTap, required bool isSelected, String? type}){
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -199,7 +228,7 @@ class _ProfileVerificationScreenState extends State<ProfileVerificationScreen> {
                 height: 5.h,
               ),
               SizedBox(height: 1.h),
-              Text(isSelected ? title : 'Selected',
+              Text(isSelected ? title : '$type Selected',
                   textAlign: TextAlign.center,
                   style: textTheme.subtitle1?.copyWith(color: textLightColor)),
             ],
@@ -214,9 +243,7 @@ class _ProfileVerificationScreenState extends State<ProfileVerificationScreen> {
 
       _paths = (await FilePicker.platform.pickFiles(
         onFileLoading: (FilePickerStatus status) => print(status),
-        type: FileType.custom,
-        allowedExtensions: ['jpg', 'png'],
-      ))!.files;
+      ))!.files.map((e) => File(e.path!)).toList();
       setState((){});
 
     } on PlatformException catch (e) {
@@ -239,6 +266,8 @@ class _ProfileVerificationScreenState extends State<ProfileVerificationScreen> {
     });
   }
 
+
+
   _imgFromCamera() async {
     var image = await _picker.pickImage(source: ImageSource.camera, imageQuality: 50);
     setState(() {
@@ -252,6 +281,16 @@ class _ProfileVerificationScreenState extends State<ProfileVerificationScreen> {
 
 
 
-
+  _docFromCamera() async {
+    var image = await _picker.pickImage(source: ImageSource.camera, imageQuality: 50);
+    setState(() {
+      if (image != null) {
+        _paths.clear();
+        _paths.add(File(image.path));
+      } else {
+        debugPrint('No image selected.');
+      }
+    });
+  }
 
 }

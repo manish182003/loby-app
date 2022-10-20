@@ -13,6 +13,7 @@ class GameModel extends Game {
     this.platform,
     this.createdAt,
     this.updatedAt,
+    this.listingCount,
   });
 
   final int? id;
@@ -21,6 +22,7 @@ class GameModel extends Game {
   final String? platform;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final int? listingCount;
 
   factory GameModel.fromJson(Map<String, dynamic> json) => GameModel(
     id: json["id"],
@@ -29,6 +31,7 @@ class GameModel extends Game {
     platform: json["platform"],
     createdAt: DateTime.parse(json["createdAt"]),
     updatedAt: DateTime.parse(json["updatedAt"]),
+    listingCount: json["listing_count"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -38,6 +41,7 @@ class GameModel extends Game {
     "platform": platform,
     "createdAt": createdAt?.toIso8601String(),
     "updatedAt": updatedAt?.toIso8601String(),
+    "listing_count": listingCount,
   };
 
   @override

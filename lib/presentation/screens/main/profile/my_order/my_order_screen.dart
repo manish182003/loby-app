@@ -23,6 +23,7 @@ class _MyOrderScreenState extends State<MyOrderScreen> with SingleTickerProvider
   void initState() {
     // TODO: implement initState
     super.initState();
+
     getOrders();
 
     _tabController = TabController(length: 3, vsync: this, initialIndex: _currentTabIndex);

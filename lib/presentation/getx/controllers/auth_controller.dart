@@ -18,6 +18,7 @@ import 'package:loby/domain/usecases/auth/get_countries.dart';
 import 'package:loby/domain/usecases/auth/get_profile_tags.dart';
 import 'package:loby/domain/usecases/auth/get_states.dart';
 import 'package:loby/domain/usecases/auth/login.dart';
+import 'package:loby/domain/usecases/auth/send_and_verify_otp.dart';
 import 'package:loby/domain/usecases/auth/signup.dart';
 import 'package:loby/domain/usecases/auth/update_profile.dart';
 import 'package:loby/presentation/getx/controllers/core_controller.dart';
@@ -38,6 +39,7 @@ class AuthController extends GetxController{
   final UpdateProfile _updateProfile;
   final CheckUsername _checkUsername;
   final AddFCMToken _addFCMToken;
+  final SendAndVerifyOTP _sendAndVerifyOTP;
 
   AuthController({
     required Signup signup,
@@ -48,6 +50,7 @@ class AuthController extends GetxController{
     required GetProfileTags getProfileTags, required UpdateProfile updateProfile,
     required CheckUsername checkUsername,
     required AddFCMToken addFCMToken,
+    required SendAndVerifyOTP sendAndVerifyOTP,
     }) : _signup = signup,
         _getCountries = getCountries,
         _getStates = getStates,
@@ -56,7 +59,8 @@ class AuthController extends GetxController{
         _updateProfile = updateProfile,
         _login = login,
   _checkUsername = checkUsername,
-        _addFCMToken = addFCMToken;
+        _addFCMToken = addFCMToken,
+        _sendAndVerifyOTP = sendAndVerifyOTP;
 
   final countries = <Country>[].obs;
   final areMoreCountriesAvailable = true.obs;
@@ -96,16 +100,24 @@ class AuthController extends GetxController{
 
    Future<void> saveProfileDetails()async{
      CoreController coreController = Get.find<CoreController>();
+     ProfileController profileController = Get.find<ProfileController>();
      final userId = await Helpers.getUserId();
      final apiToken = await Helpers.getString('apiToken');
      final fcmToken = await Helpers.getString('fcmToken');
      if(userId != null && apiToken != null){
-       ProfileController profileController = Get.find<ProfileController>();
        profileController.getProfile();
        addFCMToken(fcmToken: fcmToken);
        coreController.connect(userId);
+     }else if(apiToken != null){
+       profileController.getProfile();
      }
    }
+
+   Future<void> loggedUserIn()async{
+       SharedPreferences prefs = await SharedPreferences.getInstance();
+       prefs.setBool('isLoggedIn', true);
+   }
+
 
   Future<bool> googleSignInMethod(BuildContext context) async{
     await Helpers.loader();
@@ -352,8 +364,14 @@ class AuthController extends GetxController{
      selectedState.value = SelectedOption(id: profile.state!.id!, name: profile.state!.name!);
      selectedCity.value = SelectedOption(id: profile.city!.id!, name: profile.city!.name!);
      DOB.value.text = (Helpers.formatDateTime(dateTime: profile.dob!)).split(" ")[0];
-    profileTags.value = profile.profileTags!;
-    bio.value.text = profile.bio!;
+     selectedProfileTags.clear();
+      for(final i in profile.profileTags!){
+        selectedProfileTags.add({
+          'name': i.name,
+          'id': i.id
+        });
+      }
+      bio.value.text = profile.bio!;
      profileController.isProfileFetching(false);
   }
 
@@ -386,6 +404,29 @@ class AuthController extends GetxController{
     final failureOrSuccess = await _addFCMToken(
       Params(authParams: AuthParams(
           fcmToken: fcmToken
+      ),),
+    );
+
+    failureOrSuccess.fold(
+          (failure) {
+        errorMessage.value = Helpers.convertFailureToMessage(failure);
+        debugPrint(errorMessage.value);
+        Helpers.toast(errorMessage.value);
+      },
+          (success) {
+
+        // Helpers.toast('Profile Changed');
+      },
+    );
+    return failureOrSuccess.isRight() ? true : false;
+  }
+
+  Future<bool> sendAndVerifyOTP({required String email, String? otp}) async {
+
+    final failureOrSuccess = await _sendAndVerifyOTP(
+      Params(authParams: AuthParams(
+          email: email,
+        otp: otp,
       ),),
     );
 

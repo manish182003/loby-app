@@ -26,5 +26,7 @@ abstract class AuthRemoteDatasource{
 
   Future<Map<String, dynamic>> addFCMToken(String? fcmToken);
 
+  Future<Map<String, dynamic>> sendAndVerifyOTP(String? email, String? otp);
+
 
 }

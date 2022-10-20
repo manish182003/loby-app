@@ -42,7 +42,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
         context: context,
         initialDate: date,
         firstDate: DateTime(1900),
-        lastDate: DateTime(2100));
+        lastDate: DateTime.now());
     if (picked != null && picked != date) {
 
       setState(() {
@@ -77,6 +77,8 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                   return Helpers.validatePassword(value!);
                 case 'withdraw':
                   return Helpers.validateWalletWithdraw(value!, Get.find<ProfileController>().profile.walletMoney!);
+                case 'link':
+                  return Helpers.validateLink(value!);
                 default:
                   return Helpers.validateField(value!);
               }
@@ -85,6 +87,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
           },
           onTap: ()async{
             if(widget.type == "date"){
+
               FocusScope.of(context).requestFocus(FocusNode());
               await _selectDate(context);
               widget.textEditingController.text = DateFormat('dd/MM/yyyy').format(date);
@@ -101,7 +104,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
           input: widget.textEditingController,
           obscureText: widget.type == 'password' ? !isVisible : isVisible,
           hintText: widget.hint,
-          textCapitalization: widget.type == 'email' ? TextCapitalization.none : TextCapitalization.words,
+          textCapitalization: TextCapitalization.none,
           keyboardType: widget.isNumber ? TextInputType.number :  widget.type == 'email' ? TextInputType.emailAddress : widget.textInputAction == TextInputAction.newline ? TextInputType.multiline : TextInputType.name,
           textInputAction: widget.textInputAction ?? TextInputAction.next,
           isReadableOnly: widget.isReadableOnly,

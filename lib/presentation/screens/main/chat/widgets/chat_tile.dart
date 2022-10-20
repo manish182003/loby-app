@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:loby/core/theme/colors.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/chat/chat.dart';
-import 'package:loby/presentation/screens/main/chat/message_page.dart';
+import 'package:loby/presentation/widgets/custom_cached_network_image.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -33,9 +33,7 @@ class ChatTile extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 _buildUserAvtar(lavaRedColor),
-                const SizedBox(
-                  width: 16,
-                ),
+                const SizedBox(width: 16,),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,19 +49,19 @@ class ChatTile extends StatelessWidget {
                         children: [
                           Flexible(
                             child: Text(
-                              chat.chatLatestMessage ?? '',
+                              chat.message?.orderId != null ? "Listing" : chat.message?.filePath != null ? Helpers.getFileExtension(chat.message!.fileType!) : chat.message!.message!,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: textTheme.subtitle2?.copyWith(color: textWhiteColor, fontWeight: FontWeight.w200,),
                             ),
                           ),
-                          chat.chatLatestMessage == null ? const SizedBox() : SizedBox(width: 2.w),
-                          chat.chatLatestMessage == null ? const SizedBox() : Container(
+                          SizedBox(width: 2.w),
+                          Container(
                             decoration: const BoxDecoration(shape: BoxShape.circle, color: whiteColor),
                             width: 3,
                             height: 3,
                           ),
-                          chat.chatLatestMessage == null ? const SizedBox() : SizedBox(width: 2.w),
+                          SizedBox(width: 2.w),
                           Text(
                               timeago.format(chat.chatLatestDate!),
                             style: textTheme.subtitle2?.copyWith(color: textWhiteColor, fontWeight: FontWeight.w200,),
@@ -110,13 +108,9 @@ class ChatTile extends StatelessWidget {
           padding: const EdgeInsets.all(2.0),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(28),
-            child: CachedNetworkImage(
-              imageUrl: chat.receiverInfo!.image ?? "",
-              fit: BoxFit.cover,
-              height: 110,
-              width: 110,
-              placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
-              errorWidget: (context, url, error) => const Icon(Icons.error),
+            child: CustomCachedNetworkImage(
+              imageUrl: chat.receiverInfo!.image,
+              name: chat.receiverInfo!.displayName ?? chat.receiverInfo!.name!,
             ),
           ),
         ),

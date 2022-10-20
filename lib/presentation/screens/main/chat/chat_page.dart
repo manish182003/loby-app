@@ -9,14 +9,14 @@ import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:loby/core/theme/colors.dart';
 import 'package:loby/core/utils/helpers.dart';
+import 'package:loby/data/models/chat/chat_model.dart';
 import 'package:loby/presentation/getx/controllers/chat_controller.dart';
 import 'package:loby/presentation/getx/controllers/core_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/screens/main/chat/widgets/custom_message.dart';
-import 'package:loby/presentation/screens/main/chat/widgets/message_widget.dart';
+import 'package:loby/presentation/screens/main/chat/widgets/media_dialog.dart';
 import 'package:loby/presentation/widgets/custom_app_bar.dart';
 import 'package:loby/presentation/widgets/custom_loader.dart';
 import 'package:mime/mime.dart';
@@ -58,6 +58,7 @@ class _ChatPageState extends State<ChatPage> {
     chatController.chatMessagesMap.clear();
     // chatController.messages.clear();
     chatController.chatMessages.clear();
+    chatController.getChats();
     // coreController.socket.off('receive_message');
     super.dispose();
   }
@@ -67,40 +68,34 @@ class _ChatPageState extends State<ChatPage> {
 
     final chatChannel = chatController.chats.where((chat) => chat.receiverId == widget.receiverId).toList().first;
 
-    return WillPopScope(
-      onWillPop: (){
-        chatController.getChats();
-        return Future.value(true);
-      },
-      child: Scaffold(
-        appBar: appBar(context: context, appBarName: chatChannel.receiverInfo?.displayName),
-        body: Obx(() {
-          if(chatController.isMessagesFetching.value || profileController.isProfileFetching.value){
-            return const CustomLoader();
-          }else {
-            chatController.chatMessages.refresh();
-            _user = types.User(id: widget.senderId.toString());
-            return Chat(
-                messages: chatController.chatMessages,
-                onAttachmentPressed: _handleAttachmentPressed,
-                onMessageTap: _handleMessageTap,
-                onPreviewDataFetched: _handlePreviewDataFetched,
-                onSendPressed: _handleSendPressed,
-                showUserAvatars: true,
-                showUserNames: true,
-                user: _user,
-                theme: const DarkChatTheme(
-                  backgroundColor: backgroundColor,
-                  secondaryColor: textFieldColor,
-                  inputBackgroundColor: textFieldColor,
-                ),
-                customMessageBuilder: (message, {messageWidth = 0}) {
-                  return CustomMessage(message: message);
-                }
-            );
-          }
-        }),
-      ),
+    return Scaffold(
+      appBar: appBar(context: context, appBarName: chatChannel.receiverInfo?.displayName),
+      body: Obx(() {
+        if(chatController.isMessagesFetching.value || profileController.isProfileFetching.value){
+          return const CustomLoader();
+        }else {
+          chatController.chatMessages.refresh();
+          _user = types.User(id: widget.senderId.toString());
+          return Chat(
+              messages: chatController.chatMessages,
+              onAttachmentPressed: _handleAttachmentPressed,
+              onMessageTap: _handleMessageTap,
+              onPreviewDataFetched: _handlePreviewDataFetched,
+              onSendPressed: _handleSendPressed,
+              showUserAvatars: true,
+              showUserNames: true,
+              user: _user,
+              theme: const DarkChatTheme(
+                backgroundColor: backgroundColor,
+                secondaryColor: textFieldColor,
+                inputBackgroundColor: textFieldColor,
+              ),
+              customMessageBuilder: (message, {messageWidth = 0}) {
+                return CustomMessage(message: message);
+              }
+          );
+        }
+      }),
     );
   }
 
@@ -112,47 +107,10 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _handleAttachmentPressed() {
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (BuildContext context) =>
-          SafeArea(
-            child: SizedBox(
-              height: 144,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      _handleImageSelection();
-                    },
-                    child: const Align(
-                      alignment: AlignmentDirectional.centerStart,
-                      child: Text('Photo'),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      _handleFileSelection();
-                    },
-                    child: const Align(
-                      alignment: AlignmentDirectional.centerStart,
-                      child: Text('File/Video'),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Align(
-                      alignment: AlignmentDirectional.centerStart,
-                      child: Text('Cancel'),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-    );
+    ChatMediaDialog(
+      imageSelection: _handleImageSelection,
+      fileSelection: _handleFileSelection,
+    ).showBottomDialog(context);
   }
 
   void _handleFileSelection() async {

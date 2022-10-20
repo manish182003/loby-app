@@ -21,6 +21,7 @@ class OrderParams extends Equatable {
   final int? disputeId;
   final List<PlatformFile>? files;
   final List<int>? fileTypes;
+  final String? link;
 
 
   const OrderParams({
@@ -28,7 +29,7 @@ class OrderParams extends Equatable {
     this.listingId, this.quantity, this.price,
     this.fileType, this.file, this.stars, this.review, this.winnerId,
     this.description, this.page,
-    this.disputeId, this.files, this.fileTypes,
+    this.disputeId, this.files, this.fileTypes, this.link,
   });
 
   @override

@@ -21,6 +21,7 @@ class SubmitDisputeProof extends UseCase<Map<String, dynamic>, Params> {
         description: params.orderParams?.description,
       files: params.orderParams?.files,
       fileTypes: params.orderParams?.fileTypes,
+      link: params.orderParams?.link,
 
     );
   }

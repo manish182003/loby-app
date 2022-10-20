@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 class MyText extends StatelessWidget {
-  String name;
-  Color textColor;
-  Color myBackgroundColor;
+  final String name;
+  final Color textColor;
+  final Color myBackgroundColor;
 
-  MyText(
+  const MyText(
       {Key? key,
       required this.name,
       required this.textColor,

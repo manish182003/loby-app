@@ -30,6 +30,7 @@ import 'package:loby/domain/usecases/auth/get_countries.dart';
 import 'package:loby/domain/usecases/auth/get_profile_tags.dart';
 import 'package:loby/domain/usecases/auth/get_states.dart';
 import 'package:loby/domain/usecases/auth/login.dart';
+import 'package:loby/domain/usecases/auth/send_and_verify_otp.dart';
 import 'package:loby/domain/usecases/auth/signup.dart';
 import 'package:loby/domain/usecases/auth/update_profile.dart';
 import 'package:loby/domain/usecases/chat/get_chats.dart';
@@ -157,7 +158,7 @@ class DependencyInjector{
     Get.lazyPut(() => UpdateProfile(authRepository));
     Get.lazyPut(() => CheckUsername(authRepository));
     Get.lazyPut(() => AddFCMToken(authRepository));
-
+    Get.lazyPut(() => SendAndVerifyOTP(authRepository));
   }
 
   static void _injectHomeUsecases() {

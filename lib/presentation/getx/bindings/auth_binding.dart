@@ -10,6 +10,8 @@ import 'package:loby/domain/usecases/auth/signup.dart';
 import 'package:loby/domain/usecases/auth/update_profile.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 
+import '../../../domain/usecases/auth/send_and_verify_otp.dart';
+
 
 class AuthBinding extends Bindings {
 
@@ -25,7 +27,7 @@ class AuthBinding extends Bindings {
     final login = Get.find<Login>();
     final checkUsername = Get.find<CheckUsername>();
     final addFCMToken = Get.find<AddFCMToken>();
-
+    final sendAndVerifyOTP = Get.find<SendAndVerifyOTP>();
 
     Get.lazyPut(() => AuthController(
       signup: signup,
@@ -35,6 +37,7 @@ class AuthBinding extends Bindings {
       getProfileTags: getProfileTags,
       updateProfile: updateProfile, login: login, checkUsername: checkUsername,
       addFCMToken: addFCMToken,
+      sendAndVerifyOTP: sendAndVerifyOTP
 
     ));
   }

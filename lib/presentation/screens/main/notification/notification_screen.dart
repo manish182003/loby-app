@@ -27,9 +27,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    asyncFunctions();
+  }
+
+  Future<void> asyncFunctions() async {
     homeController.notificationPageNumber.value = 1;
     homeController.areMoreNotificationAvailable.value = true;
-    homeController.getNotifications();
+    await homeController.getNotifications();
+    homeController.getUnreadCount(type: 'notification');
 
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
@@ -56,8 +61,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             if(homeController.isNotificationFetching.value){
               return const CustomLoader();
             }else if(homeController.notifications.isEmpty) {
-              return const Center(
-                  child: Text('No notifications Found', textAlign: TextAlign.center,));
+              return const NoDataFoundWidget();
             }else{
               return ListView.separated(
                 shrinkWrap: true,

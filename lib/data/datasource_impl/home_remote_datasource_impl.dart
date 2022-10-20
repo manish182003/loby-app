@@ -52,7 +52,7 @@ class HomeRemoteDatasourceImpl extends HomeRemoteDatasource{
         _dio,
         RequestType.get,
         ApiEndpoints.getGames,
-        // queryParams: {'name': name, 'page' : '${page ?? ''}', 'catgeory_id': '${categoryId ?? ''}'},
+        queryParams: {'name': name, 'page' : '${page ?? ''}'},
         headers: headers,
       );
 

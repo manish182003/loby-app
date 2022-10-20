@@ -22,7 +22,7 @@ class WalletTransactionModel extends WalletTransaction {
   final int? id;
   final int? userId;
   final int? previousAmount;
-  final int? amount;
+  final double? amount;
   final int? totalAmount;
   final String? type;
   final String? reason;
@@ -37,7 +37,7 @@ class WalletTransactionModel extends WalletTransaction {
     id: json["id"],
     userId: json["user_id"],
     previousAmount: json["previous_amount"],
-    amount: json["amount"],
+    amount: json["amount"].toDouble(),
     totalAmount: json["total_amount"],
     type: json["type"],
     reason: json["reason"],

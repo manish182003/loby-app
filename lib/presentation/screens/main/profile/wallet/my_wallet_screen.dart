@@ -59,10 +59,9 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.only(top: 12.0),
-                          child: Text('Balance',
+                          child: Text('Loby Token Balance',
                               textAlign: TextAlign.center,
-                              style: textTheme.headline3
-                                  ?.copyWith(color: textTunaBlueColor, fontWeight: FontWeight.w500)),
+                              style: textTheme.headline3?.copyWith(color: textTunaBlueColor, fontWeight: FontWeight.w500)),
                         )),
                   ),
                   Padding(
@@ -96,35 +95,15 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
 
                                   }),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 0.0, horizontal: 16.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      SizedBox(
-                                        width: MediaQuery.of(context).size.width * 0.35,
-                                        child: CustomButton(
-                                          color: purpleLightIndigoColor,
-                                          textColor: textWhiteColor,
-                                          name: "Add Token",
-                                          onTap: () {
-                                            context.pushNamed(addFundScreenPage);
-                                          },
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: MediaQuery.of(context).size.width * 0.35,
-                                        child: CustomButton(
-                                          color: carminePinkColor,
-                                          textColor: textWhiteColor,
-                                          name: "Withdraw",
-                                          onTap: () {
-                                            context.pushNamed(withdrawFundScreenPage);
-                                          },
-                                        ),
-                                      ),
-                                    ],
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width * 0.35,
+                                  child: CustomButton(
+                                    color: purpleLightIndigoColor,
+                                    textColor: textWhiteColor,
+                                    name: "Add Token",
+                                    onTap: () {
+                                      context.pushNamed(addFundScreenPage);
+                                    },
                                   ),
                                 ),
                               ],
@@ -166,11 +145,10 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                           borderRadius: BorderRadius.circular(16.0),
                         ),
                         child: Padding(
-                          padding: EdgeInsets.only(top: 12.0),
-                          child: Text('Loby Coins',
+                          padding: const EdgeInsets.only(top: 12.0),
+                          child: Text('Your Earnings',
                               textAlign: TextAlign.center,
-                              style: textTheme.headline3
-                                  ?.copyWith(color: textTunaBlueColor)),
+                              style: textTheme.headline3?.copyWith(color: textTunaBlueColor)),
                         )),
                   ),
                   Padding(
@@ -196,22 +174,16 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 16.0),
-                                  child: Text('${profileController.profile.lobbyCoins}',
-                                      textAlign: TextAlign.center,
-                                      style: textTheme.headlineLarge
-                                          ?.copyWith(
-                                          color: aquaGreenColor)),
+                                  child: TokenWidget(tokens: "${profileController.profile.lobbyCoins}", textColor: aquaGreenColor,),
                                 ),
                                 SizedBox(
-                                  width:
-                                  MediaQuery.of(context).size.width *
-                                      0.3,
+                                  width: MediaQuery.of(context).size.width * 0.35,
                                   child: CustomButton(
-                                    color: purpleLightIndigoColor,
+                                    color: carminePinkColor,
                                     textColor: textWhiteColor,
-                                    name: "Redeem",
+                                    name: "Withdraw",
                                     onTap: () {
-                                      debugPrint('click chat');
+                                      context.pushNamed(withdrawFundScreenPage);
                                     },
                                   ),
                                 ),

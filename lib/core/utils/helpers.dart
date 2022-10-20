@@ -12,6 +12,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:loby/core/utils/environment.dart';
+import 'package:loby/domain/entities/listing/service_listing.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
@@ -70,7 +71,7 @@ class Helpers {
   }
 
   static validatePassword(String value) {
-    if (value.length < 2) {
+    if (value.length < 6) {
       return 'Password should be minimum 6 characters long';
     } else {
       return null;
@@ -117,6 +118,17 @@ class Helpers {
     return null;
   }
 
+  static validateLink(String? value) {
+    if(value == null){
+      return "Field Required";
+    }else if (Uri.tryParse(value)!.hasAbsolutePath ) {
+      return null;
+    }else{
+      return "Invalid URL";
+    }
+
+  }
+
   static int getFileType(String extension) {
     switch (extension) {
       case 'mp3':
@@ -133,6 +145,22 @@ class Helpers {
         return 3;
       default:
         return 4;
+    }
+  }
+
+
+  static String getFileExtension(int type) {
+    switch (type) {
+      case 0:
+        return "Audio";
+      case 1:
+        return "Video";
+      case 2:
+        return "Image";
+      case 3:
+        return "Document";
+      default:
+        return "";
     }
   }
 
@@ -255,19 +283,20 @@ class Helpers {
             child: Wrap(
               children: <Widget>[
                 ListTile(
+                    leading: const Icon(Icons.photo_camera),
+                    title: const Text('Camera'),
+                    onTap: (){
+                      Navigator.of(context).pop();
+                      onCamera();
+                    }),
+                ListTile(
                     leading: const Icon(Icons.photo_library),
                     title: const Text('Gallery'),
                     onTap: () {
                       Navigator.of(context).pop();
                       onGallery();
                     }),
-                ListTile(
-                    leading: const Icon(Icons.photo_camera),
-                    title: const Text('Camera'),
-                    onTap: (){
-                      Navigator.of(context).pop();
-                      onCamera();
-                      }),
+
                 // ListTile(
                 //     leading: const Icon(Icons.view_carousel_outlined),
                 //     title: const Text('View Image'),
@@ -323,6 +352,10 @@ class Helpers {
     }else{
       return number;
     }
+  }
+
+  static String? getListingImage(ServiceListing listing){
+    return listing.userGameServiceImages!.isEmpty ? null : listing.userGameServiceImages?.first.type == 2 ? listing.userGameServiceImages!.first.path! : null;
   }
 
   static Future<File> urlToFile(String imageUrl) async {

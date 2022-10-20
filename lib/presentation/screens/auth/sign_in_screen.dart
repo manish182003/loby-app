@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
+import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/screens/auth/widgets/create_account.dart';
 import 'package:loby/presentation/screens/auth/widgets/create_profile_bottom_sheet.dart';
 import 'package:loby/presentation/screens/auth/widgets/login.dart';
@@ -27,7 +28,13 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
 
   AuthController authController = Get.find<AuthController>();
+  ProfileController profileController = Get.find<ProfileController>();
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +64,12 @@ class _SignInScreenState extends State<SignInScreen> {
                   onTap: ()async{
                     final isSuccess = await authController.googleSignInMethod(context);
                     if(isSuccess){
-                      _showCreateProfileBottomSheet(context);
+                      if (!mounted) return;
+                      if(profileController.profile.displayName == null){
+                        _showCreateProfileBottomSheet(context);
+                      }else{
+                        context.pushNamed(mainPage);
+                      }
                     }
                   }
               ),
@@ -88,24 +100,16 @@ class _SignInScreenState extends State<SignInScreen> {
                   bottom: 5.h,
                   top: 2.h,
                   onTap: () async{
-
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
-                    final token = prefs.getString('apiToken');
-                    if (!mounted) return;
-                    if(token != null){
-                      _showCreateProfileBottomSheet(context);
-                    }else{
-                      _createAccountDialog(context);
-                    }
-
+                    _createAccountDialog(context);
                   }),
-
             ],
           ),
         ),
       ),
     );
   }
+  
+
 
 
   void _createAccountDialog(BuildContext context) {

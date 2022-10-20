@@ -1,9 +1,14 @@
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loby/core/theme/colors.dart';
 import 'package:loby/core/utils/helpers.dart';
+import 'package:loby/data/models/chat/chat_model.dart';
+import 'package:loby/data/models/home/notification_model.dart';
 import 'package:loby/domain/entities/home/notification.dart' as notify;
+import 'package:loby/presentation/getx/controllers/core_controller.dart';
 import 'package:loby/presentation/getx/controllers/home_controller.dart';
 import 'package:sizer/sizer.dart';
 
@@ -16,13 +21,14 @@ class NotificationItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     HomeController homeController = Get.find<HomeController>();
+    CoreController coreController = Get.find<CoreController>();
     final textTheme = Theme.of(context).textTheme;
     return GestureDetector(
         onTap: () {
-          debugPrint('hello bhai click hua');
+          coreController.onNotificationClick(jsonEncode(notification), context);
         },
         child: Dismissible(
-          key: Key(notification.title!),
+          key: Key(notification.title ?? ''),
           onDismissed: (direction){
             homeController.deleteNotification(notificationId: notification.id);
           },

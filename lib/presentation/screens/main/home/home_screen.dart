@@ -34,41 +34,37 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    return SafeArea(
-      child: Scaffold(
-        body: BodyPaddingWidget(
-          child: SingleChildScrollView(
-            child: GestureDetector(
-              onTap: () {
-                FocusManager.instance.primaryFocus?.unfocus();
-              },
-              child: Column(
-                children: [
-                  SizedBox(height: 4.h,),
-                  GlobalSearchFieldWidget(onTap: () {
-                    context.pushNamed(searchScreenPage);
-                  }),
-                  SizedBox(height: 3.h,),
-                  Text('Categories', style: textTheme.headline3?.copyWith(color: textWhiteColor)),
-                  SizedBox(height: 3.h,),
-                  _buildCategories(textTheme),
-                  SizedBox(height: 3.h,),
-                  Container(
-                      decoration: BoxDecoration(
-                        color: textFieldColor,
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
-                      child: Column(
-                        children: [
-                          Padding(
-                              padding: EdgeInsets.all(2.h),
-                              child: Text('Top Games', style: textTheme.headline3?.copyWith(color: textWhiteColor))),
-                          _buildTopGames(textTheme),
-                        ],
-                      )),
-                ],
-              ),
-            ),
+    return BodyPaddingWidget(
+      child: SingleChildScrollView(
+        child: GestureDetector(
+          onTap: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          child: Column(
+            children: [
+              SizedBox(height: 4.h,),
+              GlobalSearchFieldWidget(onTap: () {
+                context.pushNamed(searchScreenPage);
+              }),
+              SizedBox(height: 3.h,),
+              Text('Categories', style: textTheme.headline3?.copyWith(color: textWhiteColor)),
+              SizedBox(height: 3.h,),
+              _buildCategories(textTheme),
+              SizedBox(height: 3.h,),
+              Container(
+                  decoration: BoxDecoration(
+                    color: textFieldColor,
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                  child: Column(
+                    children: [
+                      Padding(
+                          padding: EdgeInsets.all(2.h),
+                          child: Text('Top Games', style: textTheme.headline3?.copyWith(color: textWhiteColor))),
+                      _buildTopGames(textTheme),
+                    ],
+                  )),
+            ],
           ),
         ),
       ),
@@ -134,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 166,
                   width: 120,
                   child: Center(
-                    child: GameCard(game: homeController.games[index]),
+                    child: GameCard(game: homeController.games[index],),
                   ),
                 ),
           );

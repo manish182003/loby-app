@@ -8,6 +8,7 @@ class Game extends Equatable {
     this.platform,
     this.createdAt,
     this.updatedAt,
+    this.listingCount,
   });
 
   final int? id;
@@ -16,9 +17,10 @@ class Game extends Equatable {
   final String? platform;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final int? listingCount;
 
 
   @override
   // TODO: implement props
-  List<Object?> get props => [id, name, image, platform];
+  List<Object?> get props => [id, name, image, platform, listingCount];
 }

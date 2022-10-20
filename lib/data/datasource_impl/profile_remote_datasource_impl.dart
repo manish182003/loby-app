@@ -341,11 +341,20 @@ class ProfileRemoteDatasourceImpl extends ProfileRemoteDatasource{
   Future<Map<String, dynamic>> submitFeedback(String? feedback, String? email) async{
     try {
       final headers = await Helpers.getApiHeaders();
+
+      FormData formData = FormData()
+        ..fields.add(
+          MapEntry('description', feedback!),
+        )
+        ..fields.add(
+          MapEntry('email', email!),
+        );
+
       final response = await Helpers.sendRequest(
         _dio,
         RequestType.post,
         ApiEndpoints.submitFeedback,
-        queryParams: {'description': feedback, 'email' : email},
+        data: formData,
         headers: headers,
       );
 

@@ -29,5 +29,7 @@ abstract class AuthRepository{
 
   Future<Either<Failure, Map<String, dynamic>>> addFCMToken({String? fcmToken});
 
+  Future<Either<Failure, Map<String, dynamic>>> sendAndVerifyOTP({String? email, String? otp});
+
 
 }

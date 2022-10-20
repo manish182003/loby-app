@@ -194,7 +194,7 @@ class OrderRemoteDatasourceImpl extends OrderRemoteDatasource{
   }
 
   @override
-  Future<Map<String, dynamic>> submitDisputeProof(int? disputeId, String? description, List<int>? fileTypes, List<PlatformFile>? files)async {
+  Future<Map<String, dynamic>> submitDisputeProof(int? disputeId, String? description, List<int>? fileTypes, List<PlatformFile>? files, String? link)async {
 
     try {
       final headers = await Helpers.getApiHeaders();
@@ -208,6 +208,11 @@ class OrderRemoteDatasourceImpl extends OrderRemoteDatasource{
           MapEntry('description', description ?? ''),
         );
 
+      if(link != null){
+        formData.fields.add(
+          MapEntry('file_link', link),
+        );
+      }
 
       if(files!.isNotEmpty){
         for(int i = 0; i < files.length; i++){

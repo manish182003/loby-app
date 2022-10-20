@@ -156,13 +156,13 @@ class _EditListingState extends State<EditListing> {
       children: [
         Padding(
           padding: EdgeInsets.only(top: 3.h),
-          child: Text("₹ ", style: textTheme.headline3?.copyWith(color: textWhiteColor),),
+          child: Image.asset("assets/images/token.png", height: 20, width: 20,),
         ),
         SizedBox(width: 2.w,),
         Expanded(
           child: TextFieldWidget(
             textEditingController: listingController.price.value,
-            title: 'Price',
+            title: 'Token',
             hint: "",
             isNumber: true,
           ),

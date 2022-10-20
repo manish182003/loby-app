@@ -9,7 +9,7 @@ import 'package:loby/presentation/widgets/text_fields/custom_drop_down.dart';
 import 'package:loby/presentation/widgets/text_fields/text_field_widget.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../core/theme/colors.dart';
-import '../../../../widgets/bottom_dialog_widget.dart';
+import '../../../../widgets/bottom_dialog.dart';
 import '../../../../widgets/custom_app_bar.dart';
 import '../../../../widgets/buttons/custom_button.dart';
 import '../../../../widgets/custom_loader.dart';
@@ -118,7 +118,6 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                         }else{
                                           return TokenWidget(tokens: '${profileController.profile.walletMoney}');
                                         }
-
                                       }),
                                     ),
                                   ],
@@ -134,10 +133,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                               borderRadius: BorderRadius.circular(16.0),
                             ),
                             child: Container(
-                              width: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width * 1,
+                              width: MediaQuery.of(context).size.width * 1,
                               decoration: BoxDecoration(
                                 color: shipGreyColor,
                                 borderRadius: BorderRadius.circular(16.0),
@@ -179,8 +175,8 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                         isNumber: true,
                                         onChanged: (value){
                                           if(value.isNotEmpty){
-                                            profileController.tokenToRupee.value = (int.tryParse(value)! * int.tryParse(homeController.staticData[2].realValue!)!).floor().toString();
-                                            profileController.rupeeToToken.value = (int.tryParse(value)! / int.tryParse(homeController.staticData[2].key!)!).floor().toString();
+                                            profileController.tokenToRupee.value = (int.tryParse(value)! * int.tryParse(homeController.staticData[5].realValue!)!).floor().toString();
+                                            profileController.rupeeToToken.value = (int.tryParse(value)! / int.tryParse(homeController.staticData[5].key!)!).floor().toString();
                                           }
                                         },
                                       )),
@@ -204,10 +200,14 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                         Helpers.loader();
                                         final isSuccess = await profileController.withdrawMoney(
                                             bankDetailId: selectedBankId,
-                                            amount: int.tryParse(profileController.tokenToRupee.value));
+                                            amount: int.tryParse(profileController.tokenToRupee.value)
+                                        );
                                         await profileController.getProfile();
                                         Helpers.hideLoader();
                                         if (isSuccess) {
+                                          amount.clear();
+                                          profileController.rupeeToToken.value = "0";
+                                          profileController.tokenToRupee.value = "0";
                                           BottomDialog(
                                             textTheme: textTheme,
                                             tileName: "Withdraw Success",
@@ -269,8 +269,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
         return Dialog(
           elevation: 0,
           backgroundColor: backgroundDarkJungleGreenColor,
-          shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
           child: SizedBox(
             height: 24.h,
             child: Padding(

@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/core/theme/colors.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
+import 'package:loby/presentation/getx/controllers/profile_controller.dart';
+import 'package:loby/presentation/screens/auth/widgets/create_profile_bottom_sheet.dart';
 import 'package:loby/presentation/widgets/buttons/custom_button.dart';
+import 'package:loby/presentation/widgets/custom_bottom_sheet.dart';
 import 'package:loby/presentation/widgets/input_text_title_widget.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
 import '../../../widgets/body_padding_widget.dart';
 import '../../../widgets/input_text_widget.dart';
 import '../../../widgets/text_fields/text_field_widget.dart';
+import 'otp_dialog.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -22,11 +27,13 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
 
   AuthController authController = Get.find<AuthController>();
+  ProfileController profileController = Get.find<ProfileController>();
   final _formKey = GlobalKey<FormState>();
   bool visible = false;
 
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+  TextEditingController otp = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -63,16 +70,82 @@ class _LoginState extends State<Login> {
                 if (_formKey.currentState!.validate()) {
                   Helpers.loader();
                   final isSuccess = await authController.login(email: email.text, password: password.text);
-                  Helpers.hideLoader();
                   if(isSuccess){
-                    context.goNamed(mainPage);
+                    await profileController.getProfile();
+                    if(profileController.profile.emailVerified == 'N' || profileController.profile.emailVerified == null){
+                      final isSuccess = await authController.sendAndVerifyOTP(email: email.text);
+                      Helpers.hideLoader();
+                      if(isSuccess){
+                        _otpDialog(context);
+                      }
+                    }else if(profileController.profile.displayName == null){
+                      Helpers.hideLoader();
+                      Navigator.pop(context);
+                      _showCreateProfileBottomSheet(context);
+                    }else{
+                      await authController.loggedUserIn();
+                      Helpers.hideLoader();
+                      Navigator.pop(context);
+                      context.goNamed(mainPage);
+                    }
+                  }else{
+                    Helpers.hideLoader();
                   }
-                  }
-               },
+                }},
             ),
             SizedBox(height: 4.h,),
       ]),
       ),
     );
   }
+
+
+  void _otpDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return OTPDialog(
+            otp: otp,
+            onVerify: () async{
+              Helpers.loader();
+              final isSuccess = await authController.sendAndVerifyOTP(email: email.text, otp: otp.text);
+              Helpers.hideLoader();
+              if(isSuccess) {
+                if (profileController.profile.displayName == null) {
+                  _showCreateProfileBottomSheet(context);
+                } else {
+                  await authController.loggedUserIn();
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  context.goNamed(mainPage);
+                }
+              }
+            });
+      },
+    );
+  }
+
+
+
+  void _showCreateProfileBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      isDismissible: false,
+      enableDrag: false,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: const CustomBottomSheet(
+              isDismissible: false,
+              initialChildSize: 0.97,
+              maxChildSize: 0.97,
+              minChildSize: 0.5,
+              child: CreateProfileCard(from: 'signIn',)),
+        );
+      },
+    );
+  }
+
 }

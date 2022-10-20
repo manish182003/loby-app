@@ -130,6 +130,7 @@ class ListingController extends GetxController{
 
 
   void clearListing(){
+
     title.value.clear();
     description.value.clear();
     price.value.clear();

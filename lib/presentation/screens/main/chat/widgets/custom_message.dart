@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:loby/core/theme/colors.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:loby/presentation/screens/main/profile/wallet/widgets/token_widget.dart';
+import 'package:loby/presentation/widgets/custom_cached_network_image.dart';
 import 'package:sizer/sizer.dart';
 
 class CustomMessage extends StatelessWidget {
@@ -21,23 +23,19 @@ class CustomMessage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Expanded(
-            flex: 3,
+            flex: 4,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20.0),
               child: SizedBox(
-                height: 15.h,
-                child: CachedNetworkImage(
-                  imageUrl: message.metadata!['image'] ?? "",
-                  fit: BoxFit.cover,
-                  height: 110,
-                  width: 110,
-                  placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                height: 12.h,
+                child: CustomCachedNetworkImage(
+                  imageUrl: message.metadata!['image'],
+                  placeHolder: Image.asset("assets/images/listing_placeholder.jpg", fit: BoxFit.cover,),
                 ),
               ),
             ),
           ),
-          SizedBox(width: 5.w,),
+          SizedBox(width: 2.w,),
           Expanded(
             flex: 7,
             child: Column(
@@ -72,11 +70,15 @@ class CustomMessage extends StatelessWidget {
                         child: Text(message.metadata!['category'] ?? "", style: textTheme.headline6?.copyWith(color: textWhiteColor)),
                       ),
                     ),
-                    const SizedBox(width: 16.0),
-                    Text(
-                      "₹${message.metadata!['price'] ?? ""}",
-                      style: textTheme.headline2?.copyWith(color: aquaGreenColor),
+                    const SizedBox(width: 8.0),
+                    TokenWidget(
+                      size: 20,
+                      text: Text(
+                        "₹${message.metadata!['price'] ?? ""}",
+                        style: textTheme.headline2?.copyWith(color: aquaGreenColor),
+                      ),
                     ),
+
                   ],
                 ),
               ],

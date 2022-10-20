@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:chewie/chewie.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/core/theme/colors.dart';
@@ -25,7 +26,7 @@ class _CarouselState extends State<Carousel> {
   int activeIndex = 0;
   final controller = CarouselController();
 
-  late VideoPlayerController videoPlayerController;
+  VideoPlayerController videoPlayerController = VideoPlayerController.asset('');
   ChewieController? chewieController;
 
 
@@ -59,7 +60,7 @@ class _CarouselState extends State<Carousel> {
 
   @override
   void dispose() {
-    // videoPlayerController.dispose();
+    videoPlayerController.dispose();
     chewieController?.dispose();
     super.dispose();
   }
@@ -75,8 +76,9 @@ class _CarouselState extends State<Carousel> {
               height: widget.height ?? 22.h,
               initialPage: 0,
               viewportFraction: 1,
-              autoPlay: widget.autoPlay,
+              autoPlay: false,
               autoPlayInterval: const Duration(seconds: 2),
+              pauseAutoPlayOnTouch: true,
               // enlargeCenterPage: true,
               // enlargeStrategy: CenterPageEnlargeStrategy.height,
               onPageChanged: (index, reason){
@@ -89,13 +91,15 @@ class _CarouselState extends State<Carousel> {
           itemBuilder: (context, index, realIndex) {
             final list = widget.images.where((element) => element.type != 3).toList();
             if(list[index].type == 2){
+              print("build image");
               return buildImage(
                 urlImage: widget.images[index].path,
                 index: index,
               );
-            }else if(list[index].type == 2){
+            }else if(list[index].type == 1){
               _initPlayer(list[index].path!);
               if(chewieController != null){
+                print("build controllee");
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20),
                   child: Chewie(
@@ -103,11 +107,13 @@ class _CarouselState extends State<Carousel> {
                   ),
                 );
               }else{
+                print("build circular");
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
             }else{
+              print("build norhing");
               return const SizedBox();
             }
           }),
@@ -202,12 +208,16 @@ class _CarouselState extends State<Carousel> {
         child:  Image.asset(imagePath!,
           fit: BoxFit.fitWidth,
         ),
-
       ),
     );
   }
 
   void animateToSlide(int index){
     controller.animateToPage(index);
+  }
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<VideoPlayerController>('videoPlayerController', videoPlayerController));
   }
 }

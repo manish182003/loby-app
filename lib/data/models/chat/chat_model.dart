@@ -7,6 +7,8 @@ import 'package:loby/data/models/profile/user_model.dart';
 import 'package:loby/domain/entities/chat/chat.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 
+import 'message_model.dart';
+
 class ChatModel extends Chat{
   const ChatModel({
     this.id,
@@ -17,6 +19,7 @@ class ChatModel extends Chat{
     this.chatLatestMessage,
     this.senderInfo,
     this.receiverInfo,
+    this.message,
   });
 
   final int? id;
@@ -27,6 +30,7 @@ class ChatModel extends Chat{
   final String? chatLatestMessage;
   final UserModel? senderInfo;
   final UserModel? receiverInfo;
+  final MessageModel? message;
 
 
 
@@ -40,7 +44,8 @@ class ChatModel extends Chat{
         chatLatestDate: DateTime.parse(json["chatLatestDate"]),
         chatLatestMessage: json["chatLatestMessage"],
         senderInfo:  profileController.profile.id == json["sender_id"] ? UserModel.fromJson(json["senderInfo"]) :  UserModel.fromJson(json["receiverInfo"]),
-        receiverInfo: profileController.profile.id == json["sender_id"] ? UserModel.fromJson(json["receiverInfo"]) : UserModel.fromJson(json["senderInfo"])
+        receiverInfo: profileController.profile.id == json["sender_id"] ? UserModel.fromJson(json["receiverInfo"]) : UserModel.fromJson(json["senderInfo"]),
+        message: json['chats'].map<MessageModel>((message) => MessageModel.fromJson(message)).toList().first,
     );
   }
 

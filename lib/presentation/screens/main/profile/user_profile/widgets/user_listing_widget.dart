@@ -74,12 +74,11 @@ class _UserListingWidgetState extends State<UserListingWidget> {
             return finalList;
           },
           onSuggestionSelected: (value) async {
-            final index = homeController.categories.indexWhere((
-                element) => element.name == value);
-            homeController.selectedCategoryId.value =
-            homeController.categories[index].id!;
-            homeController.selectedCategoryName.value.text =
-            homeController.categories[index].name!;
+            final index = homeController.categories.indexWhere((element) => element.name == value);
+            homeController.selectedCategoryId.value = homeController.categories[index].id!;
+            homeController.selectedCategoryName.value.text = homeController.categories[index].name!;
+
+            getListings();
           },
         ),
         SizedBox(height: 2.h),
@@ -98,22 +97,32 @@ class _UserListingWidgetState extends State<UserListingWidget> {
             return finalList;
           },
           onSuggestionSelected: (value) async {
-            final index = homeController.games.indexWhere((element) =>
-            element.name == value);
+
+            print("calling");
+
+            final index = homeController.games.indexWhere((element) => element.name == value);
             homeController.selectedGameId.value = homeController.games[index].id!;
             homeController.selectedGameName.value.text = homeController.games[index].name!;
-
-            listingController.getBuyerListings(
-              categoryId: homeController.selectedCategoryId.value,
-              gameId: homeController.selectedGameId.value,
-              userId: widget.user.id,
-              from: 'profile',
-            );
+            getListings();
           },
         ),
         _buildGames(textTheme),
       ],
     );
+  }
+
+  Future<void> getListings()async{
+    if(homeController.selectedGameId.value != 0 && homeController.selectedCategoryId.value != 0){
+      listingController.buyerListingPageNumber.value = 1;
+      listingController.areMoreListingAvailable.value = true;
+      listingController.buyerListingsProfile.clear();
+      listingController.getBuyerListings(
+        categoryId: homeController.selectedCategoryId.value,
+        gameId: homeController.selectedGameId.value,
+        // userId: widget.user.id,
+        from: 'myProfile',
+      );
+    }
   }
 
   _buildGames(TextTheme textTheme) {

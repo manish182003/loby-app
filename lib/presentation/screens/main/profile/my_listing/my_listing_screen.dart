@@ -4,6 +4,7 @@ import 'package:loby/presentation/getx/controllers/home_controller.dart';
 import 'package:loby/presentation/getx/controllers/listing_controller.dart';
 import 'package:loby/presentation/screens/main/profile/my_listing/widgets/my_listing_tile.dart';
 import 'package:loby/presentation/widgets/body_padding_widget.dart';
+import 'package:loby/presentation/widgets/custom_loader.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../core/theme/colors.dart';
@@ -65,12 +66,12 @@ class _MyListingScreenState extends State<MyListingScreen> {
         if (listingController.isBuyerListingsFetching.value) {
           return const Center(child: CircularProgressIndicator(),);
         } else if (listingController.buyerListingsProfile.isEmpty) {
-          return SizedBox(height: 8.h,);
+          return const NoDataFoundWidget();
         }else{
           return GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 0.60,
+              childAspectRatio: 0.58,
               crossAxisSpacing: 4,
               mainAxisSpacing: 4,
             ),

@@ -146,12 +146,9 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
               Text("or",
                   style: textTheme.headline4?.copyWith(color: textWhiteColor)),
               SizedBox(height: 1.h),
-              InputTextWidget(
-                textAlign: TextAlign.center,
-                hintName: 'Paste Youtube/Twitch/Drive Link',
-                txtHintColor: whiteColor,
-                keyboardType: TextInputType.name,
-                controller: fileLink,
+              TextFieldWidget(
+                textEditingController: fileLink,
+                hint: 'Paste Youtube/Twitch/Drive Link',
               ),
               SizedBox(height: 4.h),
             ],

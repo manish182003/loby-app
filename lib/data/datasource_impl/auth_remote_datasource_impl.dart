@@ -148,7 +148,6 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
       print(bio);
 
 
-
       FormData formData = FormData()
         ..fields.add(
           MapEntry('name', fullName!),
@@ -190,12 +189,6 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
             )));
       }
 
-      // if(cover != null && cover.path.isNotEmpty) {
-      //   formData.files.add(MapEntry('cover_image',
-      //       MultipartFile.fromFileSync(cover.path,
-      //         // contentType: MediaType('image', 'jpg'),
-      //       )));
-      // }
 
       final response = await Helpers.sendRequest(
         _dio,
@@ -205,10 +198,12 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
         headers: headers
       );
 
+
       if(response != null){
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setBool('isLoggedIn', true);
         prefs.setString('userId', "${response['data']['id']}");
+        prefs.setString('apiToken', response['data']['reset_token']);
       }
 
       return true;
@@ -226,12 +221,10 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
         socialLoginId == null ? ApiEndpoints.login : ApiEndpoints.socialLogin,
         queryParams: socialLoginId == null ? {'email' : email, 'password' : password,} : {'social_login_id' : socialLoginId, 'social_login_type' : '${socialLoginType ?? ''}', 'name' : name, 'email' : email},
       );
-      debugPrint("login $response");
 
       if(response != null){
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('apiToken', response['data']['reset_token']);
-        prefs.setBool('isLoggedIn', true);
         prefs.setString('userId', "${response['data']['id']}");
       }
 
@@ -277,9 +270,26 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
     }
   }
 
+  @override
+  Future<Map<String, dynamic>> sendAndVerifyOTP(String? email, String? otp) async{
+    try {
+      final headers = await Helpers.getApiHeaders();
+      final response = await Helpers.sendRequest(
+        _dio,
+        RequestType.post,
+        otp == null ? ApiEndpoints.sendOTP : ApiEndpoints.verifyOTP,
+        queryParams: otp == null ? {
+          'email': email,
+        } : {
+          'email': email,
+          'otp' : otp,
+        },
+        headers: headers,
+      );
 
-
-
-
-
+      return response!;
+    } on ServerException catch (e) {
+      throw ServerException(message: e.message);
+    }
+  }
 }

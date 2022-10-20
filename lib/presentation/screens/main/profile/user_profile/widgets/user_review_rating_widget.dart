@@ -32,9 +32,6 @@ class _UserReviewRatingWidgetState extends State<UserReviewRatingWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme
-        .of(context)
-        .textTheme;
     return Obx(() {
       if(profileController.isRatingsFetching.value){
         return const Center(child: CircularProgressIndicator(),);
@@ -65,48 +62,45 @@ class RatingTile extends StatelessWidget {
     final textTheme = Theme
         .of(context)
         .textTheme;
-    return Column(
-      children: <Widget>[
-        Card(
-          color: textFieldColor,
-          elevation: 0.0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: BodyPaddingWidget(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(user.name!,
-                        overflow: TextOverflow.ellipsis,
-                        style: textTheme.headline5?.copyWith(
-                            color: textWhiteColor)),
-                    const SizedBox(
-                      width: 16,
-                    ),
-                    StarRating(
-                      rating: rating.star?.toDouble() ?? 0,
-                      color: saffronMangoOrangeColor,
-                      onRatingChanged: (double rating) {},
-                    )
-                  ],
+    return Card(
+      color: textFieldColor,
+      elevation: 0.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(rating.user!.displayName!,
+                    overflow: TextOverflow.ellipsis,
+                    style: textTheme.headline5?.copyWith(
+                        color: textWhiteColor)),
+                SizedBox(
+                  width: 2.h,
                 ),
-                SizedBox(height: 1.h),
-                Text(
-                  "Good service. Fast delivery. Trusted seller. ",
-                  softWrap: true,
-                  maxLines: 5,
-                  overflow: TextOverflow.ellipsis,
-                  style: textTheme.headline6?.copyWith(color: textLightColor),
-                ),
+                StarRating(
+                  rating: rating.star?.toDouble() ?? 0,
+                  color: saffronMangoOrangeColor,
+                  onRatingChanged: (double rating) {},
+                )
               ],
             ),
-          ),
-        )
-      ],
+            SizedBox(height: 1.h),
+            Text(
+              rating.comments ?? '',
+              softWrap: true,
+              maxLines: 5,
+              overflow: TextOverflow.ellipsis,
+              style: textTheme.headline6?.copyWith(color: textLightColor),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

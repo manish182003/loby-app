@@ -5,9 +5,11 @@ import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/presentation/screens/auth/create_profile_screen.dart';
 import 'package:loby/presentation/screens/auth/sign_up_screen.dart';
 import 'package:loby/presentation/screens/main/chat/chat_page.dart';
-import 'package:loby/presentation/screens/main/chat/message_page.dart';
 import 'package:loby/presentation/screens/main/profile/my_disputes/create_new_dispute_screen.dart';
 import 'package:loby/presentation/screens/main/profile/faqs.dart';
+import 'package:loby/presentation/screens/main/profile/terms_conditions/legal_options.dart';
+import 'package:loby/presentation/screens/main/profile/terms_conditions/static_terms.dart';
+import 'package:loby/presentation/screens/onboarding/onboarding_screen.dart';
 import 'package:loby/services/routing_service/routes.dart';
 import 'package:loby/services/routing_service/routing_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,21 +42,26 @@ class MyRouter {
     final router = GoRouter(
         redirect: (state){
           bool? isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+          bool? onBoardingDone = prefs.getBool('onBoardingDone') ?? false;
           String? token = prefs.getString('apiToken');
           debugPrint("Api Token $token");
 
-          final isLogging = state.location == loginRoute;
 
-          if(!isLoggedIn && !isLogging){
+          final isLogging = state.location == loginRoute;
+          final onBoarding = state.location == onBoardingRoute;
+
+          if(!onBoardingDone && !onBoarding){
+            return onBoardingRoute;
+          }else if(onBoardingDone && !isLoggedIn && !isLogging){
             return loginRoute;
-          }else {
+          }else{
             return null;
           }
         },
         urlPathStrategy: UrlPathStrategy.path,
         debugLogDiagnostics: true,
-
         routes: [
+
           GoRoute(
             name: initialPage,
             path: initialRoute,
@@ -74,7 +81,16 @@ class MyRouter {
                   child: const SignInScreen(),
                 );
               }),
-
+          GoRoute(
+            name: onBoardingPage,
+            path: onBoardingRoute,
+            pageBuilder: (context, state) {
+              return CupertinoPage(
+                key: state.pageKey,
+                child: const OnBoardingScreen(),
+              );
+            },
+          ),
           GoRoute(
               name: signUpScreenPage,
               path: signUpScreenRoute,
@@ -134,7 +150,7 @@ class MyRouter {
               pageBuilder: (context, state) {
                 return CupertinoPage(
                   key: state.pageKey,
-                  child: GameDetailScreen(serviceListingId: int.tryParse(state.queryParams['serviceListingId']!)!),
+                  child: GameDetailScreen(serviceListingId: int.tryParse(state.queryParams['serviceListingId']!)!, from: state.queryParams['from'],),
                 );
               }),
 
@@ -285,6 +301,24 @@ class MyRouter {
                 return CupertinoPage(
                   key: state.pageKey,
                   child: const FAQs(),
+                );
+              }),
+          GoRoute(
+              name: legalTermsPage,
+              path: legalTermsRoute,
+              pageBuilder: (context, state) {
+                return CupertinoPage(
+                  key: state.pageKey,
+                  child: const LegalOptions()
+                );
+              }),
+          GoRoute(
+              name: staticContentPage,
+              path: staticContentRoute,
+              pageBuilder: (context, state) {
+                return CupertinoPage(
+                    key: state.pageKey,
+                    child: StaticTerms(termName: state.queryParams['termName']!)
                 );
               }),
           GoRoute(

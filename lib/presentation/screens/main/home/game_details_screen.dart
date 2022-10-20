@@ -3,24 +3,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loby/core/utils/helpers.dart';
+import 'package:loby/domain/entities/listing/service_listing.dart';
 import 'package:loby/presentation/getx/controllers/home_controller.dart';
 import 'package:loby/presentation/getx/controllers/listing_controller.dart';
 import 'package:loby/presentation/getx/controllers/order_controller.dart';
+import 'package:loby/presentation/screens/main/profile/wallet/widgets/token_widget.dart';
 import 'package:loby/presentation/widgets/body_padding_widget.dart';
 import 'package:loby/presentation/widgets/carousel.dart';
 import 'package:loby/presentation/widgets/custom_loader.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../services/routing_service/routes_name.dart';
-import '../../../widgets/bottom_dialog_widget.dart';
+import '../../../widgets/bottom_dialog.dart';
 import '../../../widgets/custom_app_bar.dart';
 import '../../../widgets/buttons/custom_button.dart';
 
 class GameDetailScreen extends StatefulWidget {
   final int serviceListingId;
+  final String? from;
 
-  const GameDetailScreen({Key? key, required this.serviceListingId})
-      : super(key: key);
+  const GameDetailScreen({Key? key, required this.serviceListingId, this.from}) : super(key: key);
 
   @override
   State<GameDetailScreen> createState() => _GameDetailScreenState();
@@ -31,6 +34,8 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
   ListingController listingController = Get.find<ListingController>();
   HomeController homeController = Get.find<HomeController>();
   OrderController orderController = Get.find<OrderController>();
+
+  late ServiceListing listing;
 
   List<String> images = [
     'assets/images/img.png',
@@ -54,23 +59,21 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme
-        .of(context)
-        .textTheme;
-
-
+    final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-
       appBar: appBar(context: context, appBarName: ""),
       body: Obx(() {
         if(listingController.isBuyerListingsFetching.value){
           return const CustomLoader();
         }else{
-          final listing = listingController.buyerListings
-              .where((listing) => listing.id == widget.serviceListingId)
-              .toList()
-              .first;
+          final listings = listingController.buyerListings.where((listing) => listing.id == widget.serviceListingId).toList();
+
+          if(listings.isEmpty){
+           listing = listingController.buyerListingsProfile.where((listing) => listing.id == widget.serviceListingId).toList().first;
+          }else{
+            listing = listings.first;
+          }
           return SingleChildScrollView(
             child: BodyPaddingWidget(
               child: Column(
@@ -90,11 +93,9 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _circularInfoBox(textTheme, color: orangeColor,
-                          info: listing.game!.name!),
+                      _circularInfoBox(textTheme, color: orangeColor, info: listing.game!.name!),
                       SizedBox(width: 1.w),
-                      _circularInfoBox(textTheme, color: purpleLightIndigoColor,
-                          info: listing.category!.name!),
+                      _circularInfoBox(textTheme, color: purpleLightIndigoColor, info: listing.category!.name!),
                     ],
                   ),
                   SizedBox(height: 2.h),
@@ -113,26 +114,22 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                         child: Column(
                           children: [
                             _rowWidget(textTheme,
-                                text1: "Unit Price / Per ${listing.unit!.name}",
+                                text1: "Unit Token / Per ${listing.unit!.name}",
                                 text2: "${listing.price}",
                                 isNormal: true),
                             SizedBox(height: 1.h),
                             _rowWidget(textTheme, text1: "Stock",
                                 text2: "${listing.stockAvl}"),
                             SizedBox(height: 1.h),
-                            Obx(() {
+                            widget.from == 'myListing'? const SizedBox() : Obx(() {
                               return Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      if (listingController.quantityCount
-                                          .value > 1) {
+                                      if (listingController.quantityCount.value > 1) {
                                         listingController.quantityCount.value--;
-                                        listingController.totalPrice.value =
-                                            (listing.price! *
-                                                listingController.quantityCount
-                                                    .value).toString();
+                                        listingController.totalPrice.value = (listing.price! * listingController.quantityCount.value).toString();
                                       }
                                     },
                                     child: SvgPicture.asset(
@@ -159,8 +156,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                     ),
                                     child: Center(
                                       child: Text(
-                                          "${listingController.quantityCount
-                                              .value}",
+                                          "${listingController.quantityCount.value}",
                                           style: textTheme.headline3?.copyWith(
                                               color: bodyTextColor)),
                                     ),
@@ -168,14 +164,9 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                   const SizedBox(width: 8.0),
                                   GestureDetector(
                                     onTap: () {
-                                      if (listingController.quantityCount
-                                          .value <
-                                          listing.stockAvl!) {
+                                      if (listingController.quantityCount.value < listing.stockAvl!) {
                                         listingController.quantityCount.value++;
-                                        listingController.totalPrice.value =
-                                            (listing.price! *
-                                                listingController.quantityCount
-                                                    .value).toString();
+                                        listingController.totalPrice.value = (listing.price! * listingController.quantityCount.value).toString();
                                       }
                                     },
                                     child: SvgPicture.asset(
@@ -190,21 +181,19 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                             }),
                             SizedBox(height: 1.h),
                             Obx(() {
-                              return _rowWidget(textTheme, text1: "Total Price",
+                              return _rowWidget(textTheme, text1: "Total Token",
                                   text2: listingController.totalPrice.value,
                                   isNormal: true);
                             }),
                             SizedBox(height: 1.h),
-                            _rowWidget(textTheme, text1: "Earn Loby Coins",
-                                text2: "${listing.category?.lobyCoinsPercent}"),
-                            SizedBox(height: 1.h),
+
                           ],
                         ),
                       ),
                     ),
                   ),
                   SizedBox(height: 1.h,),
-                  GestureDetector(
+                  widget.from == 'myListing'? const SizedBox() : GestureDetector(
                     onTap: () {
                       context.pushNamed(userProfilePage, queryParams: {
                         'userId': "${listing.user?.id}",
@@ -288,8 +277,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                               ),
                                               const SizedBox(width: 4.0),
                                               Text(
-                                                "${listing.user
-                                                    ?.avgRatingCount ?? 0.0}",
+                                                "${listing.user?.avgRatingCount ?? 0.0}",
                                                 overflow: TextOverflow.ellipsis,
                                                 maxLines: 1,
                                                 style: textTheme.headline5
@@ -325,8 +313,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                 ),
                               ),
                               const SizedBox(width: 4.0),
-                              listing.user?.userFollowStatus == null
-                                  ? const SizedBox()
+                              listing.user?.userFollowStatus == null ? const SizedBox()
                                   : Card(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12.0),
@@ -372,11 +359,9 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                           _rowWidget(textTheme, text1: "Listing ID",
                               text2: "#${listing.id}"),
                           SizedBox(height: 1.h),
-                          _rowWidget(textTheme, text1: "Game",
-                            text2: listing.game!.name!,),
+                          _rowWidget(textTheme, text1: "Game", text2: listing.game!.name!,),
                           SizedBox(height: 1.h),
-                          _rowWidget(textTheme, text1: "Category",
-                            text2: listing.category!.name!,),
+                          _rowWidget(textTheme, text1: "Category", text2: listing.category!.name!,),
                           SizedBox(height: 1.h),
                           _rowWidget(textTheme, text1: "Service Type", text2: listing.userGameServiceOptions!.map((e) => e.serviceOptions?.first.serviceOptionName).toList().join(", ")),
                           SizedBox(height: 1.h),
@@ -406,8 +391,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                       child: Text(
                                         textAlign: TextAlign.start,
                                         listing.description!,
-                                        style: textTheme.headline6
-                                            ?.copyWith(color: textWhiteColor),
+                                        style: textTheme.headline6?.copyWith(color: textWhiteColor),
                                       ),
                                     ),
                                   ],
@@ -420,17 +404,14 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                       ),
                     ),
                   ),
-                  Padding(
+                  widget.from == 'myListing'? const SizedBox() : Padding(
                     padding: const EdgeInsets.only(
                         top: 0.0, left: 7.0, bottom: 24.0, right: 7.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width * 0.15,
+                          width: MediaQuery.of(context).size.width * 0.15,
                           height: 48,
                           child: MaterialButton(
                             shape: RoundedRectangleBorder(
@@ -455,11 +436,13 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                             name: "Buy Now",
                             textColor: textWhiteColor,
                             onTap: () async {
+                              Helpers.loader();
                               final isSuccess = await orderController.createOrder(
                                   listingId: listing.id!,
                                   quantity: listingController.quantityCount.value,
                                   price: listingController.totalPrice.value
                               );
+                              Helpers.hideLoader();
                               if (isSuccess) {
                                 BottomDialog(
                                     textTheme: textTheme,
@@ -472,7 +455,6 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                     homeController.getUnreadCount(type: 'notification');
                                     Navigator.pop(context);
                                     context.pushNamed(myOrderPage);
-
                                   }
                                 )
                                     .showBottomDialog(context);
@@ -516,23 +498,28 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          text1,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-          style: textTheme.headline5
-              ?.copyWith(color: textLightColor),
-        ),
-        SizedBox(width: 10.w,),
         Flexible(
           child: Text(
-              text2,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 2,
-              style: isNormal ? textTheme.headline1?.copyWith(
-                  color: aquaGreenColor) : textTheme.headline5?.copyWith(
-                  color: whiteColor)
+            text1,
+            style: textTheme.headline5?.copyWith(color: textLightColor),
           ),
+        ),
+        SizedBox(width: 10.w,),
+        isNormal ? TokenWidget(
+          size: 25,
+            text: Text(
+            text2,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+            style: textTheme.headline1?.copyWith(
+                color: aquaGreenColor)
+        )) :
+        Text(
+            text2,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+            style: textTheme.headline5?.copyWith(
+                color: whiteColor)
         ),
       ],
     );

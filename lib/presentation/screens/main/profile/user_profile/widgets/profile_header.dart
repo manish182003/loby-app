@@ -14,6 +14,7 @@ import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/screens/auth/widgets/create_profile_bottom_sheet.dart';
 import 'package:loby/presentation/widgets/custom_bottom_sheet.dart';
+import 'package:loby/presentation/widgets/custom_cached_network_image.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../../core/theme/colors.dart';
@@ -61,9 +62,9 @@ class _ProfileHeaderState extends State<ProfileHeader> {
             SizedBox(
               height: 30.h,
               width: double.infinity,
-              child: Image.asset(
-                "assets/images/img1.png",
-                fit: BoxFit.cover,
+              child: CustomCachedNetworkImage(
+                imageUrl: widget.user.coverImage ?? "",
+                placeHolder: Image.asset("assets/images/cover_placeholder.png", fit: BoxFit.cover,)
               ),
             ),
             appBar(context: context, appBarName: widget.title),
@@ -116,55 +117,51 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                   padding: const EdgeInsets.all(1.0),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(36),
-                                    child: CachedNetworkImage(
-                                      imageUrl: widget.user.image ?? "",
-                                      fit: BoxFit.cover,
-                                      height: 110,
-                                      width: 110,
-                                      placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
-                                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                                    child: CustomCachedNetworkImage(
+                                      imageUrl: widget.user.image,
+                                      name: widget.user.displayName,
+                                      // placeHolder: Image.asset('assets/images/user_placeholder.png'),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                context.pushNamed(followerPage);
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.fromLTRB(4, 0, 0, 0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          constraints: BoxConstraints(
-                                              maxWidth: maxWidth),
-                                          child: Text(widget.user.displayName ?? '',
-                                              overflow: TextOverflow.ellipsis,
-                                              style: textTheme.headline3?.copyWith(color: textWhiteColor)),
-                                        ),
-                                        const SizedBox(width: 8.0),
-                                        widget.user.verifiedProfile! ? SvgPicture.asset(
-                                          'assets/icons/verified_user_bedge.svg',
-                                          height: 15,
-                                          width: 15,
-                                        ) : const SizedBox(),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      height: 4,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            RichText(
+                            Container(
+                              margin: const EdgeInsets.fromLTRB(4, 0, 0, 0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        constraints: BoxConstraints(
+                                            maxWidth: maxWidth),
+                                        child: Text(widget.user.displayName ?? '',
+                                            overflow: TextOverflow.ellipsis,
+                                            style: textTheme.headline3?.copyWith(color: textWhiteColor)),
+                                      ),
+                                      const SizedBox(width: 8.0),
+                                      widget.user.verifiedProfile! ? SvgPicture.asset(
+                                        'assets/icons/verified_user_bedge.svg',
+                                        height: 15,
+                                        width: 15,
+                                      ) : const SizedBox(),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 4,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: (){
+                                              context.pushNamed(followerPage);
+                                            },
+                                            child: RichText(
                                               textAlign: TextAlign.start,
                                               text: TextSpan(
                                                 children: [
@@ -180,8 +177,13 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                                 ],
                                               ),
                                             ),
-                                            const SizedBox(width: 16.0),
-                                            RichText(
+                                          ),
+                                          const SizedBox(width: 16.0),
+                                          GestureDetector(
+                                            onTap: (){
+                                              context.pushNamed(myListingPage);
+                                            },
+                                            child: RichText(
                                               textAlign: TextAlign.start,
                                               text: TextSpan(
                                                 children: [
@@ -201,12 +203,12 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                                 ],
                                               ),
                                             ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                             )
                           ],

@@ -20,7 +20,7 @@ class WalletTransaction extends Equatable {
   final int? id;
   final int? userId;
   final int? previousAmount;
-  final int? amount;
+  final double? amount;
   final int? totalAmount;
   final String? type;
   final String? reason;

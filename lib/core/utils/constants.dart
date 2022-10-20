@@ -16,7 +16,8 @@ class ApiEndpoints{
   static const String updateProfile = "/edit-user-profile";
   static const String checkUsername = "/check-user-name-availability";
   static const String addFCMToken = "/add-user-fcm-token";
-
+  static const String sendOTP = "/send-otp-email";
+  static const String verifyOTP = "/verify-user-email";
 
   /// Home APIs ///
   static const String getCategories = "/get-all-categories";

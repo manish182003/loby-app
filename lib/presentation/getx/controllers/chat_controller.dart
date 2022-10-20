@@ -136,7 +136,7 @@ class ChatController extends GetxController{
             "uri": i.filePath?.replaceAll("images", "chat") ?? " ",
             "width": width,
             "metadata": {
-              'image': i.orderId == null ? "" : i.userOrder?.userGameService?.game!.image ?? "",
+              'image': i.orderId == null ? "" : Helpers.getListingImage(i.userOrder!.userGameService!),
               'name' : i.orderId == null ? "" : i.userOrder?.userGameService?.title,
               'desc' : i.orderId == null ? "" : i.userOrder?.userGameService?.description,
               'category' : i.orderId == null ? "" : i.userOrder?.userGameService?.category!.name,
@@ -172,7 +172,7 @@ class ChatController extends GetxController{
       },
           (success) {
             if(coreController.socket.connected){
-              coreController.socket.emit('sendMessage', {
+              coreController.socket.emit('loby', {
                 'type' : 'chat',
                 'receiverId' : receiverId,
                 'message': success['data'],

@@ -107,4 +107,14 @@ class AuthRepositoryImpl extends AuthRepository{
     }
   }
 
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> sendAndVerifyOTP({String? email, String? otp})async {
+    try {
+      return Right(await _authRemoteDatasource.sendAndVerifyOTP(email, otp));
+    } on ServerException catch (e) {
+    // Loggers can be added here for analyzation.
+    return Left(ServerFailure(message: e.message.toString()));
+    }
+  }
+
 }
