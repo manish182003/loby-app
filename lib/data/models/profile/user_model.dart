@@ -175,7 +175,7 @@ class UserModel extends User{
     "state": state?.toJson(),
     "country": country?.toJson(),
     "city": city?.toJson(),
-    "profileTags": List<dynamic>.from(profileTags!.map((x) => x)),
+    "profileTags": profileTags == null ? null : List<dynamic>.from(profileTags!.map((x) => x)),
   };
 
   @override

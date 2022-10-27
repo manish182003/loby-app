@@ -35,6 +35,8 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
   TextEditingController fileLink = TextEditingController();
   TextEditingController comments = TextEditingController();
 
+  final _formKey = GlobalKey<FormState>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -44,40 +46,46 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
       appBar: appBar(context: context, appBarName: "My Disputes"),
       body: SingleChildScrollView(
         child: BodyPaddingWidget(
-          child: Column(
-            children: [
-              DisputeWidget(
-                  disputeType: "Open",
-                  currentStatus: '',
-                  dispute: dispute,
-              ),
-              const SizedBox(height: 16.0),
-              _buildUploadField(textTheme),
-              const SizedBox(height: 16.0),
-              TextFieldWidget(
-                textEditingController: comments,
-                hint: "Write your comments",
-                maxLines: 5,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 10.h),
-                child: CustomButton(
-                  color: aquaGreenColor,
-                  name: "Submit",
-                  textColor: textCharcoalBlueColor,
-                  onTap: () async {
-                    Helpers.loader();
-                    final isSuccess = await orderController.submitDisputeProof(disputeId: widget.disputeId, description: comments.text);
-                    Helpers.hideLoader();
-                    if(isSuccess){
-                      Helpers.toast("dispute successfully created");
-                      Navigator.pop(context);
-                    }
-                  },
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                DisputeWidget(
+                    disputeType: "Open",
+                    currentStatus: '',
+                    dispute: dispute,
                 ),
-              ),
-              const SizedBox(height: 16.0),
-            ],
+                const SizedBox(height: 16.0),
+                _buildUploadField(textTheme),
+                const SizedBox(height: 16.0),
+                TextFieldWidget(
+                  textEditingController: comments,
+                  hint: "Write your comments",
+                  maxLines: 5,
+                  isRequired: true,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 10.h),
+                  child: CustomButton(
+                    color: aquaGreenColor,
+                    name: "Submit",
+                    textColor: textCharcoalBlueColor,
+                    onTap: () async {
+                      if(_formKey.currentState!.validate()){
+                        Helpers.loader();
+                        final isSuccess = await orderController.submitDisputeProof(disputeId: widget.disputeId, description: comments.text);
+                        Helpers.hideLoader();
+                        if(isSuccess){
+                          Helpers.toast("Dispute Proof Successfully Submitted");
+                          Navigator.pop(context);
+                        }
+                      }
+                    },
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+              ],
+            ),
           ),
         ),
       ),

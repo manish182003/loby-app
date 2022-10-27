@@ -65,6 +65,8 @@ class ListingController extends GetxController{
 
   final rangeSliderDiscreteValues = const RangeValues(0, 235000).obs;
 
+  final categoryId = 0.obs;
+
 
 
 
@@ -224,7 +226,7 @@ class ListingController extends GetxController{
         Helpers.toast(errorMessage.value);
       },
           (success) {
-
+            Helpers.toast("Listing Successfully Reported.");
       },
     );
     return failureOrSuccess.isRight() ? true : false;

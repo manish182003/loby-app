@@ -85,6 +85,7 @@ class ProfileController extends GetxController{
   final errorMessage = ''.obs;
 
   User profile = const User();
+  User otherUserProfile = const User();
   final isProfileFetching = false.obs;
 
   final ratings = <Rating>[].obs;
@@ -144,7 +145,12 @@ class ProfileController extends GetxController{
         isSocialLinksFetching.value = false;
       },
           (success) {
-        profile = success.user;
+            if(userId != null){
+              otherUserProfile = success.user;
+            }else{
+              profile = success.user;
+            }
+
         isProfileFetching.value = false;
         isSocialLinksFetching.value = false;
       },

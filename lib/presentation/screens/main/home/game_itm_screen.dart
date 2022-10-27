@@ -31,6 +31,8 @@ class _GameItemScreenState extends State<GameItemScreen> {
   final ListingController listingController = Get.find<ListingController>();
   final controller = ScrollController();
 
+  int categoryId = 0;
+
   final List<String> items = [
     'Top Rated',
     'Most Recent',
@@ -42,19 +44,20 @@ class _GameItemScreenState extends State<GameItemScreen> {
 
   @override
   void initState() {
+    categoryId = widget.categoryId;
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      homeController.getCategoryGames(categoryId: widget.categoryId);
+
+      homeController.getCategoryGames(categoryId: categoryId);
 
       listingController.buyerListingPageNumber.value = 1;
       listingController.areMoreListingAvailable.value = true;
-      listingController.getBuyerListings(categoryId: widget.categoryId, gameId: widget.gameId);
-
+      listingController.getBuyerListings(categoryId: categoryId, gameId: widget.gameId);
 
       controller.addListener(() {
         if (controller.position.maxScrollExtent == controller.offset) {
-          listingController.getBuyerListings(categoryId: widget.categoryId, gameId: widget.gameId);
+          listingController.getBuyerListings(categoryId: categoryId, gameId: widget.gameId);
         }
       });
     });
@@ -65,7 +68,6 @@ class _GameItemScreenState extends State<GameItemScreen> {
     controller.dispose();
     super.dispose();
   }
-
 
 
   @override
@@ -87,11 +89,14 @@ class _GameItemScreenState extends State<GameItemScreen> {
                   } else {
                     return CustomChip(
                       labelName: homeController.categories.map((element) => element.name!).toList(),
-                      selectedIndex: homeController.categories.indexWhere((element) => element.id == widget.categoryId),
+                      selectedIndex: homeController.categories.indexWhere((element) => element.id == categoryId),
                       onChanged: (index) {
                         listingController.buyerListingPageNumber.value = 1;
                         listingController.areMoreListingAvailable.value = true;
-                        listingController.getBuyerListings(categoryId: homeController.categories[index].id, gameId: widget.gameId);
+                        setState(() {
+                          categoryId = homeController.categories[index].id!;
+                        });
+                        listingController.getBuyerListings(categoryId: categoryId, gameId: widget.gameId);
                       },
                     );
                   }
@@ -123,7 +128,7 @@ class _GameItemScreenState extends State<GameItemScreen> {
                               onChanged: (value){
                                 listingController.buyerListingPageNumber.value = 1;
                                 listingController.areMoreListingAvailable.value = true;
-                                listingController.getBuyerListings(categoryId: widget.categoryId, gameId: widget.gameId, search: value);
+                                listingController.getBuyerListings(categoryId: categoryId, gameId: widget.gameId, search: value);
                                 },
                               style: textTheme.headline4?.copyWith(color: textWhiteColor),
                               decoration: InputDecoration(
@@ -173,7 +178,7 @@ class _GameItemScreenState extends State<GameItemScreen> {
                       }),
                     ),
                     const SizedBox(width: 4.0),
-                    DropDownDivider(categoryId: widget.categoryId, gameId: widget.gameId),
+                    DropDownDivider(categoryId: categoryId, gameId: widget.gameId),
                   ],
                 ),
                 const SizedBox(height: 4.0),
@@ -255,7 +260,7 @@ class _GameItemScreenState extends State<GameItemScreen> {
                         borderRadius:
                         BorderRadius.vertical(top: Radius.circular(24)),
                       ),
-                      child: FilterBottomSheet(controller: scrollController, categoryId: widget.categoryId, gameId: widget.gameId),
+                      child: FilterBottomSheet(controller: scrollController, categoryId: categoryId, gameId: widget.gameId),
                     )),
               ],
             );

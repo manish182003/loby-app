@@ -160,6 +160,7 @@ class OrderStatusTile extends StatelessWidget {
   }
 
   Widget _selectDuelWinner(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Column(
       children: [
         // Row(
@@ -201,6 +202,10 @@ class OrderStatusTile extends StatelessWidget {
         //   ],
         // ),
         // SizedBox(height: 2.h),
+        _statusTile(textTheme, isDone: false,
+            title: "Select Winner",
+            date: ""),
+        SizedBox(height: 2.h),
         CustomButton(
           color: purpleLightIndigoColor,
           name: "Select Winner",
@@ -365,19 +370,30 @@ class OrderStatusTile extends StatelessWidget {
 
   void selectDuelWinner(BuildContext context, {required int winnerId, required String status}) async {
     OrderController orderController = Get.find<OrderController>();
+    CoreController coreController = Get.find<CoreController>();
     await Helpers.loader();
     final isSuccess = await orderController.selectDuelWinner(winnerId: winnerId, orderId: orderId);
     if (isSuccess) {
-      await orderController.changeOrderStatus(orderId: orderId, status: status);
       await orderController.uploadDeliveryProof(
         orderId: orderId,
         fileTypes: orderController.selectedDuelProofs.map((element) => element.fileType).toList(),
         files: orderController.selectedDuelProofs.map((element) => element.file).toList(),
       );
+      await orderController.changeOrderStatus(orderId: orderId, status: status);
       await getOrders();
       orderController.selectedUser.value = "";
       orderController.duelWinner.value = "";
       orderController.selectedDuelProofs.clear();
+
+      coreController.socket.emit("loby", {
+        'type': 'order',
+        'receiverId': isSeller ? buyerId : sellerId,
+        'order': (orderController.orders
+            .where((e) => e.id == orderId)
+            .toList()
+            .first as OrderModel).toJson(),
+      });
+
       await Helpers.hideLoader();
       Navigator.pop(context);
       Navigator.pop(context);
@@ -396,12 +412,7 @@ class OrderStatusTile extends StatelessWidget {
     if (isSuccess) {
       await orderController.changeOrderStatus(orderId: orderId, status: status);
       await getOrders();
-      print("confrm delivery ${orderController.orders
-          .where((p0) => p0.id == orderId)
-          .toList()
-          .first
-          .userGameService
-          ?.userGameServiceImages ?? 'null'}");
+
       coreController.socket.emit("loby", {
         'type': 'order',
         'receiverId': sellerId,
@@ -428,7 +439,7 @@ class OrderStatusTile extends StatelessWidget {
       await getOrders();
       coreController.socket.emit("loby", {
         'type': 'order',
-        'receiverId': buyerId,
+        'receiverId': isSeller ? buyerId : sellerId,
         'order': (orderController.orders
             .where((e) => e.id == orderId)
             .toList()
@@ -502,9 +513,9 @@ class OrderStatusTile extends StatelessWidget {
             onSelectWinner: (value){
               if(value.toString() == duelUsers[0]){
                 if(isSeller){
-                  orderController.duelWinner.value = "$buyerId/BUYER_DELIVERY_CONFIRMED";
+                  orderController.duelWinner.value = "$buyerId/SELLER_DELIVERY_CONFIRMED";
                 }else{
-                  orderController.duelWinner.value = "$sellerId/SELLER_DELIVERY_CONFIRMED";
+                  orderController.duelWinner.value = "$sellerId/BUYER_DELIVERY_CONFIRMED";
                 }
               }else{
                 if(isSeller){

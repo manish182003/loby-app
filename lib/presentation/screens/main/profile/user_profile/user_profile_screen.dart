@@ -30,18 +30,22 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
     asyncFunctions();
+    super.initState();
   }
 
 
   Future<void> asyncFunctions()async{
+
     WidgetsBinding.instance.addPostFrameCallback((_)async{
+      profileController.isProfileFetching.value = true;
+
+      listingController.buyerListingPageNumber.value = 1;
+      listingController.areMoreListingAvailable.value = true;
+      listingController.buyerListingsProfile.clear();
       if(widget.from == 'other'){
-        listingController.buyerListingsProfile.clear();
         profileController.getProfile(userId: widget.userId);
       }else{
-        listingController.buyerListingsProfile.clear();
         await profileController.getProfile();
         authController.getProfileDetails();
       }
@@ -68,12 +72,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           if(profileController.isProfileFetching.value){
             return const Center(child: CircularProgressIndicator(),);
           }else{
-            final user = profileController.profile;
+
+            final user = widget.from == "other" ? profileController.otherUserProfile : profileController.profile;
+
             return SingleChildScrollView(
               child: Column(
                 children: <Widget>[
                   ProfileHeader(
-                    avatar: const AssetImage('assets/images/img.png'),
                     title: user.displayName ?? '',
                     subtitle: "",
                     user: user,

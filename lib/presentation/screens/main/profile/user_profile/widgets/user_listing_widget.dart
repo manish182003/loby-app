@@ -29,9 +29,6 @@ class _UserListingWidgetState extends State<UserListingWidget> {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_){
-      listingController.buyerListingPageNumber.value = 1;
-      listingController.areMoreListingAvailable.value = true;
-      listingController.buyerListingsProfile.clear();
       listingController.getBuyerListings(userId: widget.user.id, from: widget.from);
 
       controller.addListener(() {

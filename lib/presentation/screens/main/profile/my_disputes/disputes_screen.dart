@@ -27,7 +27,7 @@ class _DisputeScreenState extends State<DisputeScreen> with SingleTickerProvider
     super.initState();
     getDisputes();
 
-    _tabController = TabController(length: 3, vsync: this, initialIndex: _currentTabIndex);
+    _tabController = TabController(length: 2, vsync: this, initialIndex: _currentTabIndex);
     _tabController.addListener(() {
       if (_tabController.animation?.value == _tabController.index) {
         setState(() {

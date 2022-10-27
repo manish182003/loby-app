@@ -109,6 +109,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                   selectedSuggestion: TextEditingController(text: authController.selectedCountry.value.name),
                   hint: 'Select Countries',
                   title: 'Country',
+                  isRequired: true,
                   suggestionsCallback: (pattern) async {
                     await authController.getCountries(search: pattern);
                     List finalList = [];
@@ -130,6 +131,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                   selectedSuggestion: TextEditingController(text: authController.selectedState.value.name),
                   hint: 'Select State',
                   title: 'State',
+                  isRequired: true,
                   suggestionsCallback: (pattern) async {
                     await authController.getStates(search: pattern, countryId: authController.selectedCountry.value.id);
                     List finalList = [];
@@ -152,6 +154,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                   selectedSuggestion: TextEditingController(text: authController.selectedCity.value.name),
                   hint: 'Select City',
                   title: 'City',
+                  isRequired: true,
                   suggestionsCallback: (pattern) async {
                     await authController.getCities(search: pattern, stateId: authController.selectedState.value.id);
                     List finalList = [];
@@ -207,6 +210,8 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                   hint: 'Search Tag',
                   icon: 'assets/icons/search.svg',
                   isMultiple: true,
+                  isRequired: true,
+                  selectedValuesList: authController.selectedProfileTags,
                   suggestionsCallback: (pattern) async {
                     await authController.getProfileTags(search: pattern);
 
@@ -238,6 +243,8 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                   title: "Bio",
                   hint: "Ex: John Doe",
                   isRequired: true,
+                  maxLines: 5,
+                  textInputAction: TextInputAction.newline,
                 ),
                 SizedBox(height: 3.h,),
                 Padding(
@@ -452,10 +459,10 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                 onTap: () {
                   Helpers.showImagePicker(context: context,
                       onCamera: (){
-                        _imgFromCamera('profile');
+                        _imgFromCamera('cover');
                       },
                       onGallery: (){
-                        _imgFromGallery('profile');
+                        _imgFromGallery('cover');
                       });
                 },
                 child: const CircleAvatar(

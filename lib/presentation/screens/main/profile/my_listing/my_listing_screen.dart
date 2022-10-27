@@ -71,7 +71,7 @@ class _MyListingScreenState extends State<MyListingScreen> {
           return GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 0.58,
+              childAspectRatio: 0.55,
               crossAxisSpacing: 4,
               mainAxisSpacing: 4,
             ),

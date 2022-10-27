@@ -34,7 +34,7 @@ class AutoCompleteField extends StatelessWidget {
       this.height,
       this.suggestionsCallback,
       this.onSuggestionSelected,
-        this.selectedValuesList,
+      this.selectedValuesList,
       this.isRequired = false, this.isMultiple = false, this.title})
       : super(key: key);
 

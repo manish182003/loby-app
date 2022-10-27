@@ -5,7 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/listing/service_listing.dart';
 import 'package:loby/presentation/getx/controllers/listing_controller.dart';
+import 'package:loby/presentation/screens/main/profile/wallet/widgets/token_widget.dart';
 import 'package:loby/presentation/widgets/custom_bottom_sheet.dart';
+import 'package:loby/presentation/widgets/custom_cached_network_image.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
 
@@ -57,13 +59,9 @@ class _MyListingTileState extends State<MyListingTile> {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16),
-                    child: CachedNetworkImage(
-                      imageUrl: widget.listing.userGameServiceImages!.isEmpty ? '' : widget.listing.userGameServiceImages?.first.type == 2 ? widget.listing.userGameServiceImages!.first.path! : '',
-                      fit: BoxFit.cover,
-                      height: 110,
-                      width: 110,
-                      placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
-                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                    child: CustomCachedNetworkImage(
+                      imageUrl: Helpers.getListingImage(widget.listing),
+                      placeHolder: Image.asset("assets/images/listing_placeholder.jpg", fit: BoxFit.cover,),
                     ),
                   ),
                 ),
@@ -113,17 +111,14 @@ class _MyListingTileState extends State<MyListingTile> {
                           ],
                         ),
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(left: 4.0),
-                        child: Column(
-                          children: <Widget>[
-                            Text( "₹ ${widget.listing.price!}",
-                                overflow: TextOverflow.ellipsis,
-                                style: textTheme.headline2
-                                    ?.copyWith(color: aquaGreenColor)),
-                          ],
-                        ),
-                      ),
+                      TokenWidget(
+                        size: 20,
+                        text: Text( "${widget.listing.price!}",
+                            overflow: TextOverflow.ellipsis,
+                            style: textTheme.headline2
+                                ?.copyWith(color: aquaGreenColor)),
+                      )
+
                     ],
                   ),
                   const SizedBox(height: 4.0),

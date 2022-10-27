@@ -53,7 +53,7 @@ class OrderItem extends StatelessWidget {
                         height: 55.0,
                         child: CustomCachedNetworkImage(
                           imageUrl: Helpers.getListingImage(order.userGameService!),
-                          placeHolder: const SizedBox(),
+                          placeHolder: Image.asset("assets/images/listing_placeholder.jpg", fit: BoxFit.cover,),
                         ),
                       ),
                     ),
@@ -71,7 +71,7 @@ class OrderItem extends StatelessWidget {
                               style: textTheme.headline5?.copyWith(color: textWhiteColor)),
                         ),
                         SizedBox(height: 1.5.h),
-                        Text("Created By ${order.userGameService!.user?.displayName ?? " "}",
+                        Text("Created By ${order.userGameService!.user?.displayName ?? ""}",
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: textTheme.headline6?.copyWith(color: textInputTitleColor)),
@@ -212,9 +212,7 @@ class OrderItem extends StatelessWidget {
                                               padding: const EdgeInsets.symmetric(vertical: 10),
                                               child: Text(
                                                 item,
-                                                style: textTheme.headline6
-                                                    ?.copyWith(
-                                                        color: textWhiteColor),
+                                                style: textTheme.headline6?.copyWith(color: textWhiteColor),
                                               ),
                                             ),
                                           ),

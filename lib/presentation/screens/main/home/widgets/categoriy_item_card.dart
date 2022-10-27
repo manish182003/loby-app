@@ -7,6 +7,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../../core/theme/colors.dart';
 import '../../../../../services/routing_service/routes.dart';
+import '../../../../widgets/custom_cached_network_image.dart';
 import '../game_itm_screen.dart';
 
 class CategoryItemCard extends StatelessWidget {
@@ -41,13 +42,9 @@ class CategoryItemCard extends StatelessWidget {
                 radius: 36,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(36),
-                  child: CachedNetworkImage(
+                  child: CustomCachedNetworkImage(
                     imageUrl: images!,
-                    fit: BoxFit.cover,
-                    height: 110,
-                    width: 110,
-                    placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
-                    errorWidget: (context, url, error) => const Icon(Icons.error),
+                    placeHolder: Image.asset("assets/images/listing_placeholder.jpg"),
                   ),
                 ),
               ),

@@ -13,7 +13,9 @@ class BuildDropdown extends StatefulWidget {
   final double? height;
   final double? width;
   final bool isRequired;
-  const BuildDropdown({Key? key, this.itemsList, this.defaultValue, this.dropdownHint, this.onChanged, this.height, this.selectedValue, this.width, this.isRequired = false}) : super(key: key);
+  final bool isMultiple;
+  final List? selectedItemList;
+  const BuildDropdown({Key? key, this.itemsList, this.defaultValue, this.dropdownHint, this.onChanged, this.height, this.selectedValue, this.width, this.isRequired = false, this.isMultiple = false, this.selectedItemList}) : super(key: key);
 
   @override
   State<BuildDropdown> createState() => _BuildDropdownState();
@@ -42,8 +44,17 @@ class _BuildDropdownState extends State<BuildDropdown> {
       items: widget.itemsList,
       onChanged: widget.onChanged,
       validator: (dynamic value) {
+
         if(widget.isRequired){
-          return Helpers.validateField(value.toString());
+          if(widget.isMultiple){
+            if(widget.selectedItemList!.isEmpty){
+              return Helpers.validateField(value.toString());
+            }else{
+              return null;
+            }
+          }else{
+            return Helpers.validateField(value.toString());
+          }
         }
         return null;
         },

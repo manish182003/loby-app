@@ -41,11 +41,11 @@ class ChatModel extends Chat{
         senderId: profileController.profile.id == json["sender_id"] ? json["sender_id"] : json["receiver_id"],
         receiverId: profileController.profile.id == json["sender_id"] ? json["receiver_id"] : json["sender_id"],
         badgeCount: json["badgeCount"],
-        chatLatestDate: DateTime.parse(json["chatLatestDate"]),
+        chatLatestDate: json["chatLatestDate"] == null ? null : DateTime.parse(json["chatLatestDate"]),
         chatLatestMessage: json["chatLatestMessage"],
         senderInfo:  profileController.profile.id == json["sender_id"] ? UserModel.fromJson(json["senderInfo"]) :  UserModel.fromJson(json["receiverInfo"]),
         receiverInfo: profileController.profile.id == json["sender_id"] ? UserModel.fromJson(json["receiverInfo"]) : UserModel.fromJson(json["senderInfo"]),
-        message: json['chats'].map<MessageModel>((message) => MessageModel.fromJson(message)).toList().first,
+        message: json["chats"] == null ? null : json['chats'].map<MessageModel>((message) => MessageModel.fromJson(message)).toList().isEmpty ? null : json['chats'].map<MessageModel>((message) => MessageModel.fromJson(message)).toList().first,
     );
   }
 

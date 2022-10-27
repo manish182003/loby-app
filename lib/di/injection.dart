@@ -33,6 +33,7 @@ import 'package:loby/domain/usecases/auth/login.dart';
 import 'package:loby/domain/usecases/auth/send_and_verify_otp.dart';
 import 'package:loby/domain/usecases/auth/signup.dart';
 import 'package:loby/domain/usecases/auth/update_profile.dart';
+import 'package:loby/domain/usecases/chat/check_eligibility.dart';
 import 'package:loby/domain/usecases/chat/get_chats.dart';
 import 'package:loby/domain/usecases/chat/get_messages.dart';
 import 'package:loby/domain/usecases/chat/send_message.dart';
@@ -192,6 +193,7 @@ class DependencyInjector{
     Get.lazyPut(() => GetChats(chatRepository));
     Get.lazyPut(() => GetMessages(chatRepository));
     Get.lazyPut(() => SendMessage(chatRepository));
+    Get.lazyPut(() => CheckEligibility(chatRepository));
 
   }
 

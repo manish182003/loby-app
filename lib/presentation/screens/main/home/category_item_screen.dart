@@ -62,7 +62,7 @@ class _CategoryItemScreenState extends State<CategoryItemScreen> {
                     child: GridView.builder(
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
-                        childAspectRatio: 6.0 / 7.65,
+                        childAspectRatio: 6.0 / 7.75,
                         mainAxisSpacing: 1,
                         crossAxisSpacing: 1,
                       ),

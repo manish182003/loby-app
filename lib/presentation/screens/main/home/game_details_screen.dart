@@ -4,13 +4,16 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/core/utils/helpers.dart';
+import 'package:loby/domain/entities/chat/chat.dart';
 import 'package:loby/domain/entities/listing/service_listing.dart';
+import 'package:loby/presentation/getx/controllers/chat_controller.dart';
 import 'package:loby/presentation/getx/controllers/home_controller.dart';
 import 'package:loby/presentation/getx/controllers/listing_controller.dart';
 import 'package:loby/presentation/getx/controllers/order_controller.dart';
 import 'package:loby/presentation/screens/main/profile/wallet/widgets/token_widget.dart';
 import 'package:loby/presentation/widgets/body_padding_widget.dart';
 import 'package:loby/presentation/widgets/carousel.dart';
+import 'package:loby/presentation/widgets/custom_cached_network_image.dart';
 import 'package:loby/presentation/widgets/custom_loader.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/theme/colors.dart';
@@ -34,14 +37,11 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
   ListingController listingController = Get.find<ListingController>();
   HomeController homeController = Get.find<HomeController>();
   OrderController orderController = Get.find<OrderController>();
+  ChatController chatController = Get.find<ChatController>();
 
   late ServiceListing listing;
 
-  List<String> images = [
-    'assets/images/img.png',
-    'assets/images/img.png',
-    'assets/images/img.png'
-  ];
+
 
   @override
   void dispose() {
@@ -54,7 +54,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    listingController.getBuyerListings();
+    // listingController.getBuyerListings();
   }
 
   @override
@@ -78,17 +78,11 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
             child: BodyPaddingWidget(
               child: Column(
                 children: [
-                  listing.userGameServiceImages!.isEmpty
-                      ? const SizedBox()
-                      : Carousel(
+                  listing.userGameServiceImages!.isEmpty ? const SizedBox() : Carousel(
                     images: listing.userGameServiceImages!,
                   ),
-                  listing.userGameServiceImages!.isEmpty
-                      ? const SizedBox()
-                      : SizedBox(height: 2.h,),
-                  Text(listing.description!,
-                      style: textTheme.headline5?.copyWith(
-                          color: textWhiteColor)),
+                  listing.userGameServiceImages!.isEmpty ? const SizedBox() : SizedBox(height: 2.h,),
+                  Text(listing.description!, style: textTheme.headline5?.copyWith(color: textWhiteColor)),
                   SizedBox(height: 2.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -142,8 +136,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                   const SizedBox(width: 8.0),
                                   Container(
                                     padding: const EdgeInsets.all(8),
-                                    constraints: const BoxConstraints(
-                                        minHeight: 46, minWidth: 46),
+                                    constraints: const BoxConstraints(minHeight: 46, minWidth: 46),
                                     decoration: BoxDecoration(
                                       boxShadow: [
                                         BoxShadow(
@@ -224,17 +217,9 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                   padding: const EdgeInsets.all(1.0),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(36),
-                                    child: CachedNetworkImage(
-                                      imageUrl: listing.user?.image ?? "",
-                                      fit: BoxFit.cover,
-                                      height: 110,
-                                      width: 110,
-                                      placeholder: (context,
-                                          url) => const Center(
-                                          child: CircularProgressIndicator(
-                                            color: Colors.white,)),
-                                      errorWidget: (context, url,
-                                          error) => const Icon(Icons.error),
+                                    child: CustomCachedNetworkImage(
+                                      imageUrl: listing.user?.image,
+                                     name:  listing.user!.displayName!,
                                     ),
                                   ),
                                 ), //CircleAvatar
@@ -249,7 +234,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                       Row(
                                         children: [
                                           Text(
-                                            listing.user!.name!,
+                                            listing.user!.displayName!,
                                             overflow: TextOverflow.ellipsis,
                                             maxLines: 1,
                                             style: textTheme.headline3
@@ -418,8 +403,23 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                               borderRadius: BorderRadius.circular(12.0),
                             ),
                             color: purpleLightIndigoColor,
-                            onPressed: () {
-                              debugPrint("Click Search");
+                            onPressed: () async{
+                              Helpers.loader();
+                              final isSuccess = await chatController.checkEligibility(receiverId: listing.user!.id!);
+                              await chatController.getChats();
+                              final chat = chatController.checkEligibilityResponse.value;
+                              Helpers.hideLoader();
+                              if(isSuccess){
+                                context.pushNamed(messagePage, queryParams: {'chatId' : "${chat.id}", 'senderId' : "${chat.senderId}", 'receiverId' : "${chat.receiverId}"});
+                              }else{
+                                BottomDialog(
+                                    textTheme: textTheme,
+                                    tileName: "Buy a Service First",
+                                    titleColor: aquaGreenColor,
+                                    contentName: "Sorry you can not chat with a verified profile without buying a service",
+                                    contentLinkName: '')
+                                    .showBottomDialog(context);
+                              }
                             },
                             child: SvgPicture.asset(
                               'assets/icons/chat_icon.svg',
@@ -498,11 +498,9 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Flexible(
-          child: Text(
-            text1,
-            style: textTheme.headline5?.copyWith(color: textLightColor),
-          ),
+        Text(
+          text1,
+          style: textTheme.headline5?.copyWith(color: textLightColor),
         ),
         SizedBox(width: 10.w,),
         isNormal ? TokenWidget(
@@ -514,12 +512,15 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
             style: textTheme.headline1?.copyWith(
                 color: aquaGreenColor)
         )) :
-        Text(
-            text2,
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-            style: textTheme.headline5?.copyWith(
-                color: whiteColor)
+        Flexible(
+          child: Text(
+              text2,
+              maxLines: 3,
+              textAlign: TextAlign.end,
+              overflow: TextOverflow.ellipsis,
+              style: textTheme.headline5?.copyWith(
+                  color: whiteColor)
+          ),
         ),
       ],
     );

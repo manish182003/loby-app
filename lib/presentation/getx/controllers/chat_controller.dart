@@ -6,9 +6,11 @@ import 'package:loby/core/usecases/chat_params.dart';
 import 'package:loby/core/usecases/home_params.dart';
 import 'package:loby/core/usecases/usecase.dart';
 import 'package:loby/core/utils/helpers.dart';
+import 'package:loby/data/models/chat/chat_model.dart';
 import 'package:loby/data/models/chat/message_model.dart';
 import 'package:loby/domain/entities/chat/chat.dart';
 import 'package:loby/domain/entities/chat/message.dart';
+import 'package:loby/domain/usecases/chat/check_eligibility.dart';
 import 'package:loby/domain/usecases/chat/get_chats.dart';
 import 'package:loby/domain/usecases/chat/get_messages.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -23,14 +25,17 @@ class ChatController extends GetxController{
   final GetChats _getChats;
   final GetMessages _getMessages;
   final SendMessage _sendMessage;
+  final CheckEligibility _checkEligibility;
 
   ChatController({
     required GetChats getChats,
     required GetMessages getMessages,
     required SendMessage sendMessage,
+    required CheckEligibility checkEligibility,
   }) : _getChats = getChats,
   _getMessages = getMessages,
-  _sendMessage = sendMessage;
+  _sendMessage = sendMessage,
+  _checkEligibility = checkEligibility;
 
   final errorMessage = "".obs;
 
@@ -45,6 +50,8 @@ class ChatController extends GetxController{
   final chatMessagesMap = <Map<String, dynamic>>[].obs;
   final chatMessages = <types.Message>[].obs;
   final isMessagesFetching = false.obs;
+
+  final checkEligibilityResponse = const Chat().obs;
 
 
 
@@ -118,6 +125,8 @@ class ChatController extends GetxController{
             }));
           }
 
+          print(i.orderId == null ? "" : i.userOrder == null ?  "" : Helpers.getListingImage(i.userOrder!.userGameService!));
+
           chatMessagesMap.add({
             "author": {
               "firstName": i.user!.displayName,
@@ -136,7 +145,7 @@ class ChatController extends GetxController{
             "uri": i.filePath?.replaceAll("images", "chat") ?? " ",
             "width": width,
             "metadata": {
-              'image': i.orderId == null ? "" : Helpers.getListingImage(i.userOrder!.userGameService!),
+              'image': i.orderId == null ? "" : i.userOrder == null ?  "" : Helpers.getListingImage(i.userOrder!.userGameService!),
               'name' : i.orderId == null ? "" : i.userOrder?.userGameService?.title,
               'desc' : i.orderId == null ? "" : i.userOrder?.userGameService?.description,
               'category' : i.orderId == null ? "" : i.userOrder?.userGameService?.category!.name,
@@ -183,6 +192,28 @@ class ChatController extends GetxController{
     return failureOrSuccess.isRight() ? true : false;
   }
 
+
+
+  Future<bool> checkEligibility({required int receiverId}) async {
+
+    final failureOrSuccess = await _checkEligibility(
+      Params(chatParams: ChatParams(
+        receiverId: receiverId,
+      ),),
+    );
+
+    failureOrSuccess.fold(
+          (failure) {
+        errorMessage.value = Helpers.convertFailureToMessage(failure);
+        debugPrint(errorMessage.value);
+        Helpers.toast(errorMessage.value);
+      },
+          (success) {
+            checkEligibilityResponse.value = ChatModel.fromJson(success['data']);
+      },
+    );
+    return failureOrSuccess.isRight() ? true : false;
+  }
 
 
 

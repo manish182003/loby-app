@@ -37,11 +37,11 @@ class _StaticTermsState extends State<StaticTerms> {
           if(homeController.isStaticDataFetching.value){
             return const CustomLoader();
           }else{
-            final staticData = homeController.staticData.where((e) => e.label == widget.termName).toList().first;
+            final staticData = homeController.staticData.where((e) => e.label == widget.termName).toList();
             return Column(
               children: [
                 Text(
-                    staticData.realValue!,
+                    staticData.isEmpty ? "No Data Found" : staticData.first.realValue!,
                     style: textTheme.headline5?.copyWith(color: textWhiteColor, height: 0.2.h),
                     textAlign: TextAlign.start,
                 ),

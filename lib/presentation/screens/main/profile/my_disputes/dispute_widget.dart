@@ -7,6 +7,7 @@ import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../core/theme/colors.dart';
+import '../../../../widgets/custom_cached_network_image.dart';
 import '../my_order/widgets/order_status_constants.dart';
 
 class DisputeWidget extends StatelessWidget {
@@ -39,9 +40,9 @@ class DisputeWidget extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      buildUser(textTheme, context,title:  'Seller', imageUrl: dispute.userOrder!.userGameService!.user!.image ?? '',name:  dispute.userOrder!.userGameService!.user!.displayName ?? ''),
+                      buildUser(textTheme, context,title:  'Seller', imageUrl: dispute.userOrder!.userGameService!.user!.image,name:  dispute.userOrder!.userGameService!.user!.displayName ?? ''),
                       const SizedBox(width: 8,),
-                      buildUser(textTheme, context,title:  'Buyer', imageUrl: dispute.userOrder!.user!.image ?? '',name:  dispute.userOrder!.user!.displayName ?? ''),
+                      buildUser(textTheme, context,title:  'Buyer', imageUrl: dispute.userOrder!.user!.image ,name:  dispute.userOrder!.user!.displayName ?? ''),
                     ],
                   ),
                   const SizedBox(height: 8),
@@ -152,8 +153,7 @@ class DisputeWidget extends StatelessWidget {
     );
   }
 
-  buildUser(TextTheme textTheme, BuildContext context,
-      {required String title, required String imageUrl,required name}) {
+  buildUser(TextTheme textTheme, BuildContext context, {required String title, required String? imageUrl,required name}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -177,16 +177,12 @@ class DisputeWidget extends StatelessWidget {
                 backgroundColor: backgroundDarkJungleGreenColor,
                 radius: 36,
                 child: Padding(
-                  padding: EdgeInsets.all(2.0),
+                  padding: const EdgeInsets.all(2.0),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(36),
-                    child: CachedNetworkImage(
+                    child: CustomCachedNetworkImage(
                       imageUrl: imageUrl,
-                      fit: BoxFit.cover,
-                      height: 110,
-                      width: 110,
-                      placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
-                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                      name: name,
                     ),
                   ),
                 ), //CircleAvatar

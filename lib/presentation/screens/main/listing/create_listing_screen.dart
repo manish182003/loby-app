@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/home/category.dart';
+import 'package:loby/domain/entities/listing/game_category_service_option.dart';
 import 'package:loby/domain/entities/listing/selected_service_option.dart';
 import 'package:loby/domain/entities/listing/unit.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
@@ -74,6 +75,8 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
   void dispose() {
     listingController.isServicesAvailable.value = false;
     homeController.disclaimer.value = "";
+    homeController.selectedCategoryId.value = 0;
+    homeController.selectedGameId.value = 0;
     listingController.clearListing();
     super.dispose();
   }
@@ -359,6 +362,10 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
     if(homeController.selectedCategoryId.value != 0 && homeController.selectedGameId.value != 0){
       Helpers.loader();
 
+      multiSelectionServices.clear();
+      singleSelectionService.clear();
+      singleSelectedServiceController.clear();
+
       await listingController.getConfigurations(
           categoryId: homeController.selectedCategoryId.value,
           gameId: homeController.selectedGameId.value
@@ -423,8 +430,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
           onOk: (){
             Navigator.pop(context);
             context.pushNamed(myListingPage);
-          })
-          .showBottomDialog(context);
+          }).showBottomDialog(context);
     }
   }
 
@@ -455,6 +461,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
 
 
   Widget services2(int index) {
+    final textTheme = Theme.of(context).textTheme;
     final service = listingController.configuration.gameCategoryServices![index].service;
     final serviceOption = listingController.configuration.gameCategoryServices![index].gameCategoryServiceOptions;
 
@@ -481,28 +488,28 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                     ),
                 ),
                 SizedBox(height: multiSelectionServices[service.index].isNotEmpty ? 2.h : 0.h,),
-                AutoCompleteField(
-                  hint: service.name,
+                BuildDropdown(
+                  dropdownHint: service.name,
                   isMultiple: true,
                   isRequired: true,
-                  selectedValuesList: multiSelectionServices[service.index],
-                  suggestionsCallback: (pattern) async {
-                    final result = serviceOption?.where((suggestion) => suggestion.toString().toLowerCase().contains(pattern.toLowerCase())).toList();
-                    List finalList = [];
-                    for (int i = 0; i < result!.length; i++) {
-                      finalList.add(result[i].serviceOption?.serviceOptionName);
-                    }
-                    return finalList;
-                  },
-                  onSuggestionSelected: (value) {
+                  selectedItemList: multiSelectionServices[service.index],
+                  itemsList: serviceOption?.map((item) =>
+                      DropdownMenuItem<GameCategoryServiceOption>(
+                        value: item,
+                        child: Text(
+                            item.serviceOption!.serviceOptionName!,
+                            style: textTheme.headline3?.copyWith(color: whiteColor)
+                        ),
+                      )).toList(),
+                  onChanged: (value) {
                     setState(() {
 
-                      final index2 = serviceOption?.indexWhere((element) => element.serviceOption?.serviceOptionName == value);
+                      final index2 = serviceOption?.indexWhere((element) => element.serviceOption?.serviceOptionName == value.serviceOption.serviceOptionName);
 
                       print(multiSelectionServices[service.index]);
                       print(value);
 
-                      if (multiSelectionServices[service.index].toString().contains(value)) {
+                      if (multiSelectionServices[service.index].map((e) => e.name).contains(value.serviceOption.serviceOptionName)) {
                         debugPrint('do nothing');
                       } else {
                         multiSelectionServices[service.index].add(SelectedServiceOption(
@@ -515,35 +522,94 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                     });
                   },
                 ),
+                // AutoCompleteField(
+                //   hint: service.name,
+                //   isMultiple: true,
+                //   isRequired: true,
+                //   selectedValuesList: multiSelectionServices[service.index],
+                //   suggestionsCallback: (pattern) async {
+                //     final result = serviceOption?.where((suggestion) => suggestion.toString().toLowerCase().contains(pattern.toLowerCase())).toList();
+                //     List finalList = [];
+                //     for (int i = 0; i < result!.length; i++) {
+                //       finalList.add(result[i].serviceOption?.serviceOptionName);
+                //     }
+                //     return finalList;
+                //   },
+                //   onSuggestionSelected: (value) {
+                //     setState(() {
+                //
+                //       final index2 = serviceOption?.indexWhere((element) => element.serviceOption?.serviceOptionName == value);
+                //
+                //       print(multiSelectionServices[service.index]);
+                //       print(value);
+                //
+                //       if (multiSelectionServices[service.index].toString().contains(value)) {
+                //         debugPrint('do nothing');
+                //       } else {
+                //         multiSelectionServices[service.index].add(SelectedServiceOption(
+                //           id: serviceOption?[index2!].serviceOption?.id,
+                //           name: serviceOption?[index2!].serviceOption?.serviceOptionName,
+                //         ));
+                //
+                //         debugPrint("Multi Selection Array ${multiSelectionServices[service.index]}");
+                //       }
+                //     });
+                //   },
+                // ),
               ],
             );
 
       case 1:
-        return AutoCompleteField(
-              hint: service!.name,
-              selectedSuggestion: singleSelectedServiceController[service.index],
-              isMultiple: false,
-              isRequired: true,
-              suggestionsCallback: (pattern) async {
-                final result = serviceOption?.where((suggestion) =>
-                    suggestion.toString().toLowerCase().contains(
-                        pattern.toLowerCase())).toList();
-                List finalList = [];
-                for (int i = 0; i < result!.length; i++) {
-                  finalList.add(result[i].serviceOption?.serviceOptionName);
-                }
-                return finalList;
-              },
-              onSuggestionSelected: (value) {
-                setState(() {
-                  final index2 = serviceOption?.indexWhere((element) => element.serviceOption?.serviceOptionName == value);
-                  singleSelectedServiceController[service.index].text = serviceOption![index2!].serviceOption!.serviceOptionName!;
-                  singleSelectionService[service.index].name = serviceOption[index2].serviceOption?.serviceOptionName;
-                  singleSelectionService[service.index].id = serviceOption[index2].serviceOption?.id;
-                });
-                debugPrint("Single Selection Array ${singleSelectionService[service.index]}");
-              },
-            );
+        return BuildDropdown(
+          dropdownHint: service!.name,
+          selectedValue: singleSelectedServiceController[service.index].text,
+          isMultiple: false,
+          isRequired: true,
+          itemsList: serviceOption?.map((item) =>
+              DropdownMenuItem<GameCategoryServiceOption>(
+                value: item,
+                child: Text(
+                    item.serviceOption!.serviceOptionName!,
+                    style: textTheme.headline3?.copyWith(color: whiteColor)
+                ),
+              )).toList(),
+          onChanged: (value) {
+            setState(() {
+              final index2 = serviceOption?.indexWhere((element) => element.serviceOption?.serviceOptionName == value.serviceOption.serviceOptionName);
+              singleSelectedServiceController[service.index].text = serviceOption![index2!].serviceOption!.serviceOptionName!;
+              singleSelectionService[service.index].name = serviceOption[index2].serviceOption?.serviceOptionName;
+              singleSelectionService[service.index].id = serviceOption[index2].serviceOption?.id;
+            });
+            debugPrint("Single Selection Array ${singleSelectionService[service.index]}");
+          },
+        );
+
+
+          // AutoCompleteField(
+          //     hint: service!.name,
+          //     selectedSuggestion: singleSelectedServiceController[service.index],
+          //     isMultiple: false,
+          //     isRequired: true,
+          //     suggestionsCallback: (pattern) async {
+          //       final result = serviceOption?.where((suggestion) =>
+          //           suggestion.toString().toLowerCase().contains(
+          //               pattern.toLowerCase())).toList();
+          //       List finalList = [];
+          //       for (int i = 0; i < result!.length; i++) {
+          //         finalList.add(result[i].serviceOption?.serviceOptionName);
+          //       }
+          //       return finalList;
+          //     },
+          //     onSuggestionSelected: (value) {
+          //       setState(() {
+          //         final index2 = serviceOption?.indexWhere((element) => element.serviceOption?.serviceOptionName == value);
+          //         singleSelectedServiceController[service.index].text = serviceOption![index2!].serviceOption!.serviceOptionName!;
+          //         singleSelectionService[service.index].name = serviceOption[index2].serviceOption?.serviceOptionName;
+          //         singleSelectionService[service.index].id = serviceOption[index2].serviceOption?.id;
+          //       });
+          //       debugPrint("Single Selection Array ${singleSelectionService[service.index]}");
+          //     },
+          //   );
 
       case 2:
         return TextFieldWidget(
@@ -621,7 +687,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                     ),
                     TextSpan(
                         text: textSpan,
-                        recognizer: TapGestureRecognizer()..onTap = () => context.pushNamed(staticContentPage, queryParams: {'termName' : 'Terms Of Use'}),
+                        recognizer: TapGestureRecognizer()..onTap = () => context.pushNamed(staticContentPage, queryParams: {'termName' : 'Terms of Use'}),
                         style: textTheme.subtitle2?.copyWith(color: aquaGreenColor)
                     ),
                   ]))),

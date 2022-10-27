@@ -62,6 +62,7 @@ class ApiEndpoints{
   static const String getMessages = "/get-messages";
   static const String sendMessage = "/send-message";
   static const String getUnreadMessageCount = "/get-unread-message-count";
+  static const String messageCapability = "/message-capability";
 
 
 

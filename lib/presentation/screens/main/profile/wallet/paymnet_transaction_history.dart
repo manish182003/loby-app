@@ -10,6 +10,7 @@ import 'package:sizer/sizer.dart';
 import '../../../../../core/theme/colors.dart';
 import '../../../../widgets/body_padding_widget.dart';
 import '../../../../widgets/custom_app_bar.dart';
+import '../../../../widgets/custom_loader.dart';
 
 class PaymentTransactionHistory extends StatefulWidget {
   const PaymentTransactionHistory({Key? key}) : super(key: key);
@@ -56,9 +57,7 @@ class _PaymentTransactionHistoryState extends State<PaymentTransactionHistory> {
         if (profileController.isPaymentTransactionsFetching.value) {
           return const Center(child: CircularProgressIndicator());
         } else if (profileController.paymentTransactions.isEmpty) {
-          return const Center(
-              child: Text('No Payment Transactions Found',
-                textAlign: TextAlign.center,));
+          return const NoDataFoundWidget();
         } else {
           return SafeArea(
             child: SingleChildScrollView(

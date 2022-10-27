@@ -49,21 +49,21 @@ class ChatTile extends StatelessWidget {
                         children: [
                           Flexible(
                             child: Text(
-                              chat.message?.orderId != null ? "Listing" : chat.message?.filePath != null ? Helpers.getFileExtension(chat.message!.fileType!) : chat.message!.message!,
+                              chat.message?.orderId != null ? "Listing" : chat.message?.filePath != null ? Helpers.getFileExtension(chat.message!.fileType!) : chat.message == null ? "" : chat.message!.message!,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: textTheme.subtitle2?.copyWith(color: textWhiteColor, fontWeight: FontWeight.w200,),
                             ),
                           ),
-                          SizedBox(width: 2.w),
-                          Container(
+                          chat.message == null ? const SizedBox() : SizedBox(width: 2.w),
+                          chat.message == null ? const SizedBox() : Container(
                             decoration: const BoxDecoration(shape: BoxShape.circle, color: whiteColor),
                             width: 3,
                             height: 3,
                           ),
-                          SizedBox(width: 2.w),
+                          chat.message == null ? const SizedBox() : SizedBox(width: 2.w),
                           Text(
-                              timeago.format(chat.chatLatestDate!),
+                              chat.chatLatestDate == null ? "" : timeago.format(chat.chatLatestDate!),
                             style: textTheme.subtitle2?.copyWith(color: textWhiteColor, fontWeight: FontWeight.w200,),
                           ),
                         ],

@@ -12,4 +12,6 @@ abstract class ChatRemoteDatasource{
 
   Future<Map<String, dynamic>> sendMessage(int? receiverId, String? message, int? fileType, File? file);
 
+  Future<Map<String, dynamic>> checkEligibility(int? receiverId);
+
 }

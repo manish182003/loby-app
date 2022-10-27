@@ -4,6 +4,7 @@ import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/screens/main/notification/widgets/notification_item_widget.dart';
 import 'package:loby/presentation/screens/main/profile/wallet/widgets/transaction_tile.dart';
+import 'package:loby/presentation/widgets/custom_loader.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../core/theme/colors.dart';
@@ -55,9 +56,7 @@ class _WalletTransactionHistoryState extends State<WalletTransactionHistory> {
       if (profileController.isWalletTransactionsFetching.value) {
         return const Center(child: CircularProgressIndicator());
       } else if (profileController.walletTransactions.isEmpty) {
-        return const Center(
-            child: Text('No Wallet Transactions Found',
-              textAlign: TextAlign.center,));
+        return const NoDataFoundWidget();
       } else {
         return SafeArea(
           child: SingleChildScrollView(

@@ -95,6 +95,36 @@ class ChatRemoteDatasourceImpl extends ChatRemoteDatasource{
     }
   }
 
+  @override
+  Future<Map<String, dynamic>> checkEligibility(int? receiverId)async {
+    try {
+
+      print(receiverId);
+
+
+
+      final headers = await Helpers.getApiHeaders();
+
+      FormData formData = FormData()
+        ..fields.add(
+          MapEntry('receiver_id', "$receiverId"),
+        );
+
+
+      final response = await Helpers.sendRequest(
+        _dio,
+        RequestType.post,
+        ApiEndpoints.messageCapability,
+        data: formData,
+        headers: headers,
+      );
+
+      return response!;
+    } on ServerException catch (e) {
+      throw ServerException(message: e.message);
+    }
+  }
+
 
 
 

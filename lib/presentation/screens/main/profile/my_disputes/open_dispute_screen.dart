@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loby/presentation/getx/controllers/order_controller.dart';
 import 'package:loby/presentation/widgets/body_padding_widget.dart';
+import 'package:loby/presentation/widgets/custom_loader.dart';
 import 'package:sizer/sizer.dart';
 
 import 'dispute_widget.dart';
@@ -48,7 +49,7 @@ class _DisputeScreenTabState extends State<DisputeScreenTab> {
         if (orderController.isDisputesFetching.value) {
           return const Center(child: CircularProgressIndicator());
         } else if (orderController.disputes.isEmpty) {
-          return const Center(child: Text('No Disputes Found', textAlign: TextAlign.center,));
+          return const NoDataFoundWidget();
         } else {
           return SafeArea(
             child: SingleChildScrollView(

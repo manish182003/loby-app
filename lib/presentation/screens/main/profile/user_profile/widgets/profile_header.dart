@@ -11,6 +11,7 @@ import 'package:go_router/go_router.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/profile/user.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
+import 'package:loby/presentation/getx/controllers/chat_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/screens/auth/widgets/create_profile_bottom_sheet.dart';
 import 'package:loby/presentation/widgets/custom_bottom_sheet.dart';
@@ -20,12 +21,12 @@ import 'package:sizer/sizer.dart';
 import '../../../../../../core/theme/colors.dart';
 import '../../../../../../data/models/ItemModel.dart';
 import '../../../../../../services/routing_service/routes_name.dart';
+import '../../../../../widgets/bottom_dialog.dart';
 import '../../../../../widgets/custom_app_bar.dart';
 import '../../../../../widgets/buttons/custom_button.dart';
 
 class ProfileHeader extends StatefulWidget {
   final String? coverImage;
-  final AssetImage avatar;
   final String title;
   final String subtitle;
   final User user;
@@ -33,7 +34,6 @@ class ProfileHeader extends StatefulWidget {
 
   const ProfileHeader({super.key,
     this.coverImage,
-    required this.avatar,
     required this.title,
     this.subtitle = "",
     required this.user,required this.from,
@@ -47,6 +47,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
 
   ProfileController profileController = Get.find<ProfileController>();
   AuthController authController = Get.find<AuthController>();
+  ChatController chatController = Get.find<ChatController>();
 
   List<PlatformFile> _paths = [];
 
@@ -63,7 +64,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
               height: 30.h,
               width: double.infinity,
               child: CustomCachedNetworkImage(
-                imageUrl: widget.user.coverImage ?? "",
+                imageUrl: widget.user.coverImage,
                 placeHolder: Image.asset("assets/images/cover_placeholder.png", fit: BoxFit.cover,)
               ),
             ),
@@ -142,7 +143,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                             style: textTheme.headline3?.copyWith(color: textWhiteColor)),
                                       ),
                                       const SizedBox(width: 8.0),
-                                      widget.user.verifiedProfile! ? SvgPicture.asset(
+                                      widget.user.verifiedProfile ?? false ? SvgPicture.asset(
                                         'assets/icons/verified_user_bedge.svg',
                                         height: 15,
                                         width: 15,
@@ -228,8 +229,23 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                   color: purpleLightIndigoColor,
                                   textColor: textWhiteColor,
                                   name: "Message",
-                                  onTap: () {
-                                    debugPrint('click chat');
+                                  onTap: () async{
+                                    Helpers.loader();
+                                    final isSuccess = await chatController.checkEligibility(receiverId: widget.user.id!);
+                                    await chatController.getChats();
+                                    final chat = chatController.checkEligibilityResponse.value;
+                                    Helpers.hideLoader();
+                                    if(isSuccess){
+                                      context.pushNamed(messagePage, queryParams: {'chatId' : "${chat.id}", 'senderId' : "${chat.senderId}", 'receiverId' : "${chat.receiverId}"});
+                                    }else{
+                                      BottomDialog(
+                                          textTheme: textTheme,
+                                          tileName: "Buy a Service First",
+                                          titleColor: aquaGreenColor,
+                                          contentName: "Sorry you can not chat with a verified profile without buying a service",
+                                          contentLinkName: '')
+                                          .showBottomDialog(context);
+                                    }
                                   },
                                 ),
                               ),

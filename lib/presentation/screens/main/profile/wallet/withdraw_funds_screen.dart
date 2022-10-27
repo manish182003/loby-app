@@ -380,8 +380,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                           onTap: () async {
                             if (_formKey2.currentState!.validate()) {
                               Helpers.loader();
-                              final isSuccess = await profileController
-                                  .addBankDetails(
+                              final isSuccess = await profileController.addBankDetails(
                                 bankName: bankName.text,
                                 branchName: branchName.text,
                                 accountNumber: accountNumber.text,
@@ -390,11 +389,13 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                 holderName: holderName.text,
                                 type: "bank_account",
                               );
-                              await profileController.getBankDetails();
-                              clearAddBankDetails();
-                              Helpers.hideLoader();
                               if (isSuccess) {
+                                await profileController.getBankDetails();
+                                clearAddBankDetails();
+                                Helpers.hideLoader();
                                 Navigator.of(context).pop();
+                              }else{
+                                Helpers.hideLoader();
                               }
                             }
                           },

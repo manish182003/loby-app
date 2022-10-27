@@ -19,6 +19,7 @@ import 'package:loby/domain/usecases/home/get_games.dart';
 import 'package:loby/domain/usecases/home/get_notifications.dart';
 import 'package:loby/domain/usecases/order/get_orders.dart';
 import 'package:loby/domain/usecases/home/get_unread_count.dart';
+import 'package:loby/presentation/getx/controllers/listing_controller.dart';
 
 import '../../../domain/usecases/home/get_static_data.dart';
 import '../../../domain/usecases/home/global_search.dart';
@@ -50,6 +51,8 @@ class HomeController extends GetxController{
   _getUnreadCount = getUnreadCount,
         _globalSearch = globalSearch,
   _getStaticData = getStaticData;
+
+  ListingController listingController = Get.find<ListingController>();
 
   final categories = <Category>[].obs;
   final isCategoryFetching = false.obs;
@@ -293,12 +296,11 @@ class HomeController extends GetxController{
         isGlobalSearchFetching(false);
       },
           (success) {
-
+            listingController.buyerListings.value = success.userGameServiceDetails;
             serviceListingResults.value = success.userGameServiceDetails;
             userResults.value = success.userDetails;
             gameResults.value = success.gameDetails;
             isGlobalSearchFetching(false);
-
         // Helpers.toast('Profile Changed');
       },
     );

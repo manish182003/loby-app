@@ -47,8 +47,10 @@ class _ChatPageState extends State<ChatPage> {
   void initState() {
     super.initState();
 
-    chatController.getMessages(chatId: widget.chatId);
-    profileController.getProfile();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      chatController.getMessages(chatId: widget.chatId);
+      profileController.getProfile();
+    });
 
     print("chat ${widget.chatId}");
   }
@@ -58,7 +60,14 @@ class _ChatPageState extends State<ChatPage> {
     chatController.chatMessagesMap.clear();
     // chatController.messages.clear();
     chatController.chatMessages.clear();
-    chatController.getChats();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      chatController.chatsPageNumber.value = 1;
+      chatController.areMoreChatsAvailable.value = true;
+      chatController.getChats();
+    });
+
+
     // coreController.socket.off('receive_message');
     super.dispose();
   }

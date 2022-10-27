@@ -45,6 +45,16 @@ class ChatRepositoryImpl extends ChatRepository{
     }
   }
 
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> checkEligibility({int? receiverId}) async{
+    try {
+      return Right(await _chatRemoteDatasource.checkEligibility(receiverId));
+    } on ServerException catch (e) {
+      // Loggers can be added here for analyzation.
+      return Left(ServerFailure(message: e.message.toString()));
+    }
+  }
+
 
 
 

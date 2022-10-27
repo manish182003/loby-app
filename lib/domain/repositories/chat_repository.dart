@@ -12,6 +12,7 @@ abstract class ChatRepository{
 
   Future<Either<Failure, Map<String, dynamic>>> sendMessage({int? receiverId, String? message, int? fileType, File? file});
 
+  Future<Either<Failure, Map<String, dynamic>>> checkEligibility({int? receiverId});
 
 
 }

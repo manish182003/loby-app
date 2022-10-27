@@ -74,11 +74,10 @@ class CustomMessage extends StatelessWidget {
                     TokenWidget(
                       size: 20,
                       text: Text(
-                        "₹${message.metadata!['price'] ?? ""}",
+                        "${message.metadata!['price'] ?? ""}",
                         style: textTheme.headline2?.copyWith(color: aquaGreenColor),
                       ),
                     ),
-
                   ],
                 ),
               ],

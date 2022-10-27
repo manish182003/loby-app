@@ -82,6 +82,8 @@ class StatusBottomSheet extends StatelessWidget {
                             final isStatic = index > order.orderStatuses!.length - 1;
                             if (isDuel) {
                               debugPrint("duel");
+                              print("statis $isStatic");
+
                               return OrderStatusTile(
                                 orderId: order.id!,
                                 sellerId: order.userGameService!.userId!,
