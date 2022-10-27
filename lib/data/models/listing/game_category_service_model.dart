@@ -1,7 +1,6 @@
 // ignore_for_file: overridden_fields, annotate_overrides
 
 import 'package:loby/data/models/listing/game_category_service_option_model.dart';
-import 'package:loby/data/models/listing/service_option_model.dart';
 import 'package:loby/domain/entities/listing/game_category_service.dart';
 import 'service_model.dart';
 
@@ -30,6 +29,6 @@ class GameCategoryServiceModel extends GameCategoryService {
   };
 
   @override
-  // TODO: implement props
+  
   List<Object?> get props => [id, service, gameCategoryServiceOptions];
 }

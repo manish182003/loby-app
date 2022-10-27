@@ -1,10 +1,7 @@
 // ignore_for_file: overridden_fields, annotate_overrides
-import 'package:equatable/equatable.dart';
 import 'package:loby/data/models/profile/user_model.dart';
-import 'package:loby/domain/entities/profile/bank_detail.dart';
 import 'package:loby/domain/entities/response_entities/profile/follower_response.dart';
 
-import '../../../../data/models/User.dart';
 
 
 

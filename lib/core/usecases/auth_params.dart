@@ -1,7 +1,8 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 
 class AuthParams extends Equatable {
   final String? name;

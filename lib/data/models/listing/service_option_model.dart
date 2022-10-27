@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:loby/domain/entities/listing/service_option.dart';
 
 import 'service_model.dart';
@@ -33,6 +32,5 @@ class ServiceOptionModel extends ServiceOption {
   };
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id, serviceOptionName];
 }

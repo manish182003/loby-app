@@ -20,6 +20,5 @@ class CategoryGames extends Equatable{
   final Game? game;
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id, gameId, categoryId, game];
 }

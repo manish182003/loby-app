@@ -1,22 +1,19 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:loby/core/usecases/chat_params.dart';
-import 'package:loby/core/usecases/home_params.dart';
 import 'package:loby/core/usecases/usecase.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/data/models/chat/chat_model.dart';
-import 'package:loby/data/models/chat/message_model.dart';
 import 'package:loby/domain/entities/chat/chat.dart';
-import 'package:loby/domain/entities/chat/message.dart';
 import 'package:loby/domain/usecases/chat/check_eligibility.dart';
 import 'package:loby/domain/usecases/chat/get_chats.dart';
 import 'package:loby/domain/usecases/chat/get_messages.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:loby/presentation/getx/controllers/core_controller.dart';
-import 'dart:ui' as ui;
-import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:loby/domain/usecases/chat/send_message.dart';
 
 

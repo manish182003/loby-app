@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:loby/domain/entities/home/category_games.dart';
 
 
@@ -37,6 +36,5 @@ class Category extends Equatable{
 
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id, name, categoryGames];
 }

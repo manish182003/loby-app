@@ -1,7 +1,5 @@
-import 'package:equatable/equatable.dart';
 import 'package:loby/domain/entities/listing/user_game_service_image.dart';
 
-import '../../../core/utils/environment.dart';
 import '../../../core/utils/helpers.dart';
 // ignore_for_file: overridden_fields, annotate_overrides
 
@@ -38,6 +36,5 @@ class UserGameServiceImageModel extends UserGameServiceImage {
   };
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id, userGameServiceId, path, type];
 }

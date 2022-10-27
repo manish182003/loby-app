@@ -1,5 +1,4 @@
 import 'package:loby/data/models/home/category_model.dart';
-import 'package:loby/domain/entities/response_entities/home/category_response.dart';
 import 'package:loby/domain/entities/response_entities/home/category_games_response.dart';
 
 import '../../../../domain/entities/home/category.dart';

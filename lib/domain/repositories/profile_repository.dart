@@ -1,9 +1,6 @@
 import 'dart:io';
 import 'package:dartz/dartz.dart';
-import 'package:flutter/material.dart';
 import 'package:loby/core/utils/failure.dart';
-import 'package:loby/domain/entities/response_entities/listing/configuration_response.dart';
-import 'package:loby/domain/entities/response_entities/listing/service_listing_response.dart';
 import 'package:loby/domain/entities/response_entities/profile/bank_detail_response.dart';
 import 'package:loby/domain/entities/response_entities/profile/duel_response.dart';
 import 'package:loby/domain/entities/response_entities/profile/rating_response.dart';

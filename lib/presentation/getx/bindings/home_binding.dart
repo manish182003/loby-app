@@ -1,10 +1,4 @@
 import 'package:get/get.dart';
-import 'package:loby/domain/usecases/auth/get_cities.dart';
-import 'package:loby/domain/usecases/auth/get_countries.dart';
-import 'package:loby/domain/usecases/auth/get_profile_tags.dart';
-import 'package:loby/domain/usecases/auth/get_states.dart';
-import 'package:loby/domain/usecases/auth/signup.dart';
-import 'package:loby/domain/usecases/auth/update_profile.dart';
 import 'package:loby/domain/usecases/home/delete_notification.dart';
 import 'package:loby/domain/usecases/home/get_categories.dart';
 import 'package:loby/domain/usecases/home/get_category_games.dart';
@@ -13,7 +7,6 @@ import 'package:loby/domain/usecases/home/get_notifications.dart';
 import 'package:loby/domain/usecases/home/get_static_data.dart';
 import 'package:loby/domain/usecases/home/get_unread_count.dart';
 import 'package:loby/domain/usecases/home/global_search.dart';
-import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 import 'package:loby/presentation/getx/controllers/home_controller.dart';
 
 class HomeBinding extends Bindings {

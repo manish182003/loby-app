@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -136,16 +138,16 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
         'Authorization': 'Bearer $token',
       };
 
-      print(cover);
-      print(avatar);
-      print(fullName);
-      print(displayName);
-      print(countryId);
-      print(stateId);
-      print(cityId);
-      print(DOB);
-      print(profileTags);
-      print(bio);
+      // print(cover);
+      // print(avatar);
+      // print(fullName);
+      // print(displayName);
+      // print(countryId);
+      // print(stateId);
+      // print(cityId);
+      // print(DOB);
+      // print(profileTags);
+      // print(bio);
 
 
       FormData formData = FormData()

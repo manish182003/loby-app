@@ -1,7 +1,5 @@
 // ignore_for_file: overridden_fields, annotate_overrides
 
-import 'package:equatable/equatable.dart';
-import 'package:loby/data/models/order/dispute_model.dart';
 import 'package:loby/domain/entities/order/dispute_proof.dart';
 
 class DisputeProofModel extends DisputeProof{
@@ -52,6 +50,5 @@ class DisputeProofModel extends DisputeProof{
   };
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id, userOrderId, disputeId];
 }

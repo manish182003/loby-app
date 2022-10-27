@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:loby/domain/entities/listing/configuration.dart';
 
 import 'game_category_service_model.dart';
@@ -31,6 +30,5 @@ class ConfigurationModel extends Configuration{
   };
 
   @override
-  // TODO: implement props
   List<Object?> get props => [gameCategoryServices, units, maximumEstimatedDeliveryTimeDays];
 }

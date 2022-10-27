@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+// ignore: implementation_imports
 import 'package:flutter/src/widgets/editable_text.dart';
 import 'package:loby/core/utils/constants.dart';
 import 'package:loby/core/utils/exceptions.dart';
@@ -42,20 +43,21 @@ class ListingRemoteDatasourceImpl extends ListingRemoteDatasource{
       final Map<String, dynamic> headers = {
         'Authorization': 'Bearer $token',
       };
-      print(listingId);
-      print(categoryId);
-      print(gameId);
-      print(title);
-      print(description);
-      print(price);
-      print(stockAvl);
-      print(estimateDeliveryTime);
-      print(priceUnitId);
-      print(serviceOptionId!.map((e) => e.id).toList().join(","));
-      print(files);
-      print(fileTypes);
-      print(optionAnswer!.map((e) => e.text).toList().join(","));
-      print(stockAvl);
+
+      // print(listingId);
+      // print(categoryId);
+      // print(gameId);
+      // print(title);
+      // print(description);
+      // print(price);
+      // print(stockAvl);
+      // print(estimateDeliveryTime);
+      // print(priceUnitId);
+      // print(serviceOptionId!.map((e) => e.id).toList().join(","));
+      // print(files);
+      // print(fileTypes);
+      // print(optionAnswer!.map((e) => e.text).toList().join(","));
+      // print(stockAvl);
 
 
 
@@ -88,13 +90,13 @@ class ListingRemoteDatasourceImpl extends ListingRemoteDatasource{
           MapEntry('price_unit_id', "$priceUnitId"),
         );
 
-        if(serviceOptionId.isNotEmpty){
+        if(serviceOptionId!.isNotEmpty){
           formData.fields.add(
             MapEntry('service_option_id', serviceOptionId.map((e) => e.id).toList().join(",")),
           );
         }
 
-        if(optionAnswer.isNotEmpty){
+        if(optionAnswer!.isNotEmpty){
           formData.fields.add(
               MapEntry('option_answer', optionAnswer.map((e) => e.text).toList().join(","))
           );
@@ -204,8 +206,7 @@ class ListingRemoteDatasourceImpl extends ListingRemoteDatasource{
   Future<Map<String, dynamic>> changeListingStatus(int? listingId, String? type) async{
     try {
 
-      print(listingId);
-      print(type);
+      
 
       final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(

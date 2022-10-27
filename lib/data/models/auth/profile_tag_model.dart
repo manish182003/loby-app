@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:loby/domain/entities/auth/profile_tag.dart';
 // ignore_for_file: overridden_fields, annotate_overrides
 
@@ -23,6 +22,6 @@ class ProfileTagModel extends ProfileTag{
   };
 
   @override
-  // TODO: implement props
+
   List<Object?> get props => [id, name];
 }

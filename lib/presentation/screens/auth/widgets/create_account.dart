@@ -1,19 +1,13 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import 'package:loby/core/theme/colors.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/widgets/buttons/custom_button.dart';
 import 'package:loby/presentation/widgets/custom_bottom_sheet.dart';
-import 'package:loby/presentation/widgets/input_text_title_widget.dart';
-import 'package:loby/presentation/widgets/input_text_widget.dart';
 import 'package:loby/presentation/widgets/text_fields/text_field_widget.dart';
-import 'package:loby/services/routing_service/routes_name.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../widgets/body_padding_widget.dart';

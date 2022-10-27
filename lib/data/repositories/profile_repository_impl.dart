@@ -1,13 +1,9 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
-import 'package:flutter/src/widgets/editable_text.dart';
 import 'package:loby/core/utils/exceptions.dart';
 import 'package:loby/core/utils/failure.dart';
-import 'package:loby/data/datasources/listing_remote_datasource.dart';
 import 'package:loby/data/datasources/profile_remote_datasource.dart';
-import 'package:loby/domain/entities/response_entities/listing/configuration_response.dart';
-import 'package:loby/domain/entities/response_entities/listing/service_listing_response.dart';
 import 'package:loby/domain/entities/response_entities/profile/bank_detail_response.dart';
 import 'package:loby/domain/entities/response_entities/profile/duel_response.dart';
 import 'package:loby/domain/entities/response_entities/profile/follower_response.dart';
@@ -15,7 +11,6 @@ import 'package:loby/domain/entities/response_entities/profile/payment_transacti
 import 'package:loby/domain/entities/response_entities/profile/rating_response.dart';
 import 'package:loby/domain/entities/response_entities/profile/user_response.dart';
 import 'package:loby/domain/entities/response_entities/profile/wallet_transaction_response.dart';
-import 'package:loby/domain/repositories/listing_repository.dart';
 import 'package:loby/domain/repositories/profile_repository.dart';
 
 class ProfileRepositoryImpl extends ProfileRepository{

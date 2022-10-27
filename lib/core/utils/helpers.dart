@@ -1,24 +1,22 @@
 
 
 
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:loby/core/utils/environment.dart';
 import 'package:loby/domain/entities/listing/service_listing.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
-import 'dart:io';
 import 'dart:math';
 import 'exceptions.dart';
 import 'failure.dart';
@@ -54,7 +52,7 @@ class Helpers {
   }
 
   static validateField(String value) {
-    print(value);
+
 
     if (value.isEmpty || value == 'null') {
       return "field required";

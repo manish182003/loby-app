@@ -8,10 +8,8 @@ import 'package:loby/domain/entities/response_entities/home/game_response.dart';
 import 'package:loby/domain/entities/response_entities/home/global_search_response.dart';
 import 'package:loby/domain/entities/response_entities/home/notification_response.dart';
 import 'package:loby/domain/entities/response_entities/home/static_data_response.dart';
-import 'package:loby/domain/entities/response_entities/order/order_response.dart';
 import 'package:loby/domain/repositories/home_repository.dart';
 
-import '../../domain/entities/response_entities/order/order_response.dart';
 
 class HomeRepositoryImpl extends HomeRepository{
 

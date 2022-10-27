@@ -1,13 +1,8 @@
 // ignore_for_file: overridden_fields, annotate_overrides
 
-import 'package:equatable/equatable.dart';
 import 'package:loby/data/models/listing/service_listing_model.dart';
 import 'package:loby/data/models/profile/user_model.dart';
-import 'package:loby/domain/entities/listing/service_listing.dart';
 import 'package:loby/domain/entities/order/order.dart';
-import 'package:loby/domain/entities/order/order_status.dart';
-import 'package:loby/domain/entities/profile/user.dart';
-
 import 'order_status_model.dart';
 
 
@@ -79,6 +74,5 @@ class OrderModel extends Order{
   };
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id, userGameServiceId, userId, disputeId, quantity];
 }

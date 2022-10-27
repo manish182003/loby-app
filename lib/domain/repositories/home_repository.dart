@@ -4,7 +4,6 @@ import 'package:loby/domain/entities/response_entities/home/category_games_respo
 import 'package:loby/domain/entities/response_entities/home/category_response.dart';
 import 'package:loby/domain/entities/response_entities/home/game_response.dart';
 import 'package:loby/domain/entities/response_entities/home/static_data_response.dart';
-import 'package:loby/domain/entities/response_entities/order/order_response.dart';
 
 import '../entities/response_entities/home/global_search_response.dart';
 import '../entities/response_entities/home/notification_response.dart';

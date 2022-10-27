@@ -6,7 +6,6 @@ import 'package:loby/core/utils/failure.dart';
 import 'package:loby/data/datasources/chat_remote_datasource.dart';
 import 'package:loby/data/models/response_models/chat/message_response_model.dart';
 import 'package:loby/domain/entities/response_entities/chat/chat_response.dart';
-import 'package:loby/domain/entities/response_entities/chat/message_response.dart';
 import 'package:loby/domain/repositories/chat_repository.dart';
 
 class ChatRepositoryImpl extends ChatRepository{

@@ -1,9 +1,5 @@
-import 'package:equatable/equatable.dart';
-import 'package:loby/data/models/order/order_model.dart';
 import 'package:loby/data/models/profile/user_model.dart';
-import 'package:loby/domain/entities/order/order.dart';
 import 'package:loby/domain/entities/profile/rating.dart';
-import 'package:loby/domain/entities/profile/user.dart';
 // ignore_for_file: overridden_fields, annotate_overrides
 
 class RatingModel extends Rating{
@@ -54,6 +50,5 @@ class RatingModel extends Rating{
   };
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id, star, comments];
 }

@@ -1,10 +1,11 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:io';
 
 import 'package:loby/data/models/response_models/auth/city_response_model.dart';
 import 'package:loby/data/models/response_models/auth/country_response_model.dart';
 import 'package:loby/data/models/response_models/auth/profile_tag_response_model.dart';
 import 'package:loby/data/models/response_models/auth/state_response_model.dart';
-import 'package:loby/domain/entities/response_entities/auth/country_response.dart';
 
 abstract class AuthRemoteDatasource{
 

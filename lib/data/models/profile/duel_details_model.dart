@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:loby/domain/entities/profile/duel_details.dart';
 // ignore_for_file: overridden_fields, annotate_overrides
 
@@ -22,6 +21,5 @@ class DuelDetailsModel extends DuelDetails{
   };
 
   @override
-  // TODO: implement props
   List<Object?> get props => [winCount, loseCount];
 }

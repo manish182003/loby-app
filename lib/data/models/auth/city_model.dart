@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:loby/domain/entities/auth/city.dart';
 // ignore_for_file: overridden_fields, annotate_overrides
 
@@ -63,6 +62,5 @@ class CityModel extends City{
   };
 
   @override
-  // TODO: implement props
   List<Object?> get props => [name, id, stateCode, stateId, countryCode, countryId];
 }

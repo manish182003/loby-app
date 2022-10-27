@@ -1,5 +1,4 @@
 // ignore_for_file: overridden_fields, annotate_overrides
-import 'package:equatable/equatable.dart';
 import 'package:loby/domain/entities/profile/payment_transaction.dart';
 
 class PaymentTransactionModel extends PaymentTransaction{
@@ -74,6 +73,5 @@ class PaymentTransactionModel extends PaymentTransaction{
   };
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id, userId, tnxId, totalAmount, paymentStatus];
 }

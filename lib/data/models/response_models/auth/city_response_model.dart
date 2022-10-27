@@ -1,13 +1,9 @@
 // ignore_for_file: overridden_fields, annotate_overrides
 
 
-import 'package:flutter/cupertino.dart';
 import 'package:loby/data/models/auth/city_model.dart';
-import 'package:loby/data/models/auth/country_model.dart';
 import 'package:loby/domain/entities/auth/city.dart';
-import 'package:loby/domain/entities/auth/country.dart';
 import 'package:loby/domain/entities/response_entities/auth/city_response.dart';
-import 'package:loby/domain/entities/response_entities/auth/country_response.dart';
 
 
 class CityResponseModel extends CityResponse {

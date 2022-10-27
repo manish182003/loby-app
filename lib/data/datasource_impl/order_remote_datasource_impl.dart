@@ -1,3 +1,5 @@
+// ignore_for_file: implementation_imports
+
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -5,11 +7,6 @@ import 'package:file_picker/src/platform_file.dart';
 import 'package:loby/core/utils/constants.dart';
 import 'package:loby/core/utils/exceptions.dart';
 import 'package:loby/core/utils/helpers.dart';
-import 'package:loby/data/datasources/home_remote_datasource.dart';
-import 'package:loby/data/models/response_models/home/category_games_response_model.dart';
-import 'package:loby/data/models/response_models/home/category_response_model.dart';
-import 'package:loby/data/models/response_models/home/game_response_model.dart';
-import 'package:loby/data/models/response_models/home/notification_response_model.dart';
 import 'package:loby/data/models/response_models/order/dispute_response_model.dart';
 import 'package:loby/data/models/response_models/order/order_response_model.dart';
 
@@ -83,9 +80,7 @@ class OrderRemoteDatasourceImpl extends OrderRemoteDatasource{
   Future<Map<String, dynamic>> uploadDeliveryProof(int? orderId, List<int>? fileType, List<File>? file) async{
     try {
 
-      print(orderId);
-      print(fileType);
-      print(file);
+    
 
       final headers = await Helpers.getApiHeaders();
 

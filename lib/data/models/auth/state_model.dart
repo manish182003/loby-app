@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:loby/domain/entities/auth/state.dart';
 // ignore_for_file: overridden_fields, annotate_overrides
 
@@ -50,7 +49,6 @@ class StateModel extends State{
     updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
   );
 
-  @override
   Map<String, dynamic> toJson() => {
     "id": id,
     "name": name,
@@ -68,6 +66,5 @@ class StateModel extends State{
   };
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id, name, countryId, countryCode];
 }

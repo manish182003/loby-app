@@ -1,14 +1,11 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
-import 'package:loby/data/models/response_models/listing/configuration_response_model.dart';
 import 'package:loby/data/models/response_models/profile/bank_detail_response_model.dart';
 import 'package:loby/data/models/response_models/profile/duel_response_model.dart';
 import 'package:loby/data/models/response_models/profile/follower_response.dart';
 import 'package:loby/data/models/response_models/profile/rating_response_model.dart';
 import 'package:loby/data/models/response_models/profile/user_response_model.dart';
 
-import '../models/response_models/listing/service_listing_response_model.dart';
 import '../models/response_models/profile/payment_transaction_response_model.dart';
 import '../models/response_models/profile/wallet_transaction_response_model.dart';
 

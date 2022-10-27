@@ -1,4 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
+// ignore_for_file: file_names
+
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,11 +11,7 @@ import 'package:loby/presentation/getx/controllers/listing_controller.dart';
 import 'package:loby/presentation/screens/main/profile/wallet/widgets/token_widget.dart';
 import 'package:loby/presentation/widgets/custom_cached_network_image.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
-import 'package:sizer/sizer.dart';
 import '../../../../../core/theme/colors.dart';
-import '../../../../../data/models/ItemModel.dart';
-import '../../profile/my_disputes/create_new_dispute_screen.dart';
-import '../game_details_screen.dart';
 
 class ItemList extends StatefulWidget {
   final String name;

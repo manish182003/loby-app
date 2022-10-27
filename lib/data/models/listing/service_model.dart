@@ -1,4 +1,5 @@
-import 'package:loby/data/models/listing/service_option_model.dart';
+// ignore_for_file: must_be_immutable
+
 import 'package:loby/domain/entities/listing/service.dart';
 // ignore_for_file: overridden_fields, annotate_overrides
 
@@ -29,6 +30,6 @@ class ServiceModel extends Service {
     "selection_type": selectionType,
   };
 
-  // TODO: implement props
+
   List<Object?> get props => [id, name, selectionType, index];
 }

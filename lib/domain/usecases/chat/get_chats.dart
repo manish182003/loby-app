@@ -2,14 +2,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:loby/core/usecases/usecase.dart';
 import 'package:loby/core/utils/failure.dart';
-import 'package:loby/domain/entities/auth/country.dart';
-import 'package:loby/domain/entities/response_entities/auth/country_response.dart';
 import 'package:loby/domain/entities/response_entities/chat/chat_response.dart';
-import 'package:loby/domain/entities/response_entities/home/category_response.dart';
-import 'package:loby/domain/entities/response_entities/home/game_response.dart';
-import 'package:loby/domain/repositories/auth_repository.dart';
 import 'package:loby/domain/repositories/chat_repository.dart';
-import 'package:loby/domain/repositories/home_repository.dart';
 
 class GetChats extends UseCase<ChatResponse, Params> {
   final ChatRepository _repository;

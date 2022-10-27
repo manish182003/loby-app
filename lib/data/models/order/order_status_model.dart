@@ -1,6 +1,5 @@
 // ignore_for_file: overridden_fields, annotate_overrides
 
-import 'package:equatable/equatable.dart';
 import 'package:loby/domain/entities/order/order_status.dart';
 
 class OrderStatusModel extends OrderStatus{
@@ -43,6 +42,5 @@ class OrderStatusModel extends OrderStatus{
   };
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id, userOrderId, status];
 }

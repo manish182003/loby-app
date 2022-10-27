@@ -1,5 +1,4 @@
 // ignore_for_file: overridden_fields, annotate_overrides
-import 'package:equatable/equatable.dart';
 import 'package:loby/domain/entities/home/notification.dart';
 
 class NotificationModel extends Notification{
@@ -58,6 +57,6 @@ class NotificationModel extends Notification{
   };
 
   @override
-  // TODO: implement props
+
   List<Object?> get props => [id, userId, title, message];
 }

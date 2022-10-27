@@ -1,12 +1,10 @@
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:loby/core/usecases/profile_params.dart';
 import 'package:loby/core/usecases/usecase.dart';
 import 'package:loby/core/utils/helpers.dart';
-import 'package:loby/domain/entities/auth/selected_file.dart';
 import 'package:loby/domain/entities/profile/duel_details.dart';
 import 'package:loby/domain/entities/profile/rating.dart';
 import 'package:loby/domain/entities/profile/user.dart';

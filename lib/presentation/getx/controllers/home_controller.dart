@@ -9,15 +9,12 @@ import 'package:loby/domain/entities/home/game.dart';
 import 'package:loby/domain/entities/home/notification.dart' as notification;
 import 'package:loby/domain/entities/home/static_data.dart';
 import 'package:loby/domain/entities/listing/service_listing.dart';
-import 'package:loby/domain/entities/order/order.dart';
 import 'package:loby/domain/entities/profile/user.dart';
-import 'package:loby/domain/usecases/order/create_order.dart';
 import 'package:loby/domain/usecases/home/delete_notification.dart';
 import 'package:loby/domain/usecases/home/get_categories.dart';
 import 'package:loby/domain/usecases/home/get_category_games.dart';
 import 'package:loby/domain/usecases/home/get_games.dart';
 import 'package:loby/domain/usecases/home/get_notifications.dart';
-import 'package:loby/domain/usecases/order/get_orders.dart';
 import 'package:loby/domain/usecases/home/get_unread_count.dart';
 import 'package:loby/presentation/getx/controllers/listing_controller.dart';
 

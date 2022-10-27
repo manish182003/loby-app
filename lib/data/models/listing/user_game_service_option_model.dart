@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
 import 'package:loby/data/models/listing/service_option_model.dart';
-import 'package:loby/domain/entities/listing/service_option.dart';
 import 'package:loby/domain/entities/listing/user_game_service_option.dart';
 // ignore_for_file: overridden_fields, annotate_overrides
 
@@ -45,6 +43,5 @@ class UserGameServiceOptionModel extends UserGameServiceOption{
   };
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id, userGameServiceId, serviceOptionId];
 }

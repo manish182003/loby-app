@@ -1,4 +1,5 @@
-import 'package:equatable/equatable.dart';
+// ignore_for_file: prefer_null_aware_operators
+
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/data/models/auth/city_model.dart';
 import 'package:loby/data/models/auth/country_model.dart';
@@ -179,6 +180,5 @@ class UserModel extends User{
   };
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id, name, email, image];
 }

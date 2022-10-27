@@ -1,5 +1,7 @@
 
 
+// ignore_for_file: must_be_immutable
+
 import 'package:equatable/equatable.dart';
 import 'package:loby/domain/entities/profile/user.dart';
 import 'package:loby/domain/entities/home/category.dart';
@@ -57,6 +59,5 @@ class ServiceListing extends Equatable{
 
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id, categoryId, gameId, title];
 }

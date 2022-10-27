@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:loby/domain/entities/home/category_games.dart';
 import 'game_model.dart';
 // ignore_for_file: overridden_fields, annotate_overrides
@@ -41,6 +40,6 @@ class CategoryGamesModel extends CategoryGames{
   };
 
   @override
-  // TODO: implement props
+
   List<Object?> get props => [id, gameId, categoryId, game];
 }

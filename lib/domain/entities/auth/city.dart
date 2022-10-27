@@ -31,6 +31,5 @@ class City extends Equatable{
 
 
   @override
-  // TODO: implement props
   List<Object?> get props => [name, id, stateCode, stateId, countryCode, countryId];
 }

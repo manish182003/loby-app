@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:loby/domain/entities/listing/service.dart';
-import 'package:loby/domain/entities/listing/service_option.dart';
 
 import 'game_category_service_option.dart';
 
@@ -17,6 +16,5 @@ class GameCategoryService extends Equatable {
 
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id, service, gameCategoryServiceOptions];
 }

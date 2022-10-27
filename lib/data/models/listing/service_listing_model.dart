@@ -1,17 +1,12 @@
-import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
+// ignore_for_file: must_be_immutable
+
 import 'package:loby/data/models/profile/user_model.dart';
 import 'package:loby/data/models/home/category_model.dart';
 import 'package:loby/data/models/home/game_model.dart';
 import 'package:loby/data/models/listing/unit_model.dart';
 import 'package:loby/data/models/listing/user_game_service_image_model.dart';
 import 'package:loby/data/models/listing/user_game_service_option_model.dart';
-import 'package:loby/domain/entities/profile/user.dart';
-import 'package:loby/domain/entities/home/game.dart';
 import 'package:loby/domain/entities/listing/service_listing.dart';
-import 'package:loby/domain/entities/listing/unit.dart';
-import 'package:loby/domain/entities/listing/user_game_service_image.dart';
-import 'package:loby/domain/entities/listing/user_game_service_option.dart';
 // ignore_for_file: overridden_fields, annotate_overrides
 
 class ServiceListingModel extends ServiceListing{
@@ -110,6 +105,5 @@ class ServiceListingModel extends ServiceListing{
   };
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id, categoryId, gameId, title];
 }

@@ -2,7 +2,6 @@
 
 
 import 'package:equatable/equatable.dart';
-import 'package:loby/domain/entities/home/category.dart';
 
 import '../../home/game.dart';
 

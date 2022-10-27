@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:loby/core/utils/helpers.dart';
 
 import '../../../domain/entities/home/game.dart';
@@ -45,6 +44,6 @@ class GameModel extends Game {
   };
 
   @override
-  // TODO: implement props
+
   List<Object?> get props => [id, name, image, platform];
 }

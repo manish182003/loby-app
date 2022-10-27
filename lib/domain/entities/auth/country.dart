@@ -30,6 +30,5 @@ class Country extends Equatable{
   final DateTime? updatedAt;
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id, name, latitude, longitude, phonecode];
 }

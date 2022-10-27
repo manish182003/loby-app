@@ -1,5 +1,4 @@
 // ignore_for_file: overridden_fields, annotate_overrides
-import 'package:equatable/equatable.dart';
 import 'package:loby/domain/entities/profile/bank_detail.dart';
 
 class BankDetailModel extends BankDetail{
@@ -62,6 +61,5 @@ class BankDetailModel extends BankDetail{
   };
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id, fullRegisteredName, bankAccountNumber];
 }

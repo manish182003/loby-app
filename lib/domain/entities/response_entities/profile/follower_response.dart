@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:loby/domain/entities/profile/bank_detail.dart';
 import 'package:loby/domain/entities/profile/user.dart';
 
 

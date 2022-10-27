@@ -1,7 +1,6 @@
-
+// ignore_for_file: must_be_immutable
 
 import 'package:equatable/equatable.dart';
-import 'package:loby/domain/entities/listing/service_option.dart';
 
 class Service extends Equatable {
   Service({

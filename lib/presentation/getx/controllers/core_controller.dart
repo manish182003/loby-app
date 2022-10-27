@@ -1,7 +1,8 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:get/get.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:go_router/go_router.dart';
@@ -14,7 +15,6 @@ import 'package:loby/presentation/getx/controllers/chat_controller.dart';
 import 'package:loby/presentation/getx/controllers/home_controller.dart';
 import 'package:loby/presentation/getx/controllers/order_controller.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
-import 'dart:ui' as ui;
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class CoreController extends GetxController{

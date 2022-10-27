@@ -1,5 +1,4 @@
 // ignore_for_file: overridden_fields, annotate_overrides
-import 'package:equatable/equatable.dart';
 import 'package:loby/domain/entities/home/static_data.dart';
 
 class StaticDataModel extends StaticData{
@@ -38,6 +37,6 @@ class StaticDataModel extends StaticData{
   };
 
   @override
-  // TODO: implement props
+
   List<Object?> get props => [id, key, realValue, label];
 }

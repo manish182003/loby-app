@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:equatable/equatable.dart';
 
 class SelectedServiceOption extends Equatable{
@@ -11,7 +13,6 @@ class SelectedServiceOption extends Equatable{
   });
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id, name];
 
 }

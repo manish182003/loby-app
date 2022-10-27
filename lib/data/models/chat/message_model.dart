@@ -1,11 +1,9 @@
 // ignore_for_file: overridden_fields, annotate_overrides
 
-import 'package:equatable/equatable.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/data/models/order/order_model.dart';
 import 'package:loby/data/models/profile/user_model.dart';
 import 'package:loby/domain/entities/chat/message.dart';
-import 'package:loby/domain/entities/order/order.dart';
 
 class MessageModel extends Message{
   const MessageModel({
@@ -67,6 +65,6 @@ class MessageModel extends Message{
   };
 
   @override
-  // TODO: implement props
+
   List<Object?> get props => [id, chatChannelId, userId, message];
 }

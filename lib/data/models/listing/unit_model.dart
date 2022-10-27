@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:loby/domain/entities/listing/unit.dart';
 // ignore_for_file: overridden_fields, annotate_overrides
 
@@ -23,6 +22,5 @@ class UnitModel extends Unit{
   };
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id, name];
 }

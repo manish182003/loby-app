@@ -95,11 +95,7 @@ class ProfileRemoteDatasourceImpl extends ProfileRemoteDatasource{
   Future<Map<String, dynamic>> verifyPayment(String? signature, String? paymentId, String? paymentStatus, String? orderId) async{
     try {
 
-      print(signature);
-      print(signature);
-      print(paymentId);
-      print(paymentStatus);
-      print(orderId);
+    
 
       final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(
@@ -157,14 +153,14 @@ class ProfileRemoteDatasourceImpl extends ProfileRemoteDatasource{
     try {
       final headers = await Helpers.getApiHeaders();
 
-      print(displayName);
-      print(name);
-      print(message);
-      print(youtube);
-      print(twitch);
-      print(instagram);
-      print(idCard);
-      print(selfie);
+      // print(displayName);
+      // print(name);
+      // print(message);
+      // print(youtube);
+      // print(twitch);
+      // print(instagram);
+      // print(idCard);
+      // print(selfie);
 
       FormData formData = FormData()
         ..fields.add(

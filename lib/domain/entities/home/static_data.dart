@@ -19,6 +19,5 @@ class StaticData extends Equatable{
 
 
   @override
-  // TODO: implement props
   List<Object?> get props => [id, key, realValue, label];
 }

@@ -53,10 +53,10 @@ class ChatRemoteDatasourceImpl extends ChatRemoteDatasource{
   Future<Map<String, dynamic>> sendMessage(int? receiverId, String? message, int? fileType, File? file) async{
     try {
 
-      print(receiverId);
-      print(message);
-      print(file);
-      print(fileType);
+      // print(receiverId);
+      // print(message);
+      // print(file);
+      // print(fileType);
 
 
       final headers = await Helpers.getApiHeaders();
@@ -99,9 +99,7 @@ class ChatRemoteDatasourceImpl extends ChatRemoteDatasource{
   Future<Map<String, dynamic>> checkEligibility(int? receiverId)async {
     try {
 
-      print(receiverId);
-
-
+      
 
       final headers = await Helpers.getApiHeaders();
 

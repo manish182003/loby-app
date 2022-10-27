@@ -1,3 +1,5 @@
+// ignore_for_file: implementation_imports
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter/src/widgets/editable_text.dart';
 import 'package:loby/core/utils/exceptions.dart';

@@ -1,7 +1,5 @@
 // ignore_for_file: overridden_fields, annotate_overrides
 
-import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:loby/data/models/profile/user_model.dart';
 import 'package:loby/domain/entities/chat/chat.dart';
@@ -61,6 +59,6 @@ class ChatModel extends Chat{
   };
 
   @override
-  // TODO: implement props
+
   List<Object?> get props => [id, senderId, receiverId, badgeCount];
 }
