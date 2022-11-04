@@ -7,6 +7,7 @@ import 'package:loby/domain/usecases/profile/get_followers.dart';
 import 'package:loby/domain/usecases/profile/get_payment_transactions.dart';
 import 'package:loby/domain/usecases/profile/get_profile.dart';
 import 'package:loby/domain/usecases/profile/get_ratings.dart';
+import 'package:loby/domain/usecases/profile/get_settlement_requests.dart';
 import 'package:loby/domain/usecases/profile/get_wallet_transactions.dart';
 import 'package:loby/domain/usecases/profile/profile_verification.dart';
 import 'package:loby/domain/usecases/profile/update_social_links.dart';
@@ -38,6 +39,7 @@ class ProfileBinding extends Bindings {
     final getWalletTransaction = Get.find<GetWalletTransactions>();
     final getFollowers = Get.find<GetFollowers>();
     final submitFeedback = Get.find<SubmitFeedback>();
+    final getSettlementRequests = Get.find<GetSettlementRequests>();
 
 
     Get.lazyPut(() => ProfileController(
@@ -55,7 +57,8 @@ class ProfileBinding extends Bindings {
       getPaymentTransactions: getPaymentTransaction,
       getWalletTransactions: getWalletTransaction,
       getFollowers: getFollowers,
-      submitFeedback: submitFeedback
+      submitFeedback: submitFeedback,
+        getSettlementRequests: getSettlementRequests,
     ));
   }
 

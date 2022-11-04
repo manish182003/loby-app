@@ -12,7 +12,8 @@ class OnBoarding1 extends StatelessWidget {
   final String desc;
   final double? frontImageSize;
   final double? frontImagePosition;
-  const OnBoarding1({Key? key, required this.backgroundImage, required this.frontImage, required this.title, required this.desc, this.frontImageSize, this.frontImagePosition}) : super(key: key);
+  final double? backImageSize;
+  const OnBoarding1({Key? key, required this.backgroundImage, required this.frontImage, required this.title, required this.desc, this.frontImageSize, this.frontImagePosition, this.backImageSize}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class OnBoarding1 extends StatelessWidget {
             children: [
               FadeInUp(
                 duration: const Duration(seconds: 1),
-                  child: Image.asset("assets/onboarding/$backgroundImage.png", height: 41.h, width: 41.h,)),
+                  child: Image.asset("assets/onboarding/$backgroundImage.png", height: backImageSize ?? 41.h, width: 41.h,)),
               Positioned(
                 bottom: frontImagePosition ?? 2.h,
                 child: FadeInDown(

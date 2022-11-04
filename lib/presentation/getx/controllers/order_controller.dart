@@ -109,38 +109,42 @@ class OrderController extends GetxController{
 
   Future<bool> getOrders({int? orderId, String? status}) async {
     ordersPageNumber.value == 1 ? isOrdersFetching(true) : isOrdersFetching(false);
-    final failureOrSuccess = await _getOrders(
-      Params(orderParams: OrderParams(
-        orderId: orderId,
-        status: status,
-        page: ordersPageNumber.value
-      ),),
-    );
 
-    failureOrSuccess.fold(
-          (failure) {
-        errorMessage.value = Helpers.convertFailureToMessage(failure);
-        debugPrint(errorMessage.value);
-        Helpers.toast(errorMessage.value);
-        isOrdersFetching(false);
-      },
-          (success) {
+    if(areMoreOrdersAvailable.value){
+      final failureOrSuccess = await _getOrders(
+        Params(orderParams: OrderParams(
+            orderId: orderId,
+            status: status,
+            page: ordersPageNumber.value
+        ),),
+      );
 
-            areMoreOrdersAvailable.value = success.orders.length == 10;
+      failureOrSuccess.fold(
+            (failure) {
+          errorMessage.value = Helpers.convertFailureToMessage(failure);
+          debugPrint(errorMessage.value);
+          Helpers.toast(errorMessage.value);
+          isOrdersFetching(false);
+        },
+            (success) {
 
-            if (ordersPageNumber > 1) {
-              orders.addAll(success.orders);
-            } else {
-              orders.value = success.orders;
-            }
-            ordersPageNumber.value++;
+          areMoreOrdersAvailable.value = success.orders.length == 10;
 
-            isOrdersFetching.value = false;
+          if (ordersPageNumber > 1) {
+            orders.addAll(success.orders);
+          } else {
+            orders.value = success.orders;
+          }
+          ordersPageNumber.value++;
 
-        // Helpers.toast('Profile Changed');
-      },
-    );
-    return failureOrSuccess.isRight() ? true : false;
+          isOrdersFetching.value = false;
+
+          // Helpers.toast('Profile Changed');
+        },
+      );
+      return failureOrSuccess.isRight() ? true : false;
+    }
+    return false;
   }
 
   Future<bool> changeOrderStatus({required int orderId, required String status}) async {
@@ -158,7 +162,7 @@ class OrderController extends GetxController{
         Helpers.toast(errorMessage.value);
       },
           (success) {
-        Helpers.toast('SUCCESS');
+        Helpers.toast('Successfully Updated');
       },
     );
     return failureOrSuccess.isRight() ? true : false;
@@ -229,6 +233,7 @@ class OrderController extends GetxController{
       },
     );
     return failureOrSuccess.isRight() ? true : false;
+
   }
 
 

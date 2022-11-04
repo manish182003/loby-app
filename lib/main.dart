@@ -12,12 +12,15 @@ import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 import 'package:loby/presentation/getx/controllers/core_controller.dart';
 import 'package:loby/presentation/widgets/custom_loading_widget.dart';
 import 'package:loby/services/routing_service/router.dart';
+import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'core/theme/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'di/injection.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'firebase_options.dart';
+import 'package:loby/services/firebase_dynamic_link.dart';
 
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =   FlutterLocalNotificationsPlugin();
@@ -46,8 +49,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // PendingDynamicLinkData initialLink = await FirebaseDynamicLinks.instance.getInitialLink();
-  PendingDynamicLinkData initialLink;
+  // PendingDynamicLinkData? initialLink = await FirebaseDynamicLinks.instance.getInitialLink();
+  PendingDynamicLinkData? initialLink;
 
   DependencyInjector.inject();
 
@@ -55,15 +58,16 @@ void main() async {
   await authController.saveProfileDetails();
 
   final router = MyRouter();
-  GoRouter appRouter = await router.appRouter();
+  GoRouter appRouter = await router.appRouter(initialLink: initialLink);
 
-  runApp(MyApp(appRouter: appRouter));
+  runApp(MyApp(appRouter: appRouter, initialLink: initialLink,));
 }
 
 
 class MyApp extends StatefulWidget {
   final GoRouter appRouter;
-  const MyApp({Key? key, required this.appRouter}) : super(key: key);
+  final PendingDynamicLinkData? initialLink;
+  const MyApp({Key? key, required this.appRouter, this.initialLink}) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -78,7 +82,7 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement initState
     super.initState();
     initializePushNotification();
-
+    _handleDynamicLink();
   }
 
 
@@ -147,6 +151,37 @@ class _MyAppState extends State<MyApp> {
         ),
         payload: data,
       );
+    }
+  }
+
+
+  void _handleDynamicLink(){
+    FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
+
+    dynamicLinks.onLink.listen((dynamicLinkData) {
+      final Uri deepLink = dynamicLinkData.link;
+      bool isListingPage = deepLink.pathSegments.contains('user-game-service');
+      String? id = deepLink.queryParameters['listingId'];
+
+      if (isListingPage) {
+        contextKey.currentContext?.goNamed(gameDetailPage, queryParams: {'serviceListingId' : "$id"});
+      } else {
+        contextKey.currentContext?.goNamed(gameDetailPage, queryParams: {'serviceListingId' : "$id"});
+      }
+    }).onError((error){
+      print(error);
+    });
+
+
+    if(widget.initialLink != null){
+      final Uri deepLink = widget.initialLink!.link;
+      bool isListingPage = deepLink.pathSegments.contains('user-game-service');
+      String? id = deepLink.queryParameters['listingId'];
+      if (isListingPage) {
+        contextKey.currentContext?.goNamed(gameDetailPage, queryParams: {'serviceListingId' : "$id"});
+      } else {
+        contextKey.currentContext?.goNamed(gameDetailPage, queryParams: {'serviceListingId' : "$id"});
+      }
     }
   }
 }

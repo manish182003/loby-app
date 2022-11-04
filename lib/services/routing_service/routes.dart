@@ -27,3 +27,4 @@ const String searchScreenRoute = "/search_screen";
 const String faqRoute = "/faq";
 const String legalTermsRoute = "/legal_terms";
 const String staticContentRoute = "/static_content";
+const String settlementRequestHistoryRoute = "/settlement-request";

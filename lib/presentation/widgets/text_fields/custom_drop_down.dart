@@ -44,7 +44,6 @@ class _BuildDropdownState extends State<BuildDropdown> {
       items: widget.itemsList,
       onChanged: widget.onChanged,
       validator: (dynamic value) {
-
         if(widget.isRequired){
           if(widget.isMultiple){
             if(widget.selectedItemList!.isEmpty){

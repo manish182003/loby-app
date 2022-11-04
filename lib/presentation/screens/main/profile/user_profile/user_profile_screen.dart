@@ -26,10 +26,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   final ListingController listingController = Get.find<ListingController>();
   final AuthController authController = Get.find<AuthController>();
 
+  bool isFetching = true;
+
 
   @override
   void initState() {
     // TODO: implement initState
+
     asyncFunctions();
     super.initState();
   }
@@ -44,10 +47,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       listingController.areMoreListingAvailable.value = true;
       listingController.buyerListingsProfile.clear();
       if(widget.from == 'other'){
-        profileController.getProfile(userId: widget.userId);
+        await profileController.getProfile(userId: widget.userId);
+        setState(() {
+          isFetching = false;
+        });
       }else{
         await profileController.getProfile();
-        authController.getProfileDetails();
+        await authController.getProfileDetails();
+        setState(() {
+          isFetching = false;
+        });
       }
     });
   }
@@ -69,7 +78,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     return Scaffold(
       body: SafeArea(
         child: Obx(() {
-          if(profileController.isProfileFetching.value){
+          if(profileController.isProfileFetching.value || isFetching){
             return const Center(child: CircularProgressIndicator(),);
           }else{
 

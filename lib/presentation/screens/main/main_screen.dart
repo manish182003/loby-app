@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:loby/core/theme/colors.dart';
-
 import '../../../main.dart';
 import 'widgets/custom_tabbed_bar.dart';
 
@@ -14,7 +12,9 @@ class MainScreen extends StatelessWidget {
       child: Scaffold(
         key: contextKey,
         resizeToAvoidBottomInset: false,
-        body: const SafeArea(child: CustomTabbedAppBar()),
+        body: const SafeArea(
+            child: CustomTabbedAppBar()
+        ),
       ),
     );
   }

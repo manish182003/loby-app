@@ -10,6 +10,7 @@ import 'package:loby/data/models/response_models/profile/duel_response_model.dar
 import 'package:loby/data/models/response_models/profile/follower_response.dart';
 import 'package:loby/data/models/response_models/profile/payment_transaction_response_model.dart';
 import 'package:loby/data/models/response_models/profile/rating_response_model.dart';
+import 'package:loby/data/models/response_models/profile/settlement_request_response_model.dart';
 import 'package:loby/data/models/response_models/profile/user_response_model.dart';
 import 'package:loby/data/models/response_models/profile/wallet_transaction_response_model.dart';
 
@@ -95,14 +96,17 @@ class ProfileRemoteDatasourceImpl extends ProfileRemoteDatasource{
   Future<Map<String, dynamic>> verifyPayment(String? signature, String? paymentId, String? paymentStatus, String? orderId) async{
     try {
 
-    
-
       final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(
         _dio,
         RequestType.post,
         ApiEndpoints.verifyPayment,
-        queryParams: {'signature': signature, 'payment_id': paymentId, 'payment_status': paymentStatus, 'order_id': orderId},
+        queryParams: {
+          if(signature != null) 'signature': signature,
+          if(paymentId != null) 'payment_id': paymentId,
+          'payment_status': paymentStatus,
+          if(orderId != null) 'order_id': orderId
+        },
         headers: headers,
       );
 
@@ -355,6 +359,24 @@ class ProfileRemoteDatasourceImpl extends ProfileRemoteDatasource{
       );
 
       return response!;
+    } on ServerException catch (e) {
+      throw ServerException(message: e.message);
+    }
+  }
+
+  @override
+  Future<SettlementRequestResponseModel> getSettlementRequests(int? page, String? type)async {
+    try {
+      final headers = await Helpers.getApiHeaders();
+      final response = await Helpers.sendRequest(
+        _dio,
+        RequestType.get,
+        ApiEndpoints.getSettlementRequests,
+        queryParams: {'page': page ?? ""},
+        headers: headers,
+      );
+
+      return SettlementRequestResponseModel.fromJSON(response!);
     } on ServerException catch (e) {
       throw ServerException(message: e.message);
     }

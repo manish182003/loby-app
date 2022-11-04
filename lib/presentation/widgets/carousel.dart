@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/core/theme/colors.dart';
+import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/listing/user_game_service_image.dart';
 import 'package:sizer/sizer.dart';
 import 'package:video_player/video_player.dart';
@@ -12,7 +13,7 @@ import 'package:video_player/video_player.dart';
 
 class Carousel extends StatefulWidget {
   final double? height;
-  final List<UserGameServiceImage> images;
+  final List<CarouselList> images;
   final bool autoPlay;
   final bool isIndicator;
   const Carousel({Key? key, this.height,required this.images, this.autoPlay = true, this.isIndicator = true}) : super(key: key);
@@ -30,7 +31,7 @@ class _CarouselState extends State<Carousel> {
   ChewieController? chewieController;
 
 
-  void _initPlayer(String url) async {
+  Future<void> _initPlayer(String url) async {
     videoPlayerController = VideoPlayerController.network(url);
     await videoPlayerController.initialize();
 
@@ -91,29 +92,32 @@ class _CarouselState extends State<Carousel> {
           itemBuilder: (context, index, realIndex) {
             final list = widget.images.where((element) => element.type != 3).toList();
             if(list[index].type == 2){
-              print("build image");
               return buildImage(
                 urlImage: widget.images[index].path,
                 index: index,
               );
             }else if(list[index].type == 1){
-              _initPlayer(list[index].path!);
-              if(chewieController != null){
-                print("build controllee");
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: Chewie(
-                    controller: chewieController!,
-                  ),
-                );
-              }else{
-                print("build circular");
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
+              return GestureDetector(
+                onTap: ()async{
+                  Helpers.loader();
+                  await _initPlayer(widget.images[index].path);
+                  _videoPlayerDialog(context);
+                  Helpers.hideLoader();
+                },
+                child: Stack(
+                  alignment: AlignmentDirectional.center,
+                  children: [
+                    Opacity(
+                      opacity: 0.5,
+                      child: buildLocalImage(
+                        imagePath: "assets/images/listing_placeholder.jpg"
+                      ),
+                    ),
+                    const Icon(Icons.play_circle_outline, color: whiteColor, size: 50,),
+                  ],
+                ),
+              );
             }else{
-              print("build norhing");
               return const SizedBox();
             }
           }),
@@ -215,9 +219,52 @@ class _CarouselState extends State<Carousel> {
   void animateToSlide(int index){
     controller.animateToPage(index);
   }
+
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(DiagnosticsProperty<VideoPlayerController>('videoPlayerController', videoPlayerController));
   }
+
+  void _videoPlayerDialog(BuildContext context) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return WillPopScope(
+          onWillPop: (){
+            videoPlayerController.pause();
+            chewieController?.pause();
+            return Future.value(true);
+          },
+          child: Dialog(
+            elevation: 0,
+            backgroundColor: backgroundDarkJungleGreenColor,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.0)),
+            child: SizedBox(
+              height: chewieController!.aspectRatio,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Chewie(
+                  controller: chewieController!,
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+}
+
+
+class CarouselList{
+
+  final int type;
+  final String path;
+
+  CarouselList({required this.type, required this.path});
+
 }

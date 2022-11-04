@@ -42,7 +42,6 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
   late ServiceListing listing;
 
 
-
   @override
   void dispose() {
     listingController.quantityCount.value = 1;
@@ -79,7 +78,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
               child: Column(
                 children: [
                   listing.userGameServiceImages!.isEmpty ? const SizedBox() : Carousel(
-                    images: listing.userGameServiceImages!,
+                    images: [for(final i in listing.userGameServiceImages!) CarouselList(type: i.type!, path: i.path!)],
                   ),
                   listing.userGameServiceImages!.isEmpty ? const SizedBox() : SizedBox(height: 2.h,),
                   Text(listing.description!, style: textTheme.headline5?.copyWith(color: textWhiteColor)),
@@ -197,12 +196,12 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                       color: backgroundBalticSeaColor,
                       elevation: 0.0,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
+                        borderRadius: BorderRadius.circular(16.0),
                         side: const BorderSide(
                             color: textLightColor, width: 0.5),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(14.0),
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8.0),
@@ -226,10 +225,9 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                               ),
                               Expanded(
                                 child: Container(
-                                  margin: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+                                  margin: const EdgeInsets.fromLTRB(18, 0, 0, 0),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment
-                                        .start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
@@ -237,8 +235,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                             listing.user!.displayName!,
                                             overflow: TextOverflow.ellipsis,
                                             maxLines: 1,
-                                            style: textTheme.headline3
-                                                ?.copyWith(color: textWhiteColor),
+                                            style: textTheme.headline2?.copyWith(color: profileNameYellowColor),
                                           ),
                                           const SizedBox(width: 8.0),
                                           listing.user!.verifiedProfile ?? false ? SvgPicture.asset(
@@ -248,7 +245,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                           ) : const SizedBox(),
                                         ],
                                       ),
-                                      const SizedBox(height: 8.0,),
+                                      const SizedBox(height: 12.0,),
                                       Row(
                                         children: [
                                           Row(
@@ -257,15 +254,15 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                               SvgPicture.asset(
                                                 'assets/icons/user_rating_icon.svg',
                                                 color: iconWhiteColor,
-                                                height: 13.0,
-                                                width: 13.0,
+                                                height: 16.0,
+                                                width: 16.0,
                                               ),
                                               const SizedBox(width: 4.0),
                                               Text(
                                                 "${listing.user?.avgRatingCount ?? 0.0}",
                                                 overflow: TextOverflow.ellipsis,
                                                 maxLines: 1,
-                                                style: textTheme.headline5
+                                                style: textTheme.headline4
                                                     ?.copyWith(
                                                     color: textWhiteColor),
                                               ),
@@ -277,15 +274,15 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                               SvgPicture.asset(
                                                 'assets/icons/user_chat_icon.svg',
                                                 color: iconWhiteColor,
-                                                height: 13.0,
-                                                width: 13.0,
+                                                height: 16.0,
+                                                width: 16.0,
                                               ),
-                                              const SizedBox(width: 4.0),
+                                              const SizedBox(width: 8.0),
                                               Text(
                                                 "${listing.user?.commentCount}",
                                                 overflow: TextOverflow.ellipsis,
                                                 maxLines: 1,
-                                                style: textTheme.headline5
+                                                style: textTheme.headline4
                                                     ?.copyWith(
                                                     color: textWhiteColor),
                                               ),

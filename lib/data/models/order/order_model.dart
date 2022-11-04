@@ -53,7 +53,7 @@ class OrderModel extends Order{
     updatedAt: DateTime.parse(json["updatedAt"]),
     user: json['user'] == null ? null : UserModel.fromJson(json['user']),
     userGameService: json["userGameService"] == null ? null : ServiceListingModel.fromJson(json["userGameService"]),
-    orderStatuses: List<OrderStatusModel>.from(json["orderStatuses"].map((x) => OrderStatusModel.fromJson(x))),
+    orderStatuses: json["orderStatuses"] == null ? null : List<OrderStatusModel>.from(json["orderStatuses"].map((x) => OrderStatusModel.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {

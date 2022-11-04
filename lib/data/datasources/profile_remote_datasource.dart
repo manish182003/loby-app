@@ -4,6 +4,7 @@ import 'package:loby/data/models/response_models/profile/bank_detail_response_mo
 import 'package:loby/data/models/response_models/profile/duel_response_model.dart';
 import 'package:loby/data/models/response_models/profile/follower_response.dart';
 import 'package:loby/data/models/response_models/profile/rating_response_model.dart';
+import 'package:loby/data/models/response_models/profile/settlement_request_response_model.dart';
 import 'package:loby/data/models/response_models/profile/user_response_model.dart';
 
 import '../models/response_models/profile/payment_transaction_response_model.dart';
@@ -40,6 +41,8 @@ abstract class ProfileRemoteDatasource{
   Future<FollowerResponseModel> getFollowers(int? page, String? type);
 
   Future<Map<String, dynamic>> submitFeedback(String? feedback, String? email);
+
+  Future<SettlementRequestResponseModel> getSettlementRequests(int? page, String? type);
 
 
 }

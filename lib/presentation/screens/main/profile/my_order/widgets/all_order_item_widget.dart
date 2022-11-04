@@ -155,12 +155,11 @@ class OrderItem extends StatelessWidget {
                                   fontSize: 11.0, color: textLightColor),
                             ),
                             const SizedBox(width: 2.0),
-                            Text(
+                            Text(order.userGameService!.category!.name == "Duel" ? duelStatusesName[order.orderStatuses!.last.status!] :
                               statusesName[order.orderStatuses!.last.status!],
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
-                              style: textTheme.headline4?.copyWith(
-                                  fontSize: 11.0, color: aquaGreenColor),
+                              style: textTheme.headline4?.copyWith(fontSize: 11.0, color: aquaGreenColor),
                             ),
                           ],
                         ),

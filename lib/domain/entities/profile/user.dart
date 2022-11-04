@@ -5,7 +5,7 @@ import 'package:loby/domain/entities/auth/profile_tag.dart';
 import 'package:loby/domain/entities/auth/state.dart';
 
 class User extends Equatable{
-  const User(
+  User(
       {this.id,
       this.name,
       this.email,
@@ -46,7 +46,9 @@ class User extends Equatable{
       this.state,
       this.country,
       this.city,
-      this.profileTags});
+      this.profileTags,
+      this.followStatus
+      });
 
   final int? id;
   final String? name;
@@ -89,9 +91,10 @@ class User extends Equatable{
   final Country? country;
   final City? city;
   final List<ProfileTag>? profileTags;
+  String? followStatus;
 
 
   @override
   // TODO: implement props
-  List<Object?> get props => [id, name, email, image];
+  List<Object?> get props => [id, name, email, image, followStatus];
 }

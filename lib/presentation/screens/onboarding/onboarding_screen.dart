@@ -64,7 +64,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   OnBoarding1(
                     backgroundImage: "4b",
                     frontImage: "4a",
-                    title: "play with your fav. gaming \ncelebrity",
+                    title: "play with your fav. gaming celebrity",
                     desc: "Book and play with your favourite streamer or gaming celebrity",
                     frontImageSize: 37.h,
                     frontImagePosition: -4.h,
@@ -75,6 +75,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     title: "duel with other gamers & earn",
                     desc: "Play duel matches or compete with other gamers",
                     frontImageSize: 42.h,
+                    backImageSize: 42.h,
                     frontImagePosition: -4.h,
                   ),
                 ],

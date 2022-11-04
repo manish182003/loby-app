@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loby/presentation/getx/controllers/order_controller.dart';
+import 'package:loby/presentation/widgets/carousel.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../core/theme/colors.dart';
@@ -50,6 +51,10 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
             key: _formKey,
             child: Column(
               children: [
+                dispute.disputeProofs!.isEmpty ? const SizedBox() : Carousel(
+                  images: [for(final i in dispute.disputeProofs!) CarouselList(type: i.fileType!, path: i.filePath!)],
+                ),
+                dispute.disputeProofs!.isEmpty ? const SizedBox() : SizedBox(height: 2.h,),
                 DisputeWidget(
                     disputeType: "Open",
                     currentStatus: '',
@@ -157,6 +162,8 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
               TextFieldWidget(
                 textEditingController: fileLink,
                 hint: 'Paste Youtube/Twitch/Drive Link',
+                type: 'optionalLink',
+                isRequired: true,
               ),
               SizedBox(height: 4.h),
             ],

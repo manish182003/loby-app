@@ -130,8 +130,7 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Padding(
-                                    padding: const EdgeInsets.only(
-                                        bottom: 24.0),
+                                    padding: const EdgeInsets.only(bottom: 24.0),
                                     child: TextFieldWidget(
                                       textEditingController: amount,
                                       hint: "Enter Token Quantity",
@@ -200,23 +199,33 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
 
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) async {
-    await profileController.verifyPayment(signature: response.signature,
+    await profileController.verifyPayment(
+        signature: response.signature,
         paymentId: response.paymentId,
         paymentStatus: 'success',
-        orderId: response.orderId);
+        orderId: response.orderId,
+    );
     await Helpers.hideLoader();
     Helpers.toast("Payment Successful");
   }
 
-  void _handlePaymentError(PaymentFailureResponse response) {
+  void _handlePaymentError(PaymentFailureResponse response) async{
+    await profileController.verifyPayment(
+      paymentStatus: 'failed',
+      orderId: profileController.addFundsResponse['order_id'],
+    );
     Helpers.hideLoader();
     // Helpers.toast("Payment Failed ");
     print('Payment Error : ${response.code.toString()} ${response.message.toString()}');
-    Helpers.toast("ERROR: ${response.code} - ${response.message!}");
-
+    Helpers.toast("Payment Failed");
+    // Helpers.toast("ERROR: ${response.code} - ${response.message!}");
   }
 
-  void _handleExternalWallet(ExternalWalletResponse response) {
+  void _handleExternalWallet(ExternalWalletResponse response) async{
+    await profileController.verifyPayment(
+      paymentStatus: 'failed',
+      orderId: profileController.addFundsResponse['order_id'],
+    );
     Helpers.hideLoader();
     Helpers.toast("Payment Failed");
   }
@@ -231,7 +240,7 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
         profileController.rupeeToToken.value = "0";
         profileController.tokenToRupee.value = "0";
         var options = {
-          'key': 'rzp_test_aiQKDzBg6pCSdH',
+          'key': 'rzp_test_0OFPJol8Rd6TZB',
           'amount': int.tryParse(profileController.addFundsResponse['total_amount'],),
           'name': 'Loby',
           'order_id': profileController.addFundsResponse['order_id'],

@@ -10,7 +10,7 @@ import 'package:loby/data/models/auth/state_model.dart';
 import '../../../domain/entities/profile/user.dart';
 
 class UserModel extends User{
-  const UserModel(
+  UserModel(
       {this.id,
         this.name,
         this.email,
@@ -51,7 +51,9 @@ class UserModel extends User{
         this.state,
         this.country,
         this.city,
-        this.profileTags});
+        this.profileTags,
+        this.followStatus
+      });
 
   final int? id;
   final String? name;
@@ -94,6 +96,7 @@ class UserModel extends User{
   final CountryModel? country;
   final CityModel? city;
   final List<ProfileTagModel>? profileTags;
+  String? followStatus;
 
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
@@ -132,10 +135,12 @@ class UserModel extends User{
     orderCount: json["orderCount"],
     avgRatingCount: json["avg_rating_count"],
     commentCount: json["comment_count"],
+    userFollowStatus: json["user_follow_status"],
     state: json["state"] == null ? null : StateModel.fromJson(json["state"]),
     country: json["country"] == null ? null : CountryModel.fromJson(json["country"]),
     city: json["city"] == null ? null : CityModel.fromJson(json["city"]),
     profileTags: json["profileTags"] == null ? null : json["profileTags"].map<ProfileTagModel>((profileTags) => ProfileTagModel.fromJson(profileTags)).toList(),
+    followStatus: json["userFollowingTo"] == null ? json["userFollowers"] == null ? null : json["userFollowers"]["followStatus"] == 0 ? 'N' : 'Y' : json["userFollowingTo"]["followStatus"] == 0 ? 'N' : 'Y',
   );
 
   Map<String, dynamic> toJson() => {
@@ -180,5 +185,5 @@ class UserModel extends User{
   };
 
   @override
-  List<Object?> get props => [id, name, email, image];
+  List<Object?> get props => [id, name, email, image, followStatus];
 }

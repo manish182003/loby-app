@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/profile/user.dart';
 import 'package:sizer/sizer.dart';
 
@@ -23,13 +24,13 @@ class UserSocialWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const SizedBox(height: 8),
-            buildItem(textTheme, context, 'assets/icons/instagram_one_icon.svg', 'Instagram', user.instagramId ?? "", 38.0, 38.0),
+            buildItem(textTheme, context, 'assets/icons/instagram_one_icon.svg', 'Instagram', user.instagramId ?? "", 50.0, 50.0),
             const SizedBox(height: 16),
-            buildItem(textTheme, context, 'assets/icons/youtube_icon.svg', 'YouTube', user.youtubeId ?? "", 32.0, 32.0),
+            buildItem(textTheme, context, 'assets/icons/youtube_icon.svg', 'YouTube', user.youtubeId ?? "", 40.0, 40.0),
             const SizedBox(height: 16),
-            buildItem(textTheme, context, 'assets/icons/discord_icon.svg', 'Discord', user.discordId ?? "", 32.0, 32.0),
+            buildItem(textTheme, context, 'assets/icons/discord_icon.svg', 'Discord', user.discordId ?? "", 40.0, 40.0),
             const SizedBox(height: 16),
-            buildItem(textTheme, context, 'assets/icons/twitch_icon.svg', 'Twitch', user.twitchId ?? "", 32.0, 32.0),
+            buildItem(textTheme, context, 'assets/icons/twitch_icon.svg', 'Twitch', user.twitchId ?? "", 40.0, 40.0),
             const SizedBox(height: 16),
           ],
         ),
@@ -39,17 +40,17 @@ class UserSocialWidget extends StatelessWidget {
 
   Widget buildItem(TextTheme textTheme, BuildContext context, String socialIcon, String socialTitle, String socialLink, double width, double height) {
     return Container(
-      constraints: const BoxConstraints(
-        minHeight: 45, minWidth: double.infinity,),
+      height: 8.5.h,
       decoration: BoxDecoration(
-        color: whiteColor,
+        color: textFieldColor,
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
@@ -68,12 +69,17 @@ class UserSocialWidget extends StatelessWidget {
                       Text(socialTitle,
                           overflow: TextOverflow.ellipsis,
                           style: textTheme.headline4
-                              ?.copyWith(color: textTunaBlueColor)),
+                              ?.copyWith(color: aquaGreenColor)),
                       const SizedBox(height: 6),
-                      Text(socialLink,
-                          overflow: TextOverflow.ellipsis,
-                          style: textTheme.headline6
-                              ?.copyWith(color: purpleLightIndigoColor)),
+                      GestureDetector(
+                        onTap: (){
+                          Helpers.launch(socialLink);
+                        },
+                        child: Text(socialLink,
+                            overflow: TextOverflow.ellipsis,
+                            style: textTheme.headline6
+                                ?.copyWith(color: whiteColor)),
+                      ),
                     ],
                   ),
                 ),

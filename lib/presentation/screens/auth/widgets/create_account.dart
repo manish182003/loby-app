@@ -95,6 +95,8 @@ class _CreateAccountState extends State<CreateAccount> {
                     if(isSuccess){
                       _otpDialog(context);
                     }
+                  }else{
+                    Helpers.hideLoader();
                   }
                 }
               },

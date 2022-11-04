@@ -75,9 +75,9 @@ class _ProfileVerificationScreenState extends State<ProfileVerificationScreen> {
             child: Column(
               children: [
                 Text(
-                    textAlign: TextAlign.center,
-                    "Get your profile verified if you are an gaming influencer, sports athlete or a content creator",
-                    style: textTheme.headline5?.copyWith(color: orangeColor)),
+                    textAlign: TextAlign.start,
+                    "Get your profile verified if you are an gaming influencer, esports athlete or a content creator.\n\nCriteria for the verified badge:\n\n1. Your account represents a real person, registered business, or entity.\n\n2. Represents a unique person, business or entity. Only one account per person or business may be verified.\n\n3. Your account must not represent any other well-known, highly searched-for person, brand, or entity.\n\nOnce we receive your application, it will be reviewed and you will be notified only upon success. This process can take anywhere from 48 hours to 7 days.\n\n\nThank you for applying to our Loby Verified badge !",
+                    style: textTheme.headline5?.copyWith(color: aquaGreenColor)),
                 SizedBox(height: 4.h,),
                 TextFieldWidget(
                   textEditingController: displayName,
@@ -100,21 +100,21 @@ class _ProfileVerificationScreenState extends State<ProfileVerificationScreen> {
                 SizedBox(height: 3.h,),
                 TextFieldWidget(
                   textEditingController: youtube,
-                  type: 'link',
+                  type: 'optionalLink',
                   title: "Youtube Link",
                   isRequired: true,
                 ),
                 SizedBox(height: 3.h,),
                 TextFieldWidget(
                   textEditingController: twitch,
-                  type: 'link',
+                  type: 'optionalLink',
                   title: "Twitch Link",
                   isRequired: true,
                 ),
                 SizedBox(height: 3.h,),
                 TextFieldWidget(
                   textEditingController: instagram,
-                  type: 'link',
+                  type: 'optionalLink',
                   title: "Instagram Link",
                   isRequired: true,
                 ),

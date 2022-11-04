@@ -113,7 +113,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                               padding: const EdgeInsets.all(8.0),
                               child: CircleAvatar(
                                 radius: 36,
-                                backgroundColor: butterflyBlueColor,
+                                backgroundColor: aquaGreenColor,
                                 child: Padding(
                                   padding: const EdgeInsets.all(1.0),
                                   child: ClipRRect(
@@ -160,7 +160,9 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                         children: [
                                           GestureDetector(
                                             onTap: (){
-                                              context.pushNamed(followerPage);
+                                              if(widget.from == "myProfile"){
+                                                context.pushNamed(followerPage);
+                                              }
                                             },
                                             child: RichText(
                                               textAlign: TextAlign.start,
@@ -182,7 +184,9 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                           const SizedBox(width: 16.0),
                                           GestureDetector(
                                             onTap: (){
-                                              context.pushNamed(myListingPage);
+                                              if(widget.from == "myProfile"){
+                                                context.pushNamed(myListingPage);
+                                              }
                                             },
                                             child: RichText(
                                               textAlign: TextAlign.start,

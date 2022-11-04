@@ -79,6 +79,8 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                   return Helpers.validateWalletWithdraw(value!, Get.find<ProfileController>().profile.walletMoney!);
                 case 'link':
                   return Helpers.validateLink(value!);
+                case 'optionalLink':
+                  return Helpers.validateOptionalLink(value!);
                 default:
                   return Helpers.validateField(value!);
               }

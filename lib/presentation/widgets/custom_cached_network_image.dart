@@ -23,7 +23,7 @@ class CustomCachedNetworkImage extends StatelessWidget {
   Widget profilePicture(){
     return ProfilePicture(
       name: name ?? '',
-      radius: 31,
+      radius: 36,
       fontsize: 21,
       random: true,
       count: 1,

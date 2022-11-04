@@ -413,7 +413,6 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
 
     debugPrint("final service selection ${listingController.serviceOptionId}");
 
-
     final isSuccess = await listingController.createListing(
         categoryId: homeController.selectedCategoryId.value,
         gameId: homeController.selectedGameId.value
@@ -804,6 +803,8 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
               TextFieldWidget(
                   textEditingController: fileLink,
                 hint: 'Paste Youtube/Twitch/Drive Link',
+                type: 'optionalLink',
+                isRequired: true,
               ),
               SizedBox(height: 4.h),
             ],

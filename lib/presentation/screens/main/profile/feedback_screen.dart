@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/widgets/text_fields/text_field_widget.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../../../core/theme/colors.dart';
 import '../../../../core/utils/helpers.dart';
 import '../../../../services/routing_service/routes_name.dart';
 import '../../../widgets/bottom_dialog.dart';
 import '../../../widgets/custom_app_bar.dart';
 import '../../../widgets/buttons/custom_button.dart';
-import '../../../widgets/input_text_title_widget.dart';
-import '../../../widgets/input_text_widget.dart';
+
 
 class FeedbackScreen extends StatefulWidget {
   const FeedbackScreen({Key? key}) : super(key: key);
@@ -29,7 +26,6 @@ class FeedbackScreenState extends State<FeedbackScreen> {
   TextEditingController feedback = TextEditingController();
   TextEditingController email = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
 
 
   @override
@@ -100,8 +96,7 @@ class FeedbackScreenState extends State<FeedbackScreen> {
                                     Navigator.pop(context);
                                     context.pushNamed(mainPage);
                                   }
-                              )
-                                  .showBottomDialog(context);
+                              ).showBottomDialog(context);
                             }
                           }
                         },

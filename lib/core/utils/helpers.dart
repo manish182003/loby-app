@@ -4,6 +4,7 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'dart:convert';
+import 'dart:core';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -11,12 +12,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:loby/core/theme/colors.dart';
 import 'package:loby/core/utils/environment.dart';
 import 'package:loby/domain/entities/listing/service_listing.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:math';
 import 'exceptions.dart';
 import 'failure.dart';
@@ -78,7 +81,7 @@ class Helpers {
 
   static validateWalletWithdraw(String value, int balance) {
     if(value != ''){
-      if (balance - int.parse(value) <= 200) {
+      if (balance - int.parse(value) < 200) {
         return 'Minimum Balance Left Should be 200';
       } else {
         return null;
@@ -124,7 +127,22 @@ class Helpers {
     }else{
       return "Invalid URL";
     }
+  }
 
+  static validateOptionalLink(String? value) {
+    if(value == null || value.isEmpty){
+      return null;
+    }else if (Uri.tryParse(value)!.hasAbsolutePath ) {
+      return null;
+    }else{
+      return "Invalid URL";
+    }
+  }
+
+  static Future launch(String url) async {
+    if (!await launchUrl(Uri.parse(url))) {
+      throw 'Could not launch $url';
+    }
   }
 
   static int getFileType(String extension) {
@@ -272,40 +290,115 @@ class Helpers {
 
 
   static void showImagePicker({required BuildContext context, required Function() onGallery, required Function() onCamera})async{
-
-
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext bc) {
-          return SafeArea(
-            child: Wrap(
-              children: <Widget>[
-                ListTile(
-                    leading: const Icon(Icons.photo_camera),
-                    title: const Text('Camera'),
-                    onTap: (){
-                      Navigator.of(context).pop();
-                      onCamera();
-                    }),
-                ListTile(
-                    leading: const Icon(Icons.photo_library),
-                    title: const Text('Gallery'),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      onGallery();
-                    }),
-
-                // ListTile(
-                //     leading: const Icon(Icons.view_carousel_outlined),
-                //     title: const Text('View Image'),
-                //     onTap: () {
-                //       Navigator.of(context).pop();
-                //       //Navigator.push(context, new CupertinoPageRoute(builder: (context) => FullScreenImg(img: profilePic)));
-                //     }),
-              ],
+    final textTheme = Theme.of(context).textTheme;
+    showGeneralDialog(
+      barrierLabel: "showGeneralDialog",
+      barrierDismissible: true,
+      barrierColor: Colors.black.withOpacity(0.6),
+      transitionDuration: const Duration(milliseconds: 300),
+      context: context,
+      pageBuilder: (context, _, __) {
+        return Align(
+          alignment: Alignment.bottomCenter,
+          child: IntrinsicHeight(
+            child: Container(
+              margin: const EdgeInsets.all(24.0),
+              width: double.maxFinite,
+              clipBehavior: Clip.antiAlias,
+              padding: const EdgeInsets.all(16),
+              decoration: const BoxDecoration(
+                color: backgroundDarkJungleGreenColor,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
+                  bottomLeft: Radius.circular(16),
+                  bottomRight: Radius.circular(16),
+                ),
+              ),
+              child: Material(
+                color: backgroundDarkJungleGreenColor,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        onCamera();
+                      },
+                      child: Align(
+                        alignment: AlignmentDirectional.centerStart,
+                        child: Text('Camera', style: textTheme.headline3?.copyWith(color: aquaGreenColor),),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        onGallery();
+                      },
+                      child: Align(
+                        alignment: AlignmentDirectional.centerStart,
+                        child: Text('Gallery', style: textTheme.headline3?.copyWith(color: aquaGreenColor),),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Align(
+                        alignment: AlignmentDirectional.centerStart,
+                        child: Text('Cancel', style: textTheme.headline3?.copyWith(color: aquaGreenColor),),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          );
-        });
+          ),
+        );
+      },
+      transitionBuilder: (_, animation1, __, child) {
+        return SlideTransition(
+          position: Tween(
+            begin: const Offset(0, 1),
+            end: const Offset(0, 0),
+          ).animate(animation1),
+          child: child,
+        );
+      },
+    );
+
+
+
+    // showModalBottomSheet(
+    //     context: context,
+    //     builder: (BuildContext bc) {
+    //       return SafeArea(
+    //         child: Wrap(
+    //           children: <Widget>[
+    //             ListTile(
+    //                 leading: const Icon(Icons.photo_camera),
+    //                 title: const Text('Camera'),
+    //                 onTap: (){
+    //                   Navigator.of(context).pop();
+    //                   onCamera();
+    //                 }),
+    //             ListTile(
+    //                 leading: const Icon(Icons.photo_library),
+    //                 title: const Text('Gallery'),
+    //                 onTap: () {
+    //                   Navigator.of(context).pop();
+    //                   onGallery();
+    //                 }),
+    //
+    //             // ListTile(
+    //             //     leading: const Icon(Icons.view_carousel_outlined),
+    //             //     title: const Text('View Image'),
+    //             //     onTap: () {
+    //             //       Navigator.of(context).pop();
+    //             //       //Navigator.push(context, new CupertinoPageRoute(builder: (context) => FullScreenImg(img: profilePic)));
+    //             //     }),
+    //           ],
+    //         ),
+    //       );
+    //     });
   }
 
   static getImage(String image){

@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:loby/core/utils/failure.dart';
+import 'package:loby/data/models/profile/settlement_request_model.dart';
 import 'package:loby/domain/entities/response_entities/profile/bank_detail_response.dart';
 import 'package:loby/domain/entities/response_entities/profile/duel_response.dart';
 import 'package:loby/domain/entities/response_entities/profile/rating_response.dart';
+import 'package:loby/domain/entities/response_entities/profile/settlement_request_response.dart';
 import 'package:loby/domain/entities/response_entities/profile/user_response.dart';
 
 import '../entities/response_entities/profile/follower_response.dart';
@@ -42,6 +44,7 @@ abstract class ProfileRepository{
 
   Future<Either<Failure, Map<String, dynamic>>> submitFeedback({String? feedback, String? email});
 
+  Future<Either<Failure, SettlementRequestResponse>> getSettlementRequests({int? page, String? type});
 
 
 

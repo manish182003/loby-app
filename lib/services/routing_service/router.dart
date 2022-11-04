@@ -1,3 +1,4 @@
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -9,6 +10,7 @@ import 'package:loby/presentation/screens/main/profile/my_disputes/create_new_di
 import 'package:loby/presentation/screens/main/profile/faqs.dart';
 import 'package:loby/presentation/screens/main/profile/terms_conditions/legal_options.dart';
 import 'package:loby/presentation/screens/main/profile/terms_conditions/static_terms.dart';
+import 'package:loby/presentation/screens/main/profile/wallet/settlement_request_history.dart';
 import 'package:loby/presentation/screens/onboarding/onboarding_screen.dart';
 import 'package:loby/services/routing_service/routes.dart';
 import 'package:loby/services/routing_service/routing_service.dart';
@@ -32,15 +34,16 @@ import '../../presentation/screens/main/profile/wallet/my_wallet_screen.dart';
 import '../../presentation/screens/main/profile/wallet/paymnet_transaction_history.dart';
 import '../../presentation/screens/main/profile/wallet/wallet_transaction_history.dart';
 import '../../presentation/screens/main/profile/wallet/withdraw_funds_screen.dart';
+import '../firebase_dynamic_link.dart';
 import 'routes_name.dart';
 
 class MyRouter {
-  Future<GoRouter> appRouter()async {
+  Future<GoRouter> appRouter({required PendingDynamicLinkData? initialLink}) async {
     // final token = await Helpers.getApiToken();
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     final router = GoRouter(
-        redirect: (state){
+        redirect: (context, state)async{
           bool? isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
           bool? onBoardingDone = prefs.getBool('onBoardingDone') ?? false;
           String? token = prefs.getString('apiToken');
@@ -50,7 +53,10 @@ class MyRouter {
           final isLogging = state.location == loginRoute;
           final onBoarding = state.location == onBoardingRoute;
 
-          if(!onBoardingDone && !onBoarding){
+
+          if(initialLink != null){
+            return null;
+          }else if(!onBoardingDone && !onBoarding){
             return onBoardingRoute;
           }else if(onBoardingDone && !isLoggedIn && !isLogging){
             return loginRoute;
@@ -58,7 +64,6 @@ class MyRouter {
             return null;
           }
         },
-        urlPathStrategy: UrlPathStrategy.path,
         debugLogDiagnostics: true,
         routes: [
 
@@ -68,7 +73,7 @@ class MyRouter {
             pageBuilder: (context, state) {
               return CupertinoPage(
                 key: state.pageKey,
-                child: const MainScreen(),
+                child: RoutingService(initialLink: initialLink),
               );
             },
           ),
@@ -333,6 +338,15 @@ class MyRouter {
                     receiverId: int.tryParse(state.queryParams['receiverId']!)!,
                   )
                   // MessagePage(chatId: int.tryParse(state.queryParams['chatId']!)!, name: state.queryParams['name']!,),
+                );
+              }),
+          GoRoute(
+              name: settlementRequestHistoryPage,
+              path: settlementRequestHistoryRoute,
+              pageBuilder: (context, state) {
+                return CupertinoPage(
+                    key: state.pageKey,
+                    child: const SettlementRequestHistory()
                 );
               }),
         ]);

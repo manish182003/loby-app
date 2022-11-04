@@ -1,5 +1,6 @@
 // ignore_for_file: overridden_fields, annotate_overrides
 
+import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/order/dispute_proof.dart';
 
 class DisputeProofModel extends DisputeProof{
@@ -29,7 +30,7 @@ class DisputeProofModel extends DisputeProof{
     id: json["id"],
     userOrderId: json["user_order_id"],
     disputeId: json["dispute_id"],
-    filePath: json["file_path"],
+    filePath: Helpers.getImage(json["file_path"]),
     fileType: json["file_type"],
     description: json["description"],
     userId: json["user_id"],

@@ -9,6 +9,7 @@ const Color lavaRedColor = Color(0xFFD82F0E);
 const Color carminePinkColor = Color(0xFFE94F31);
 const Color saffronMangoOrangeColor = Color(0xFFFAC663);
 const Color selectiveYellowColor = Color(0xFFFBBC05);
+const Color profileNameYellowColor = Color(0xFFFFC727);
 const Color gambogeOrangeColor = Color(0xFFE29509);
 const Color butterflyBlueColor = Color(0xFF33A9FF);
 const Color frenchBlueColor = Color(0xFF006FC2);

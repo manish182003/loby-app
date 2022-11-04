@@ -34,38 +34,54 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    return BodyPaddingWidget(
-      child: SingleChildScrollView(
-        child: GestureDetector(
-          onTap: () {
-            FocusManager.instance.primaryFocus?.unfocus();
-          },
-          child: Column(
-            children: [
-              SizedBox(height: 4.h,),
-              GlobalSearchFieldWidget(onTap: () {
-                context.pushNamed(searchScreenPage);
-              }),
-              SizedBox(height: 3.h,),
-              Text('Categories', style: textTheme.headline3?.copyWith(color: textWhiteColor)),
-              SizedBox(height: 3.h,),
-              _buildCategories(textTheme),
-              SizedBox(height: 3.h,),
-              Container(
-                  decoration: BoxDecoration(
-                    color: textFieldColor,
-                    borderRadius: BorderRadius.circular(16.0),
-                  ),
-                  child: Column(
-                    children: [
-                      Padding(
-                          padding: EdgeInsets.all(2.h),
-                          child: Text('Top Games', style: textTheme.headline3?.copyWith(color: textWhiteColor))),
-                      _buildTopGames(textTheme),
-                    ],
-                  )),
-            ],
-          ),
+    return SingleChildScrollView(
+      child: GestureDetector(
+        onTap: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
+        child: Column(
+          children: [
+            Container(
+              color: backgroundBalticSeaColor,
+              width: double.infinity,
+              child: Column(
+                children: [
+                  SizedBox(height: 4.h,),
+                  Image.asset("assets/icons/app_icon.png", height: 80, width: 80,),
+                  SizedBox(height: 1.h,),
+                ],
+              ),
+            ),
+            SizedBox(height: 3.h,),
+            BodyPaddingWidget(
+              child: Column(
+                children: [
+                  GlobalSearchFieldWidget(onTap: () {
+                    context.pushNamed(searchScreenPage);
+                  }),
+                  SizedBox(height: 3.h,),
+                  Text('Categories', style: textTheme.headline3?.copyWith(color: textWhiteColor)),
+                  SizedBox(height: 3.h,),
+                  _buildCategories(textTheme),
+                  SizedBox(height: 3.h,),
+                  Container(
+                      decoration: BoxDecoration(
+                        color: textFieldColor,
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                      child: Column(
+                        children: [
+                          Padding(
+                              padding: EdgeInsets.all(2.h),
+                              child: Text('Top Games', style: textTheme.headline3?.copyWith(color: textWhiteColor))),
+                          _buildTopGames(textTheme),
+                        ],
+                      )),
+                ],
+              ),
+            ),
+
+          ],
         ),
       ),
     );

@@ -9,6 +9,7 @@ import 'package:loby/domain/entities/response_entities/profile/duel_response.dar
 import 'package:loby/domain/entities/response_entities/profile/follower_response.dart';
 import 'package:loby/domain/entities/response_entities/profile/payment_transaction_response.dart';
 import 'package:loby/domain/entities/response_entities/profile/rating_response.dart';
+import 'package:loby/domain/entities/response_entities/profile/settlement_request_response.dart';
 import 'package:loby/domain/entities/response_entities/profile/user_response.dart';
 import 'package:loby/domain/entities/response_entities/profile/wallet_transaction_response.dart';
 import 'package:loby/domain/repositories/profile_repository.dart';
@@ -162,6 +163,16 @@ class ProfileRepositoryImpl extends ProfileRepository{
   Future<Either<Failure, Map<String, dynamic>>> submitFeedback({String? feedback, String? email})async {
     try {
       return Right(await _profileRemoteDatasource.submitFeedback(feedback, email));
+    } on ServerException catch (e) {
+    // Loggers can be added here for analyzation.
+    return Left(ServerFailure(message: e.message.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, SettlementRequestResponse>> getSettlementRequests({int? page, String? type})async {
+    try {
+      return Right(await _profileRemoteDatasource.getSettlementRequests(page, type));
     } on ServerException catch (e) {
     // Loggers can be added here for analyzation.
     return Left(ServerFailure(message: e.message.toString()));

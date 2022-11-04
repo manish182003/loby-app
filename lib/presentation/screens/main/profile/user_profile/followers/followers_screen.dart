@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/widgets/body_padding_widget.dart';
 import 'package:loby/presentation/widgets/custom_app_bar.dart';
+import 'package:loby/presentation/widgets/custom_cached_network_image.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../../core/theme/colors.dart';
 import 'follower_tab.dart';
@@ -62,13 +63,9 @@ class _FollowersScreenState extends State<FollowersScreen> {
                                       padding: const EdgeInsets.all(1.0),
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(36),
-                                        child: CachedNetworkImage(
-                                          imageUrl: profileController.profile.image ?? '',
-                                          fit: BoxFit.cover,
-                                          height: 110,
-                                          width: 110,
-                                          placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
-                                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                                        child: CustomCachedNetworkImage(
+                                          imageUrl: profileController.profile.image,
+                                          name: profileController.profile.displayName,
                                         ),
                                       ),
                                     ), //CircleAvatar

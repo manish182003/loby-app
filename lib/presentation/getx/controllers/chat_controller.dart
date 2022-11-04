@@ -203,7 +203,7 @@ class ChatController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        Helpers.toast(errorMessage.value);
+        // Helpers.toast(errorMessage.value);
       },
           (success) {
             checkEligibilityResponse.value = ChatModel.fromJson(success['data']);

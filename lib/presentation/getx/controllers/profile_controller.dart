@@ -1,12 +1,11 @@
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:loby/core/usecases/profile_params.dart';
 import 'package:loby/core/usecases/usecase.dart';
 import 'package:loby/core/utils/helpers.dart';
-import 'package:loby/domain/entities/profile/duel_details.dart';
 import 'package:loby/domain/entities/profile/rating.dart';
+import 'package:loby/domain/entities/profile/settlement_request.dart';
 import 'package:loby/domain/entities/profile/user.dart';
 import 'package:loby/domain/usecases/profile/add_bank_details.dart';
 import 'package:loby/domain/usecases/profile/add_funds.dart';
@@ -15,12 +14,14 @@ import 'package:loby/domain/usecases/profile/get_duel.dart';
 import 'package:loby/domain/usecases/profile/get_payment_transactions.dart';
 import 'package:loby/domain/usecases/profile/get_profile.dart';
 import 'package:loby/domain/usecases/profile/get_ratings.dart';
+import 'package:loby/domain/usecases/profile/get_settlement_requests.dart';
 import 'package:loby/domain/usecases/profile/profile_verification.dart';
 import 'package:loby/domain/usecases/profile/submit_feedback.dart';
 import 'package:loby/domain/usecases/profile/update_social_links.dart';
 import 'package:loby/domain/usecases/profile/withdraw_money.dart';
-
 import '../../../domain/entities/profile/bank_detail.dart';
+import '../../../domain/entities/profile/duel_details.dart';
+import '../../../domain/entities/profile/duel_details_count.dart';
 import '../../../domain/entities/profile/payment_transaction.dart';
 import '../../../domain/entities/profile/wallet_transaction.dart';
 import '../../../domain/usecases/profile/get_bank_details.dart';
@@ -46,6 +47,7 @@ class ProfileController extends GetxController{
   final GetWalletTransactions _getWalletTransactions;
   final GetFollowers _getFollowers;
   final SubmitFeedback _submitFeedback;
+  final GetSettlementRequests _getSettlementRequests;
   ProfileController({
     required GetProfile getProfile,
     required GetRatings getRatings,
@@ -62,6 +64,7 @@ class ProfileController extends GetxController{
     required GetWalletTransactions getWalletTransactions,
     required GetFollowers getFollowers,
     required SubmitFeedback submitFeedback,
+    required GetSettlementRequests getSettlementRequests,
   }) : _getProfile = getProfile,
   _getRatings = getRatings,
   _getDuel = getDuel,
@@ -76,21 +79,24 @@ class ProfileController extends GetxController{
         _getPaymentTransactions = getPaymentTransactions,
         _getWalletTransactions = getWalletTransactions,
   _getFollowers = getFollowers,
-        _submitFeedback = submitFeedback;
+        _submitFeedback = submitFeedback,
+  _getSettlementRequests = getSettlementRequests;
 
 
 
   final errorMessage = ''.obs;
 
-  User profile = const User();
-  User otherUserProfile = const User();
+  User profile = User();
+  User otherUserProfile = User();
   final isProfileFetching = false.obs;
 
   final ratings = <Rating>[].obs;
   final isRatingsFetching = false.obs;
   final ratingPageNumber = 1.obs;
 
-  DuelDetails duelDetails = const DuelDetails();
+  final duelDetailsCount = const DuelDetailsCount().obs;
+  final duelDetailsList = <DuelDetails>[].obs;
+
   final isDuelFetching = false.obs;
 
   final addFundsResponse = {}.obs;
@@ -121,6 +127,13 @@ class ProfileController extends GetxController{
 
   final tokenToRupee = "0".obs;
   final rupeeToToken = "0".obs;
+
+
+  final settlementRequests = <SettlementRequest>[].obs;
+  final isSettlementRequestsFetching = false.obs;
+  final areMoreSettlementRequestsAvailable = true.obs;
+  final settlementRequestsPageNumber = 1.obs;
+
 
 
 
@@ -201,7 +214,8 @@ class ProfileController extends GetxController{
         isDuelFetching.value = false;
       },
           (success) {
-        duelDetails = success.duelDetails;
+            duelDetailsCount.value = success.duelDetailsCount;
+          duelDetailsList.value = success.duelDetailsList;
         isDuelFetching.value = false;
       },
     );
@@ -538,6 +552,49 @@ class ProfileController extends GetxController{
     );
     return failureOrSuccess.isRight() ? true : false;
   }
+
+
+
+  Future<bool> getSettlementRequests({String? type}) async {
+
+
+
+    settlementRequestsPageNumber.value == 1 ? isSettlementRequestsFetching(true) : isSettlementRequestsFetching(false);
+
+    if(areMoreSettlementRequestsAvailable.value){
+      final failureOrSuccess = await _getSettlementRequests(
+        Params(profileParams: ProfileParams(
+          page: settlementRequestsPageNumber.value,
+        ),),
+      );
+
+      failureOrSuccess.fold(
+            (failure) {
+          errorMessage.value = Helpers.convertFailureToMessage(failure);
+          debugPrint(errorMessage.value);
+          Helpers.toast(errorMessage.value);
+          isSettlementRequestsFetching.value = false;
+        },
+            (success) {
+          areMoreSettlementRequestsAvailable.value = success.settlementRequests.length == 10;
+
+
+          if (settlementRequestsPageNumber > 1) {
+            settlementRequests.addAll(success.settlementRequests);
+          } else {
+            settlementRequests.value = success.settlementRequests;
+          }
+
+          settlementRequestsPageNumber.value++;
+          isSettlementRequestsFetching.value = false;
+        },
+      );
+      return failureOrSuccess.isRight() ? true : false;
+    }
+    return false;
+  }
+
+
 
 
 

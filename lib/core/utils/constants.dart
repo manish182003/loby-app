@@ -84,6 +84,7 @@ class ApiEndpoints{
   static const String getFollowers = "/get-followers-users";
   static const String getFollowing = "/get-following-users";
   static const String submitFeedback = "/submit-feedback";
+  static const String getSettlementRequests = "/get-settlement-request";
 
 
 

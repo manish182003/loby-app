@@ -32,6 +32,8 @@ class UserInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return BodyPaddingWidget(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           CustomChip(
             labelName: bubbles,

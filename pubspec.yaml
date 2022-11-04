@@ -25,11 +25,11 @@ dependencies:
 
 
   #firebase
-  firebase_core: ^1.20.1
-  firebase_auth: ^3.6.3
+  firebase_core: ^2.1.1
+  firebase_auth: ^4.1.0
   google_sign_in: ^5.4.1
-  firebase_messaging: ^13.1.0
-  firebase_dynamic_links: ^4.3.4
+  firebase_messaging: ^14.0.3
+  firebase_dynamic_links: ^5.0.3
 
 
   #ui
@@ -67,14 +67,14 @@ dependencies:
   mime: ^1.0.2
 
 
-
   #cache_local
   shared_preferences: ^2.0.15
   cached_network_image: ^3.2.2
 
 
   #routes
-  go_router: ^4.1.0
+  go_router: ^5.1.1
+  url_launcher: ^6.1.6
 
 
   #payment
@@ -90,7 +90,6 @@ dependencies:
 
 
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -98,6 +97,7 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_launcher_icons: ^0.10.0
   flutter_native_splash: ^2.2.11
+  change_app_package_name: ^1.1.0
 
 
 

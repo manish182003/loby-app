@@ -43,7 +43,7 @@ class ListingRemoteDatasourceImpl extends ListingRemoteDatasource{
       final Map<String, dynamic> headers = {
         'Authorization': 'Bearer $token',
       };
-
+      //
       // print(listingId);
       // print(categoryId);
       // print(gameId);
@@ -124,7 +124,7 @@ class ListingRemoteDatasourceImpl extends ListingRemoteDatasource{
 
       if(files!.isNotEmpty){
         for(int i = 0; i < files.length; i++){
-          formData.files.add(MapEntry('file_path',
+          formData.files.add(MapEntry(listingId == null ? 'file_path' : 'file',
               MultipartFile.fromFileSync(files[i].path,
                 // contentType: MediaType('image', 'jpg'),
               )));
@@ -133,7 +133,6 @@ class ListingRemoteDatasourceImpl extends ListingRemoteDatasource{
         formData.fields.add(
           MapEntry('type', "$fileTypes"),
         );
-
       }
 
       final response = await Helpers.sendRequest(

@@ -35,7 +35,9 @@ class ChatMediaDialog {
       },
     );
   }
+
   Widget _buildDialogContent(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return IntrinsicHeight(
       child: Container(
         margin: const EdgeInsets.all(24.0),
@@ -61,9 +63,9 @@ class ChatMediaDialog {
                   Navigator.pop(context);
                   imageSelection();
                 },
-                child: const Align(
+                child: Align(
                   alignment: AlignmentDirectional.centerStart,
-                  child: Text('Photo'),
+                  child: Text('Photo', style: textTheme.headline3?.copyWith(color: aquaGreenColor),),
                 ),
               ),
               TextButton(
@@ -71,16 +73,16 @@ class ChatMediaDialog {
                   Navigator.pop(context);
                   fileSelection();
                 },
-                child: const Align(
+                child: Align(
                   alignment: AlignmentDirectional.centerStart,
-                  child: Text('File/Video'),
+                  child: Text('File/Video', style: textTheme.headline3?.copyWith(color: aquaGreenColor),),
                 ),
               ),
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Align(
+                child: Align(
                   alignment: AlignmentDirectional.centerStart,
-                  child: Text('Cancel'),
+                  child: Text('Cancel', style: textTheme.headline3?.copyWith(color: aquaGreenColor),),
                 ),
               ),
             ],

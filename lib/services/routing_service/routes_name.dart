@@ -27,3 +27,4 @@ const String searchScreenPage = "search_screen";
 const String faqPage = "faq-screen";
 const String legalTermsPage = "/legal-terms";
 const String staticContentPage = "/static-content";
+const String settlementRequestHistoryPage = "/settlement_request_page";

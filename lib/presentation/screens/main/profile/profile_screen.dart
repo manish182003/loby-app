@@ -40,9 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme
-        .of(context)
-        .textTheme;
+    final textTheme = Theme.of(context).textTheme;
     return SafeArea(
       child: Scaffold(
         body: Obx(() {
@@ -166,26 +164,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               onTap: () {
                                 context.pushNamed(faqPage);
                               }),
-                          ProfileOptionsWidget(
-                              name: "App Setting",
-                              onTap: () {
-                                SmartDialog.showLoading();
-                                // showDialog(
-                                //     context: context,
-                                //     builder: (BuildContext context) {
-                                //       return RatingDialog(
-                                //         title: "Review & Rating",
-                                //         descriptions: "Congratulations on sucessfully getting your service delivered. Kindly rate thus seller & its service to help us serve you better",
-                                //         text: "OK",
-                                //         onChanged: (rating){
-                                //           rating = rating;
-                                //         },
-                                //         onSubmit: () {
-                                //
-                                //         },
-                                //       );
-                                //     });
-                              }),
+                          // ProfileOptionsWidget(
+                          //     name: "App Setting",
+                          //     onTap: () {
+                          //       SmartDialog.showLoading();
+                          //       // showDialog(
+                          //       //     context: context,
+                          //       //     builder: (BuildContext context) {
+                          //       //       return RatingDialog(
+                          //       //         title: "Review & Rating",
+                          //       //         descriptions: "Congratulations on sucessfully getting your service delivered. Kindly rate thus seller & its service to help us serve you better",
+                          //       //         text: "OK",
+                          //       //         onChanged: (rating){
+                          //       //           rating = rating;
+                          //       //         },
+                          //       //         onSubmit: () {
+                          //       //
+                          //       //         },
+                          //       //       );
+                          //       //     });
+                          //     }),
                           ProfileOptionsWidget(
                               name: "Terms & Conditions",
                               onTap: () {

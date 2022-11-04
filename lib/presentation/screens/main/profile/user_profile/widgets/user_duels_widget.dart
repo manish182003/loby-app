@@ -35,7 +35,7 @@ class _UserDuelsWidgetState extends State<UserDuelsWidget> {
       if(profileController.isDuelFetching.value){
         return const Center(child: CircularProgressIndicator(),);
       }else{
-        final duelDetails = profileController.duelDetails;
+        final duelDetailsCount = profileController.duelDetailsCount;
         return Column(
           children: <Widget>[
             Padding(
@@ -66,7 +66,7 @@ class _UserDuelsWidgetState extends State<UserDuelsWidget> {
                                   style: textTheme.headline4?.copyWith(
                                       color: textTunaBlueColor,
                                       fontWeight: FontWeight.w500)),
-                              Text("${duelDetails.winCount}",
+                              Text("${duelDetailsCount.value.winCount}",
                                   textAlign: TextAlign.center,
                                   style: textTheme.headlineLarge
                                       ?.copyWith(color: textTunaBlueColor,
@@ -81,7 +81,7 @@ class _UserDuelsWidgetState extends State<UserDuelsWidget> {
                                   style: textTheme.headline4
                                       ?.copyWith(color: textTunaBlueColor,
                                       fontWeight: FontWeight.w500)),
-                              Text("${duelDetails.loseCount}",
+                              Text("${duelDetailsCount.value.loseCount}",
                                   textAlign: TextAlign.center,
                                   style: textTheme.headlineLarge
                                       ?.copyWith(color: textTunaBlueColor,
@@ -162,7 +162,7 @@ class _UserDuelsWidgetState extends State<UserDuelsWidget> {
   }
 
 
-  buildUser(TextTheme textTheme, String name, Color borderColor,
+  _buildUser(TextTheme textTheme, String name, Color borderColor,
       BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -231,3 +231,6 @@ class _UserDuelsWidgetState extends State<UserDuelsWidget> {
     );
   }
 }
+
+
+

@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -35,6 +36,7 @@ class CoreController extends GetxController{
     );
     socket.connect();
     socket.onConnect((data){
+      socket.off("$userId");
       socketListener(userId);
       debugPrint("Socket is Connected");
     });
@@ -143,8 +145,7 @@ class CoreController extends GetxController{
   Future<void> onNotificationClick(String json, BuildContext context) async {
     final data = jsonDecode(json);
 
-    print("Notification data $data");
-
+    log("Notification data $data");
 
     switch(data['notification_type']){
       case 'SERVICE_BOUGHT':
@@ -160,9 +161,10 @@ class CoreController extends GetxController{
         break;
 
       case 'MESSAGE_SENT':
-        context.pushNamed(myDisputePage);
-        // final chat = ChatModel.fromJson(jsonDecode(data['chat_obj']));
-        // context.pushNamed(messagePage, queryParams: {'chatId' : "${chat.id}", 'senderId' : "${chat.senderId}", 'receiverId' : "${chat.receiverId}"});
+
+        Map<String, dynamic> chatObj = jsonDecode(data['chat_obj']);
+        final chat = ChatModel.fromJson(chatObj['contact']);
+        context.pushNamed(messagePage, queryParams: {'chatId' : "${chat.id}", 'senderId' : "${chat.senderId}", 'receiverId' : "${chat.receiverId}"});
         break;
 
       case 'DISPUTE_RESOLVED':

@@ -195,11 +195,16 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                 ],
               ),
               SizedBox(height: 1.h,),
-              Padding(
-                padding: const EdgeInsets.only(right: 20.0),
-                child: Text('View all Transactions',
-                    textAlign: TextAlign.end,
-                    style: textTheme.subtitle2?.copyWith(color: textWhiteColor)),
+              GestureDetector(
+                onTap: (){
+                  context.pushNamed(settlementRequestHistoryPage);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 20.0),
+                  child: Text('View all Transactions',
+                      textAlign: TextAlign.end,
+                      style: textTheme.subtitle2?.copyWith(color: textWhiteColor)),
+                ),
               ),
             ],
           ),

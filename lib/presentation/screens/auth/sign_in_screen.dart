@@ -40,7 +40,8 @@ class _SignInScreenState extends State<SignInScreen> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-              image: AssetImage("assets/images/login_bg_img.png"),
+              image: AssetImage("assets/images/login_bg_img.jpeg"),
+              opacity: 0.5,
               fit: BoxFit.fill
           ),
         ),
