@@ -142,24 +142,50 @@ class OrderItem extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(
-                          height: 16.0,
-                        ),
+                        SizedBox(height: 1.h,),
                         Row(
                           children: [
-                            Text(
-                              "Current Status : ",
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: textTheme.headline4?.copyWith(
-                                  fontSize: 11.0, color: textLightColor),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Current Status",
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: textTheme.headline4?.copyWith(
+                                      fontSize: 11.0, color: textLightColor),
+                                ),
+                                SizedBox(height: 1.h,),
+                                Text(order.userGameService!.category!.name == "Duel" ? duelStatusesName[order.orderStatuses!.last.status!] :
+                                statusesName[order.orderStatuses!.last.status!],
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: textTheme.headline4?.copyWith(fontSize: 11.0, color: aquaGreenColor),
+                                ),
+                              ],
                             ),
-                            const SizedBox(width: 2.0),
-                            Text(order.userGameService!.category!.name == "Duel" ? duelStatusesName[order.orderStatuses!.last.status!] :
-                              statusesName[order.orderStatuses!.last.status!],
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: textTheme.headline4?.copyWith(fontSize: 11.0, color: aquaGreenColor),
+                            SizedBox(width: 4.w),
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Date",
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: textTheme.headline4?.copyWith(
+                                        fontSize: 11.0, color: textLightColor),
+                                  ),
+                                  SizedBox(height: 1.h,),
+                                  Text(Helpers.formatDateTime(dateTime: order.createdAt!),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: textTheme.headline4?.copyWith(fontSize: 11.0, color: aquaGreenColor),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),

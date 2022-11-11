@@ -57,7 +57,7 @@ class ProfileRemoteDatasourceImpl extends ProfileRemoteDatasource{
   }
 
   @override
-  Future<DuelResponseModel> getDuel(int? userId) async{
+  Future<DuelResponseModel> getDuel(int? userId, int? page) async{
     try {
       final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(

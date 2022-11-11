@@ -180,30 +180,6 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                   isRequired: true,
                 ),
                 SizedBox(height: 3.h,),
-                Obx(() {
-                  if (authController.selectedProfileTags.isEmpty) {
-                    return const SizedBox();
-                  } else {
-                    return Padding(
-                      padding: EdgeInsets.only(bottom: 1.h),
-                      child: Wrap(
-                          spacing: 13.0,
-                          runSpacing: 0.0,
-                          children: List.from(
-                            authController.selectedProfileTags.map((products) {
-                              return CustomChips(
-                                  chipName: products['name'],
-                                  removeItem: () {
-                                    setState(() {
-                                      final index = authController.selectedProfileTags.indexWhere((element) => element == products);
-                                      authController.selectedProfileTags.removeAt(index);
-                                    });
-                                  });
-                            }).toList(),
-                          )),
-                    );
-                  }
-                }),
                 AutoCompleteField(
                   selectedSuggestion: selectedProfileTag,
                   title: 'Profile Tag',
@@ -237,6 +213,35 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                     });
                   },
                 ),
+                Obx(() {
+                  if (authController.selectedProfileTags.isEmpty) {
+                    return const SizedBox();
+                  } else {
+                    return Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(8.0),
+                      decoration: const BoxDecoration(
+                          color: textFieldColor,
+                        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8.0), bottomRight: Radius.circular(8.0))
+                      ),
+                      child: Wrap(
+                          spacing: 13.0,
+                          runSpacing: 0.0,
+                          children: List.from(
+                            authController.selectedProfileTags.map((products) {
+                              return CustomChips(
+                                  chipName: products['name'],
+                                  removeItem: () {
+                                    setState(() {
+                                      final index = authController.selectedProfileTags.indexWhere((element) => element == products);
+                                      authController.selectedProfileTags.removeAt(index);
+                                    });
+                                  });
+                            }).toList(),
+                          )),
+                    );
+                  }
+                }),
                 SizedBox(height: 3.h,),
                 TextFieldWidget(
                   textEditingController: authController.bio.value,
@@ -256,7 +261,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                     onTap: () async {
                       if (_formKey.currentState!.validate()) {
                         await Helpers.loader();
-                        final isSuccess = await authController.updateProfile();
+                        final isSuccess = await authController.updateProfile(from: widget.from);
                         await Helpers.hideLoader();
                         if (isSuccess) {
                           if(widget.from == 'signIn'){

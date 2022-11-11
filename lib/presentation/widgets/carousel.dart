@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:chewie/chewie.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -9,6 +10,9 @@ import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/listing/user_game_service_image.dart';
 import 'package:sizer/sizer.dart';
 import 'package:video_player/video_player.dart';
+
+import '../screens/main/home/widgets/full_image_view.dart';
+import 'custom_cached_network_image.dart';
 
 
 class Carousel extends StatefulWidget {
@@ -31,9 +35,11 @@ class _CarouselState extends State<Carousel> {
   ChewieController? chewieController;
 
 
+
   Future<void> _initPlayer(String url) async {
     videoPlayerController = VideoPlayerController.network(url);
     await videoPlayerController.initialize();
+
 
     chewieController = ChewieController(
       videoPlayerController: videoPlayerController,
@@ -69,6 +75,7 @@ class _CarouselState extends State<Carousel> {
 
   @override
   Widget build(BuildContext context) {
+    final list = widget.images.where((element) => element.type != 3).toList();
     return Stack(
       children: [
         CarouselSlider.builder(
@@ -88,13 +95,16 @@ class _CarouselState extends State<Carousel> {
                 });
               }
           ),
-          itemCount: widget.images.length,
+          itemCount: list.length,
           itemBuilder: (context, index, realIndex) {
-            final list = widget.images.where((element) => element.type != 3).toList();
             if(list[index].type == 2){
               return buildImage(
                 urlImage: widget.images[index].path,
                 index: index,
+                onTap: (){
+                  Navigator.push(context, CupertinoPageRoute(
+                      builder: (context) => FullImageView(image: list[index])));
+                }
               );
             }else if(list[index].type == 1){
               return GestureDetector(
@@ -118,7 +128,9 @@ class _CarouselState extends State<Carousel> {
                 ),
               );
             }else{
-              return const SizedBox();
+              return buildLocalImage(
+                  imagePath: "assets/images/listing_placeholder.jpg"
+              );
             }
           }),
         Positioned.fill(
@@ -206,15 +218,21 @@ class _CarouselState extends State<Carousel> {
   Widget buildLocalImage({String? imagePath, int? index, Function()? onTap}){
     return GestureDetector(
       onTap: onTap,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(16.0),
-        // margin: EdgeInsets.symmetric(horizontal: 12),
-        child:  Image.asset(imagePath!,
-          fit: BoxFit.fitWidth,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16.0),
+          // margin: EdgeInsets.symmetric(horizontal: 12),
+          child:  Image.asset(imagePath!,
+            fit: BoxFit.cover,
+            width: MediaQuery.of(context).size.width,
+          ),
         ),
       ),
     );
   }
+
+
 
   void animateToSlide(int index){
     controller.animateToPage(index);
@@ -227,6 +245,10 @@ class _CarouselState extends State<Carousel> {
   }
 
   void _videoPlayerDialog(BuildContext context) {
+    print("aspect ratio ${videoPlayerController.value.aspectRatio}");
+    print("width ${videoPlayerController.value.size.width}");
+    print("height ${videoPlayerController.value.size.height}");
+    // print("height ${chewieController.value.size.height}");
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -243,11 +265,26 @@ class _CarouselState extends State<Carousel> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16.0)),
             child: SizedBox(
-              height: chewieController!.aspectRatio,
+              height: videoPlayerController.value.size.height / 2,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Chewie(
-                  controller: chewieController!,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    InkWell(
+                        onTap: (){
+                          videoPlayerController.pause();
+                          chewieController?.pause();
+                          Navigator.pop(context);
+                        }, child: const Icon(Icons.close, color: whiteColor)),
+                    SizedBox(height: 2.h),
+                    AspectRatio(
+                      aspectRatio: videoPlayerController.value.aspectRatio,
+                      child: Chewie(
+                        controller: chewieController!,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -256,15 +293,12 @@ class _CarouselState extends State<Carousel> {
       },
     );
   }
-
 }
 
 
 class CarouselList{
-
   final int type;
   final String path;
 
   CarouselList({required this.type, required this.path});
-
 }

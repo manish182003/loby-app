@@ -61,13 +61,14 @@ class CustomMessage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     Container(
+                      width: 20.w,
                       decoration: BoxDecoration(
                         color: orangeColor,
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-                        child: Text(message.metadata!['category'] ?? "", style: textTheme.headline6?.copyWith(color: textWhiteColor)),
+                        child: Text(message.metadata!['category'] ?? "", style: textTheme.headline6?.copyWith(color: textWhiteColor), maxLines: 1, overflow: TextOverflow.ellipsis,),
                       ),
                     ),
                     const SizedBox(width: 8.0),

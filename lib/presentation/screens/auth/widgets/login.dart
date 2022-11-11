@@ -15,6 +15,7 @@ import 'package:sizer/sizer.dart';
 import '../../../widgets/body_padding_widget.dart';
 import '../../../widgets/input_text_widget.dart';
 import '../../../widgets/text_fields/text_field_widget.dart';
+import 'forgot_password.dart';
 import 'otp_dialog.dart';
 
 class Login extends StatefulWidget {
@@ -60,7 +61,17 @@ class _LoginState extends State<Login> {
               title: "Password",
               isRequired: true,
             ),
-            SizedBox(height: 5.h,),
+            SizedBox(height: 1.h,),
+            Align(
+              alignment: Alignment.centerRight,
+              child: InkWell(
+                  onTap: (){
+                    Navigator.pop(context);
+                    _showForgotPasswordBottomSheet(context);
+                  },
+                  child: Text('Forgot Password ?', style: textTheme.headline5?.copyWith(color: aquaGreenColor))),
+            ),
+            SizedBox(height: 4.h,),
             CustomButton(
               color: aquaGreenColor,
               name: "Login",
@@ -143,6 +154,28 @@ class _LoginState extends State<Login> {
               maxChildSize: 0.97,
               minChildSize: 0.5,
               child: CreateProfileCard(from: 'signIn',)),
+        );
+      },
+    );
+  }
+
+
+  void _showForgotPasswordBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      isDismissible: false,
+      enableDrag: false,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: const CustomBottomSheet(
+              isDismissible: false,
+              initialChildSize: 0.5,
+              maxChildSize: 0.9,
+              minChildSize: 0.5,
+              child: ForgotPassword()),
         );
       },
     );

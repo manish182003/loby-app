@@ -32,7 +32,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   void initState() {
     // TODO: implement initState
-
     asyncFunctions();
     super.initState();
   }
@@ -81,9 +80,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           if(profileController.isProfileFetching.value || isFetching){
             return const Center(child: CircularProgressIndicator(),);
           }else{
-
             final user = widget.from == "other" ? profileController.otherUserProfile : profileController.profile;
-
             return SingleChildScrollView(
               child: Column(
                 children: <Widget>[
@@ -103,8 +100,4 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       ),
     );
   }
-
-
-
-
 }

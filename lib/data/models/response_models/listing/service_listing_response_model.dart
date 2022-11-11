@@ -10,11 +10,14 @@ class ServiceListingResponseModel extends ServiceListingResponse {
 
   final int count;
   final List<ServiceListing> serviceListings;
+  final int maxFilterPrice;
+
 
   const ServiceListingResponseModel({
     required this.count,
     required this.serviceListings,
-  }) : super(count: count, serviceListings: serviceListings);
+    required this.maxFilterPrice,
+  }) : super(count: count, serviceListings: serviceListings, maxFilterPrice: maxFilterPrice);
 
   @override
   List<Object> get props => [count, serviceListings];
@@ -25,5 +28,6 @@ class ServiceListingResponseModel extends ServiceListingResponse {
         serviceListings: (json['data']['rows'] as List<dynamic>)
             .map<ServiceListingModel>((listings) => ServiceListingModel.fromJson(listings))
             .toList(),
+        maxFilterPrice: json["maxPrice"] ?? 0,
       );
 }

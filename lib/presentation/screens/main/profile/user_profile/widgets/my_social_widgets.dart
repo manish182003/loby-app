@@ -83,7 +83,7 @@ class _MySocialWidgetState extends State<MySocialWidget> {
                     discord: discord.text,
                     twitch: twitch.text,
                 );
-
+                profileController.isSocialsEditable.value = false;
                 await Helpers.hideLoader();
               },
             ),

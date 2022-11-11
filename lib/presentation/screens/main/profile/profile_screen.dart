@@ -1,20 +1,14 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:loby/core/utils/helpers.dart';
-import 'package:loby/presentation/getx/controllers/listing_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/widgets/custom_loader.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../../../core/theme/colors.dart';
 import '../../../widgets/custom_cached_network_image.dart';
-import '../../../widgets/rating_dialog.dart';
 import '../profile/widgets/profile_options.dart';
 
 class ProfileScreen extends StatefulWidget {

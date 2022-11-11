@@ -6,12 +6,14 @@ class ServiceListingResponse extends Equatable {
 
   final int count;
   final List<ServiceListing> serviceListings;
+  final int maxFilterPrice;
 
   const ServiceListingResponse({
     required this.count,
     required this.serviceListings,
+    required this.maxFilterPrice,
   });
 
   @override
-  List<Object> get props => [count, serviceListings];
+  List<Object> get props => [count, serviceListings, maxFilterPrice];
 }

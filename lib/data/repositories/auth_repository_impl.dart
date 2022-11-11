@@ -119,4 +119,14 @@ class AuthRepositoryImpl extends AuthRepository{
     }
   }
 
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> forgotAndResetPassword({String? email, String? otp, String? password, String? confirmPassword}) async{
+    try {
+      return Right(await _authRemoteDatasource.forgotAndResetPassword(email, otp, password, confirmPassword));
+    } on ServerException catch (e) {
+    // Loggers can be added here for analyzation.
+    return Left(ServerFailure(message: e.message.toString()));
+    }
+  }
+
 }

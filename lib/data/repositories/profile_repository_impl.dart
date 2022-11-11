@@ -40,9 +40,9 @@ class ProfileRepositoryImpl extends ProfileRepository{
   }
 
   @override
-  Future<Either<Failure, DuelResponse>> getDuel({int? userId})async {
+  Future<Either<Failure, DuelResponse>> getDuel({int? userId, int? page})async {
     try {
-      return Right(await _profileRemoteDatasource.getDuel(userId));
+      return Right(await _profileRemoteDatasource.getDuel(userId, page));
     } on ServerException catch (e) {
     // Loggers can be added here for analyzation.
     return Left(ServerFailure(message: e.message.toString()));

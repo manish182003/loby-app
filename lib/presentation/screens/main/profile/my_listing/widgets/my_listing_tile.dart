@@ -92,23 +92,19 @@ class _MyListingTileState extends State<MyListingTile> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Container(
+                        width: 18.w,
                         margin: const EdgeInsets.only(right: 4.0),
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              decoration: BoxDecoration(
-                                color: orangeColor,
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 4.0, horizontal: 6.0),
-                                child: Text(widget.listing.category?.name! ?? '',
-                                    style: textTheme.headline6
-                                        ?.copyWith(color: textWhiteColor)),
-                              ),
-                            ),
-                          ],
+                        alignment: Alignment.center,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: orangeColor,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4.0, horizontal: 6.0),
+                            child: Text(widget.listing.category?.name! ?? '', style: textTheme.headline6?.copyWith(color: textWhiteColor), maxLines: 1, overflow: TextOverflow.ellipsis,),
+                          ),
                         ),
                       ),
                       TokenWidget(

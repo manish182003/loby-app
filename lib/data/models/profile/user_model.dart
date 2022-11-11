@@ -42,7 +42,7 @@ class UserModel extends User{
         this.createdAt,
         this.updatedAt,
         this.memberSince,
-        this.followersCount,
+        this.followersCount = 0,
         this.listingsCount,
         this.orderCount,
         this.avgRatingCount,
@@ -86,12 +86,12 @@ class UserModel extends User{
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final DateTime? memberSince;
-  final int? followersCount;
+  int followersCount;
   final int? listingsCount;
   final int? orderCount;
   final String? avgRatingCount;
   final int? commentCount;
-  final String? userFollowStatus;
+  String? userFollowStatus;
   final StateModel? state;
   final CountryModel? country;
   final CityModel? city;
@@ -130,12 +130,12 @@ class UserModel extends User{
     coverImage: json["cover_image"] == null ? null : Helpers.getImage(json["cover_image"]),
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
     updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
-    followersCount: json["followersCount"],
+    followersCount: json["followersCount"] ?? 0,
     listingsCount: json["listingsCount"],
     orderCount: json["orderCount"],
     avgRatingCount: json["avg_rating_count"],
     commentCount: json["comment_count"],
-    userFollowStatus: json["user_follow_status"],
+    userFollowStatus: json["user_follow_status"] == 0 ? 'N' : 'Y',
     state: json["state"] == null ? null : StateModel.fromJson(json["state"]),
     country: json["country"] == null ? null : CountryModel.fromJson(json["country"]),
     city: json["city"] == null ? null : CityModel.fromJson(json["city"]),

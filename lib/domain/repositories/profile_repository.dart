@@ -18,7 +18,7 @@ abstract class ProfileRepository{
 
   Future<Either<Failure, RatingResponse>> getRatings({int? userId, int? page});
 
-  Future<Either<Failure, DuelResponse>> getDuel({int? userId});
+  Future<Either<Failure, DuelResponse>> getDuel({int? userId, int? page});
 
   Future<Either<Failure, Map<String, dynamic>>> addFunds({int? amount});
 

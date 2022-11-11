@@ -63,9 +63,12 @@ class ListingController extends GetxController{
   final quantityCount = 1.obs;
   final totalPrice = "".obs;
 
-  final rangeSliderDiscreteValues = const RangeValues(0, 235000).obs;
 
   final categoryId = 0.obs;
+  final maxFilterPrice = 0.obs;
+
+  final rangeSliderDiscreteValues = const RangeValues(0, 235000).obs;
+
 
 
 
@@ -192,7 +195,10 @@ class ListingController extends GetxController{
             }
 
           }else{
+            maxFilterPrice.value = success.maxFilterPrice;
+            print("macxx price ${maxFilterPrice.value}");
             areMoreListingAvailable.value = success.serviceListings.length == 10;
+
 
             if (buyerListingPageNumber > 1) {
               buyerListings.addAll(success.serviceListings);

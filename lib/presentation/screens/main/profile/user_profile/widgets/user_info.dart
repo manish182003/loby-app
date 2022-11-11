@@ -22,8 +22,8 @@ class UserInfo extends StatelessWidget {
     'Listing',
     'About',
     'Socials',
-    'Review & Ratings',
     'Duels',
+    'Review & Ratings',
   ];
 
   HomeController homeController = Get.find<HomeController>();
@@ -37,6 +37,7 @@ class UserInfo extends StatelessWidget {
         children: <Widget>[
           CustomChip(
             labelName: bubbles,
+            spacing: 16,
             onChanged: (index) {
               homeController.profileSelectedOptionIndex.value = index;
             },
@@ -49,15 +50,16 @@ class UserInfo extends StatelessWidget {
               case 1:
                 return UserAboutWidget(user: user);
               case 2:
-                if(from == "other"){
-                  return UserSocialWidget(user: user);
-                }else{
-                  return MySocialWidget(user: user);
-                }
+                return UserSocialWidget(user: user, from: from,);
+                // if(from == "other"){
+                //   return UserSocialWidget(user: user);
+                // }else{
+                //   return MySocialWidget(user: user);
+                // }
               case 3:
-                return UserReviewRatingWidget(user: user);
-              case 4:
                 return UserDuelsWidget(user: user);
+              case 4:
+                return UserReviewRatingWidget(user: user);
               default:
                 return UserListingWidget(user: user, from: from);
             }

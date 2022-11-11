@@ -83,6 +83,7 @@ import 'package:loby/presentation/getx/bindings/profile_binding.dart';
 
 import '../data/datasource_impl/order_remote_datasource_impl.dart';
 import '../data/repositories/order_repository_impl.dart';
+import '../domain/usecases/auth/forgot_and_reset_password.dart';
 import '../domain/usecases/listing/change_listing_status.dart';
 import '../domain/usecases/profile/get_wallet_transactions.dart';
 
@@ -159,6 +160,7 @@ class DependencyInjector{
     Get.lazyPut(() => CheckUsername(authRepository));
     Get.lazyPut(() => AddFCMToken(authRepository));
     Get.lazyPut(() => SendAndVerifyOTP(authRepository));
+    Get.lazyPut(() => ForgotAndResetPassword(authRepository));
   }
 
   static void _injectHomeUsecases() {

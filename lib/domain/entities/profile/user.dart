@@ -37,7 +37,7 @@ class User extends Equatable{
       this.createdAt,
       this.updatedAt,
       this.memberSince,
-      this.followersCount,
+      this.followersCount = 0,
       this.listingsCount,
       this.orderCount,
       this.avgRatingCount,
@@ -81,12 +81,12 @@ class User extends Equatable{
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final DateTime? memberSince;
-  final int? followersCount;
+  int followersCount;
   final int? listingsCount;
   final int? orderCount;
   final String? avgRatingCount;
   final int? commentCount;
-  final String? userFollowStatus;
+  String? userFollowStatus;
   final State? state;
   final Country? country;
   final City? city;

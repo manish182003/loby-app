@@ -60,9 +60,11 @@ class _UserListingWidgetState extends State<UserListingWidget> {
           selectedSuggestion: homeController.selectedCategoryName.value,
           hint: 'Select Category',
           suggestionsCallback: (pattern) async {
-            WidgetsBinding.instance.addPostFrameCallback((_) async {
-              await homeController.getCategories(name: pattern);
-            });
+            await homeController.getCategories(name: pattern);
+            // WidgetsBinding.instance.addPostFrameCallback((_) async {
+            //
+            //   homeController.categories.refresh();
+            // });
 
             List finalList = [];
             for (int i = 0; i < homeController.categories.length; i++) {
@@ -83,9 +85,10 @@ class _UserListingWidgetState extends State<UserListingWidget> {
           selectedSuggestion: homeController.selectedGameName.value,
           hint: 'Select Game',
           suggestionsCallback: (pattern) async {
-            WidgetsBinding.instance.addPostFrameCallback((_) async {
-              await homeController.getGames(name: pattern);
-            });
+            await homeController.getGames(name: pattern);
+            // WidgetsBinding.instance.addPostFrameCallback((_) async {
+            //
+            // });
 
             List finalList = [];
             for (int i = 0; i < homeController.games.length; i++) {

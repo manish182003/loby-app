@@ -10,11 +10,13 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:loby/core/usecases/auth_params.dart';
 import 'package:loby/core/usecases/usecase.dart';
 import 'package:loby/core/utils/helpers.dart';
+import 'package:loby/data/models/profile/user_model.dart';
 import 'package:loby/domain/entities/auth/city.dart';
 import 'package:loby/domain/entities/auth/country.dart';
 import 'package:loby/domain/entities/auth/profile_tag.dart';
 import 'package:loby/domain/entities/auth/selected_option.dart';
 import 'package:loby/domain/usecases/auth/check_username.dart';
+import 'package:loby/domain/usecases/auth/forgot_and_reset_password.dart';
 import 'package:loby/domain/usecases/auth/get_cities.dart';
 import 'package:loby/domain/usecases/auth/get_countries.dart';
 import 'package:loby/domain/usecases/auth/get_profile_tags.dart';
@@ -26,9 +28,11 @@ import 'package:loby/domain/usecases/auth/update_profile.dart';
 import 'package:loby/presentation/getx/controllers/core_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../data/models/profile/user_model.dart';
 import '../../../domain/entities/auth/state.dart' as state;
 import '../../../domain/usecases/auth/add_fcm_token.dart';
 import 'profile_controller.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 class AuthController extends GetxController{
 
@@ -42,6 +46,7 @@ class AuthController extends GetxController{
   final CheckUsername _checkUsername;
   final AddFCMToken _addFCMToken;
   final SendAndVerifyOTP _sendAndVerifyOTP;
+  final ForgotAndResetPassword _forgotAndResetPassword;
 
   AuthController({
     required Signup signup,
@@ -53,6 +58,7 @@ class AuthController extends GetxController{
     required CheckUsername checkUsername,
     required AddFCMToken addFCMToken,
     required SendAndVerifyOTP sendAndVerifyOTP,
+    required ForgotAndResetPassword forgotAndResetPassword,
     }) : _signup = signup,
         _getCountries = getCountries,
         _getStates = getStates,
@@ -62,7 +68,15 @@ class AuthController extends GetxController{
         _login = login,
   _checkUsername = checkUsername,
         _addFCMToken = addFCMToken,
-        _sendAndVerifyOTP = sendAndVerifyOTP;
+        _sendAndVerifyOTP = sendAndVerifyOTP,
+        _forgotAndResetPassword = forgotAndResetPassword;
+
+
+
+  final auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
+  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
 
   final countries = <Country>[].obs;
   final areMoreCountriesAvailable = true.obs;
@@ -90,13 +104,13 @@ class AuthController extends GetxController{
 
   final errorMessage = ''.obs;
 
-  final auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
+
 
   final isGoogleSignInSuccess = false.obs;
 
   final isUsernameAvailable = false.obs;
   final usernameString = "".obs;
+
 
 
 
@@ -109,6 +123,8 @@ class AuthController extends GetxController{
      if(userId != null && apiToken != null){
        profileController.getProfile();
        addFCMToken(fcmToken: fcmToken);
+       analytics.setUserId(id: '$userId');
+       analytics.logEvent(name: 'loggedInUser', parameters: ({'userId' : '$userId'}));
        coreController.connect(userId);
      }else if(apiToken != null){
        profileController.getProfile();
@@ -429,6 +445,31 @@ class AuthController extends GetxController{
       Params(authParams: AuthParams(
           email: email,
         otp: otp,
+      ),),
+    );
+
+    failureOrSuccess.fold(
+          (failure) {
+        errorMessage.value = Helpers.convertFailureToMessage(failure);
+        debugPrint(errorMessage.value);
+        Helpers.toast(errorMessage.value);
+      },
+          (success) {
+
+        // Helpers.toast('Profile Changed');
+      },
+    );
+    return failureOrSuccess.isRight() ? true : false;
+  }
+
+  Future<bool> forgotAndResetPassword({required String email, String? otp, String? password, String? confirmPassword}) async {
+
+    final failureOrSuccess = await _forgotAndResetPassword(
+      Params(authParams: AuthParams(
+        email: email,
+        otp: otp,
+        password: password,
+        confirmPassword: confirmPassword,
       ),),
     );
 

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/order/dispute.dart';
@@ -7,6 +8,8 @@ import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../core/theme/colors.dart';
+import '../../../../../core/utils/constants.dart';
+import '../../../../getx/controllers/profile_controller.dart';
 import '../../../../widgets/custom_cached_network_image.dart';
 import '../my_order/widgets/order_status_constants.dart';
 
@@ -14,15 +17,18 @@ class DisputeWidget extends StatelessWidget {
   final String disputeType;
   final String currentStatus;
   final Dispute dispute;
+  final String? from;
 
-  const DisputeWidget({Key? key, required this.disputeType, required this.currentStatus, required this.dispute}) : super(key: key);
+  const DisputeWidget({Key? key, required this.disputeType, required this.currentStatus, required this.dispute, this.from}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return GestureDetector(
       onTap: (){
-        context.pushNamed(createNewDisputePage, queryParams: {'disputeId' : "${dispute.id}"});
+        if(from == 'list'){
+          context.pushNamed(createNewDisputePage, queryParams: {'disputeId' : "${dispute.id}"});
+        }
       },
       child: Column(
         children: <Widget>[
@@ -40,9 +46,9 @@ class DisputeWidget extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      buildUser(textTheme, context,title:  'Seller', imageUrl: dispute.userOrder!.userGameService!.user!.image,name:  dispute.userOrder!.userGameService!.user!.displayName ?? ''),
+                      buildUser(textTheme, context, userId: dispute.userOrder!.userGameService!.user!.id!, title:  'Seller', imageUrl: dispute.userOrder!.userGameService!.user!.image, name:  dispute.userOrder!.userGameService!.user!.displayName ?? ''),
                       const SizedBox(width: 8,),
-                      buildUser(textTheme, context,title:  'Buyer', imageUrl: dispute.userOrder!.user!.image ,name:  dispute.userOrder!.user!.displayName ?? ''),
+                      buildUser(textTheme, context, userId: dispute.userOrder!.user!.id!, title:  'Buyer', imageUrl: dispute.userOrder!.user!.image ,name:  dispute.userOrder!.user!.displayName ?? ''),
                     ],
                   ),
                   const SizedBox(height: 8),
@@ -153,7 +159,8 @@ class DisputeWidget extends StatelessWidget {
     );
   }
 
-  buildUser(TextTheme textTheme, BuildContext context, {required String title, required String? imageUrl,required name}) {
+  buildUser(TextTheme textTheme, BuildContext context, {required int userId, required String title, required String? imageUrl,required name}) {
+    ProfileController profileController = Get.find<ProfileController>();
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -166,26 +173,34 @@ class DisputeWidget extends StatelessWidget {
                   title,
                   style: textTheme.headline5?.copyWith(color: whiteColor),
                 ))),
-        Padding(
-          padding: EdgeInsets.symmetric(vertical:8.0, horizontal: 0.0),
-          child: CircleAvatar(
-            radius: 36,
-            backgroundColor: butterflyBlueColor,
-            child: Padding(
-              padding: EdgeInsets.all(2.0),
-              child: CircleAvatar(
-                backgroundColor: backgroundDarkJungleGreenColor,
-                radius: 36,
-                child: Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(36),
-                    child: CustomCachedNetworkImage(
-                      imageUrl: imageUrl,
-                      name: name,
+        GestureDetector(
+          onTap: (){
+            context.pushNamed(userProfilePage, queryParams: {
+              'userId': "$userId",
+              'from': profileController.profile.id == userId ? ConditionalConstants.myProfile : ConditionalConstants.otherProfile,
+            });
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical:8.0, horizontal: 0.0),
+            child: CircleAvatar(
+              radius: 36,
+              backgroundColor: butterflyBlueColor,
+              child: Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: CircleAvatar(
+                  backgroundColor: backgroundDarkJungleGreenColor,
+                  radius: 36,
+                  child: Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(36),
+                      child: CustomCachedNetworkImage(
+                        imageUrl: imageUrl,
+                        name: name,
+                      ),
                     ),
-                  ),
-                ), //CircleAvatar
+                  ), //CircleAvatar
+                ),
               ),
             ),
           ),

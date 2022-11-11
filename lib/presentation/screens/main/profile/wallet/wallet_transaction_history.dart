@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loby/core/utils/helpers.dart';
+import 'package:loby/domain/entities/profile/wallet_transaction.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
-import 'package:loby/presentation/screens/main/notification/widgets/notification_item_widget.dart';
 import 'package:loby/presentation/screens/main/profile/wallet/widgets/transaction_tile.dart';
 import 'package:loby/presentation/widgets/custom_loader.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../../../../core/theme/colors.dart';
 import '../../../../widgets/body_padding_widget.dart';
 import '../../../../widgets/custom_app_bar.dart';
@@ -33,6 +32,7 @@ class _WalletTransactionHistoryState extends State<WalletTransactionHistory> {
       profileController.areMoreWalletTransactionsAvailable.value = true;
       profileController.getWalletTransactions();
     });
+
 
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
@@ -79,15 +79,14 @@ class _WalletTransactionHistoryState extends State<WalletTransactionHistory> {
                           date: Helpers.formatDateTime(dateTime: transaction.createdAt!),
                           amount: transaction.amount.toString(),
                           isDebited: transaction.type == 'C' ? false : true,
+                          transaction: transaction,
                         );
                       } else {
                         return Obx(() {
                           if (profileController.areMoreWalletTransactionsAvailable.value) {
                             return const Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 32.0),
-                              child: Center(
-                                  child: CircularProgressIndicator()),
+                              padding: EdgeInsets.symmetric(vertical: 32.0),
+                              child: Center(child: CircularProgressIndicator()),
                             );
                           } else {
                             return const SizedBox();
@@ -101,10 +100,8 @@ class _WalletTransactionHistoryState extends State<WalletTransactionHistory> {
             ),
           ),
         );
-
       }
-    }),
-
+      }),
     );
   }
 }

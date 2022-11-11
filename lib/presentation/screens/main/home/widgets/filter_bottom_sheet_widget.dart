@@ -28,6 +28,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
     final textTheme = Theme
         .of(context)
         .textTheme;
+
+    listingController.rangeSliderDiscreteValues.value = RangeValues(0, listingController.maxFilterPrice.value.toDouble());
     return ListView.builder(
       controller: widget.controller,
       // assign controller here
@@ -71,10 +73,11 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                           overlayRadius: 28.0),
                     ),
                     child: Obx(() {
+
                       return RangeSlider(
                         values: listingController.rangeSliderDiscreteValues.value,
                         min: 0,
-                        max: 240000,
+                        max: listingController.maxFilterPrice.value.toDouble(),
                         labels: RangeLabels(
                           listingController.rangeSliderDiscreteValues.value.start.round().toString(),
                           listingController.rangeSliderDiscreteValues.value.end.round().toString(),

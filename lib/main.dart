@@ -8,6 +8,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/core/utils/environment.dart';
+import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 import 'package:loby/presentation/getx/controllers/core_controller.dart';
 import 'package:loby/presentation/widgets/custom_loading_widget.dart';
@@ -60,7 +61,7 @@ void main() async {
   final router = MyRouter();
   GoRouter appRouter = await router.appRouter(initialLink: initialLink);
 
-  runApp(MyApp(appRouter: appRouter, initialLink: initialLink,));
+  runApp(MyApp(appRouter: appRouter, initialLink: initialLink));
 }
 
 
@@ -102,6 +103,7 @@ class _MyAppState extends State<MyApp> {
       );
     });
   }
+
 
 
   Future<void> initializePushNotification()async{
@@ -153,7 +155,6 @@ class _MyAppState extends State<MyApp> {
       );
     }
   }
-
 
   void _handleDynamicLink(){
     FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;

@@ -16,7 +16,7 @@ abstract class ProfileRemoteDatasource{
 
   Future<RatingResponseModel> getRatings(int? userId, int? page);
 
-  Future<DuelResponseModel> getDuel(int? userId);
+  Future<DuelResponseModel> getDuel(int? userId, int? page);
 
   Future<Map<String, dynamic>> addFunds(int? amount);
 

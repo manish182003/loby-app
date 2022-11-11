@@ -78,7 +78,7 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
                     onTap: () async {
                       if(_formKey.currentState!.validate()){
                         Helpers.loader();
-                        final isSuccess = await orderController.submitDisputeProof(disputeId: widget.disputeId, description: comments.text);
+                        final isSuccess = await orderController.submitDisputeProof(disputeId: widget.disputeId, description: comments.text, link: fileLink.text);
                         Helpers.hideLoader();
                         if(isSuccess){
                           Helpers.toast("Dispute Proof Successfully Submitted");

@@ -18,6 +18,7 @@ import 'package:loby/presentation/widgets/custom_loader.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../services/routing_service/routes_name.dart';
+import '../../../getx/controllers/profile_controller.dart';
 import '../../../widgets/bottom_dialog.dart';
 import '../../../widgets/custom_app_bar.dart';
 import '../../../widgets/buttons/custom_button.dart';
@@ -38,6 +39,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
   HomeController homeController = Get.find<HomeController>();
   OrderController orderController = Get.find<OrderController>();
   ChatController chatController = Get.find<ChatController>();
+  ProfileController profileController = Get.find<ProfileController>();
 
   late ServiceListing listing;
 
@@ -77,19 +79,22 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
             child: BodyPaddingWidget(
               child: Column(
                 children: [
-                  listing.userGameServiceImages!.isEmpty ? const SizedBox() : Carousel(
+                  listing.userGameServiceImages!.isEmpty ?  Carousel(images: [CarouselList(type: 5, path: '')],) : Carousel(
                     images: [for(final i in listing.userGameServiceImages!) CarouselList(type: i.type!, path: i.path!)],
                   ),
                   listing.userGameServiceImages!.isEmpty ? const SizedBox() : SizedBox(height: 2.h,),
-                  Text(listing.description!, style: textTheme.headline5?.copyWith(color: textWhiteColor)),
+                  Text(listing.title!, style: textTheme.headline5?.copyWith(color: textWhiteColor)),
                   SizedBox(height: 2.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _circularInfoBox(textTheme, color: orangeColor, info: listing.game!.name!),
-                      SizedBox(width: 1.w),
-                      _circularInfoBox(textTheme, color: purpleLightIndigoColor, info: listing.category!.name!),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _circularInfoBox(textTheme, color: orangeColor, info: listing.game!.name!),
+                        SizedBox(width: 1.w),
+                        _circularInfoBox(textTheme, color: purpleLightIndigoColor, info: listing.category!.name!),
+                      ],
+                    ),
                   ),
                   SizedBox(height: 2.h),
                   Card(
@@ -295,28 +300,18 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                 ),
                               ),
                               const SizedBox(width: 4.0),
-                              listing.user?.userFollowStatus == null ? const SizedBox()
-                                  : Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12.0),
-                                ),
-                                color: shipGreyColor,
-                                child: Container(
-                                  width: 45,
-                                  height: 45,
-                                  decoration: BoxDecoration(
-                                    color: shipGreyColor,
-                                    borderRadius: BorderRadius.circular(12.0),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: SvgPicture.asset(
-                                      'assets/icons/a_check_icon.svg',
-                                      color: iconWhiteColor,
-                                      width: 12,
-                                      height: 12,
-                                    ),
-                                  ),
+                              GestureDetector(
+                                onTap: (){
+                                  profileController.followUnfollow(userId: listing.user?.id);
+                                  setState(() {
+                                    listing.user?.userFollowStatus = listing.user?.userFollowStatus == 'N' ? 'Y' : 'N';
+                                  });
+                                },
+                                child: SvgPicture.asset(
+                                  listing.user?.userFollowStatus == 'N' ? 'assets/icons/follow.svg' : 'assets/icons/unfollow.svg',
+                                  color: iconWhiteColor,
+                                  width: 48,
+                                  height: 48,
                                 ),
                               ),
                             ],
@@ -327,10 +322,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                   ),
                   SizedBox(height: 2.h,),
                   Container(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 1,
+                    width: MediaQuery.of(context).size.width * 1,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
@@ -339,7 +331,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                       child: Column(
                         children: [
                           _rowWidget(textTheme, text1: "Listing ID",
-                              text2: "#${listing.id}"),
+                              text2: "#${listing.listingNumber}"),
                           SizedBox(height: 1.h),
                           _rowWidget(textTheme, text1: "Game", text2: listing.game!.name!,),
                           SizedBox(height: 1.h),
@@ -389,7 +381,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                   widget.from == 'myListing'? const SizedBox() : Padding(
                     padding: const EdgeInsets.only(
                         top: 0.0, left: 7.0, bottom: 24.0, right: 7.0),
-                    child: Row(
+                    child: listing.user?.id == profileController.profile.id ? const SizedBox() :  Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
@@ -490,8 +482,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
     );
   }
 
-  Widget _rowWidget(TextTheme textTheme,
-      {required String text1, required String text2, bool isNormal = false}) {
+  Widget _rowWidget(TextTheme textTheme, {required String text1, required String text2, bool isNormal = false}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -515,8 +506,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
               maxLines: 3,
               textAlign: TextAlign.end,
               overflow: TextOverflow.ellipsis,
-              style: textTheme.headline5?.copyWith(
-                  color: whiteColor)
+              style: textTheme.headline5?.copyWith(color: whiteColor),
           ),
         ),
       ],

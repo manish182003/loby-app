@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "259408443986-oabd6tqaopbm0rmavl4jf9escml0gl9m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.loby.app",
+            "certificate_hash": "b57070277e506f5f255977e161ec20541361c6d6"
+          }
+        },
+        {
           "client_id": "259408443986-lktb56g5uoc4d134r40bksg2bs2oihe6.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -31,10 +39,10 @@
               "client_type": 3
             },
             {
-              "client_id": "259408443986-aism1f90erd659pf8re12mmrqnbq9m9n.apps.googleusercontent.com",
+              "client_id": "259408443986-9512m0pm2th1tb6etg2r58bod9mr2i5p.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.loby"
+                "bundle_id": "com.loby.app"
               }
             }
           ]

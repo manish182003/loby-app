@@ -13,6 +13,7 @@ class GetDuel extends UseCase<DuelResponse, Params> {
   Future<Either<Failure, DuelResponse>> call(Params params) {
     return _repository.getDuel(
       userId: params.profileParams?.userId,
+      page: params.profileParams?.page,
     );
   }
 }

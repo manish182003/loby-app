@@ -33,5 +33,7 @@ abstract class AuthRepository{
 
   Future<Either<Failure, Map<String, dynamic>>> sendAndVerifyOTP({String? email, String? otp});
 
+  Future<Either<Failure, Map<String, dynamic>>> forgotAndResetPassword({String? email, String? otp, String? password, String? confirmPassword});
+
 
 }

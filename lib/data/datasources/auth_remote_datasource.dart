@@ -29,5 +29,6 @@ abstract class AuthRemoteDatasource{
 
   Future<Map<String, dynamic>> sendAndVerifyOTP(String? email, String? otp);
 
+  Future<Map<String, dynamic>> forgotAndResetPassword(String? email, String? otp, String? password, String? confirmPassword);
 
 }

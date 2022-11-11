@@ -6,6 +6,7 @@ import 'package:loby/presentation/getx/controllers/listing_controller.dart';
 import 'package:loby/presentation/screens/main/home/widgets/ItemList.dart';
 import 'package:loby/presentation/screens/main/home/widgets/filter_bottom_sheet_widget.dart';
 import 'package:loby/presentation/widgets/body_padding_widget.dart';
+import 'package:sizer/sizer.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../widgets/custom_app_bar.dart';
 import '../../../widgets/custom_chip.dart';
@@ -106,6 +107,7 @@ class _GameItemScreenState extends State<GameItemScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
+                      width: 70.w,
                       decoration: BoxDecoration(
                         color: textFieldColor,
                         borderRadius: BorderRadius.circular(10.0),
@@ -143,7 +145,7 @@ class _GameItemScreenState extends State<GameItemScreen> {
                     ),
                     const SizedBox(width: 4.0),
                     SizedBox(
-                      height: 45,
+                      height: 50,
                       width: 66,
                       child: MaterialButton(
                         shape: RoundedRectangleBorder(

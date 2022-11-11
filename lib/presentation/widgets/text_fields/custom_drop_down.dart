@@ -73,26 +73,28 @@ class _BuildDropdownState extends State<BuildDropdown> {
         hintStyle: textTheme.headline4?.copyWith(color: textInputTitleColor),
         labelStyle: textTheme.headline4!.copyWith(color: textWhiteColor),
         focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: aquaGreenColor, width: 0.5),
-          borderRadius: BorderRadius.circular(8.0),
+          borderSide: BorderSide(color: widget.isMultiple ? textFieldColor : aquaGreenColor, width: widget.isMultiple ? 0 : 0.5),
+          borderRadius: widget.isMultiple ? widget.selectedItemList!.isNotEmpty ? const BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0)) : BorderRadius.circular(8.0) :  BorderRadius.circular(8.0),
         ),
         border:  OutlineInputBorder(
-          borderSide: const BorderSide(color: textFieldColor, width: 0),
-          borderRadius: BorderRadius.circular(8.0),
+          borderSide: BorderSide(color: textFieldColor, width: widget.isMultiple ? 0 : 0.5),
+          borderRadius: widget.isMultiple ? widget.selectedItemList!.isNotEmpty ? const BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0)) : BorderRadius.circular(8.0) :  BorderRadius.circular(8.0),
         ),
 
         enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color:textFieldColor, width: 0),
-          borderRadius:  BorderRadius.circular(8.0),),
+          borderSide: BorderSide(color: textFieldColor, width: widget.isMultiple ? 0 : 0.5),
+          borderRadius: widget.isMultiple ? widget.selectedItemList!.isNotEmpty ? const BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0)) : BorderRadius.circular(8.0) :  BorderRadius.circular(8.0),
+        ),
 
         errorBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: textErrorColor, width: 0.5),
-          borderRadius:  BorderRadius.circular(8.0),),
+          borderSide:  const BorderSide(color: textErrorColor, width: 0.5),
+          borderRadius:  BorderRadius.circular(8.0),
+        ),
 
         focusedErrorBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color:textErrorColor, width: 0.5),
-          borderRadius:  BorderRadius.circular(8.0),),
-
+          borderSide:  const BorderSide(color:textErrorColor, width: 0.5),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
       ),
     );
   }

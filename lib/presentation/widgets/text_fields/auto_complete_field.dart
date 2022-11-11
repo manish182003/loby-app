@@ -108,25 +108,28 @@ class AutoCompleteField extends StatelessWidget {
               hintStyle: textTheme.headline4?.copyWith(color: textInputTitleColor),
               labelStyle: textTheme.headline4!.copyWith(color: textWhiteColor),
               focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: aquaGreenColor, width: 0.5),
-                borderRadius: BorderRadius.circular(8.0),
+                borderSide: BorderSide(color: isMultiple ? textFieldColor : aquaGreenColor, width: isMultiple ? 0 : 0.5),
+                borderRadius: isMultiple ? selectedValuesList!.isNotEmpty ? const BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0)) : BorderRadius.circular(8.0) :  BorderRadius.circular(8.0),
               ),
               border:  OutlineInputBorder(
-                borderSide: const BorderSide(color: textFieldColor, width: 0),
-                borderRadius: BorderRadius.circular(8.0),
+                borderSide: BorderSide(color: textFieldColor, width: isMultiple ? 0 : 0.5),
+                borderRadius: isMultiple ? selectedValuesList!.isNotEmpty ? const BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0)) : BorderRadius.circular(8.0) :  BorderRadius.circular(8.0),
               ),
 
               enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color:textFieldColor, width: 0),
-                borderRadius:  BorderRadius.circular(8.0),),
+                borderSide: BorderSide(color: textFieldColor, width:isMultiple ? 0 : 0.5),
+                borderRadius: isMultiple ? selectedValuesList!.isNotEmpty ? const BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0)) : BorderRadius.circular(8.0) :  BorderRadius.circular(8.0),
+              ),
 
-              errorBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: textErrorColor, width: 0.5),
-                borderRadius:  BorderRadius.circular(8.0),),
+                errorBorder: OutlineInputBorder(
+                  borderSide:  const BorderSide(color: textErrorColor, width: 0.5),
+                  borderRadius:  BorderRadius.circular(8.0),
+                ),
 
-              focusedErrorBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color:textErrorColor, width: 0.5),
-                borderRadius:  BorderRadius.circular(8.0),),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderSide:  const BorderSide(color:textErrorColor, width: 0.5),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
 
               suffixIcon: IconButton(
                 padding: const EdgeInsets.all(0.0),

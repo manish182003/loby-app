@@ -18,6 +18,9 @@ class ApiEndpoints{
   static const String addFCMToken = "/add-user-fcm-token";
   static const String sendOTP = "/send-otp-email";
   static const String verifyOTP = "/verify-user-email";
+  static const String forgotPassword = "/forgot-password";
+  static const String resetPassword = "/reset-password";
+
 
   /// Home APIs ///
   static const String getCategories = "/get-all-categories";
@@ -86,14 +89,14 @@ class ApiEndpoints{
   static const String submitFeedback = "/submit-feedback";
   static const String getSettlementRequests = "/get-settlement-request";
 
+}
 
 
 
+class ConditionalConstants{
 
-
-
-
-
-
+  static const String otherProfile = "other";
+  static const String myProfile = "myProfile";
+  static const String fromMyListing = "myListing";
 
 }

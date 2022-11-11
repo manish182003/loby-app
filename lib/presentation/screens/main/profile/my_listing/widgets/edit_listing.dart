@@ -61,6 +61,18 @@ class _EditListingState extends State<EditListing> {
             child: Column(
               children: [
                 TextFieldWidget(
+                  textEditingController: TextEditingController(text: widget.listing.category!.name),
+                  title: "Category",
+                  isReadableOnly: true,
+                ),
+                SizedBox(height: 2.h),
+                TextFieldWidget(
+                  textEditingController: TextEditingController(text: widget.listing.game!.name),
+                  title: "Game",
+                  isReadableOnly: true,
+                ),
+                SizedBox(height: 2.h),
+                TextFieldWidget(
                   textEditingController: listingController.title.value,
                   title: "Title",
                   hint: "Enter Title",
@@ -73,10 +85,28 @@ class _EditListingState extends State<EditListing> {
                   maxLines: 5,
                   textInputAction: TextInputAction.newline,
                 ),
+                SizedBox(height: 2.h),
+                TextFieldWidget(
+                  textEditingController: TextEditingController(text: widget.listing.userGameServiceOptions!.map((e) => e.serviceOptions?.first.serviceOptionName).toList().join(", ")),
+                  title: "Service Type",
+                  isReadableOnly: true,
+                ),
                 SizedBox(height: 4.h),
                 _buildUploadField(textTheme),
                 SizedBox(height: 4.h),
                 _buildPrice(textTheme),
+                SizedBox(height: 2.h),
+                TextFieldWidget(
+                  textEditingController: TextEditingController(text: widget.listing.unit!.name),
+                  title: "Unit",
+                  isReadableOnly: true,
+                ),
+                SizedBox(height: 2.h),
+                TextFieldWidget(
+                  textEditingController: TextEditingController(text: widget.listing.edt.toString()),
+                  title: "Estimated Delivery Time (Days)",
+                  isReadableOnly: true,
+                ),
                 SizedBox(height: 4.h),
                 CustomButton(
                   color: createProfileButtonColor,

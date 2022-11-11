@@ -11,6 +11,7 @@ import 'package:loby/presentation/getx/controllers/listing_controller.dart';
 import 'package:loby/presentation/screens/main/profile/wallet/widgets/token_widget.dart';
 import 'package:loby/presentation/widgets/custom_cached_network_image.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
+import 'package:sizer/sizer.dart';
 import '../../../../../core/theme/colors.dart';
 
 class ItemList extends StatefulWidget {
@@ -86,23 +87,23 @@ class _ItemListState extends State<ItemList> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Container(
-                        margin: const EdgeInsets.only(right: 0),
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              decoration: BoxDecoration(
-                                color: orangeColor,
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 4.0, horizontal: 6.0),
-                                child: Text(widget.listing.category?.name! ?? '',
-                                    style: textTheme.headline6?.copyWith(color: textWhiteColor)),
-                              ),
-                            ),
-                          ],
+                      SizedBox(
+                        width: 16.w,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: orangeColor,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          alignment: Alignment.center,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4.0, horizontal: 6.0),
+                            child: Text(
+                                widget.listing.category?.name! ?? '',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: textTheme.headline6?.copyWith(color: textWhiteColor)),
+                          ),
                         ),
                       ),
                       Container(
@@ -155,12 +156,22 @@ class _ItemListState extends State<ItemList> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              widget.listing.user!.name!,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: textTheme.headline4?.copyWith(
-                                  fontSize: 11.0, color: textWhiteColor),
+                            Row(
+                              children: [
+                                Text(
+                                  widget.listing.user!.name!,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: textTheme.headline4?.copyWith(
+                                      fontSize: 11.0, color: textWhiteColor),
+                                ),
+                                const SizedBox(width: 4,),
+                                widget.listing.user!.verifiedProfile ?? false ? SvgPicture.asset(
+                                  'assets/icons/verified_user_bedge.svg',
+                                  height: 14,
+                                  width: 14,
+                                ) : const SizedBox(),
+                              ],
                             ),
                             Row(
                               children: [
@@ -222,7 +233,7 @@ class _ItemListState extends State<ItemList> {
                                       behavior: HitTestBehavior.translucent,
                                       onTap: ()async {
                                         await Helpers.loader();
-                                        await listingController.reportListing(userId: widget.listing.id, userGameServiceId: widget.listing.id);
+                                        await listingController.reportListing(userGameServiceId: widget.listing.id);
                                         await Helpers.hideLoader();
                                         _controller.hideMenu();
                                         /* ConfirmationRiseDisputeBottomDialog(

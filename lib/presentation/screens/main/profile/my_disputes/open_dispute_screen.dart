@@ -69,6 +69,7 @@ class _DisputeScreenTabState extends State<DisputeScreenTab> {
                             disputeType: widget.status,
                             currentStatus: 'Resolved on July 20th 2022',
                             dispute: dispute,
+                            from: 'list',
                           );
                         } else {
                           return Obx(() {

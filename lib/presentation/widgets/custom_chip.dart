@@ -7,9 +7,9 @@ class CustomChip extends StatefulWidget {
   final List<String> labelName;
   final ValueChanged<int>? onChanged;
   final int selectedIndex;
+  final double? spacing;
 
-  const CustomChip({Key? key, this.label, this.color, required this.labelName, this.onChanged, this.selectedIndex = 0})
-      : super(key: key);
+  const CustomChip({Key? key, this.label, this.color, required this.labelName, this.onChanged, this.selectedIndex = 0, this.spacing}) : super(key: key);
 
   @override
   State<CustomChip> createState() => _CustomChipState();
@@ -29,15 +29,14 @@ class _CustomChipState extends State<CustomChip> {
 
     final textTheme = Theme.of(context).textTheme;
     return Wrap(
-      spacing: 8.0,
+      spacing: widget.spacing ?? 8.0,
       children: [
         ...List.generate(
             widget.labelName.length,
             (index) => ChoiceChip(
                   selected: _selectedIndex == index,
                   label: Text(widget.labelName[index].toString(),
-                      style:
-                      textTheme.headline6?.copyWith(color: textWhiteColor)),
+                      style: textTheme.headline6?.copyWith(color: textWhiteColor)),
                   elevation: 1,
                   side: BorderSide(
                       color: widget.color ?? orangeColor,

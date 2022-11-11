@@ -96,8 +96,10 @@ class ProfileController extends GetxController{
 
   final duelDetailsCount = const DuelDetailsCount().obs;
   final duelDetailsList = <DuelDetails>[].obs;
+  final isDuelDetailsFetching = false.obs;
+  final areMoreDuelDetailsAvailable = true.obs;
+  final duelDetailsPageNumber = 1.obs;
 
-  final isDuelFetching = false.obs;
 
   final addFundsResponse = {}.obs;
   final isSocialLinksFetching = false.obs;
@@ -134,7 +136,7 @@ class ProfileController extends GetxController{
   final areMoreSettlementRequestsAvailable = true.obs;
   final settlementRequestsPageNumber = 1.obs;
 
-
+  final isSocialsEditable = false.obs;
 
 
 
@@ -198,28 +200,43 @@ class ProfileController extends GetxController{
 
 
   Future<bool> getDuel({int? userId}) async {
-    isDuelFetching.value = true;
+    duelDetailsPageNumber.value == 1 ? isDuelDetailsFetching(true) : isDuelDetailsFetching(false);
 
-    final failureOrSuccess = await _getDuel(
-      Params(profileParams: ProfileParams(
-        userId: userId,
-      ),),
-    );
+    if(areMoreDuelDetailsAvailable.value){
+      final failureOrSuccess = await _getDuel(
+        Params(profileParams: ProfileParams(
+          userId: userId,
+          page: duelDetailsPageNumber.value,
+        ),),
+      );
 
-    failureOrSuccess.fold(
-          (failure) {
-        errorMessage.value = Helpers.convertFailureToMessage(failure);
-        debugPrint(errorMessage.value);
-        Helpers.toast(errorMessage.value);
-        isDuelFetching.value = false;
-      },
-          (success) {
-            duelDetailsCount.value = success.duelDetailsCount;
-          duelDetailsList.value = success.duelDetailsList;
-        isDuelFetching.value = false;
-      },
-    );
-    return failureOrSuccess.isRight() ? true : false;
+      failureOrSuccess.fold(
+            (failure) {
+          errorMessage.value = Helpers.convertFailureToMessage(failure);
+          debugPrint(errorMessage.value);
+          Helpers.toast(errorMessage.value);
+          isDuelDetailsFetching.value = false;
+        },
+            (success) {
+              areMoreDuelDetailsAvailable.value = success.duelDetailsList.length == 10;
+              duelDetailsCount.value = success.duelDetailsCount;
+
+
+              if (duelDetailsPageNumber > 1) {
+                duelDetailsList.addAll(success.duelDetailsList);
+              } else {
+                duelDetailsList.value = success.duelDetailsList;
+              }
+
+              duelDetailsPageNumber.value++;
+
+              isDuelDetailsFetching.value = false;
+
+        },
+      );
+      return failureOrSuccess.isRight() ? true : false;
+    }
+    return false;
   }
 
 
@@ -441,14 +458,12 @@ class ProfileController extends GetxController{
         },
             (success) {
 
-
             if (paymentTransactionsPageNumber > 1) {
               paymentTransactions.addAll(success.paymentTransactions);
             } else {
               paymentTransactions.value = success.paymentTransactions;
             }
             areMorePaymentTransactionsAvailable.value = success.paymentTransactions.length == 10;
-
 
             paymentTransactionsPageNumber.value++;
 

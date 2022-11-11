@@ -294,4 +294,29 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
       throw ServerException(message: e.message);
     }
   }
+
+  @override
+  Future<Map<String, dynamic>> forgotAndResetPassword(String? email, String? otp, String? password, String? confirmPassword) async{
+    try {
+      // final headers = await Helpers.getApiHeaders();
+      final response = await Helpers.sendRequest(
+        _dio,
+        RequestType.post,
+        otp == null ? ApiEndpoints.forgotPassword : ApiEndpoints.resetPassword,
+        queryParams: otp == null ? {
+          'email': email,
+        } : {
+          'email': email,
+          'otp' : otp,
+          'password' : password,
+          'confirm_password' : confirmPassword,
+        },
+        // headers: headers,
+      );
+
+      return response!;
+    } on ServerException catch (e) {
+      throw ServerException(message: e.message);
+    }
+  }
 }

@@ -172,7 +172,7 @@ class CoreController extends GetxController{
         break;
 
       case 'PROFILE_VERIFICATION':
-        context.pushNamed(userProfilePage, queryParams: {'userId': "71", 'from': 'myProfile'});
+        context.pushNamed(userProfilePage, queryParams: {'userId': "", 'from': 'myProfile'});
         break;
     }
   }

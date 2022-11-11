@@ -311,7 +311,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                 selectedValue: listingController.estimateDeliveryTime.value,
                 dropdownHint: "Select",
                 isRequired: true,
-                itemsList:  [for(var i = 1; i <= (listingController.configuration.maximumEstimatedDeliveryTimeDays ?? "").length; i++) i].map((item) =>
+                itemsList:  [for(var i = 1; i <= int.tryParse(listingController.configuration.maximumEstimatedDeliveryTimeDays == "" ? '0' : listingController.configuration.maximumEstimatedDeliveryTimeDays ?? '0')! ; i++) i].map((item) =>
                     DropdownMenuItem<String>(
                       value: "$item",
                       child: Text("$item", style: textTheme.headline3?.copyWith(color: whiteColor)
@@ -470,25 +470,9 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Wrap(
-                    spacing: 12.0,
-                    runSpacing: 0.0,
-                    children: List.from(
-                      multiSelectionServices[service!.index].map((services) {
-                        return CustomChips(
-                            chipName: services.name,
-                            removeItem: () {
-                              setState((){
-                                multiSelectionServices[service.index].removeWhere((element) => element.name == services.name);
-                              });
-                              }
-                        );
-                      }).toList(),
-                    ),
-                ),
-                SizedBox(height: multiSelectionServices[service.index].isNotEmpty ? 2.h : 0.h,),
+                // SizedBox(height: multiSelectionServices[service.index].isNotEmpty ? 2.h : 0.h,),
                 BuildDropdown(
-                  dropdownHint: service.name,
+                  dropdownHint: service!.name,
                   isMultiple: true,
                   isRequired: true,
                   selectedItemList: multiSelectionServices[service.index],
@@ -520,6 +504,30 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                       }
                     });
                   },
+                ),
+                multiSelectionServices[service.index].isEmpty ? const SizedBox() : Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: const BoxDecoration(
+                      color: textFieldColor,
+                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8.0), bottomRight: Radius.circular(8.0))
+                  ),
+                  child: Wrap(
+                    spacing: 12.0,
+                    runSpacing: 0.0,
+                    children: List.from(
+                      multiSelectionServices[service.index].map((services) {
+                        return CustomChips(
+                            chipName: services.name,
+                            removeItem: () {
+                              setState((){
+                                multiSelectionServices[service.index].removeWhere((element) => element.name == services.name);
+                              });
+                            }
+                        );
+                      }).toList(),
+                    ),
+                  ),
                 ),
                 // AutoCompleteField(
                 //   hint: service.name,

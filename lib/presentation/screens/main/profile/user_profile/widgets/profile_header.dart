@@ -254,26 +254,40 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                 ),
                               ),
                               const SizedBox(width: 4.0),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.15,
-                                height: 45,
-                                child: MaterialButton(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12.0),
-                                  ),
-                                  color: shipGreyColor,
-                                  onPressed: () {
-                                    profileController.followUnfollow(userId: widget.user.id);
-                                    debugPrint("Click Search");
-                                  },
-                                  child: SvgPicture.asset(
-                                    'assets/icons/a_check_icon.svg',
-                                    color: iconWhiteColor,
-                                    width: 24,
-                                    height: 24,
-                                  ),
+                              GestureDetector(
+                                onTap: (){
+                                  profileController.followUnfollow(userId: widget.user.id);
+                                  setState(() {
+                                    widget.user.userFollowStatus = widget.user.userFollowStatus == 'N' ? 'Y' : 'N';
+                                    widget.user.followersCount = widget.user.userFollowStatus == 'N' ? widget.user.followersCount+1 : widget.user.followersCount-1;
+                                  });
+                                },
+                                child: SvgPicture.asset(
+                                  widget.user.userFollowStatus == 'N' ? 'assets/icons/follow.svg' : 'assets/icons/unfollow.svg',
+                                  color: iconWhiteColor,
+                                  width: 48,
+                                  height: 48,
                                 ),
                               ),
+                              // SizedBox(
+                              //   width: MediaQuery.of(context).size.width * 0.15,
+                              //   height: 45,
+                              //   child: MaterialButton(
+                              //     shape: RoundedRectangleBorder(
+                              //       borderRadius: BorderRadius.circular(12.0),
+                              //     ),
+                              //     color: shipGreyColor,
+                              //     onPressed: () {
+                              //       profileController.followUnfollow(userId: widget.user.id);
+                              //     },
+                              //     child: SvgPicture.asset(
+                              //       'assets/icons/a_check_icon.svg',
+                              //       color: iconWhiteColor,
+                              //       width: 24,
+                              //       height: 24,
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                         ) : const SizedBox(),

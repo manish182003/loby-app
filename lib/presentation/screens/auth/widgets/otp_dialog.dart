@@ -30,7 +30,7 @@ class _OTPDialogState extends State<OTPDialog> {
       backgroundColor: backgroundDarkJungleGreenColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
       child: SizedBox(
-        height: 24.h,
+        height: 26.h,
         child: Form(
           key: _formKey,
           child: Column(
@@ -58,8 +58,8 @@ class _OTPDialogState extends State<OTPDialog> {
                     pinTheme: PinTheme(
                       shape: PinCodeFieldShape.box,
                       borderRadius: BorderRadius.circular(5),
-                      fieldHeight: 50,
-                      fieldWidth: 40,
+                      fieldHeight: 45,
+                      fieldWidth: 35,
                       activeColor: aquaGreenColor,
                       inactiveColor: textFieldColor,
                       selectedColor: aquaGreenColor,

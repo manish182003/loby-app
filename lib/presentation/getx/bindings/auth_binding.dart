@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:loby/domain/usecases/auth/add_fcm_token.dart';
 import 'package:loby/domain/usecases/auth/check_username.dart';
+import 'package:loby/domain/usecases/auth/forgot_and_reset_password.dart';
 import 'package:loby/domain/usecases/auth/get_cities.dart';
 import 'package:loby/domain/usecases/auth/get_countries.dart';
 import 'package:loby/domain/usecases/auth/get_profile_tags.dart';
@@ -28,6 +29,7 @@ class AuthBinding extends Bindings {
     final checkUsername = Get.find<CheckUsername>();
     final addFCMToken = Get.find<AddFCMToken>();
     final sendAndVerifyOTP = Get.find<SendAndVerifyOTP>();
+    final forgotAndResetPassword = Get.find<ForgotAndResetPassword>();
 
     Get.lazyPut(() => AuthController(
       signup: signup,
@@ -37,7 +39,8 @@ class AuthBinding extends Bindings {
       getProfileTags: getProfileTags,
       updateProfile: updateProfile, login: login, checkUsername: checkUsername,
       addFCMToken: addFCMToken,
-      sendAndVerifyOTP: sendAndVerifyOTP
+      sendAndVerifyOTP: sendAndVerifyOTP,
+      forgotAndResetPassword: forgotAndResetPassword,
 
     ));
   }
