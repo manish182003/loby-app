@@ -68,6 +68,7 @@ import 'package:loby/domain/usecases/profile/get_payment_transactions.dart';
 import 'package:loby/domain/usecases/profile/get_profile.dart';
 import 'package:loby/domain/usecases/profile/get_ratings.dart';
 import 'package:loby/domain/usecases/profile/get_settlement_requests.dart';
+import 'package:loby/domain/usecases/profile/get_total_earning.dart';
 import 'package:loby/domain/usecases/profile/profile_verification.dart';
 import 'package:loby/domain/usecases/profile/submit_feedback.dart';
 import 'package:loby/domain/usecases/profile/update_social_links.dart';
@@ -232,6 +233,7 @@ class DependencyInjector{
     Get.lazyPut(() => GetFollowers(profileRepository));
     Get.lazyPut(() => SubmitFeedback(profileRepository));
     Get.lazyPut(() => GetSettlementRequests(profileRepository));
+    Get.lazyPut(() => GetTotalEarning(profileRepository));
   }
 
 }

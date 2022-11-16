@@ -50,6 +50,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
   int selectedCategoryId = 0;
 
   TextEditingController selectedGameName = TextEditingController();
+  String selectedGameString = '';
   int selectedGameId = 0;
   String selectedUnitName = '';
 
@@ -168,7 +169,12 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                 hint: 'Select Game',
                 isRequired: true,
                 suggestionsCallback: (pattern) async {
-                  await homeController.getGames(name: pattern);
+
+                  if(pattern == selectedGameString){
+                    await homeController.getGames(name: '');
+                  }else{
+                    await homeController.getGames(name: pattern);
+                  }
                   List finalList = [];
                   for (int i = 0; i < homeController.games.length; i++) {
                     finalList.add(homeController.games[i].name);
@@ -179,6 +185,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   final index = homeController.games.indexWhere((element) => element.name == value);
                   homeController.selectedGameId.value = homeController.games[index].id!;
                   selectedGameName.text = homeController.games[index].name!;
+                  selectedGameString = homeController.games[index].name!;
                   _getConfigurations();
                 },
               ),
@@ -420,6 +427,13 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
 
     Helpers.hideLoader();
     if (isSuccess) {
+      selectedCategoryName = '';
+      selectedCategoryId = 0;
+      selectedGameName.clear();
+      selectedGameString = '';
+      selectedGameId = 0;
+      selectedUnitName = '';
+
       BottomDialog(
           textTheme: textTheme,
           tileName: "Congratulations",

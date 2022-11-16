@@ -9,7 +9,8 @@ class CustomBottomSheet extends StatelessWidget {
   final double? minChildSize;
   final bool? isDismissible;
   final double? horizontalPadding;
-  const CustomBottomSheet({Key? key, required this.child, this.initialChildSize, this.maxChildSize, this.minChildSize, this.isDismissible, this.horizontalPadding}) : super(key: key);
+  final double? sheetRadius;
+  const CustomBottomSheet({Key? key, required this.child, this.initialChildSize, this.maxChildSize, this.minChildSize, this.isDismissible, this.horizontalPadding, this.sheetRadius}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +26,9 @@ class CustomBottomSheet extends StatelessWidget {
         maxChildSize: maxChildSize ?? 0.5,
         minChildSize: minChildSize ?? 0.5,
         builder:(_, controller) => Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
               color: backgroundBalticSeaColor,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(40)),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(sheetRadius ?? 40)),
             ),
             padding: EdgeInsets.only(left: horizontalPadding ?? 15, right: horizontalPadding ?? 15, top: 3.h, bottom: 0.h),
             child: ListView.builder(

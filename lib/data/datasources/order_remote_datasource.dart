@@ -13,7 +13,7 @@ abstract class OrderRemoteDatasource{
 
   Future<Map<String, dynamic>> changeOrderStatus(int? orderId, String? status);
 
-  Future<Map<String, dynamic>> uploadDeliveryProof(int? orderId, List<int>? fileType ,List<File>? file);
+  Future<Map<String, dynamic>> uploadDeliveryProof(int? orderId, List<int>? fileType ,List<File>? file, String? link);
 
   Future<Map<String, dynamic>> submitRating(int? orderId, double? stars, String? review);
 

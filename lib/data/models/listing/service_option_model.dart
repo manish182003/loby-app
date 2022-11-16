@@ -23,7 +23,11 @@ class ServiceOptionModel extends ServiceOption {
 
   factory ServiceOptionModel.fromJson(Map<String, dynamic> json) => ServiceOptionModel(
     id: json["id"],
+    serviceId: json["service_id"],
     serviceOptionName: json["service_option"],
+    createdAt: json['createdAt'] == null ? null : DateTime.parse(json['createdAt']),
+    updatedAt: json['updatedAt'] == null ? null : DateTime.parse(json['updatedAt']),
+    service: json['service'] == null ? null : ServiceModel.fromJson(json['service'])
   );
 
   Map<String, dynamic> toJson() => {

@@ -148,6 +148,8 @@ class _MyAppState extends State<MyApp> {
             channelDescription : channel.description,
             icon: android.smallIcon,
             importance: Importance.high,
+            ongoing: true,
+            styleInformation: const BigTextStyleInformation(''),
           ),
           iOS: const IOSNotificationDetails(),
         ),

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/order/dispute.dart';
+import 'package:loby/domain/entities/profile/user.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
 
@@ -11,6 +12,7 @@ import '../../../../../core/theme/colors.dart';
 import '../../../../../core/utils/constants.dart';
 import '../../../../getx/controllers/profile_controller.dart';
 import '../../../../widgets/custom_cached_network_image.dart';
+import '../../../../widgets/profile_picture.dart';
 import '../my_order/widgets/order_status_constants.dart';
 
 class DisputeWidget extends StatelessWidget {
@@ -46,9 +48,9 @@ class DisputeWidget extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      buildUser(textTheme, context, userId: dispute.userOrder!.userGameService!.user!.id!, title:  'Seller', imageUrl: dispute.userOrder!.userGameService!.user!.image, name:  dispute.userOrder!.userGameService!.user!.displayName ?? ''),
+                      buildUser(textTheme, context,profile: dispute.userOrder!.userGameService!.user!, userId: dispute.userOrder!.userGameService!.user!.id!, title:  'Seller', imageUrl: dispute.userOrder!.userGameService!.user!.image, name:  dispute.userOrder!.userGameService!.user!.displayName ?? ''),
                       const SizedBox(width: 8,),
-                      buildUser(textTheme, context, userId: dispute.userOrder!.user!.id!, title:  'Buyer', imageUrl: dispute.userOrder!.user!.image ,name:  dispute.userOrder!.user!.displayName ?? ''),
+                      buildUser(textTheme, context,profile: dispute.userOrder!.user!, userId: dispute.userOrder!.user!.id!, title:  'Buyer', imageUrl: dispute.userOrder!.user!.image ,name:  dispute.userOrder!.user!.displayName ?? ''),
                     ],
                   ),
                   const SizedBox(height: 8),
@@ -145,7 +147,7 @@ class DisputeWidget extends StatelessWidget {
                         ),
                         TextSpan(
                             text: "${dispute.result} on ${Helpers.formatDateTime(dateTime: dispute.updatedAt!)}",
-                            style: textTheme.headline6?.copyWith(color: disputeType == 'PENDING' ? lavaRedColor : aquaGreenColor)),
+                            style: textTheme.headline6?.copyWith(color: dispute.result!.contains('PENDING') ? lavaRedColor : aquaGreenColor)),
                       ],
                     ),
                   ),
@@ -159,7 +161,7 @@ class DisputeWidget extends StatelessWidget {
     );
   }
 
-  buildUser(TextTheme textTheme, BuildContext context, {required int userId, required String title, required String? imageUrl,required name}) {
+  buildUser(TextTheme textTheme, BuildContext context, {required int userId, required String title, required String? imageUrl,required String name, required User profile}) {
     ProfileController profileController = Get.find<ProfileController>();
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -182,27 +184,7 @@ class DisputeWidget extends StatelessWidget {
           },
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical:8.0, horizontal: 0.0),
-            child: CircleAvatar(
-              radius: 36,
-              backgroundColor: butterflyBlueColor,
-              child: Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: CircleAvatar(
-                  backgroundColor: backgroundDarkJungleGreenColor,
-                  radius: 36,
-                  child: Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(36),
-                      child: CustomCachedNetworkImage(
-                        imageUrl: imageUrl,
-                        name: name,
-                      ),
-                    ),
-                  ), //CircleAvatar
-                ),
-              ),
-            ),
+            child: ProfilePicture(profile: profile, radius: 36,),
           ),
         ),
         Text(

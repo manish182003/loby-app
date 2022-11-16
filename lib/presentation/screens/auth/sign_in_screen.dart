@@ -12,6 +12,7 @@ import 'package:loby/presentation/widgets/custom_bottom_sheet.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
 import '../../../core/theme/colors.dart';
+import '../../../core/utils/helpers.dart';
 
 
 class SignInScreen extends StatefulWidget {
@@ -58,17 +59,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   right: 14.w,
                   bottom: 2.h,
                   top: 6.h,
-                  onTap: ()async{
-                    final isSuccess = await authController.googleSignInMethod(context);
-                    if(isSuccess){
-                      if (!mounted) return;
-                      if(profileController.profile.displayName == null){
-                        _showCreateProfileBottomSheet(context);
-                      }else{
-                        context.pushNamed(mainPage);
-                      }
-                    }
-                  }
+                  onTap: _checkProfileStatus,
               ),
               CustomButton(
                   name: "Continue with Apple",
@@ -105,8 +96,26 @@ class _SignInScreenState extends State<SignInScreen> {
       ),
     );
   }
-  
 
+
+  Future<void> _checkProfileStatus()async{
+    Helpers.loader();
+    final isSuccess = await authController.googleSignInMethod(context);
+    if(isSuccess){
+      await profileController.getProfile();
+      if (!mounted) return;
+      if(profileController.profile.displayName == null){
+        Helpers.hideLoader();
+        _showCreateProfileBottomSheet(context);
+      }else{
+        await authController.loggedUserIn();
+        Helpers.hideLoader();
+        context.pushNamed(mainPage);
+      }
+    }else{
+      Helpers.hideLoader();
+    }
+  }
 
 
   void _createAccountDialog(BuildContext context) {

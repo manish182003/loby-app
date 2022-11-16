@@ -1,4 +1,5 @@
 // ignore_for_file: overridden_fields, annotate_overrides
+import 'package:loby/data/models/order/order_model.dart';
 import 'package:loby/domain/entities/profile/wallet_transaction.dart';
 
 class WalletTransactionModel extends WalletTransaction {
@@ -16,13 +17,14 @@ class WalletTransactionModel extends WalletTransaction {
     this.walletSettlementId,
     this.createdAt,
     this.updatedAt,
+    this.order,
   });
 
   final int? id;
   final int? userId;
-  final int? previousAmount;
+  final double? previousAmount;
   final double? amount;
-  final int? totalAmount;
+  final double? totalAmount;
   final String? type;
   final String? reason;
   final String? details;
@@ -31,13 +33,14 @@ class WalletTransactionModel extends WalletTransaction {
   final int? walletSettlementId;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final OrderModel? order;
 
   factory WalletTransactionModel.fromJson(Map<String, dynamic> json) => WalletTransactionModel(
     id: json["id"],
     userId: json["user_id"],
-    previousAmount: json["previous_amount"],
-    amount: json["amount"].toDouble(),
-    totalAmount: json["total_amount"],
+    previousAmount: double.tryParse(json["previous_amount"]),
+    amount: double.tryParse(json["amount"]),
+    totalAmount: double.tryParse(json["total_amount"]),
     type: json["type"],
     reason: json["reason"],
     details: json["details"],
@@ -46,6 +49,8 @@ class WalletTransactionModel extends WalletTransaction {
     walletSettlementId: json["wallet_settlement_id"],
     createdAt: DateTime.parse(json["createdAt"]),
     updatedAt: DateTime.parse(json["updatedAt"]),
+    order: json["userOrder"] == null ? null : OrderModel.fromJson(json["userOrder"]),
+
   );
 
   Map<String, dynamic> toJson() => {

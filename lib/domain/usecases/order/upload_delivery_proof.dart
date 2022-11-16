@@ -14,7 +14,8 @@ class UploadDeliveryProof extends UseCase<Map<String, dynamic>, Params> {
     return _repository.uploadDeliveryProof(
       orderId: params.orderParams?.orderId,
       fileType: params.orderParams?.fileType,
-      file: params.orderParams?.file
+      file: params.orderParams?.file,
+      link: params.orderParams?.link
     );
   }
 }

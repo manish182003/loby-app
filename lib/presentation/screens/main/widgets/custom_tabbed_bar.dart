@@ -28,6 +28,7 @@ class CustomTabbedAppBarState extends State<CustomTabbedAppBar>
   void initState() {
     super.initState();
 
+    homeController.getStaticData();
     homeController.getUnreadCount(type: 'chat');
     homeController.getUnreadCount(type: 'notification');
 
@@ -139,7 +140,7 @@ class TabTitle extends StatelessWidget {
       badgeContent: Text(
           '$count', style: textTheme.headline6?.copyWith(color: Colors.white)
       ),
-      position: BadgePosition.topEnd(),
+      position: BadgePosition.topEnd(end: 10, top: 0),
       badgeColor: badgeColor,
       showBadge: count == 0 ? false : true,
       child: AnimatedContainer(

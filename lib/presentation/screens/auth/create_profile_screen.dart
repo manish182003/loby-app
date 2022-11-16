@@ -70,8 +70,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 topRight: Radius.circular(40.0),
               )),
           child: Padding(
-            padding: EdgeInsets.fromLTRB(31.5, 16.00, 31.5, 16.00),
-            child: Container(
+            padding: const EdgeInsets.fromLTRB(31.5, 16.00, 31.5, 16.00),
+            child: SizedBox(
               width: double.infinity,
               child: Form(
                 key: _formKey,

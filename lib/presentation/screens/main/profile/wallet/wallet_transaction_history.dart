@@ -75,9 +75,6 @@ class _WalletTransactionHistoryState extends State<WalletTransactionHistory> {
                         final transaction = profileController.walletTransactions[index];
                         return TransactionTile(
                           title: transaction.type == 'C' ? 'Tokens Credited' : 'Tokens Debited',
-                          desc: transaction.details!,
-                          date: Helpers.formatDateTime(dateTime: transaction.createdAt!),
-                          amount: transaction.amount.toString(),
                           isDebited: transaction.type == 'C' ? false : true,
                           transaction: transaction,
                         );

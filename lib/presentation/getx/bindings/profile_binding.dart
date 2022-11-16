@@ -17,6 +17,7 @@ import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 
 import '../../../domain/usecases/profile/add_bank_details.dart';
 import '../../../domain/usecases/profile/follow_unfollow.dart';
+import '../../../domain/usecases/profile/get_total_earning.dart';
 import '../../../domain/usecases/profile/submit_feedback.dart';
 
 class ProfileBinding extends Bindings {
@@ -40,6 +41,7 @@ class ProfileBinding extends Bindings {
     final getFollowers = Get.find<GetFollowers>();
     final submitFeedback = Get.find<SubmitFeedback>();
     final getSettlementRequests = Get.find<GetSettlementRequests>();
+    final getTotalEarning = Get.find<GetTotalEarning>();
 
 
     Get.lazyPut(() => ProfileController(
@@ -59,6 +61,7 @@ class ProfileBinding extends Bindings {
       getFollowers: getFollowers,
       submitFeedback: submitFeedback,
         getSettlementRequests: getSettlementRequests,
+        getTotalEarning: getTotalEarning,
     ));
   }
 

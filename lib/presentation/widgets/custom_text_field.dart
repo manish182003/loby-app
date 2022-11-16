@@ -86,7 +86,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       textCapitalization: widget.textCapitalization!,
       obscureText: widget.obscureText,
       // maxLengthEnforced: true,
-      style: textTheme.headline4?.copyWith(color: textWhiteColor),
+      style: textTheme.headline4?.copyWith(color: widget.isReadableOnly ? textInputTitleColor : textWhiteColor),
       scrollPadding: EdgeInsets.only(bottom: widget.scrollBottomPadding!),
 
       decoration: InputDecoration(

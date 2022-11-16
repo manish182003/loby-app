@@ -21,6 +21,7 @@ import 'package:loby/presentation/widgets/custom_app_bar.dart';
 import 'package:loby/presentation/widgets/custom_loader.dart';
 import 'package:mime/mime.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:sizer/sizer.dart';
 import 'package:uuid/uuid.dart';
 
 
@@ -74,6 +75,7 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
 
     final chatChannel = chatController.chats.where((chat) => chat.receiverId == widget.receiverId).toList().first;
 
@@ -85,23 +87,41 @@ class _ChatPageState extends State<ChatPage> {
         }else {
           chatController.chatMessages.refresh();
           _user = types.User(id: widget.senderId.toString());
-          return Chat(
-              messages: chatController.chatMessages,
-              onAttachmentPressed: _handleAttachmentPressed,
-              onMessageTap: _handleMessageTap,
-              onPreviewDataFetched: _handlePreviewDataFetched,
-              onSendPressed: _handleSendPressed,
-              showUserAvatars: true,
-              showUserNames: true,
-              user: _user,
-              theme: const DarkChatTheme(
-                backgroundColor: backgroundColor,
-                secondaryColor: textFieldColor,
-                inputBackgroundColor: textFieldColor,
+          return Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(6.0),
+                margin: const EdgeInsets.symmetric(horizontal: 15.0),
+                decoration: BoxDecoration(
+                  border: Border.all(color: textErrorColor, width: 1),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Text(
+                  'Disclaimer : This chat may be reviewed by Loby Team in case of a dispute. Use of inappropriate language will lead to suspension of user account & might result to legal actions.',
+                  style: textTheme.headline6?.copyWith(color: textErrorColor),
+                ),
               ),
-              customMessageBuilder: (message, {messageWidth = 0}) {
-                return CustomMessage(message: message);
-              }
+              Expanded(
+                child: Chat(
+                    messages: chatController.chatMessages,
+                    onAttachmentPressed: _handleAttachmentPressed,
+                    onMessageTap: _handleMessageTap,
+                    onPreviewDataFetched: _handlePreviewDataFetched,
+                    onSendPressed: _handleSendPressed,
+                    showUserAvatars: true,
+                    showUserNames: true,
+                    user: _user,
+                    theme: const DarkChatTheme(
+                      backgroundColor: backgroundColor,
+                      secondaryColor: textFieldColor,
+                      inputBackgroundColor: textFieldColor,
+                    ),
+                    customMessageBuilder: (message, {messageWidth = 0}) {
+                      return CustomMessage(message: message);
+                    }
+                ),
+              ),
+            ],
           );
         }
       }),

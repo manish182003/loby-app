@@ -24,6 +24,7 @@ import '../../../../../../services/routing_service/routes_name.dart';
 import '../../../../../widgets/bottom_dialog.dart';
 import '../../../../../widgets/custom_app_bar.dart';
 import '../../../../../widgets/buttons/custom_button.dart';
+import '../../../../../widgets/profile_picture.dart';
 
 class ProfileHeader extends StatefulWidget {
   final String? coverImage;
@@ -111,21 +112,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: CircleAvatar(
-                                radius: 36,
-                                backgroundColor: aquaGreenColor,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(1.0),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(36),
-                                    child: CustomCachedNetworkImage(
-                                      imageUrl: widget.user.image,
-                                      name: widget.user.displayName,
-                                      // placeHolder: Image.asset('assets/images/user_placeholder.png'),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              child: ProfilePicture(profile: widget.user, radius: 36,),
                             ),
                             Container(
                               margin: const EdgeInsets.fromLTRB(4, 0, 0, 0),
@@ -143,11 +130,6 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                             style: textTheme.headline3?.copyWith(color: textWhiteColor)),
                                       ),
                                       const SizedBox(width: 8.0),
-                                      widget.user.verifiedProfile ?? false ? SvgPicture.asset(
-                                        'assets/icons/verified_user_bedge.svg',
-                                        height: 15,
-                                        width: 15,
-                                      ) : const SizedBox(),
                                     ],
                                   ),
                                   const SizedBox(

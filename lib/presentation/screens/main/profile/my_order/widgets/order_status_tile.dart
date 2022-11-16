@@ -21,6 +21,7 @@ import '../../../../../../core/utils/helpers.dart';
 import '../../../../../widgets/buttons/custom_button.dart';
 
 class OrderStatusTile extends StatelessWidget {
+  final Order order;
   final int orderId;
   final int sellerId;
   final int buyerId;
@@ -34,7 +35,7 @@ class OrderStatusTile extends StatelessWidget {
   final String lastStatus;
 
   const OrderStatusTile(
-      {Key? key, required this.orderId, required this.isDone, required this.title, required this.date, this.isSeller = false, this.isDuel = false, required this.isLast, this.isDisputeRaised = false, required this.lastStatus, required this.sellerId, required this.buyerId,})
+      {Key? key, required this.orderId, required this.isDone, required this.title, required this.date, this.isSeller = false, this.isDuel = false, required this.isLast, this.isDisputeRaised = false, required this.lastStatus, required this.sellerId, required this.buyerId, required this.order,})
       : super(key: key);
 
 
@@ -57,7 +58,9 @@ class OrderStatusTile extends StatelessWidget {
             children: [
               _statusTile(textTheme, isDone: true,
                   title: isDuel ? "Seller & Challenger selection doesn’t match. Dispute Raised. Transaction on hold" : "Dispute Raised. Transaction on hold",
-                  date: date),
+                  date: date,
+                isDisputedRaised: true,
+              ),
               SizedBox(height: 2.h),
             ],
           ) :
@@ -87,8 +90,7 @@ class OrderStatusTile extends StatelessWidget {
     );
   }
 
-  Widget _statusTile(TextTheme textTheme,
-      {required bool isDone, required String title, required String date}) {
+  Widget _statusTile(TextTheme textTheme, {required bool isDone, required String title, required String date, bool isDisputedRaised = false}) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -100,14 +102,14 @@ class OrderStatusTile extends StatelessWidget {
                 'assets/icons/verified_user_bedge.svg',
                 height: 18,
                 width: 18,
-                color: isDone ? null : iconWhiteColor,
+                color: isDisputedRaised ? textErrorColor : isDone ? null : iconWhiteColor,
               ),
               SizedBox(width: 3.w),
               Expanded(
                 child: Text(title,
                     // maxLines: 3,
                     // overflow: TextOverflow.ellipsis,
-                    style: textTheme.headline5?.copyWith(color: textWhiteColor)),
+                    style: textTheme.headline5?.copyWith(color: isDisputedRaised ? textErrorColor : textWhiteColor)),
               ),
             ],
           ),
@@ -115,13 +117,13 @@ class OrderStatusTile extends StatelessWidget {
         Text(date,
             textAlign: TextAlign.end,
             overflow: TextOverflow.ellipsis,
-            style: textTheme.headline5?.copyWith(
-                color: textLightColor)),
+            style: textTheme.headline5?.copyWith(color: textLightColor)),
       ],
     );
   }
 
   Widget _duelOrderPlaced(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
     return Column(
       children: [
         Row(
@@ -155,6 +157,13 @@ class OrderStatusTile extends StatelessWidget {
           ],
         ),
         SizedBox(height: 2.h),
+        Padding(
+          padding: EdgeInsets.only(bottom: 2.h),
+          child: Text('Note - When anyone wins a Duel. There will be two separate wallet transactions.\n\n1. First will be the return of his original amount with no deduction.\n2. Second will be the winning amount with the loby protection & taxes deducted as shown above',
+            style: textTheme.subtitle1!.copyWith(color: textLightColor),
+          )
+        ),
+
       ],
     );
   }
@@ -308,25 +317,28 @@ class OrderStatusTile extends StatelessWidget {
                 right: 0.w,
                 radius: 50,
                 onTap: () async {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return RatingDialog(
-                          title: "Review & Rating",
-                          descriptions: "Congratulations on successfully getting your service delivered. Kindly rate thus seller & its service to help us serve you better",
-                          text: "OK",
-                          review: review,
-                          onChanged: (star) {
-                            rating = star;
-                          },
-                          onSubmit: () async {
-                            confirmDelivery(
-                                context, status: 'BUYER_DELIVERY_REJECTED',
-                                rating: rating,
-                                review: review.text);
-                          },
-                        );
-                      });
+
+                  changeOrderStatus(context, status: 'BUYER_DELIVERY_REJECTED');
+
+                  // showDialog(
+                  //     context: context,
+                  //     builder: (BuildContext context) {
+                  //       return RatingDialog(
+                  //         title: "Review & Rating",
+                  //         descriptions: "Congratulations on successfully getting your service delivered. Kindly rate thus seller & its service to help us serve you better",
+                  //         text: "OK",
+                  //         review: review,
+                  //         onChanged: (star) {
+                  //           rating = star;
+                  //         },
+                  //         onSubmit: () async {
+                  //           confirmDelivery(
+                  //               context, status: 'BUYER_DELIVERY_REJECTED',
+                  //               rating: rating,
+                  //               review: review.text);
+                  //         },
+                  //       );
+                  //     });
                 },
               ),
             ),
@@ -402,8 +414,7 @@ class OrderStatusTile extends StatelessWidget {
     }
   }
 
-  void confirmDelivery(BuildContext context,
-      {required String status, required double rating, String? review}) async {
+  void confirmDelivery(BuildContext context, {required String status, required double rating, String? review}) async {
     OrderController orderController = Get.find<OrderController>();
     CoreController coreController = Get.find<CoreController>();
     await Helpers.loader();
@@ -433,8 +444,7 @@ class OrderStatusTile extends StatelessWidget {
     OrderController orderController = Get.find<OrderController>();
     CoreController coreController = Get.find<CoreController>();
     await Helpers.loader();
-    final isSuccess = await orderController.changeOrderStatus(
-        orderId: orderId, status: status);
+    final isSuccess = await orderController.changeOrderStatus(orderId: orderId, status: status);
     if (isSuccess) {
       await getOrders();
       coreController.socket.emit("loby", {
@@ -500,7 +510,7 @@ class OrderStatusTile extends StatelessWidget {
 
   void _selectDuelWinnerDialog(BuildContext context) {
     OrderController orderController = Get.find<OrderController>();
-    final duelUsers = orderController.duelUsers;
+    final duelUsers = [isSeller ? order.user?.displayName ?? '' : order.userGameService?.user?.displayName ?? '', 'You'];
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -510,6 +520,7 @@ class OrderStatusTile extends StatelessWidget {
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16.0)),
           child: SelectDuelWinnerDialog(
+            options: duelUsers,
             onSelectWinner: (value){
               if(value.toString() == duelUsers[0]){
                 if(isSeller){

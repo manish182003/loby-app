@@ -15,11 +15,14 @@ import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/widgets/buttons/custom_button.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../../widgets/text_fields/text_field_widget.dart';
+
 //ignore: must_be_immutable
 class SelectDuelWinnerDialog extends StatelessWidget {
   final Function(Object?) onSelectWinner;
   final Function() onSubmit;
-  SelectDuelWinnerDialog({Key? key, required this.onSelectWinner, required this.onSubmit}) : super(key: key);
+  final List<String> options;
+  SelectDuelWinnerDialog({Key? key, required this.onSelectWinner, required this.onSubmit, required this.options}) : super(key: key);
   
   OrderController orderController = Get.find<OrderController>();
 
@@ -28,7 +31,7 @@ class SelectDuelWinnerDialog extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return SizedBox(
-        height: 55.h,
+        height: 60.h,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 16),
           child: SingleChildScrollView(
@@ -50,7 +53,7 @@ class SelectDuelWinnerDialog extends StatelessWidget {
                 Obx(() {
                   return Wrap(
                     children: List.from(
-                      orderController.duelUsers.map((winner) {
+                      options.map((winner) {
                         final selectedUser = orderController.selectedUser.value;
                         return SizedBox(
                           width: 143,
@@ -93,7 +96,6 @@ class SelectDuelWinnerDialog extends StatelessWidget {
 
 
   Widget _buildUploadField(TextTheme textTheme) {
-
     return DottedBorder(
       color: iconTintColor,
       borderType: BorderType.RRect,
@@ -139,14 +141,24 @@ class SelectDuelWinnerDialog extends StatelessWidget {
               }),
               CustomButton(
                   top: 0.h,
-                  left: 15.w,
-                  right: 15.w,
+                  left: 13.w,
+                  right: 13.w,
                   bottom: 1.h,
                   color: createProfileButtonColor,
                   name: "Choose file",
                   textColor: textWhiteColor,
                   iconWidget: 'assets/icons/upload_img_icon.svg',
                   onTap: _openFileExplorer
+              ),
+              SizedBox(height: 2.h),
+              Text("or",
+                  style: textTheme.headline4?.copyWith(color: textWhiteColor)),
+              SizedBox(height: 1.h),
+              TextFieldWidget(
+                textEditingController: orderController.fileLink.value,
+                hint: 'Paste Youtube/Twitch/Drive Link',
+                type: 'optionalLink',
+                isRequired: true,
               ),
             ],
           )),
@@ -196,7 +208,6 @@ class SelectDuelWinnerDialog extends StatelessWidget {
         type: FileType.custom,
         allowedExtensions: ['jpg', 'png', 'mp4'],
       ))!.files;
-
       for (final i in paths) {
         orderController.selectedDuelProofs.add(SelectedFile(file: File(i.path!), fileType: Helpers.getFileType(i.extension!)));
       }

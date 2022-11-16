@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/chat/chat.dart';
 import 'package:loby/domain/entities/listing/service_listing.dart';
+import 'package:loby/domain/entities/listing/user_game_service_option.dart';
 import 'package:loby/presentation/getx/controllers/chat_controller.dart';
 import 'package:loby/presentation/getx/controllers/home_controller.dart';
 import 'package:loby/presentation/getx/controllers/listing_controller.dart';
@@ -13,6 +14,7 @@ import 'package:loby/presentation/getx/controllers/order_controller.dart';
 import 'package:loby/presentation/screens/main/profile/wallet/widgets/token_widget.dart';
 import 'package:loby/presentation/widgets/body_padding_widget.dart';
 import 'package:loby/presentation/widgets/carousel.dart';
+import 'package:loby/presentation/widgets/confirmation_dialog.dart';
 import 'package:loby/presentation/widgets/custom_cached_network_image.dart';
 import 'package:loby/presentation/widgets/custom_loader.dart';
 import 'package:sizer/sizer.dart';
@@ -22,6 +24,7 @@ import '../../../getx/controllers/profile_controller.dart';
 import '../../../widgets/bottom_dialog.dart';
 import '../../../widgets/custom_app_bar.dart';
 import '../../../widgets/buttons/custom_button.dart';
+import '../../../widgets/profile_picture.dart';
 
 class GameDetailScreen extends StatefulWidget {
   final int serviceListingId;
@@ -42,6 +45,8 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
   ProfileController profileController = Get.find<ProfileController>();
 
   late ServiceListing listing;
+
+  List<String> mergedList = [];
 
 
   @override
@@ -69,12 +74,13 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
           return const CustomLoader();
         }else{
           final listings = listingController.buyerListings.where((listing) => listing.id == widget.serviceListingId).toList();
-
           if(listings.isEmpty){
            listing = listingController.buyerListingsProfile.where((listing) => listing.id == widget.serviceListingId).toList().first;
           }else{
             listing = listings.first;
           }
+
+
           return SingleChildScrollView(
             child: BodyPaddingWidget(
               child: Column(
@@ -119,7 +125,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                             _rowWidget(textTheme, text1: "Stock",
                                 text2: "${listing.stockAvl}"),
                             SizedBox(height: 1.h),
-                            widget.from == 'myListing'? const SizedBox() : Obx(() {
+                            listing.user?.id == profileController.profile.id ? const SizedBox() :  Obx(() {
                               return Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -190,7 +196,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                     ),
                   ),
                   SizedBox(height: 1.h,),
-                  widget.from == 'myListing'? const SizedBox() : GestureDetector(
+                  listing.user?.id == profileController.profile.id ? const SizedBox() :  GestureDetector(
                     onTap: () {
                       context.pushNamed(userProfilePage, queryParams: {
                         'userId': "${listing.user?.id}",
@@ -214,20 +220,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              CircleAvatar(
-                                backgroundColor: aquaGreenColor,
-                                radius: 36,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(1.0),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(36),
-                                    child: CustomCachedNetworkImage(
-                                      imageUrl: listing.user?.image,
-                                     name:  listing.user!.displayName!,
-                                    ),
-                                  ),
-                                ), //CircleAvatar
-                              ),
+                              ProfilePicture(profile: listing.user!),
                               Expanded(
                                 child: Container(
                                   margin: const EdgeInsets.fromLTRB(18, 0, 0, 0),
@@ -236,18 +229,16 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                     children: [
                                       Row(
                                         children: [
-                                          Text(
-                                            listing.user!.displayName!,
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                            style: textTheme.headline2?.copyWith(color: profileNameYellowColor),
+                                          SizedBox(
+                                            width: 35.w,
+                                            child: Text(
+                                              listing.user!.displayName!,
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                              style: textTheme.headline2?.copyWith(color: profileNameYellowColor),
+                                            ),
                                           ),
                                           const SizedBox(width: 8.0),
-                                          listing.user!.verifiedProfile ?? false ? SvgPicture.asset(
-                                            'assets/icons/verified_user_bedge.svg',
-                                            height: 15,
-                                            width: 15,
-                                          ) : const SizedBox(),
                                         ],
                                       ),
                                       const SizedBox(height: 12.0,),
@@ -330,17 +321,34 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
                         children: [
-                          _rowWidget(textTheme, text1: "Listing ID",
-                              text2: "#${listing.listingNumber}"),
+                          _rowWidget(textTheme, text1: "Listing ID", text2: "#${listing.listingNumber}"),
                           SizedBox(height: 1.h),
                           _rowWidget(textTheme, text1: "Game", text2: listing.game!.name!,),
                           SizedBox(height: 1.h),
                           _rowWidget(textTheme, text1: "Category", text2: listing.category!.name!,),
                           SizedBox(height: 1.h),
-                          _rowWidget(textTheme, text1: "Service Type", text2: listing.userGameServiceOptions!.map((e) => e.serviceOptions?.first.serviceOptionName).toList().join(", ")),
-                          SizedBox(height: 1.h),
-                          _rowWidget(textTheme, text1: "Game Platform",
-                            text2: listing.game!.platform!,),
+                          listing.userGameServiceOptions!.any((element) => element.serviceOptions!.isEmpty) ? const SizedBox(): Column(
+                            children:
+                              List.from(
+                                  listing.userGameServiceOptions!.map((e) {
+                                    final sameServiceOption = listing.userGameServiceOptions!.where((element) => element.serviceOptions!.first.service!.name == e.serviceOptions!.first.service!.name).toList();
+                                    if(mergedList.contains(e.serviceOptions!.first.service!.name)){
+                                      return const SizedBox();
+                                    }else{
+                                      mergedList.add(e.serviceOptions!.first.service!.name!);
+                                      return Padding(
+                                        padding: EdgeInsets.only(bottom: 1.h),
+                                        child: _rowWidget(
+                                            textTheme,
+                                            text1: e.serviceOptions!.first.service!.previewName!,
+                                            text2: sameServiceOption.map((e) => e.serviceOptions!.first.serviceOptionName!).toList().join(", "),
+                                        ),
+                                      );
+                                    }
+                                  }).toList()),
+                          ),
+                          // _rowWidget(textTheme, text1: "Service Type", text2: listing.userGameServiceOptions!.map((e) => e.serviceOptions?.first.serviceOptionName).toList().join(", ")),
+                          _rowWidget(textTheme, text1: "Game Platform", text2: listing.game!.platform!,),
                           SizedBox(height: 3.h),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -378,10 +386,9 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                       ),
                     ),
                   ),
-                  widget.from == 'myListing'? const SizedBox() : Padding(
-                    padding: const EdgeInsets.only(
-                        top: 0.0, left: 7.0, bottom: 24.0, right: 7.0),
-                    child: listing.user?.id == profileController.profile.id ? const SizedBox() :  Row(
+                  listing.user?.id == profileController.profile.id ? const SizedBox() : Padding(
+                    padding: const EdgeInsets.only(top: 0.0, left: 7.0, bottom: 24.0, right: 7.0),
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
@@ -425,30 +432,35 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                             name: "Buy Now",
                             textColor: textWhiteColor,
                             onTap: () async {
-                              Helpers.loader();
-                              final isSuccess = await orderController.createOrder(
-                                  listingId: listing.id!,
-                                  quantity: listingController.quantityCount.value,
-                                  price: listingController.totalPrice.value
-                              );
-                              Helpers.hideLoader();
-                              if (isSuccess) {
-                                BottomDialog(
-                                    textTheme: textTheme,
-                                    tileName: "Congratulations",
-                                    titleColor: aquaGreenColor,
-                                    contentName: "Payment Successful. You can check your order status from ",
-                                    contentLinkName: 'My Orders',
-                                  onOk: (){
-                                    homeController.getUnreadCount(type: 'chat');
-                                    homeController.getUnreadCount(type: 'notification');
-                                    Navigator.pop(context);
-                                    context.pushNamed(myOrderPage);
-                                  }
-                                )
-                                    .showBottomDialog(context);
-                              }
-                            },
+                              ConfirmationBottomDialog(
+                                  textTheme: textTheme,
+                                  contentName: "Are you sure you want to Buy this Service ?",
+                                  yesBtnClick: ()async{
+                                    Helpers.loader();
+                                    final isSuccess = await orderController.createOrder(
+                                        listingId: listing.id!,
+                                        quantity: listingController.quantityCount.value,
+                                        price: listingController.totalPrice.value
+                                    );
+                                    Helpers.hideLoader();
+                                    if (isSuccess) {
+                                      Navigator.pop(context);
+                                      BottomDialog(
+                                          textTheme: textTheme,
+                                          tileName: "Congratulations",
+                                          titleColor: aquaGreenColor,
+                                          contentName: "Payment Successful. You can check your order status from ",
+                                          contentLinkName: 'My Orders',
+                                          onOk: (){
+                                            homeController.getUnreadCount(type: 'chat');
+                                            homeController.getUnreadCount(type: 'notification');
+                                            Navigator.pop(context);
+                                            context.pushNamed(myOrderPage);
+                                          }
+                                      ).showBottomDialog(context);
+                                    }
+                                  }).showBottomDialog(context);
+                              },
                           ),
                         ),
                       ],

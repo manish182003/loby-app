@@ -11,6 +11,7 @@ import 'package:loby/presentation/widgets/follow_btn.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../../core/theme/colors.dart';
+import '../../../../../getx/controllers/home_controller.dart';
 import 'order_status_constants.dart';
 import 'order_status_tile.dart';
 
@@ -25,6 +26,8 @@ class StatusBottomSheet extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     ProfileController profileController = Get.find<ProfileController>();
     OrderController orderController = Get.find<OrderController>();
+    HomeController homeController = Get.find<HomeController>();
+
     return Column(
       children: <Widget>[
         Padding(
@@ -83,14 +86,14 @@ class StatusBottomSheet extends StatelessWidget {
                             if (isDuel) {
                               debugPrint("duel");
                               print("statis $isStatic");
-
                               return OrderStatusTile(
+                                order: order,
                                 orderId: order.id!,
                                 sellerId: order.userGameService!.userId!,
                                 buyerId: order.userId!,
                                 isDone: isStatic ? false : statuses.contains(order.orderStatuses![index].status),
                                 title: isStatic ? duelStatuses[index] : duelStatusesName[order.orderStatuses![index].status!],
-                                date: isStatic ? '' : Helpers.formatDateTime(dateTime: order.orderStatuses![index].createdAt!),
+                                date: isStatic ? daysRemaining(order) : Helpers.formatDateTime(dateTime: order.orderStatuses![index].createdAt!),
                                 isLast: isStatic ? false : order.orderStatuses![index].status! == order.orderStatuses!.last.status!,
                                 lastStatus: order.orderStatuses!.last.status!,
                                 isSeller: isSeller,
@@ -100,6 +103,7 @@ class StatusBottomSheet extends StatelessWidget {
                             } else if (isSeller) {
                               debugPrint("seller");
                               return OrderStatusTile(
+                                order: order,
                                 orderId: order.id!,
                                 sellerId: order.userGameService!.userId!,
                                 buyerId: order.userId!,
@@ -114,6 +118,7 @@ class StatusBottomSheet extends StatelessWidget {
                             } else {
                               debugPrint("buyer");
                               return OrderStatusTile(
+                                order: order,
                                 orderId: order.id!,
                                 sellerId: order.userGameService!.userId!,
                                 buyerId: order.userId!,
@@ -138,5 +143,15 @@ class StatusBottomSheet extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  String daysRemaining(Order order){
+    HomeController homeController = Get.find<HomeController>();
+    final days = int.tryParse(homeController.staticData[1].realValue!);
+    if(order.orderStatuses!.last.status! == 'TRANSACTION_COMPLETED'){
+      return '${Helpers.daysBetween(order.orderStatuses!.last.createdAt!, DateTime.now().add(Duration(days: days!)))} Days Remaining of $days';
+    }else{
+      return '';
+    }
   }
 }

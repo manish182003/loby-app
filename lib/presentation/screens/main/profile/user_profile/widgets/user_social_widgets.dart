@@ -33,7 +33,7 @@ class UserSocialWidget extends StatelessWidget {
           children: [
             _buildWidget(textTheme, context),
             SizedBox(height: 4.h,),
-            CustomButton(
+            from == ConditionalConstants.otherProfile ? const SizedBox() : CustomButton(
               color: butterflyBlueColor,
               name: "Edit",
               left: 50.w,

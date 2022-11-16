@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:loby/core/utils/constants.dart';
@@ -313,6 +314,8 @@ class ProfileRemoteDatasourceImpl extends ProfileRemoteDatasource{
         headers: headers,
       );
 
+      log("$response");
+
       return WalletTransactionResponseModel.fromJSON(response!);
     } on ServerException catch (e) {
       throw ServerException(message: e.message);
@@ -377,6 +380,24 @@ class ProfileRemoteDatasourceImpl extends ProfileRemoteDatasource{
       );
 
       return SettlementRequestResponseModel.fromJSON(response!);
+    } on ServerException catch (e) {
+      throw ServerException(message: e.message);
+    }
+  }
+
+  @override
+  Future<double> getTotalEarning() async {
+    try {
+      final headers = await Helpers.getApiHeaders();
+      final response = await Helpers.sendRequest(
+        _dio,
+        RequestType.get,
+        ApiEndpoints.getTotalEarning,
+        // queryParams: {'page': page ?? ""},
+        headers: headers,
+      );
+
+      return double.tryParse(response!["data"]["totalEarning"]) ?? 0.00;
     } on ServerException catch (e) {
       throw ServerException(message: e.message);
     }

@@ -10,6 +10,8 @@ import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import '../../../../widgets/profile_picture.dart';
+
 class ChatTile extends StatelessWidget {
   final Chat chat;
   const ChatTile({Key? key, required this.chat}) : super(key: key);
@@ -32,7 +34,10 @@ class ChatTile extends StatelessWidget {
             ),
             child: Row(
               children: <Widget>[
-                _buildUserAvtar(lavaRedColor),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ProfilePicture(profile: chat.receiverInfo!, radius: 28,),
+                ),
                 const SizedBox(width: 16,),
                 Expanded(
                   child: Column(

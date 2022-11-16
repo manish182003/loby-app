@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../widgets/custom_cached_network_image.dart';
+import '../../../widgets/profile_picture.dart';
 import '../profile/widgets/profile_options.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -54,21 +55,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        CircleAvatar(
-                          backgroundColor: aquaGreenColor,
-                          radius: 35,
-                          child: Padding(
-                            padding: const EdgeInsets.all(1.0),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(35),
-                              child: CustomCachedNetworkImage(
-                                imageUrl: profileController.profile.image,
-                                name: profileController.profile.displayName,
-                                // placeHolder: Image.asset('assets/images/user_placeholder.png'),
-                              ),
-                            ),
-                          ), //CircleAvatar
-                        ),
+                        ProfilePicture(profile: profileController.profile),
                         Expanded(
                           child: Container(
                             margin: const EdgeInsets.fromLTRB(15, 0, 0, 0),
@@ -89,11 +76,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               color: textWhiteColor)),
                                     ),
                                     const SizedBox(width: 8.0),
-                                    profileController.profile.verifiedProfile ?? false ? SvgPicture.asset(
-                                      'assets/icons/verified_user_bedge.svg',
-                                      height: 15,
-                                      width: 15,
-                                    ) : const SizedBox(),
                                   ],
                                 ),
                                 SizedBox(

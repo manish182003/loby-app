@@ -74,8 +74,7 @@ class AutoCompleteField extends StatelessWidget {
           suggestionsCallback: suggestionsCallback ?? (pattern) async {
                 return suggestions!.where((suggestion) => suggestion.toString().toLowerCase().contains(pattern.toLowerCase())).toList();
               },
-          onSuggestionSelected: onSuggestionSelected ??
-                  (value) {
+          onSuggestionSelected: onSuggestionSelected ?? (value) {
                 selectedSuggestion!.text = value.toString();
                 onChanged!(value.toString());
               },
@@ -137,9 +136,9 @@ class AutoCompleteField extends StatelessWidget {
                   Icons.keyboard_arrow_down,
                   color: whiteColor,
                   size: 20,
-                ), onPressed: () { },
-              )
-
+                ),
+                onPressed: () {},
+              ),
             ),
             controller: selectedSuggestion,
             cursorColor: whiteColor,

@@ -1,17 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loby/presentation/getx/controllers/home_controller.dart';
-import 'package:loby/presentation/getx/controllers/listing_controller.dart';
 import 'package:loby/presentation/screens/main/home/widgets/categoriy_item_card.dart';
 import 'package:loby/presentation/widgets/body_padding_widget.dart';
 import 'package:loby/presentation/widgets/custom_loader.dart';
-import 'package:loby/presentation/widgets/text_fields/auto_complete_field.dart';
-import 'package:sizer/sizer.dart';
-import '../../../../core/theme/colors.dart';
-import '../../../widgets/SearchFieldWidget.dart';
 import '../../../widgets/custom_app_bar.dart';
-import '../../../widgets/drop_down.dart';
 import '../../../widgets/text_fields/text_field_widget.dart';
 
 class CategoryItemScreen extends StatefulWidget {
@@ -84,7 +77,6 @@ class _CategoryItemScreenState extends State<CategoryItemScreen> {
                   ),
                 );
               }
-
             }),
           ],
         ),

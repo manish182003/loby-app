@@ -26,6 +26,7 @@ import '../../../domain/entities/profile/payment_transaction.dart';
 import '../../../domain/entities/profile/wallet_transaction.dart';
 import '../../../domain/usecases/profile/get_bank_details.dart';
 import '../../../domain/usecases/profile/get_followers.dart';
+import '../../../domain/usecases/profile/get_total_earning.dart';
 import '../../../domain/usecases/profile/get_wallet_transactions.dart';
 import '../../../domain/usecases/profile/verify_payment.dart';
 
@@ -48,6 +49,7 @@ class ProfileController extends GetxController{
   final GetFollowers _getFollowers;
   final SubmitFeedback _submitFeedback;
   final GetSettlementRequests _getSettlementRequests;
+  final GetTotalEarning _getTotalEarning;
   ProfileController({
     required GetProfile getProfile,
     required GetRatings getRatings,
@@ -65,6 +67,7 @@ class ProfileController extends GetxController{
     required GetFollowers getFollowers,
     required SubmitFeedback submitFeedback,
     required GetSettlementRequests getSettlementRequests,
+    required GetTotalEarning getTotalEarning,
   }) : _getProfile = getProfile,
   _getRatings = getRatings,
   _getDuel = getDuel,
@@ -80,7 +83,8 @@ class ProfileController extends GetxController{
         _getWalletTransactions = getWalletTransactions,
   _getFollowers = getFollowers,
         _submitFeedback = submitFeedback,
-  _getSettlementRequests = getSettlementRequests;
+  _getSettlementRequests = getSettlementRequests,
+  _getTotalEarning = getTotalEarning;
 
 
 
@@ -137,6 +141,8 @@ class ProfileController extends GetxController{
   final settlementRequestsPageNumber = 1.obs;
 
   final isSocialsEditable = false.obs;
+
+  final totalEarning = 0.00.obs;
 
 
 
@@ -608,6 +614,28 @@ class ProfileController extends GetxController{
     }
     return false;
   }
+
+
+
+  Future<bool> getTotalEarning() async {
+    final failureOrSuccess = await _getTotalEarning(
+      const Params(profileParams: ProfileParams(
+      ),),
+    );
+
+    failureOrSuccess.fold(
+          (failure) {
+        errorMessage.value = Helpers.convertFailureToMessage(failure);
+        debugPrint(errorMessage.value);
+        Helpers.toast(errorMessage.value);
+      },
+          (success) {
+            totalEarning.value = success;
+      },
+    );
+    return failureOrSuccess.isRight() ? true : false;
+  }
+
 
 
 

@@ -13,7 +13,7 @@ class SelectDuelWinner extends UseCase<Map<String, dynamic>, Params> {
   Future<Either<Failure, Map<String, dynamic>>> call(Params params) {
     return _repository.selectDuelWinner(
       orderId: params.orderParams?.orderId,
-      winnerId: params.orderParams?.winnerId
+      winnerId: params.orderParams?.winnerId,
     );
   }
 }

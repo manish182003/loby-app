@@ -77,10 +77,10 @@ class OrderRemoteDatasourceImpl extends OrderRemoteDatasource{
   }
 
   @override
-  Future<Map<String, dynamic>> uploadDeliveryProof(int? orderId, List<int>? fileType, List<File>? file) async{
+  Future<Map<String, dynamic>> uploadDeliveryProof(int? orderId, List<int>? fileType, List<File>? file, String? link) async{
     try {
 
-    
+      print("here is the link $link");
 
       final headers = await Helpers.getApiHeaders();
 
@@ -99,6 +99,15 @@ class OrderRemoteDatasourceImpl extends OrderRemoteDatasource{
               )));
         }
       }
+
+      if(link != null){
+        formData.fields.add(
+          MapEntry('file_link', link),
+        );
+      }
+
+
+
 
       final response = await Helpers.sendRequest(
         _dio,
@@ -133,14 +142,15 @@ class OrderRemoteDatasourceImpl extends OrderRemoteDatasource{
   }
 
   @override
-  Future<Map<String, dynamic>> selectDuelWinner(int? winnerId, int? orderId)async {
+  Future<Map<String, dynamic>> selectDuelWinner(int? winnerId, int? orderId,)async {
     try {
+
       final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(
         _dio,
         RequestType.post,
         ApiEndpoints.selectDuelWinner,
-        queryParams: {'winner_id': "${winnerId ?? ""}", 'user_order_id': "${orderId ?? ""}"},
+        queryParams: {'winner_id': "${winnerId ?? ""}", 'user_order_id': "${orderId ?? ""}",},
         headers: headers,
       );
 

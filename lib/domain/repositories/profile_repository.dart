@@ -46,6 +46,7 @@ abstract class ProfileRepository{
 
   Future<Either<Failure, SettlementRequestResponse>> getSettlementRequests({int? page, String? type});
 
+  Future<Either<Failure, double>> getTotalEarning();
 
 
 }

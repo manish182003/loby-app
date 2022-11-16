@@ -16,6 +16,7 @@ import '../../../../../../data/models/ItemModel.dart';
 import '../../../../../../services/routing_service/routes_name.dart';
 import '../../../../../widgets/ConfirmationRiseDisputeBottomDialog.dart';
 import '../../../../../widgets/UpdateStatusDialog.dart';
+import '../../../../../widgets/buttons/custom_button.dart';
 import 'order_status_constants.dart';
 
 class OrderItem extends StatelessWidget {
@@ -41,160 +42,142 @@ class OrderItem extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 16.0),
             child: Stack(
                 children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.2,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: SizedBox(
-                        height: 55.0,
-                        child: CustomCachedNetworkImage(
-                          imageUrl: Helpers.getListingImage(order.userGameService!),
-                          placeHolder: Image.asset("assets/images/listing_placeholder.jpg", fit: BoxFit.cover,),
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.2,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: SizedBox(
+                            height: 55.0,
+                            child: CustomCachedNetworkImage(
+                              imageUrl: Helpers.getListingImage(order.userGameService!),
+                              placeHolder: Image.asset("assets/images/listing_placeholder.jpg", fit: BoxFit.cover,),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.66,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.48,
-                          child: Text(order.userGameService!.title!,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: textTheme.headline5?.copyWith(color: textWhiteColor)),
-                        ),
-                        SizedBox(height: 1.5.h),
-                        Text("Created By ${order.userGameService!.user?.displayName ?? ""}",
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: textTheme.headline6?.copyWith(color: textInputTitleColor)),
-                        SizedBox(height: 1.0.h),
-                        SizedBox(
-                          child: Text(order.userGameService!.game?.name! ?? "",
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: textTheme.headline6?.copyWith(color: textInputTitleColor)),
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.66,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Container(
-                              decoration: BoxDecoration(
-                                color: orangeColor,
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-                                child: Text(order.userGameService!.category!.name!, style: textTheme.headline6?.copyWith(color: textWhiteColor)),
-                              ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.48,
+                              child: Text(order.userGameService!.title!,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: textTheme.headline5?.copyWith(color: textWhiteColor)),
                             ),
-                            const SizedBox(width: 16.0),
-                            GestureDetector(
-                              onTap: () {
-                                showModalBottomSheet(
-                                  context: context,
-                                  isScrollControlled: true,
-                                  backgroundColor: Colors.transparent,
-                                  isDismissible: false,
-                                  builder: (BuildContext context) {
-                                    return Padding(
-                                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                      child: CustomBottomSheet(
-                                          isDismissible: false,
-                                          initialChildSize: 0.6,
-                                          maxChildSize: 0.8,
-                                          minChildSize: 0.6,
-                                          horizontalPadding: 0.0,
-                                          child: StatusBottomSheet(orderId: order.id!)),
-                                    );
-                                  },
-                                );
-
-                                // UpdateStatusDialog(
-                                //         textTheme: textTheme,
-                                //         tileName: "Congratulations",
-                                //         titleColor: aquaGreenColor,
-                                //         contentName: "Your service has been successfully listed. You can edit your listings from My Listings.",
-                                //         contentLinkName: ' My Listings').showBottomDialog(context);
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: butterflyBlueColor,
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 4.0, horizontal: 8.0),
-                                  child: Text('Update Status',
-                                      style: textTheme.headline6?.copyWith(color: textWhiteColor)),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 1.h,),
-                        Row(
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            SizedBox(height: 1.5.h),
+                            Text(order.userGameService!.game?.name! ?? "",
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: textTheme.headline6?.copyWith(color: textInputTitleColor)),
+                            SizedBox(height: 1.0.h),
+                            Text(order.userGameService!.category?.name! ?? "",
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: textTheme.headline6?.copyWith(color: textInputTitleColor)),
+                            SizedBox(height: 1.0.h),
+                            Text("Created By ${order.userGameService!.user?.displayName ?? ""}",
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: textTheme.headline6?.copyWith(color: textInputTitleColor)),
+                            SizedBox(height: 1.h,),
+                            Row(
                               children: [
-                                Text(
-                                  "Current Status",
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: textTheme.headline4?.copyWith(
-                                      fontSize: 11.0, color: textLightColor),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Current Status",
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: textTheme.headline4?.copyWith(
+                                          fontSize: 11.0, color: textLightColor),
+                                    ),
+                                    SizedBox(height: 1.h,),
+                                    Text(order.disputeId != null ? 'Dispute Raised': order.userGameService!.category!.name == "Duel" ? duelStatusesName[order.orderStatuses!.last.status!] :
+                                    statusesName[order.orderStatuses!.last.status!],
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: textTheme.headline4?.copyWith(fontSize: 11.0, color: order.disputeId != null ? textErrorColor : aquaGreenColor),
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(height: 1.h,),
-                                Text(order.userGameService!.category!.name == "Duel" ? duelStatusesName[order.orderStatuses!.last.status!] :
-                                statusesName[order.orderStatuses!.last.status!],
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: textTheme.headline4?.copyWith(fontSize: 11.0, color: aquaGreenColor),
+                                SizedBox(width: 4.w),
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Date",
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: textTheme.headline4?.copyWith(
+                                            fontSize: 11.0, color: textLightColor),
+                                      ),
+                                      SizedBox(height: 1.h,),
+                                      Text(Helpers.formatDateTime(dateTime: order.createdAt!),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: textTheme.headline4?.copyWith(fontSize: 11.0, color: aquaGreenColor),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
-                            SizedBox(width: 4.w),
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Date",
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: textTheme.headline4?.copyWith(
-                                        fontSize: 11.0, color: textLightColor),
-                                  ),
-                                  SizedBox(height: 1.h,),
-                                  Text(Helpers.formatDateTime(dateTime: order.createdAt!),
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: textTheme.headline4?.copyWith(fontSize: 11.0, color: aquaGreenColor),
-                                  ),
-                                ],
-                              ),
-                            ),
                           ],
                         ),
-                      ],
-                    ),
+                      ),
+
+                    ],
+                  ),
+                  CustomButton(
+                    color: butterflyBlueColor,
+                    name: "Update Status",
+                    top: 2.h,
+                    bottom: 2.h,
+                    textColor: whiteColor,
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        isDismissible: false,
+                        builder: (BuildContext context) {
+                          return Padding(
+                            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                            child: CustomBottomSheet(
+                                isDismissible: false,
+                                initialChildSize: 0.6,
+                                maxChildSize: 0.8,
+                                minChildSize: 0.6,
+                                horizontalPadding: 0.0,
+                                sheetRadius: 16,
+                                child: StatusBottomSheet(orderId: order.id!)),
+                          );
+                        },
+                      );
+                      // await Helpers.hideLoader();
+                    },
                   ),
                 ],
               ),
-              order.orderStatuses!.last.status! == 'ORDER_COMPLETED' ? const SizedBox() : Positioned(
+
+              order.orderStatuses!.last.status! == orderCompleted ? const SizedBox() :
+              order.orderStatuses!.last.status! == orderPlaced ? const SizedBox() :
+              order.orderStatuses!.last.status! == sellerRejected ? const SizedBox() :
+              order.disputeId != null ? const SizedBox() :
+              Positioned(
                   top: 0.0,
                   right: 0.0,
                   child: CustomPopupMenu(

@@ -44,5 +44,7 @@ abstract class ProfileRemoteDatasource{
 
   Future<SettlementRequestResponseModel> getSettlementRequests(int? page, String? type);
 
+  Future<double> getTotalEarning();
+
 
 }

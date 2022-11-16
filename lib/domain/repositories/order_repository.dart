@@ -14,7 +14,7 @@ abstract class OrderRepository{
 
   Future<Either<Failure, Map<String, dynamic>>> changeOrderStatus({int? orderId, String? status});
 
-  Future<Either<Failure, Map<String, dynamic>>> uploadDeliveryProof({int? orderId, List<int>? fileType, List<File>? file});
+  Future<Either<Failure, Map<String, dynamic>>> uploadDeliveryProof({int? orderId, List<int>? fileType, List<File>? file, String? link});
 
   Future<Either<Failure, Map<String, dynamic>>> submitRating({int? orderId, double? stars, String? review});
 

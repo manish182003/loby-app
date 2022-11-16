@@ -179,6 +179,16 @@ class ProfileRepositoryImpl extends ProfileRepository{
     }
   }
 
+  @override
+  Future<Either<Failure, double>> getTotalEarning() async{
+    try {
+      return Right(await _profileRemoteDatasource.getTotalEarning());
+    } on ServerException catch (e) {
+    // Loggers can be added here for analyzation.
+    return Left(ServerFailure(message: e.message.toString()));
+    }
+  }
+
 
 
 }

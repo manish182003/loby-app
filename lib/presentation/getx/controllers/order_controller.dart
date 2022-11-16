@@ -76,6 +76,7 @@ class OrderController extends GetxController{
   final selectedUser = "".obs;
   final selectedDuelProofs = <SelectedFile>[].obs;
   final duelWinner = ''.obs;
+  final fileLink = TextEditingController().obs;
 
 
 
@@ -175,6 +176,7 @@ class OrderController extends GetxController{
         orderId: orderId,
         fileType: fileTypes,
         file: files,
+        link: fileLink.value.text,
       ),),
     );
 
@@ -219,6 +221,7 @@ class OrderController extends GetxController{
       Params(orderParams: OrderParams(
         winnerId: winnerId,
         orderId: orderId,
+        link: fileLink.value.text
       ),),
     );
 

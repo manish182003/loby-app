@@ -13,6 +13,7 @@ import 'package:loby/presentation/widgets/custom_cached_network_image.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../core/theme/colors.dart';
+import '../../../../widgets/profile_picture.dart';
 
 class ItemList extends StatefulWidget {
   final String name;
@@ -116,8 +117,7 @@ class _ItemListState extends State<ItemList> {
                                 style: textTheme.headline2?.copyWith(color: aquaGreenColor),
                               ),
                               size: 20,
-                            )
-
+                            ),
                           ],
                         ),
                       ),
@@ -134,43 +134,25 @@ class _ItemListState extends State<ItemList> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CircleAvatar(
-                        backgroundColor: aquaGreenColor,
-                        radius: 15,
-                        child: Padding(
-                          padding: const EdgeInsets.all(1.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: CustomCachedNetworkImage(
-                              imageUrl: widget.listing.user?.image,
-                              name: widget.listing.user?.displayName,
-                              // placeHolder: Image.asset('assets/images/user_placeholder.png'),
-                            ),
-                          ),
-                        ), //CircleAvatar
-                      ),
-                      const SizedBox(
-                        width: 8.0,
-                      ),
+                      ProfilePicture(profile: widget.listing.user!, radius: 15, iconSize: 14,),
+                      const SizedBox(width: 8.0),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               children: [
-                                Text(
-                                  widget.listing.user!.name!,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: textTheme.headline4?.copyWith(
-                                      fontSize: 11.0, color: textWhiteColor),
+                                SizedBox(
+                                  width: 20.w,
+                                  child: Text(
+                                    widget.listing.user!.displayName!,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: textTheme.headline4?.copyWith(
+                                        fontSize: 11.0, color: textWhiteColor),
+                                  ),
                                 ),
                                 const SizedBox(width: 4,),
-                                widget.listing.user!.verifiedProfile ?? false ? SvgPicture.asset(
-                                  'assets/icons/verified_user_bedge.svg',
-                                  height: 14,
-                                  width: 14,
-                                ) : const SizedBox(),
                               ],
                             ),
                             Row(

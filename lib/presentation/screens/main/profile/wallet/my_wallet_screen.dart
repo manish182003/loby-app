@@ -32,6 +32,7 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       homeController.getStaticData();
       profileController.getProfile();
+      profileController.getTotalEarning();
     });
   }
 
@@ -209,8 +210,7 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 16.0),
                                         child: TokenWidget(
-                                          tokens: "${profileController.profile
-                                              .lobbyCoins}",
+                                          tokens: profileController.totalEarning.value.toStringAsFixed(2),
                                           textColor: aquaGreenColor,),
                                       ),
                                       SizedBox(
