@@ -99,6 +99,24 @@ class DisputeWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
+                  Align(
+                    alignment: Alignment.center,
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'Dispute ID : ',
+                            style: textTheme.headline6?.copyWith(color: textLightColor),
+                          ),
+                          TextSpan(
+                              text: dispute.disputeNumber.toString(),
+                              style: textTheme.headline6?.copyWith(color: textWhiteColor)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
                 Align(
                   alignment: Alignment.center,
                   child: RichText(
@@ -110,7 +128,7 @@ class DisputeWidget extends StatelessWidget {
                           style: textTheme.headline6?.copyWith(color: textLightColor),
                         ),
                         TextSpan(
-                            text: dispute.userOrder!.userGameService!.id.toString(),
+                            text: dispute.userOrder!.userGameService!.listingNumber.toString(),
                             style: textTheme.headline6?.copyWith(color: textWhiteColor)),
                       ],
                     ),

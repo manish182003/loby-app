@@ -6,7 +6,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/auth/selected_option.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
@@ -14,24 +13,21 @@ import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/widgets/body_padding_widget.dart';
 import 'package:loby/presentation/widgets/custom_chips.dart';
 import 'package:loby/presentation/widgets/text_fields/text_field_widget.dart';
-import 'package:loby/services/routing_service/routes.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../widgets/text_fields/auto_complete_field.dart';
 import '../../../widgets/buttons/custom_button.dart';
-import '../../../widgets/input_text_title_widget.dart';
-import '../../../widgets/input_text_widget.dart';
-import '../../main/main_screen.dart';
+
 
 class CreateProfileCard extends StatefulWidget {
   final String from;
   const CreateProfileCard({Key? key, required this.from}) : super(key: key);
 
-
   @override
   State<CreateProfileCard> createState() => _CreateProfileCardState();
 }
+
 
 class _CreateProfileCardState extends State<CreateProfileCard> {
 
@@ -45,8 +41,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme
-        .of(context)
+    final textTheme = Theme.of(context)
         .textTheme;
 
     return GestureDetector(
@@ -87,6 +82,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                   textEditingController: authController.displayName.value,
                   title: "Display Name",
                   hint: "Ex: Commander",
+                  type: 'username',
                   isRequired: true,
                   onChanged: (value){
                     authController.usernameString.value = value;

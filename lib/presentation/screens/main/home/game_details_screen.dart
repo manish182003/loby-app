@@ -25,6 +25,7 @@ import '../../../widgets/bottom_dialog.dart';
 import '../../../widgets/custom_app_bar.dart';
 import '../../../widgets/buttons/custom_button.dart';
 import '../../../widgets/profile_picture.dart';
+import 'package:text_helpers/text_helpers.dart';
 
 class GameDetailScreen extends StatefulWidget {
   final int serviceListingId;
@@ -122,8 +123,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                 text2: "${listing.price}",
                                 isNormal: true),
                             SizedBox(height: 1.h),
-                            _rowWidget(textTheme, text1: "Stock",
-                                text2: "${listing.stockAvl}"),
+                            _rowWidget(textTheme, text1: "Stock", text2: "${listing.stockAvl}"),
                             SizedBox(height: 1.h),
                             listing.user?.id == profileController.profile.id ? const SizedBox() :  Obx(() {
                               return Row(
@@ -230,11 +230,12 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                       Row(
                                         children: [
                                           SizedBox(
-                                            width: 35.w,
-                                            child: Text(
+                                            width: 36.w,
+                                            child: InlineText(
                                               listing.user!.displayName!,
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 1,
+                                              // overflow: TextOverflow.ellipsis,
+                                              // maxLines: 1,
+                                              // softWrap: true,
                                               style: textTheme.headline2?.copyWith(color: profileNameYellowColor),
                                             ),
                                           ),
@@ -437,13 +438,13 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                   contentName: "Are you sure you want to Buy this Service ?",
                                   yesBtnClick: ()async{
                                     Helpers.loader();
-                                    final isSuccess = await orderController.createOrder(
+                                    final response = await orderController.createOrder(
                                         listingId: listing.id!,
                                         quantity: listingController.quantityCount.value,
                                         price: listingController.totalPrice.value
                                     );
                                     Helpers.hideLoader();
-                                    if (isSuccess) {
+                                    if (response['success']) {
                                       Navigator.pop(context);
                                       BottomDialog(
                                           textTheme: textTheme,
@@ -458,6 +459,18 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                             context.pushNamed(myOrderPage);
                                           }
                                       ).showBottomDialog(context);
+                                    }else if(response['reason'] == 'insufficient balance'){
+                                      Navigator.pop(context);
+                                      ConfirmationBottomDialog(
+                                          textTheme: Theme.of(context).textTheme,
+                                          contentName: "You have insifficient tokens to buy this service. Would you like to Add Tokens to your Wallet ?",
+                                          yesBtnClick: ()async{
+                                            Navigator.pop(context);
+                                            context.pushNamed(addFundScreenPage);
+                                          }).showBottomDialog(context);
+
+                                    }else{
+                                      Helpers.hideLoader();
                                     }
                                   }).showBottomDialog(context);
                               },

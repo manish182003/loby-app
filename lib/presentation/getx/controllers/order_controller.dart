@@ -80,11 +80,12 @@ class OrderController extends GetxController{
 
 
 
-
-
   final errorMessage = ''.obs;
 
-  Future<bool> createOrder({required int listingId, required int quantity, required String price}) async {
+  Future<Map<String, dynamic>> createOrder({required int listingId, required int quantity, required String price}) async {
+
+    Map<String, dynamic> response = {};
+
     final failureOrSuccess = await _createOrder(
       Params(orderParams: OrderParams(
         listingId: listingId,
@@ -100,10 +101,13 @@ class OrderController extends GetxController{
         Helpers.toast(errorMessage.value);
       },
           (success) {
+            response = success['data'];
         // Helpers.toast('Profile Changed');
       },
     );
-    return failureOrSuccess.isRight() ? true : false;
+
+    final isSuccess = response['insufficientBalance'] == null ? true : response['insufficientBalance'] ?  false : true;
+    return failureOrSuccess.isRight() ? {'success' : isSuccess, 'reason' : 'insufficient balance'} : {'success' : false, 'reason' : 'other'};
   }
 
 
@@ -124,7 +128,7 @@ class OrderController extends GetxController{
             (failure) {
           errorMessage.value = Helpers.convertFailureToMessage(failure);
           debugPrint(errorMessage.value);
-          Helpers.toast(errorMessage.value);
+          // Helpers.toast(errorMessage.value);
           isOrdersFetching(false);
         },
             (success) {
@@ -148,7 +152,10 @@ class OrderController extends GetxController{
     return false;
   }
 
-  Future<bool> changeOrderStatus({required int orderId, required String status}) async {
+  Future<Map<String, dynamic>> changeOrderStatus({required int orderId, required String status}) async {
+
+    Map<String, dynamic> response = {};
+
     final failureOrSuccess = await _changeOrderStatus(
       Params(orderParams: OrderParams(
         orderId: orderId,
@@ -163,10 +170,14 @@ class OrderController extends GetxController{
         Helpers.toast(errorMessage.value);
       },
           (success) {
-        Helpers.toast('Successfully Updated');
+            response = success['data'];
+            if(!(success['data']['insufficientBalance'] ?? false)){
+              Helpers.toast('Successfully Updated');
+            }
       },
     );
-    return failureOrSuccess.isRight() ? true : false;
+    final isSuccess = response['insufficientBalance'] == null ? true : response['insufficientBalance'] ?  false : true;
+    return failureOrSuccess.isRight() ? {'success' : isSuccess, 'reason' : 'insufficient balance'} : {'success' : false, 'reason' : 'other'};
   }
 
 
@@ -187,6 +198,7 @@ class OrderController extends GetxController{
         Helpers.toast(errorMessage.value);
       },
           (success) {
+            selectedDuelProofs.clear();
         // Helpers.toast('Profile Changed');
       },
     );
@@ -277,7 +289,7 @@ class OrderController extends GetxController{
             (failure) {
           errorMessage.value = Helpers.convertFailureToMessage(failure);
           debugPrint(errorMessage.value);
-          Helpers.toast(errorMessage.value);
+          // Helpers.toast(errorMessage.value);
           isDisputesFetching.value = false;
         },
             (success) {

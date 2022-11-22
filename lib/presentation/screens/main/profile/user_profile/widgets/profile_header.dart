@@ -21,11 +21,13 @@ import 'package:sizer/sizer.dart';
 import '../../../../../../core/theme/colors.dart';
 import '../../../../../../data/models/ItemModel.dart';
 import '../../../../../../services/routing_service/routes_name.dart';
+import '../../../../../getx/controllers/listing_controller.dart';
+import '../../../../../getx/controllers/order_controller.dart';
+import '../../../../../widgets/ConfirmationRiseDisputeBottomDialog.dart';
 import '../../../../../widgets/bottom_dialog.dart';
 import '../../../../../widgets/custom_app_bar.dart';
 import '../../../../../widgets/buttons/custom_button.dart';
 import '../../../../../widgets/profile_picture.dart';
-
 class ProfileHeader extends StatefulWidget {
   final String? coverImage;
   final String title;
@@ -49,8 +51,11 @@ class _ProfileHeaderState extends State<ProfileHeader> {
   ProfileController profileController = Get.find<ProfileController>();
   AuthController authController = Get.find<AuthController>();
   ChatController chatController = Get.find<ChatController>();
+  ListingController listingController = Get.find<ListingController>();
 
-  List<PlatformFile> _paths = [];
+
+
+  final CustomPopupMenuController _controller = CustomPopupMenuController();
 
 
   @override
@@ -79,14 +84,14 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                 child: Container(
                   padding: EdgeInsets.only(top: 3.h, right: 4.w),
                   child: SvgPicture.asset(
-                    'assets/icons/edit_icon.svg',
+                   'assets/icons/edit_icon.svg',
                     color: whiteColor,
                     width: 20,
                     height: 20,
                   ),
                 ),
               ),
-            ) : const SizedBox(),
+            ) : _reportAccount(),
           ],
         ),
         Padding(
@@ -210,8 +215,9 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.6,
+                                width: MediaQuery.of(context).size.width * 0.56,
                                 child: CustomButton(
+                                  height: 7.0.h,
                                   color: purpleLightIndigoColor,
                                   textColor: textWhiteColor,
                                   name: "Message",
@@ -247,8 +253,8 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                 child: SvgPicture.asset(
                                   widget.user.userFollowStatus == 'N' ? 'assets/icons/follow.svg' : 'assets/icons/unfollow.svg',
                                   color: iconWhiteColor,
-                                  width: 48,
-                                  height: 48,
+                                  width: 40,
+                                  height: 7.h,
                                 ),
                               ),
                               // SizedBox(
@@ -336,29 +342,6 @@ class _ProfileHeaderState extends State<ProfileHeader> {
     );
   }
 
-
-  void _openFileExplorer() async {
-    try {
-      _paths = (await FilePicker.platform.pickFiles(
-        onFileLoading: (FilePickerStatus status) => print(status),
-        type: FileType.custom,
-        allowedExtensions: ['jpg', 'png'],
-      ))!.files;
-
-      Helpers.loader();
-      await authController.updateProfile();
-      await profileController.getProfile();
-      Helpers.hideLoader();
-
-    } on PlatformException catch (e) {
-      Helpers.toast('Unsupported operation$e');
-    } catch (e) {
-      Helpers.toast('Something went wrong');
-    }
-    if (!mounted) return;
-  }
-
-
   void _showCreateProfileBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -378,5 +361,84 @@ class _ProfileHeaderState extends State<ProfileHeader> {
         );
       },
     );
+  }
+
+
+  Widget _reportAccount(){
+    final textTheme = Theme.of(context).textTheme;
+    return Positioned(
+        top: 0.0,
+        right: 0.0,
+        child: CustomPopupMenu(
+          arrowColor: lavaRedColor,
+          menuBuilder: () => ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Container(
+              color: lavaRedColor,
+              child: IntrinsicWidth(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: ['Report Account']
+                      .map(
+                        (item) => GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onTap: () {
+                        _controller.hideMenu();
+                        ConfirmationRiseDisputeBottomDialog(
+                            textTheme: textTheme,
+                            contentName: "Are you sure you want to report this account ?",
+                            yesBtnClick: ()async{
+                              Helpers.loader();
+                              final isSuccess = await listingController.reportListing(userId: widget.user.id);
+                              Helpers.hideLoader();
+                              if(isSuccess){
+                                Navigator.of(context).pop();
+                              }
+                            }
+                        ).showBottomDialog(context);
+                      },
+                      child: Container(
+                        height: 40,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Container(
+                                margin: const EdgeInsets.only(left: 10),
+                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                child: Text(
+                                  item,
+                                  style: textTheme.headline6?.copyWith(color: textWhiteColor),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                      .toList(),
+                ),
+              ),
+            ),
+          ),
+          pressType: PressType.singleClick,
+          horizontalMargin: 0,
+          verticalMargin: 0,
+          arrowSize: 15,
+          controller: _controller,
+          child: Align(
+            alignment: Alignment.topRight,
+            child: Container(
+              padding: EdgeInsets.only(top: 3.h, right: 4.w),
+              child: SvgPicture.asset(
+                'assets/icons/option.svg',
+                color: whiteColor,
+                width: 20,
+                height: 20,
+        ),
+            ),
+          ),
+        ));
   }
 }

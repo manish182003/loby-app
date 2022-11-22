@@ -69,7 +69,7 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
                   maxLines: 5,
                   isRequired: true,
                 ),
-                Padding(
+                dispute.result == 'RESOLVED' ? const SizedBox() : Padding(
                   padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 10.h),
                   child: CustomButton(
                     color: aquaGreenColor,

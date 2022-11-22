@@ -19,10 +19,11 @@ import '../../../../../widgets/text_fields/text_field_widget.dart';
 
 //ignore: must_be_immutable
 class SelectDuelWinnerDialog extends StatelessWidget {
-  final Function(Object?) onSelectWinner;
+  final Function(Object?)? onSelectWinner;
   final Function() onSubmit;
-  final List<String> options;
-  SelectDuelWinnerDialog({Key? key, required this.onSelectWinner, required this.onSubmit, required this.options}) : super(key: key);
+  final List<String>? options;
+  final bool? isNormalOrder;
+  SelectDuelWinnerDialog({Key? key, this.onSelectWinner, required this.onSubmit, this.options, this.isNormalOrder = false}) : super(key: key);
   
   OrderController orderController = Get.find<OrderController>();
 
@@ -42,7 +43,7 @@ class SelectDuelWinnerDialog extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Select Winner", style: textTheme.headline2?.copyWith(fontWeight: FontWeight.w500, color: whiteColor)),
+                    Text(isNormalOrder ?? false ? "Upload Proofs" : "Select Winner", style: textTheme.headline2?.copyWith(fontWeight: FontWeight.w500, color: whiteColor)),
                     GestureDetector(onTap: (){
                       Navigator.pop(context);
                     },
@@ -50,13 +51,12 @@ class SelectDuelWinnerDialog extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 2.h,),
-                Obx(() {
+                isNormalOrder ?? false ? const SizedBox() : Obx(() {
                   return Wrap(
                     children: List.from(
-                      options.map((winner) {
+                      options!.map((winner) {
                         final selectedUser = orderController.selectedUser.value;
                         return SizedBox(
-                          width: 143,
                           child: RadioListTile(
                               selected: selectedUser == winner,
                               groupValue: selectedUser,
@@ -170,7 +170,8 @@ class SelectDuelWinnerDialog extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       constraints: BoxConstraints(
           minHeight: MediaQuery.of(context).size.height * 0.08,
-          minWidth: MediaQuery.of(context).size.width * 0.4),
+          minWidth: MediaQuery.of(context).size.width * 0.4
+      ),
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -217,5 +218,4 @@ class SelectDuelWinnerDialog extends StatelessWidget {
       Helpers.toast('Something went wrong');
     }
   }
-
 }

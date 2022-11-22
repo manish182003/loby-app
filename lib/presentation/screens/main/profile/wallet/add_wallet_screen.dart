@@ -96,8 +96,7 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
                                     return const CustomLoader();
                                   } else {
                                     return TokenWidget(
-                                      tokens: "${profileController.profile
-                                          .walletMoney}",);
+                                      tokens: profileController.profile.walletMoney!.toStringAsFixed(2),);
                                   }
                                 }),
                               ),
@@ -138,27 +137,15 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
                                       isRequired: true,
                                       onChanged: (value) {
                                         if (value.isNotEmpty) {
-                                          profileController.tokenToRupee.value =
-                                              (int.tryParse(value)! *
-                                                  int.tryParse(homeController
-                                                      .staticData[5]
-                                                      .realValue!)!)
-                                                  .floor()
-                                                  .toString();
-                                          profileController.rupeeToToken.value =
-                                              (int.tryParse(value)! /
-                                                  int.tryParse(homeController
-                                                      .staticData[5].key!)!)
-                                                  .floor()
-                                                  .toString();
+                                          profileController.tokenToRupee.value = (int.tryParse(value)! * int.tryParse(homeController.staticData[5].realValue!)!).floor().toString();
+                                          profileController.rupeeToToken.value = (int.tryParse(value)! / int.tryParse(homeController.staticData[5].key!)!).floor().toString();
                                         }
                                       },
                                     )
                                 ),
                                 Obx(() {
                                   return Row(
-                                    mainAxisAlignment: MainAxisAlignment
-                                        .spaceEvenly,
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
                                       TokenWidget(
                                         tokens: profileController.rupeeToToken.value,

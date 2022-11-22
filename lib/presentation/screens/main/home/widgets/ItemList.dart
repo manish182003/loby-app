@@ -148,8 +148,7 @@ class _ItemListState extends State<ItemList> {
                                     widget.listing.user!.displayName!,
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
-                                    style: textTheme.headline4?.copyWith(
-                                        fontSize: 11.0, color: textWhiteColor),
+                                    style: textTheme.headline4?.copyWith(fontSize: 11.0, color: textWhiteColor),
                                   ),
                                 ),
                                 const SizedBox(width: 4,),

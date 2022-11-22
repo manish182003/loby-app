@@ -102,6 +102,9 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
           },
           inputFormatters: widget.isNumber ? [
             FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+          ] : widget.type == "username" ? [
+              FilteringTextInputFormatter.deny(
+                  RegExp(r'\s')),
           ] : null,
           input: widget.textEditingController,
           obscureText: widget.type == 'password' ? !isVisible : isVisible,

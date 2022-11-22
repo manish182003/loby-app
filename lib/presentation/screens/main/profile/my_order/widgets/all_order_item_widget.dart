@@ -84,7 +84,7 @@ class OrderItem extends StatelessWidget {
                                 maxLines: 1,
                                 style: textTheme.headline6?.copyWith(color: textInputTitleColor)),
                             SizedBox(height: 1.0.h),
-                            Text("Created By ${order.userGameService!.user?.displayName ?? ""}",
+                            Text("Listing By ${order.userGameService!.user?.displayName ?? ""}",
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 style: textTheme.headline6?.copyWith(color: textInputTitleColor)),
@@ -107,7 +107,7 @@ class OrderItem extends StatelessWidget {
                                     statusesName[order.orderStatuses!.last.status!],
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
-                                      style: textTheme.headline4?.copyWith(fontSize: 11.0, color: order.disputeId != null ? textErrorColor : aquaGreenColor),
+                                      style: textTheme.headline4?.copyWith(fontSize: 11.0, color: order.disputeId != null ? carminePinkColor : order.orderStatuses!.last.status! == sellerRejected  ? carminePinkColor : aquaGreenColor),
                                     ),
                                   ],
                                 ),
@@ -118,7 +118,7 @@ class OrderItem extends StatelessWidget {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "Date",
+                                        "",
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
                                         style: textTheme.headline4?.copyWith(
@@ -143,32 +143,35 @@ class OrderItem extends StatelessWidget {
                   ),
                   CustomButton(
                     color: butterflyBlueColor,
-                    name: "Update Status",
+                    name: order.disputeId != null ? 'View Disputes' : "Update Status",
                     top: 2.h,
                     bottom: 2.h,
                     textColor: whiteColor,
                     onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        backgroundColor: Colors.transparent,
-                        isDismissible: false,
-                        builder: (BuildContext context) {
-                          return Padding(
-                            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                            child: CustomBottomSheet(
-                                isDismissible: false,
-                                initialChildSize: 0.6,
-                                maxChildSize: 0.8,
-                                minChildSize: 0.6,
-                                horizontalPadding: 0.0,
-                                sheetRadius: 16,
-                                child: StatusBottomSheet(orderId: order.id!)),
-                          );
-                        },
-                      );
-                      // await Helpers.hideLoader();
-                    },
+                      if (order.disputeId == null) {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          isDismissible: false,
+                          builder: (BuildContext context) {
+                            return Padding(
+                              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                              child: CustomBottomSheet(
+                                  isDismissible: false,
+                                  initialChildSize: 0.6,
+                                  maxChildSize: 0.8,
+                                  minChildSize: 0.6,
+                                  horizontalPadding: 0.0,
+                                  sheetRadius: 16,
+                                  child: StatusBottomSheet(orderId: order.id!)),
+                            );
+                          },
+                        );// await Helpers.hideLoader();
+                      }else{
+                        context.pushNamed(myDisputePage);
+                      }
+                    }
                   ),
                 ],
               ),

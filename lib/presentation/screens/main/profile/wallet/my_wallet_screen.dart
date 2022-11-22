@@ -103,18 +103,13 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 16.0),
+                                        padding: const EdgeInsets.symmetric(vertical: 16.0),
                                         child: Obx(() {
-                                          if (profileController
-                                              .isProfileFetching
-                                              .value) {
+                                          if (profileController.isProfileFetching.value) {
                                             return const CustomLoader();
                                           } else {
                                             return TokenWidget(
-                                              tokens: "${profileController
-                                                  .profile
-                                                  .walletMoney}",
+                                              tokens: profileController.profile.walletMoney!.toStringAsFixed(2),
                                               textColor: aquaGreenColor,);
                                           }
                                         }),
@@ -129,8 +124,7 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                                           textColor: textWhiteColor,
                                           name: "Add Token",
                                           onTap: () {
-                                            context.pushNamed(
-                                                addFundScreenPage);
+                                            context.pushNamed(addFundScreenPage);
                                           },
                                         ),
                                       ),

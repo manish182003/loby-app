@@ -67,7 +67,7 @@ class ChatController extends GetxController{
             (failure) {
           errorMessage.value = Helpers.convertFailureToMessage(failure);
           debugPrint(errorMessage.value);
-          Helpers.toast(errorMessage.value);
+          // Helpers.toast(errorMessage.value);
           isChatsFetching(false);
         },
             (success) {
@@ -101,7 +101,7 @@ class ChatController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        Helpers.toast(errorMessage.value);
+        // Helpers.toast(errorMessage.value);
         isMessagesFetching(false);
       },
           (success) {
@@ -174,7 +174,7 @@ class ChatController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        Helpers.toast(errorMessage.value);
+        // Helpers.toast(errorMessage.value);
       },
           (success) {
             if(coreController.socket.connected){

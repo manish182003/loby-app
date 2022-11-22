@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:loby/core/theme/colors.dart';
 import 'package:sizer/sizer.dart';
 
@@ -16,13 +17,13 @@ class TokenWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Image.asset("assets/images/token.png", height: size ?? 30, width: size ?? 30,),
+        SvgPicture.asset("assets/icons/token.svg", height: size ?? 30, width: size ?? 30,),
         SizedBox(width: 1.w,),
         text ?? Text(tokens!,
             textAlign: TextAlign.center,
             style: size == 20 ? textTheme.headline3?.copyWith(
-    color: textColor ?? textTunaBlueColor,
-    fontFamily: 'Inter') : textTheme.headlineLarge
+                color: textColor ?? textTunaBlueColor,
+                fontFamily: 'Inter') : textTheme.headlineLarge
                 ?.copyWith(
                 color: textColor ?? textTunaBlueColor,
                 fontFamily: 'Inter')),

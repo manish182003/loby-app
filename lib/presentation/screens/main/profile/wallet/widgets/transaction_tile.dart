@@ -5,6 +5,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../../../core/utils/helpers.dart';
 import '../../../../../../domain/entities/profile/wallet_transaction.dart';
+import '../../../../../widgets/buttons/custom_button.dart';
 
 class TransactionTile extends StatelessWidget {
   final String title;
@@ -18,8 +19,8 @@ class TransactionTile extends StatelessWidget {
 
     return InkWell(
       onTap: (){
-        if(transaction.order != null && transaction.order!.userGameService != null){
-          _transactionSDetails(context);
+        if(transaction.order != null && transaction.order!.userGameService != null && !isDebited){
+          _transactionsDetails(context);
         }
       },
       child: Column(
@@ -57,7 +58,7 @@ class TransactionTile extends StatelessWidget {
 
 
 
-  void _transactionSDetails(BuildContext context) {
+  void _transactionsDetails(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     showDialog(
       barrierDismissible: false,
@@ -71,9 +72,9 @@ class TransactionTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(16.0)),
           child: Container(
             alignment: Alignment.center,
-            height: 50.h,
             padding: const EdgeInsets.all(16.0),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -99,7 +100,15 @@ class TransactionTile extends StatelessWidget {
                 Divider(thickness: 1, color: whiteColor, indent: 50.w),
                 SizedBox(height: 1.h),
                 _rowWidget(textTheme, text1: 'Total $title', text2: (transaction.amount! - lobyProtectionCharges).toStringAsFixed(2), isToken: true, isDebited: title.contains('Debited')),
-                SizedBox(height: 1.h),
+                SizedBox(height: 5.h),
+                CustomButton(
+                    name: "OK",
+                    color: aquaGreenColor,
+                    left: 15.w,
+                    right: 15.w,
+                    onTap: () async{
+                      Navigator.pop(context);
+                    }),
               ],
             ),
           ),

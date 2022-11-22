@@ -7,6 +7,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:loby/core/theme/colors.dart';
@@ -23,6 +24,8 @@ import 'package:mime/mime.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:uuid/uuid.dart';
+
+import '../../../../services/routing_service/routes_name.dart';
 
 
 class ChatPage extends StatefulWidget {
@@ -111,6 +114,12 @@ class _ChatPageState extends State<ChatPage> {
                     showUserAvatars: true,
                     showUserNames: true,
                     user: _user,
+                    onAvatarTap: (user){
+                      context.pushNamed(userProfilePage, queryParams: {
+                        'userId': user.id,
+                        'from': 'other'
+                      });
+                    },
                     theme: const DarkChatTheme(
                       backgroundColor: backgroundColor,
                       secondaryColor: textFieldColor,

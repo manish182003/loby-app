@@ -7,7 +7,6 @@ import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/screens/main/profile/user_profile/widgets/profile_header.dart';
 import 'package:loby/presentation/screens/main/profile/user_profile/widgets/user_info.dart';
 
-import '../../../../../core/theme/colors.dart';
 
 class UserProfileScreen extends StatefulWidget {
   final int userId;

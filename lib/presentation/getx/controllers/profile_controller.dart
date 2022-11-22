@@ -159,7 +159,7 @@ class ProfileController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        Helpers.toast(errorMessage.value);
+        // Helpers.toast(errorMessage.value);
         isProfileFetching.value = false;
         isSocialLinksFetching.value = false;
       },
@@ -192,7 +192,7 @@ class ProfileController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        Helpers.toast(errorMessage.value);
+        // Helpers.toast(errorMessage.value);
         isRatingsFetching.value = false;
       },
           (success) {
@@ -220,7 +220,7 @@ class ProfileController extends GetxController{
             (failure) {
           errorMessage.value = Helpers.convertFailureToMessage(failure);
           debugPrint(errorMessage.value);
-          Helpers.toast(errorMessage.value);
+          // Helpers.toast(errorMessage.value);
           isDuelDetailsFetching.value = false;
         },
             (success) {
@@ -411,7 +411,7 @@ class ProfileController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        Helpers.toast(errorMessage.value);
+        // Helpers.toast(errorMessage.value);
         isBankDetailsFetching(false);
       },
           (success) {
@@ -459,7 +459,7 @@ class ProfileController extends GetxController{
             (failure) {
           errorMessage.value = Helpers.convertFailureToMessage(failure);
           debugPrint(errorMessage.value);
-          Helpers.toast(errorMessage.value);
+          // Helpers.toast(errorMessage.value);
           isPaymentTransactionsFetching.value = false;
         },
             (success) {
@@ -496,7 +496,7 @@ class ProfileController extends GetxController{
             (failure) {
           errorMessage.value = Helpers.convertFailureToMessage(failure);
           debugPrint(errorMessage.value);
-          Helpers.toast(errorMessage.value);
+          // Helpers.toast(errorMessage.value);
           isWalletTransactionsFetching.value = false;
         },
             (success) {
@@ -536,7 +536,7 @@ class ProfileController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        Helpers.toast(errorMessage.value);
+        // Helpers.toast(errorMessage.value);
         isBankDetailsFetching(false);
       },
           (success) {
@@ -593,7 +593,7 @@ class ProfileController extends GetxController{
             (failure) {
           errorMessage.value = Helpers.convertFailureToMessage(failure);
           debugPrint(errorMessage.value);
-          Helpers.toast(errorMessage.value);
+          // Helpers.toast(errorMessage.value);
           isSettlementRequestsFetching.value = false;
         },
             (success) {
@@ -627,7 +627,7 @@ class ProfileController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        Helpers.toast(errorMessage.value);
+        // Helpers.toast(errorMessage.value);
       },
           (success) {
             totalEarning.value = success;

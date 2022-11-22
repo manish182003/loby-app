@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:loby/data/models/order/order_model.dart';
 import 'package:loby/domain/entities/order/order.dart';
 import 'package:loby/presentation/getx/controllers/core_controller.dart';
@@ -18,7 +19,10 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../../../core/theme/colors.dart';
 import '../../../../../../core/utils/helpers.dart';
+import '../../../../../../services/routing_service/routes_name.dart';
 import '../../../../../widgets/buttons/custom_button.dart';
+import '../../../../../widgets/confirmation_dialog.dart';
+import 'order_status_constants.dart';
 
 class OrderStatusTile extends StatelessWidget {
   final Order order;
@@ -56,10 +60,11 @@ class OrderStatusTile extends StatelessWidget {
           isLast ? isDisputeRaised ?
           Column(
             children: [
-              _statusTile(textTheme, isDone: true,
+              _statusTile(textTheme,
+                  isDone: true,
                   title: isDuel ? "Seller & Challenger selection doesn’t match. Dispute Raised. Transaction on hold" : "Dispute Raised. Transaction on hold",
                   date: date,
-                isDisputedRaised: true,
+                  isDisputedRaised: true,
               ),
               SizedBox(height: 2.h),
             ],
@@ -102,14 +107,14 @@ class OrderStatusTile extends StatelessWidget {
                 'assets/icons/verified_user_bedge.svg',
                 height: 18,
                 width: 18,
-                color: isDisputedRaised ? textErrorColor : isDone ? null : iconWhiteColor,
+                color: isDisputedRaised ? carminePinkColor : title == statusesName[sellerRejected] ? carminePinkColor : isDone ? null : iconWhiteColor,
               ),
               SizedBox(width: 3.w),
               Expanded(
                 child: Text(title,
                     // maxLines: 3,
                     // overflow: TextOverflow.ellipsis,
-                    style: textTheme.headline5?.copyWith(color: isDisputedRaised ? textErrorColor : textWhiteColor)),
+                    style: textTheme.headline5?.copyWith(color: isDisputedRaised ? carminePinkColor : title == statusesName[sellerRejected] ? carminePinkColor : textWhiteColor)),
               ),
             ],
           ),
@@ -222,7 +227,6 @@ class OrderStatusTile extends StatelessWidget {
           radius: 50,
           onTap: () async {
             _selectDuelWinnerDialog(context);
-            // _openFileExplorer(context);
           },
         ),
         SizedBox(height: 2.h),
@@ -273,7 +277,7 @@ class OrderStatusTile extends StatelessWidget {
             textColor: textWhiteColor,
             radius: 50,
             onTap: () async {
-              _openFileExplorer(context, status: 'SELLER_DELIVERY_CONFIRMED');
+              _uploadProofsDialog(context);
             },
           ),
         ) : const SizedBox(),
@@ -405,7 +409,6 @@ class OrderStatusTile extends StatelessWidget {
             .toList()
             .first as OrderModel).toJson(),
       });
-
       await Helpers.hideLoader();
       Navigator.pop(context);
       Navigator.pop(context);
@@ -444,8 +447,8 @@ class OrderStatusTile extends StatelessWidget {
     OrderController orderController = Get.find<OrderController>();
     CoreController coreController = Get.find<CoreController>();
     await Helpers.loader();
-    final isSuccess = await orderController.changeOrderStatus(orderId: orderId, status: status);
-    if (isSuccess) {
+    final response = await orderController.changeOrderStatus(orderId: orderId, status: status);
+    if (response['success']) {
       await getOrders();
       coreController.socket.emit("loby", {
         'type': 'order',
@@ -457,6 +460,16 @@ class OrderStatusTile extends StatelessWidget {
       });
       await Helpers.hideLoader();
       Navigator.pop(context);
+    } else if(response['reason'] == 'insufficient balance'){
+      Helpers.hideLoader();
+      ConfirmationBottomDialog(
+          textTheme: Theme.of(context).textTheme,
+          contentName: "You have insifficient tokens to buy this service. Would you like to Add Tokens to your Wallet ?",
+          yesBtnClick: ()async{
+            Navigator.pop(context);
+            context.pushNamed(addFundScreenPage);
+          }).showBottomDialog(context);
+
     } else {
       await Helpers.hideLoader();
     }
@@ -552,6 +565,54 @@ class OrderStatusTile extends StatelessWidget {
               }
             },
           )
+        );
+      },
+    );
+  }
+
+
+  void _uploadProofsDialog(BuildContext context) {
+    OrderController orderController = Get.find<OrderController>();
+    CoreController coreController = Get.find<CoreController>();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+            elevation: 0,
+            backgroundColor: backgroundDarkJungleGreenColor,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.0)),
+            child: SelectDuelWinnerDialog(
+              isNormalOrder: true,
+              onSubmit: () async{
+                if(orderController.selectedDuelProofs.isEmpty){
+                  Helpers.toast("Please Upload Proofs");
+                }else{
+                  await Helpers.loader();
+                  final isSuccess = await orderController.uploadDeliveryProof(
+                    orderId: orderId,
+                    fileTypes: orderController.selectedDuelProofs.map((element) => element.fileType).toList(),
+                    files: orderController.selectedDuelProofs.map((element) => element.file).toList(),
+                  );
+                  if(isSuccess){
+                    await orderController.changeOrderStatus(orderId: orderId, status: sellerDeliveryConfirmed);
+                    await getOrders();
+                    coreController.socket.emit("loby", {
+                      'type': 'order',
+                      'receiverId': buyerId,
+                      'order': (orderController.orders
+                          .where((e) => e.id == orderId)
+                          .toList()
+                          .first as OrderModel).toJson(),
+                    });
+                    await Helpers.hideLoader();
+                    Navigator.pop(context);
+                  }else{
+                    Helpers.hideLoader();
+                  }
+                }
+              },
+            )
         );
       },
     );

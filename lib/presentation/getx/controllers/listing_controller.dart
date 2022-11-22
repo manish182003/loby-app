@@ -69,6 +69,10 @@ class ListingController extends GetxController{
 
   final rangeSliderDiscreteValues = const RangeValues(0, 235000).obs;
 
+  final tokenToRupee = "0".obs;
+  final rupeeToToken = "0".obs;
+
+
 
 
 
@@ -86,7 +90,7 @@ class ListingController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        Helpers.toast(errorMessage.value);
+        // Helpers.toast(errorMessage.value);
       },
           (success) {
             configuration = success.configuration;
@@ -149,6 +153,9 @@ class ListingController extends GetxController{
     optionAnswer.clear();
     isServicesAvailable.value = false;
 
+    tokenToRupee.value = "0";
+    rupeeToToken.value = "0";
+
   }
 
 
@@ -181,7 +188,7 @@ class ListingController extends GetxController{
             (failure) {
           errorMessage.value = Helpers.convertFailureToMessage(failure);
           debugPrint(errorMessage.value);
-          Helpers.toast(errorMessage.value);
+          // Helpers.toast(errorMessage.value);
           isBuyerListingsFetching.value = false;
         },
             (success) {
@@ -233,7 +240,7 @@ class ListingController extends GetxController{
         Helpers.toast(errorMessage.value);
       },
           (success) {
-            Helpers.toast("Listing Successfully Reported.");
+            Helpers.toast(userId == null ? "Listing Successfully Reported." : "Account Successfully Reported");
       },
     );
     return failureOrSuccess.isRight() ? true : false;

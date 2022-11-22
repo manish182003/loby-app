@@ -94,7 +94,7 @@ class FeedbackScreenState extends State<FeedbackScreen> {
                                   contentName: "Thank you for your feedback.",
                                   onOk: (){
                                     Navigator.pop(context);
-                                    context.pushNamed(mainPage);
+                                    context.goNamed(mainPage);
                                   }
                               ).showBottomDialog(context);
                             }

@@ -5,6 +5,7 @@ import 'package:loby/domain/entities/profile/bank_detail.dart';
 import 'package:loby/presentation/getx/controllers/home_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/screens/main/profile/wallet/widgets/token_widget.dart';
+import 'package:loby/presentation/widgets/confirmation_dialog.dart';
 import 'package:loby/presentation/widgets/text_fields/custom_drop_down.dart';
 import 'package:loby/presentation/widgets/text_fields/text_field_widget.dart';
 import 'package:sizer/sizer.dart';
@@ -73,6 +74,20 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
       body: Obx(() {
         if (profileController.isBankDetailsFetching.value) {
           return const CustomLoader();
+        } else if(profileController.bankDetails.isEmpty){
+          return Center(
+            child: CustomButton(
+              color: purpleLightIndigoColor,
+              textColor: textWhiteColor,
+              left: 20.w,
+              right: 20.w,
+              height: 7.5.h,
+              name: "Add Withdraw Method",
+              onTap: () {
+                _addNewWithdrawMethodDialog(context, textTheme);
+              },
+            ),
+          );
         } else {
           return SingleChildScrollView(
             child: Form(
@@ -90,10 +105,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                             borderRadius: BorderRadius.circular(16.0),
                           ),
                           child: Container(
-                              width: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width * 1,
+                              width: MediaQuery.of(context).size.width * 1,
                               height: 140.0,
                               decoration: BoxDecoration(
                                 color: aquaGreenColor,
@@ -116,7 +128,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                         if(profileController.isProfileFetching.value){
                                           return const CustomLoader();
                                         }else{
-                                          return TokenWidget(tokens: '${profileController.profile.walletMoney}');
+                                          return TokenWidget(tokens: profileController.profile.walletMoney!.toStringAsFixed(2));
                                         }
                                       }),
                                     ),
@@ -197,23 +209,30 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                     name: "Withdraw ₹ ${profileController.tokenToRupee}",
                                     onTap: () async {
                                       if (_formKey.currentState!.validate()) {
-                                        Helpers.loader();
-                                        final isSuccess = await profileController.withdrawMoney(
-                                            bankDetailId: selectedBankId,
-                                            amount: int.tryParse(profileController.tokenToRupee.value)
-                                        );
-                                        await profileController.getProfile();
-                                        Helpers.hideLoader();
-                                        if (isSuccess) {
-                                          amount.clear();
-                                          profileController.rupeeToToken.value = "0";
-                                          profileController.tokenToRupee.value = "0";
-                                          BottomDialog(
+                                        FocusManager.instance.primaryFocus?.unfocus();
+                                        ConfirmationBottomDialog(
                                             textTheme: textTheme,
-                                            tileName: "Withdraw Success",
-                                            contentName: "Amount has been successfully withdrawn. It will be credited to your account within 48 hours.",)
-                                              .showBottomDialog(context);
-                                        }
+                                            contentName: "Are you sure you want to withdraw amount ?",
+                                            yesBtnClick: ()async{
+                                              Navigator.pop(context);
+                                              Helpers.loader();
+                                              final isSuccess = await profileController.withdrawMoney(
+                                                  bankDetailId: selectedBankId,
+                                                  amount: int.tryParse(profileController.tokenToRupee.value)
+                                              );
+                                              await profileController.getProfile();
+                                              Helpers.hideLoader();
+                                              if (isSuccess) {
+                                                amount.clear();
+                                                profileController.rupeeToToken.value = "0";
+                                                profileController.tokenToRupee.value = "0";
+                                                BottomDialog(
+                                                  textTheme: textTheme,
+                                                  tileName: "Withdraw Success",
+                                                  contentName: "Amount has been successfully withdrawn. It will be credited to your account within 48 hours.",
+)                                                    .showBottomDialog(context);
+                                              }
+                                            }).showBottomDialog(context);
                                       }
                                     },
                                   ),

@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/screens/auth/widgets/create_account.dart';
@@ -100,6 +102,12 @@ class _SignInScreenState extends State<SignInScreen> {
 
   Future<void> _checkProfileStatus()async{
     Helpers.loader();
+    final auth = FirebaseAuth.instance;
+    final GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']);
+    if(await googleSignIn.isSignedIn()){
+      await auth.signOut();
+      await googleSignIn.signOut();
+    }
     final isSuccess = await authController.googleSignInMethod(context);
     if(isSuccess){
       await profileController.getProfile();

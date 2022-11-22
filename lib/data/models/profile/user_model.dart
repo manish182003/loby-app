@@ -71,7 +71,7 @@ class UserModel extends User{
   final int? stateId;
   final DateTime? dob;
   final String? bio;
-  final int? walletMoney;
+  final double? walletMoney;
   final bool? verifiedProfile;
   final int? lobbyCoins;
   final String? fcmToken;
@@ -116,7 +116,7 @@ class UserModel extends User{
     stateId: json["state_id"],
     dob: json["dob"] == null ? null : DateTime.parse(json["dob"]),
     bio: json["bio"],
-    walletMoney: json["wallet_money"],
+    walletMoney: json["wallet_money"] == null ? null : double.tryParse(json["wallet_money"]),
     verifiedProfile: json["verified_profile"],
     lobbyCoins: json["lobby_coins"],
     fcmToken: json["fcm_token"],

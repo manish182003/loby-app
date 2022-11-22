@@ -87,6 +87,7 @@ import '../data/repositories/order_repository_impl.dart';
 import '../domain/usecases/auth/forgot_and_reset_password.dart';
 import '../domain/usecases/listing/change_listing_status.dart';
 import '../domain/usecases/profile/get_wallet_transactions.dart';
+import '../presentation/getx/bindings/network_binding.dart';
 
 class DependencyInjector{
 
@@ -101,7 +102,7 @@ class DependencyInjector{
     _injectChatUsecases();
     _injectProfileUsecases();
 
-
+    NetworkBinding().dependencies();
     AuthBinding().dependencies();
     HomeBinding().dependencies();
     ListingBinding().dependencies();

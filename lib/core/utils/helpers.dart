@@ -79,9 +79,9 @@ class Helpers {
     }
   }
 
-  static validateWalletWithdraw(String value, int balance) {
+  static validateWalletWithdraw(String value, double balance) {
     if(value != ''){
-      if (balance - int.parse(value) < 200) {
+      if (balance - double.parse(value) < 200) {
         return 'Minimum Balance Left Should be 200';
       } else {
         return null;

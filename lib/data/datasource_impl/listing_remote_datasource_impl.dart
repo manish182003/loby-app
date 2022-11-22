@@ -191,7 +191,9 @@ class ListingRemoteDatasourceImpl extends ListingRemoteDatasource{
         _dio,
         RequestType.post,
         ApiEndpoints.reportListing,
-        queryParams: {'account_id': "$userId", 'user_game_service_id': "$userGameServiceId"},
+        queryParams: {
+          if(userId != null )'account_id': "$userId",
+          if(userGameServiceId != null ) 'user_game_service_id': "$userGameServiceId"},
         headers: headers,
       );
 

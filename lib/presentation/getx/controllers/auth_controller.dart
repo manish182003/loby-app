@@ -237,7 +237,7 @@ class AuthController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        Helpers.toast(errorMessage.value);
+        // Helpers.toast(errorMessage.value);
         isCountriesFetching.value = false;
         },
           (success) {
@@ -266,7 +266,7 @@ class AuthController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        Helpers.toast(errorMessage.value);
+        // Helpers.toast(errorMessage.value);
         isCountriesFetching.value = false;
       },
           (success) {
@@ -292,7 +292,7 @@ class AuthController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        Helpers.toast(errorMessage.value);
+        // Helpers.toast(errorMessage.value);
 
       },
           (success) {
@@ -316,7 +316,7 @@ class AuthController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        Helpers.toast(errorMessage.value);
+        // Helpers.toast(errorMessage.value);
       },
           (success) {
         profileTags.value = success.profileTags;

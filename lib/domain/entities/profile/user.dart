@@ -66,7 +66,7 @@ class User extends Equatable{
   final int? stateId;
   final DateTime? dob;
   final String? bio;
-  final int? walletMoney;
+  final double? walletMoney;
   final bool? verifiedProfile;
   final int? lobbyCoins;
   final String? fcmToken;
