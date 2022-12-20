@@ -17,9 +17,7 @@ import 'order_status_tile.dart';
 
 class StatusBottomSheet extends StatelessWidget {
   final int orderId;
-
   const StatusBottomSheet({Key? key, required this.orderId}) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +83,12 @@ class StatusBottomSheet extends StatelessWidget {
                             final isStatic = index > order.orderStatuses!.length - 1;
                             if (isDuel) {
                               debugPrint("duel");
-                              print("statis $isStatic");
+                              debugPrint("static $isStatic");
+                              // if(index == 3 && !isStatic && order.orderStatuses![index].status! == buyerDeliveryConfirmed){
+                              //   if(duelStatuses[4] != duelStatusesName[sellerDeliveryConfirmed]){
+                              //     duelStatuses[4] = duelStatusesName[sellerDeliveryConfirmed];
+                              //   }
+                              // }
                               return OrderStatusTile(
                                 order: order,
                                 orderId: order.id!,
@@ -93,7 +96,7 @@ class StatusBottomSheet extends StatelessWidget {
                                 buyerId: order.userId!,
                                 isDone: isStatic ? false : statuses.contains(order.orderStatuses![index].status),
                                 title: isStatic ? duelStatuses[index] : duelStatusesName[order.orderStatuses![index].status!],
-                                date: isStatic ? daysRemaining(order) : Helpers.formatDateTime(dateTime: order.orderStatuses![index].createdAt!),
+                                date: isStatic ? '' : daysRemaining(order, index),
                                 isLast: isStatic ? false : order.orderStatuses![index].status! == order.orderStatuses!.last.status!,
                                 lastStatus: order.orderStatuses!.last.status!,
                                 isSeller: isSeller,
@@ -109,7 +112,7 @@ class StatusBottomSheet extends StatelessWidget {
                                 buyerId: order.userId!,
                                 isDone: isStatic ? false : statuses.contains(order.orderStatuses![index].status),
                                 title: isStatic ? sellerStatuses[index] : statusesName[order.orderStatuses![index].status!],
-                                date: isStatic ? '' : Helpers.formatDateTime(dateTime: order.orderStatuses![index].createdAt!),
+                                date: isStatic ? '' : daysRemaining(order, index),
                                 isLast: isStatic ? false : order.orderStatuses![index].status! == order.orderStatuses!.last.status!,
                                 lastStatus: order.orderStatuses!.last.status!,
                                 isSeller: true,
@@ -124,7 +127,7 @@ class StatusBottomSheet extends StatelessWidget {
                                 buyerId: order.userId!,
                                 isDone: isStatic ? false : statuses.contains(order.orderStatuses![index].status),
                                 title: isStatic ? buyerStatuses[index] : statusesName[order.orderStatuses![index].status!],
-                                date: isStatic ? '' : Helpers.formatDateTime(dateTime: order.orderStatuses![index].createdAt!),
+                                date: isStatic ? '' : daysRemaining(order, index),
                                 isLast: isStatic ? false : order.orderStatuses![index].status! == order.orderStatuses!.last.status!,
                                 lastStatus: order.orderStatuses!.last.status!,
                                 isDisputeRaised : order.disputeId != null,
@@ -145,13 +148,17 @@ class StatusBottomSheet extends StatelessWidget {
     );
   }
 
-  String daysRemaining(Order order){
-    HomeController homeController = Get.find<HomeController>();
-    final days = int.tryParse(homeController.staticData[1].realValue!);
-    if(order.orderStatuses!.last.status! == 'TRANSACTION_COMPLETED'){
-      return '${Helpers.daysBetween(order.orderStatuses!.last.createdAt!, DateTime.now().add(Duration(days: days!)))} Days Remaining of $days';
+  String daysRemaining(Order order, int index){
+    if(order.orderStatuses!.last.status! == lobyProtectionPeriod){
+      if(order.orderStatuses![index].status! == lobyProtectionPeriod){
+        HomeController homeController = Get.find<HomeController>();
+        final days = int.tryParse(homeController.staticData[1].realValue!);
+        return '${Helpers.daysBetween(order.orderStatuses![index].createdAt!, DateTime.now().add(Duration(days: days!)))} Days Remaining of $days';
+      }else{
+        return '${Helpers.formatDateTime(dateTime: order.orderStatuses![index].createdAt!)}';
+      }
     }else{
-      return '';
+      return '${Helpers.formatDateTime(dateTime: order.orderStatuses![index].createdAt!)}';
     }
   }
 }

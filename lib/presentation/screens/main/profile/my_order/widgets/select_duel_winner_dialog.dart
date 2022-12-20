@@ -15,6 +15,7 @@ import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/widgets/buttons/custom_button.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../../widgets/single_selectable_card.dart';
 import '../../../../../widgets/text_fields/text_field_widget.dart';
 
 //ignore: must_be_immutable
@@ -31,66 +32,75 @@ class SelectDuelWinnerDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    return SizedBox(
-        height: 60.h,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 16),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 16),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(isNormalOrder ?? false ? "Upload Proofs" : "Select Winner", style: textTheme.headline2?.copyWith(fontWeight: FontWeight.w500, color: whiteColor)),
-                    GestureDetector(onTap: (){
-                      Navigator.pop(context);
-                    },
-                    child: const Icon(Icons.close, color: whiteColor,)),
-                  ],
-                ),
-                SizedBox(height: 2.h,),
-                isNormalOrder ?? false ? const SizedBox() : Obx(() {
-                  return Wrap(
-                    children: List.from(
-                      options!.map((winner) {
-                        final selectedUser = orderController.selectedUser.value;
-                        return SizedBox(
-                          child: RadioListTile(
-                              selected: selectedUser == winner,
-                              groupValue: selectedUser,
-                              dense: true,
-                              contentPadding: const EdgeInsets.all(0),
-                              controlAffinity: ListTileControlAffinity.leading,
-                              title: Text(winner, style: textTheme.headline3?.copyWith(fontWeight: FontWeight.w500, color: whiteColor)),
-                              value: winner,
-                              activeColor: aquaGreenColor,
-                              onChanged: onSelectWinner
-                          ),
-                        );
-                      }).toList(),
-                    )
-                    ,
-                  );
-                }),
-                SizedBox(height: 3.h,),
-                _buildUploadField(textTheme),
-                SizedBox(height: 5.h,),
-                CustomButton(
-                    top: 0.h,
-                    left: 5.w,
-                    right: 5.w,
-                    bottom: 1.h,
-                    color: createProfileButtonColor,
-                    name: "Submit",
-                    textColor: textWhiteColor,
-                    onTap: onSubmit
-                ),
+                Text(isNormalOrder ?? false ? "Upload Proofs" : "Select Winner", style: textTheme.headline2?.copyWith(fontWeight: FontWeight.w500, color: whiteColor)),
+                GestureDetector(onTap: (){
+                  orderController.fileLink.value.clear();
+                  orderController.selectedDuelProofs.clear();
+                  Navigator.pop(context);
+                },
+                child: const Icon(Icons.close, color: whiteColor,)),
               ],
             ),
-          ),
-        )
+            SizedBox(height: 2.h,),
+            isNormalOrder ?? false ? const SizedBox() : Obx(() {
+              final selectedUser = orderController.selectedUser.value;
+              return
+                SingleSelectableCard(
+                options: options!,
+                onSelected: onSelectWinner!,
+              );
+
+
+
+              //   Wrap(
+              //   children: List.from(
+              //     options!.map((winner) {
+              //       final selectedUser = orderController.selectedUser.value;
+              //       return SizedBox(
+              //         child: RadioListTile(
+              //             selected: selectedUser == winner,
+              //             groupValue: selectedUser,
+              //             dense: true,
+              //             contentPadding: const EdgeInsets.all(0),
+              //             controlAffinity: ListTileControlAffinity.leading,
+              //             title: Text(winner, style: textTheme.headline3?.copyWith(fontWeight: FontWeight.w500, color: whiteColor)),
+              //             value: winner,
+              //             activeColor: aquaGreenColor,
+              //             onChanged: onSelectWinner
+              //         ),
+              //       );
+              //     }).toList(),
+              //   )
+              //   ,
+              // );
+            }),
+            SizedBox(height: 3.h,),
+            _buildUploadField(textTheme),
+            SizedBox(height: 5.h,),
+            CustomButton(
+                top: 0.h,
+                left: 5.w,
+                right: 5.w,
+                bottom: 1.h,
+                color: createProfileButtonColor,
+                name: "Submit",
+                textColor: textWhiteColor,
+                onTap: onSubmit
+            ),
+          ],
+        ),
+      ),
     );
   }
 

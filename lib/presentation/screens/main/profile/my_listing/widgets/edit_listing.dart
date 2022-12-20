@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:loby/core/theme/colors.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/listing/service_listing.dart';
+import 'package:loby/domain/entities/listing/user_game_service_image.dart';
 import 'package:loby/presentation/getx/controllers/home_controller.dart';
 import 'package:loby/presentation/getx/controllers/listing_controller.dart';
 import 'package:loby/presentation/widgets/body_padding_widget.dart';
@@ -17,8 +18,12 @@ import 'package:loby/presentation/widgets/text_fields/custom_drop_down.dart';
 import 'package:loby/presentation/widgets/text_fields/text_field_widget.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../../../domain/entities/listing/unit.dart';
+import '../../../../../widgets/confirmation_dialog.dart';
+
 class EditListing extends StatefulWidget {
   final ServiceListing listing;
+
   const EditListing({Key? key, required this.listing}) : super(key: key);
 
   @override
@@ -32,7 +37,7 @@ class _EditListingState extends State<EditListing> {
   HomeController homeController = Get.find<HomeController>();
   List<PlatformFile> _paths = [];
   List<String?> selectedFilesExtensions = [];
-
+  TextEditingController fileLink = TextEditingController();
 
 
   @override
@@ -52,23 +57,38 @@ class _EditListingState extends State<EditListing> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final textTheme = Theme
+        .of(context)
+        .textTheme;
 
     return BodyPaddingWidget(
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextFieldWidget(
-                  textEditingController: TextEditingController(text: widget.listing.category!.name),
+                  textEditingController: TextEditingController(
+                      text: widget.listing.category!.name),
                   title: "Category",
                   isReadableOnly: true,
                 ),
                 SizedBox(height: 2.h),
                 TextFieldWidget(
-                  textEditingController: TextEditingController(text: widget.listing.game!.name),
+                  textEditingController: TextEditingController(
+                      text: widget.listing.game!.name),
                   title: "Game",
+                  isReadableOnly: true,
+                ),
+                SizedBox(height: 2.h),
+                TextFieldWidget(
+                  textEditingController: TextEditingController(
+                      text: widget.listing.userGameServiceOptions!.map((e) => e
+                          .serviceOptions?.first.serviceOptionName)
+                          .toList()
+                          .join(", ")),
+                  title: "Service Type",
                   isReadableOnly: true,
                 ),
                 SizedBox(height: 2.h),
@@ -85,27 +105,83 @@ class _EditListingState extends State<EditListing> {
                   maxLines: 5,
                   textInputAction: TextInputAction.newline,
                 ),
-                SizedBox(height: 2.h),
-                TextFieldWidget(
-                  textEditingController: TextEditingController(text: widget.listing.userGameServiceOptions!.map((e) => e.serviceOptions?.first.serviceOptionName).toList().join(", ")),
-                  title: "Service Type",
-                  isReadableOnly: true,
-                ),
+                SizedBox(height: 4.h),
+                Obx(() {
+                  if (listingController.downloadedListingFiles.isEmpty) {
+                    return const SizedBox();
+                  } else {
+                    return GridView.builder(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 2.5,
+                        mainAxisSpacing: 15.0,
+                        crossAxisSpacing: 15.0,
+                      ),
+                      shrinkWrap: true,
+                      physics: const ClampingScrollPhysics(),
+                      padding: const EdgeInsets.only(bottom: 0),
+                      itemCount: listingController.downloadedListingFiles
+                          .length,
+                      itemBuilder: (context, index) {
+                        return downloadedFileTile(
+                            image: listingController
+                                .downloadedListingFiles[index],
+                            index: index
+                        );
+                      },
+                    );
+                  }
+                }),
                 SizedBox(height: 4.h),
                 _buildUploadField(textTheme),
                 SizedBox(height: 4.h),
                 _buildPrice(textTheme),
                 SizedBox(height: 2.h),
-                TextFieldWidget(
-                  textEditingController: TextEditingController(text: widget.listing.unit!.name),
-                  title: "Unit",
-                  isReadableOnly: true,
+                BuildDropdown(
+                  defaultValue: listingController.configuration.units?.where((element) =>
+                  element.id == listingController.priceUnitId.value).first,
+                  dropdownHint: "Select Unit",
+                  isRequired: true,
+                  itemsList: listingController.configuration.units?.map((item) =>
+                      DropdownMenuItem<Unit>(
+                        value: item,
+                        child: Text(
+                            item.name!,
+                            style: textTheme.headline3?.copyWith(color: whiteColor)
+                        ),
+                      )).toList(),
+                  onChanged: (value) {
+                    listingController.priceUnitId.value = value.id;
+                    debugPrint("unit id ${listingController.priceUnitId.value}");
+                  },
                 ),
                 SizedBox(height: 2.h),
-                TextFieldWidget(
-                  textEditingController: TextEditingController(text: widget.listing.edt.toString()),
-                  title: "Estimated Delivery Time (Days)",
-                  isReadableOnly: true,
+                Text(
+                    textAlign: TextAlign.start,
+                    'Estimated Delivery Time (Days)',
+                    style: textTheme.headline4?.copyWith(
+                        color: textLightColor)),
+                SizedBox(height: 2.h),
+                BuildDropdown(
+                  defaultValue: listingController.estimateDeliveryTime.value,
+                  dropdownHint: "Select",
+                  isRequired: true,
+                  itemsList: [
+                    for(var i = 1; i <= int.tryParse(
+                        widget.listing.category?.edtDays == "" ? '0' :
+                        widget.listing.category?.edtDays ?? '0')!; i++) i
+                  ].map((item) =>
+                      DropdownMenuItem<String>(
+                        value: "$item",
+                        child: Text(
+                            "$item", style: textTheme.headline3?.copyWith(
+                            color: whiteColor)
+                        ),
+                      )).toList(),
+                  onChanged: (value) {
+                    listingController.estimateDeliveryTime.value = value;
+                    debugPrint("edt ${listingController.estimateDeliveryTime.value}");
+                  },
                 ),
                 SizedBox(height: 4.h),
                 CustomButton(
@@ -117,15 +193,13 @@ class _EditListingState extends State<EditListing> {
                   onTap: () async {
                     if (_formKey.currentState!.validate()) {
                       Helpers.loader();
-                      final isSuccess = await listingController.createListing(
-                          listingId: widget.listing.id
+                      final isSuccess = await listingController.createListing(listingId: widget.listing.id
                       );
                       Helpers.hideLoader();
                       if (isSuccess) {
                         listingController.buyerListingPageNumber.value = 1;
                         listingController.areMoreListingAvailable.value = true;
                         listingController.getBuyerListings(from: 'myProfile');
-
                         Navigator.pop(context);
                       }
                     }
@@ -139,19 +213,29 @@ class _EditListingState extends State<EditListing> {
   }
 
 
-  Future<void> getListingDetails()async{
+  Future<void> getListingDetails() async {
     listingController.title.value.text = widget.listing.title!;
     listingController.description.value.text = widget.listing.description!;
     listingController.price.value.text = "${widget.listing.price!}";
     listingController.stockAvl.value.text = "${widget.listing.stockAvl!}";
+    listingController.downloadedListingFiles.value =
+    widget.listing.userGameServiceImages!;
+    listingController.estimateDeliveryTime.value = widget.listing.edt.toString();
+    listingController.priceUnitId.value = widget.listing.priceUnitId!;
   }
 
   Widget selectedFileTile({required File image, required int index}) {
     return Container(
       padding: const EdgeInsets.all(8),
       constraints: BoxConstraints(
-          minHeight: MediaQuery.of(context).size.height * 0.08,
-          minWidth: MediaQuery.of(context).size.width * 0.4),
+          minHeight: MediaQuery
+              .of(context)
+              .size
+              .height * 0.08,
+          minWidth: MediaQuery
+              .of(context)
+              .size
+              .width * 0.4),
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -181,6 +265,64 @@ class _EditListingState extends State<EditListing> {
     );
   }
 
+  Widget downloadedFileTile(
+      {required UserGameServiceImage image, required int index}) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      constraints: BoxConstraints(
+          minHeight: MediaQuery
+              .of(context)
+              .size
+              .height * 0.08,
+          minWidth: MediaQuery
+              .of(context)
+              .size
+              .width * 0.4),
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+              spreadRadius: 1,
+              blurRadius: 5,
+              color: Colors.black.withAlpha(50))
+        ],
+        borderRadius: BorderRadius.circular(12),
+        color: iconWhiteColor,
+        image: DecorationImage(
+            image: NetworkImage(image.path!), fit: BoxFit.cover),
+      ),
+      child: GestureDetector(
+        onTap: () {
+          final textTheme = Theme
+              .of(context)
+              .textTheme;
+
+          ConfirmationBottomDialog(
+              textTheme: textTheme,
+              contentName: "Are you sure you want delete this image ?",
+              yesBtnClick: () async {
+                Helpers.loader();
+                final isSuccess = await listingController.deleteListingImage(id: image.id!, path: image.path!);
+                Helpers.hideLoader();
+                if (isSuccess) {
+                  listingController.downloadedListingFiles.removeAt(index);
+                  Helpers.toast("Image Successfully Deleted");
+                  Navigator.pop(context);
+                }
+              }).showBottomDialog(context);
+        },
+        child: Align(
+          alignment: AlignmentDirectional.topEnd,
+          child: SvgPicture.asset(
+            'assets/icons/close_icon.svg',
+            color: selectiveYellowColor,
+            width: 8,
+            height: 8,
+          ),
+        ),
+      ),
+    );
+  }
+
   _buildPrice(TextTheme textTheme) {
     return Row(
       children: [
@@ -193,8 +335,10 @@ class _EditListingState extends State<EditListing> {
           child: TextFieldWidget(
             textEditingController: listingController.price.value,
             title: 'Token',
+            type: "token",
             hint: "",
             isNumber: true,
+            isRequired: true,
           ),
         ),
         SizedBox(width: 4.w,),
@@ -203,7 +347,9 @@ class _EditListingState extends State<EditListing> {
             textEditingController: listingController.stockAvl.value,
             title: "Stock Available",
             hint: 'Available Stock',
+            type: 'stock',
             isNumber: true,
+            isRequired: true,
           ),
         ),
       ],
@@ -232,9 +378,9 @@ class _EditListingState extends State<EditListing> {
                   style: textTheme.headline4?.copyWith(color: textWhiteColor)),
               SizedBox(height: 3.h),
               Obx(() {
-                if(listingController.files.isEmpty){
+                if (listingController.files.isEmpty) {
                   return const SizedBox();
-                }else{
+                } else {
                   return GridView.builder(
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
@@ -265,6 +411,15 @@ class _EditListingState extends State<EditListing> {
                   textColor: textWhiteColor,
                   iconWidget: 'assets/icons/upload_img_icon.svg',
                   onTap: _openFileExplorer
+              ),
+              Text("or",
+                  style: textTheme.headline4?.copyWith(color: textWhiteColor)),
+              SizedBox(height: 1.h),
+              TextFieldWidget(
+                textEditingController: listingController.filePathLink.value,
+                hint: 'Paste Youtube/Twitch/Drive Link',
+                type: 'optionalLink',
+                isRequired: true,
               ),
               SizedBox(height: 4.h),
             ],

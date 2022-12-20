@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loby/core/utils/constants.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/chat/chat.dart';
 import 'package:loby/domain/entities/listing/service_listing.dart';
@@ -19,6 +20,7 @@ import 'package:loby/presentation/widgets/custom_cached_network_image.dart';
 import 'package:loby/presentation/widgets/custom_loader.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../core/theme/colors.dart';
+import '../../../../domain/entities/listing/user_game_service_image.dart';
 import '../../../../services/routing_service/routes_name.dart';
 import '../../../getx/controllers/profile_controller.dart';
 import '../../../widgets/bottom_dialog.dart';
@@ -45,10 +47,11 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
   ChatController chatController = Get.find<ChatController>();
   ProfileController profileController = Get.find<ProfileController>();
 
-  late ServiceListing listing;
+  // ServiceListing listing = ServiceListing();
+  bool loading = true;
 
   List<String> mergedList = [];
-
+  List<Widget> serviceOptionList = [];
 
   @override
   void dispose() {
@@ -61,7 +64,58 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // listingController.getBuyerListings();
+    WidgetsBinding.instance.addPostFrameCallback((_)async {
+
+      listingController.buyerListingPageNumber.value = 1;
+      listingController.areMoreListingAvailable.value = true;
+      await listingController.getBuyerListings(listingId: widget.serviceListingId);
+
+
+      // final listing = listingController.buyerListings.where((element) => element.id == widget.serviceListingId).toList();
+      // if(listing.isEmpty){
+      //   final profileListing = listingController.buyerListingsProfile.where((listing) => listing.id == widget.serviceListingId).toList();
+      //   if(profileListing.isEmpty){
+      //     listingController.buyerListingPageNumber.value = 1;
+      //     listingController.areMoreListingAvailable.value = true;
+      //     await listingController.getBuyerListings(listingId: widget.serviceListingId);
+      //   }else{
+      //     listingController.buyerSingleListing.value = profileListing.first;
+      //   }
+      // }else{
+      //   listingController.buyerSingleListing.value = listing.first;
+      // }
+
+      if(listingController.buyerSingleListing.value.userGameServiceOptions!.any((element) => element.serviceOptions!.isNotEmpty)){
+        serviceOptionList = List.from(
+            listingController.buyerSingleListing.value.userGameServiceOptions!.map((e) {
+              final sameServiceOption = listingController.buyerSingleListing.value.userGameServiceOptions!.where((element) => element.serviceOptions!.first.service!.name == e.serviceOptions!.first.service!.name).toList();
+              if(mergedList.contains(e.serviceOptions!.first.service!.name)){
+                return const SizedBox();
+              }else{
+                mergedList.add(e.serviceOptions!.first.service!.name!);
+                return Padding(
+                  padding: EdgeInsets.only(bottom: 1.h),
+                  child: _rowWidget(
+                    text1: e.serviceOptions!.first.service!.previewName!,
+                    text2: sameServiceOption.map((e) => e.serviceOptions!.first.serviceOptionName!).toList().join(", "),
+                  ),
+                );
+              }
+            }).toList());
+      }
+
+      setState(() {
+        loading = false;
+      });
+    });
+  }
+
+
+  Widget serviceOptions(){
+
+    return serviceOptionList.isEmpty ? const SizedBox(): Column(
+      children: serviceOptionList,
+    );
   }
 
   @override
@@ -71,25 +125,21 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
     return Scaffold(
       appBar: appBar(context: context, appBarName: ""),
       body: Obx(() {
-        if(listingController.isBuyerListingsFetching.value){
+        if(listingController.isBuyerListingsFetching.value || loading){
           return const CustomLoader();
         }else{
-          final listings = listingController.buyerListings.where((listing) => listing.id == widget.serviceListingId).toList();
-          if(listings.isEmpty){
-           listing = listingController.buyerListingsProfile.where((listing) => listing.id == widget.serviceListingId).toList().first;
-          }else{
-            listing = listings.first;
-          }
 
+          final listing = listingController.buyerSingleListing.value;
+          List<UserGameServiceImage> userGameServiceImages = listing.userGameServiceImages!.where((element) => element.type != 3).toList();
 
           return SingleChildScrollView(
             child: BodyPaddingWidget(
               child: Column(
                 children: [
-                  listing.userGameServiceImages!.isEmpty ?  Carousel(images: [CarouselList(type: 5, path: '')],) : Carousel(
+                  userGameServiceImages.isEmpty ?  Carousel(images: [CarouselList(type: 5, path: '')],) : Carousel(
                     images: [for(final i in listing.userGameServiceImages!) CarouselList(type: i.type!, path: i.path!)],
                   ),
-                  listing.userGameServiceImages!.isEmpty ? const SizedBox() : SizedBox(height: 2.h,),
+                  userGameServiceImages.isEmpty ? const SizedBox() : SizedBox(height: 2.h,),
                   Text(listing.title!, style: textTheme.headline5?.copyWith(color: textWhiteColor)),
                   SizedBox(height: 2.h),
                   Padding(
@@ -118,76 +168,76 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
                           children: [
-                            _rowWidget(textTheme,
+                            _rowWidget(
                                 text1: "Unit Token / Per ${listing.unit!.name}",
                                 text2: "${listing.price}",
                                 isNormal: true),
                             SizedBox(height: 1.h),
-                            _rowWidget(textTheme, text1: "Stock", text2: "${listing.stockAvl}"),
+                            _rowWidget(text1: "Stock", text2: "${listing.stockAvl}"),
                             SizedBox(height: 1.h),
-                            listing.user?.id == profileController.profile.id ? const SizedBox() :  Obx(() {
-                              return Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      if (listingController.quantityCount.value > 1) {
-                                        listingController.quantityCount.value--;
-                                        listingController.totalPrice.value = (listing.price! * listingController.quantityCount.value).toString();
-                                      }
-                                    },
-                                    child: SvgPicture.asset(
-                                      'assets/icons/minus_circle_icon.svg',
-                                      color: whiteColor,
-                                      width: 5.h,
-                                      height: 5.h,
-                                    ),
+                            listing.user?.id == profileController.profile.id ? const SizedBox() :  Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    if (listing.quantity > 1) {
+                                      setState(() {
+                                        listing.quantity--;
+                                      });
+                                      // listingController.totalPrice.value = (listing.price! * listingController.quantityCount.value).toString();
+                                    }
+                                  },
+                                  child: SvgPicture.asset(
+                                    'assets/icons/minus_circle_icon.svg',
+                                    color: whiteColor,
+                                    width: 5.h,
+                                    height: 5.h,
                                   ),
-                                  const SizedBox(width: 8.0),
-                                  Container(
-                                    padding: const EdgeInsets.all(8),
-                                    constraints: const BoxConstraints(minHeight: 46, minWidth: 46),
-                                    decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                            spreadRadius: 1,
-                                            blurRadius: 5,
-                                            color: Colors.black.withAlpha(50))
-                                      ],
-                                      borderRadius: BorderRadius.circular(32),
-                                      color: iconWhiteColor,
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                          "${listingController.quantityCount.value}",
-                                          style: textTheme.headline3?.copyWith(
-                                              color: bodyTextColor)),
-                                    ),
+                                ),
+                                const SizedBox(width: 8.0),
+                                Container(
+                                  padding: const EdgeInsets.all(8),
+                                  constraints: const BoxConstraints(minHeight: 46, minWidth: 46),
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                          spreadRadius: 1,
+                                          blurRadius: 5,
+                                          color: Colors.black.withAlpha(50))
+                                    ],
+                                    borderRadius: BorderRadius.circular(32),
+                                    color: iconWhiteColor,
                                   ),
-                                  const SizedBox(width: 8.0),
-                                  GestureDetector(
-                                    onTap: () {
-                                      if (listingController.quantityCount.value < listing.stockAvl!) {
-                                        listingController.quantityCount.value++;
-                                        listingController.totalPrice.value = (listing.price! * listingController.quantityCount.value).toString();
-                                      }
-                                    },
-                                    child: SvgPicture.asset(
-                                      'assets/icons/plus_circle_icon.svg',
-                                      color: whiteColor,
-                                      width: 5.h,
-                                      height: 5.h,
-                                    ),
+                                  child: Center(
+                                    child: Text(
+                                        "${listing.quantity}",
+                                        style: textTheme.headline3?.copyWith(
+                                            color: bodyTextColor)),
                                   ),
-                                ],
-                              );
-                            }),
+                                ),
+                                const SizedBox(width: 8.0),
+                                GestureDetector(
+                                  onTap: () {
+                                    if (listing.quantity < listing.stockAvl!) {
+                                      setState(() {
+                                        listing.quantity++;
+                                      });
+                                      // listingController.totalPrice.value = (listing.price! * listingController.quantityCount.value).toString();
+                                    }
+                                  },
+                                  child: SvgPicture.asset(
+                                    'assets/icons/plus_circle_icon.svg',
+                                    color: whiteColor,
+                                    width: 5.h,
+                                    height: 5.h,
+                                  ),
+                                ),
+                              ],
+                            ),
                             SizedBox(height: 1.h),
-                            Obx(() {
-                              return _rowWidget(textTheme, text1: "Total Token",
-                                  text2: listingController.totalPrice.value,
-                                  isNormal: true);
-                            }),
+                            _rowWidget(text1: "Total Token",
+                                text2:(listing.quantity * listing.price!).toString(),
+                                isNormal: true),
                             SizedBox(height: 1.h),
 
                           ],
@@ -196,8 +246,11 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                     ),
                   ),
                   SizedBox(height: 1.h,),
-                  listing.user?.id == profileController.profile.id ? const SizedBox() :  GestureDetector(
+                  listing.user?.id == profileController.profile.id ? const SizedBox() :
+                  widget.from == ListingPageRedirection.profile ? const SizedBox() :
+                  GestureDetector(
                     onTap: () {
+                      listingController.buyerListingsProfile.clear();
                       context.pushNamed(userProfilePage, queryParams: {
                         'userId': "${listing.user?.id}",
                         'from': 'other'
@@ -322,35 +375,19 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
                         children: [
-                          _rowWidget(textTheme, text1: "Listing ID", text2: "#${listing.listingNumber}"),
+                          _rowWidget(text1: "listing ID", text2: "#${listing.listingNumber}"),
                           SizedBox(height: 1.h),
-                          _rowWidget(textTheme, text1: "Game", text2: listing.game!.name!,),
+                          _rowWidget( text1: "Game", text2: listing.game!.name!,),
                           SizedBox(height: 1.h),
-                          _rowWidget(textTheme, text1: "Category", text2: listing.category!.name!,),
+                          _rowWidget(text1: "Category", text2: listing.category!.name!,),
                           SizedBox(height: 1.h),
-                          listing.userGameServiceOptions!.any((element) => element.serviceOptions!.isEmpty) ? const SizedBox(): Column(
-                            children:
-                              List.from(
-                                  listing.userGameServiceOptions!.map((e) {
-                                    final sameServiceOption = listing.userGameServiceOptions!.where((element) => element.serviceOptions!.first.service!.name == e.serviceOptions!.first.service!.name).toList();
-                                    if(mergedList.contains(e.serviceOptions!.first.service!.name)){
-                                      return const SizedBox();
-                                    }else{
-                                      mergedList.add(e.serviceOptions!.first.service!.name!);
-                                      return Padding(
-                                        padding: EdgeInsets.only(bottom: 1.h),
-                                        child: _rowWidget(
-                                            textTheme,
-                                            text1: e.serviceOptions!.first.service!.previewName!,
-                                            text2: sameServiceOption.map((e) => e.serviceOptions!.first.serviceOptionName!).toList().join(", "),
-                                        ),
-                                      );
-                                    }
-                                  }).toList()),
-                          ),
+                          serviceOptions(),
                           // _rowWidget(textTheme, text1: "Service Type", text2: listing.userGameServiceOptions!.map((e) => e.serviceOptions?.first.serviceOptionName).toList().join(", ")),
-                          _rowWidget(textTheme, text1: "Game Platform", text2: listing.game!.platform!,),
+                          _rowWidget(text1: "Game Platform", text2: listing.game!.platform!,),
+                          SizedBox(height: 1.h),
+                          _rowWidget(text1: "Link", text2: getFileLink(listing), isLink: true),
                           SizedBox(height: 3.h),
+
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
@@ -369,8 +406,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                       ),
                                     ),
                                     Padding(
-                                      padding:
-                                      const EdgeInsets.symmetric(vertical: 8.0),
+                                      padding: const EdgeInsets.symmetric(vertical: 8.0),
                                       child: Text(
                                         textAlign: TextAlign.start,
                                         listing.description!,
@@ -414,8 +450,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                     tileName: "Buy a Service First",
                                     titleColor: aquaGreenColor,
                                     contentName: "Sorry you can not chat with a verified profile without buying a service",
-                                    contentLinkName: '')
-                                    .showBottomDialog(context);
+                                    contentLinkName: '').showBottomDialog(context);
                               }
                             },
                             child: SvgPicture.asset(
@@ -440,11 +475,15 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                     Helpers.loader();
                                     final response = await orderController.createOrder(
                                         listingId: listing.id!,
-                                        quantity: listingController.quantityCount.value,
-                                        price: listingController.totalPrice.value
+                                        quantity: listing.quantity,
+                                        price: (listing.quantity * listing.price!).toString(),
                                     );
                                     Helpers.hideLoader();
                                     if (response['success']) {
+                                      listing.stockAvl = (listing.stockAvl! - listing.quantity);
+                                      print(profileController.profile.walletMoney);
+                                      profileController.profile.walletMoney = (profileController.profile.walletMoney! - (listing.quantity * listing.price!));
+                                      print(profileController.profile.walletMoney);
                                       Navigator.pop(context);
                                       BottomDialog(
                                           textTheme: textTheme,
@@ -468,7 +507,6 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                             Navigator.pop(context);
                                             context.pushNamed(addFundScreenPage);
                                           }).showBottomDialog(context);
-
                                     }else{
                                       Helpers.hideLoader();
                                     }
@@ -490,6 +528,17 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
   }
 
 
+  String getFileLink(ServiceListing listing){
+    final link = listing.userGameServiceImages!.where((element) => element.type == 3);
+    if(link.isNotEmpty){
+      return link.first.path!;
+    }else{
+      return '';
+    }
+
+  }
+
+
   Widget _circularInfoBox(TextTheme textTheme, {Color? color, String? info,}) {
     return Container(
       decoration: BoxDecoration(
@@ -507,7 +556,9 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
     );
   }
 
-  Widget _rowWidget(TextTheme textTheme, {required String text1, required String text2, bool isNormal = false}) {
+  Widget _rowWidget({required String text1, required String text2, bool isNormal = false, bool isLink = false}) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -526,12 +577,19 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                 color: aquaGreenColor)
         )) :
         Flexible(
-          child: Text(
-              text2,
-              maxLines: 3,
-              textAlign: TextAlign.end,
-              overflow: TextOverflow.ellipsis,
-              style: textTheme.headline5?.copyWith(color: whiteColor),
+          child: GestureDetector(
+            onTap: (){
+              if(isLink){
+                Helpers.launch(text2);
+              }
+            },
+            child: Text(
+                text2,
+                maxLines: 3,
+                textAlign: TextAlign.end,
+                overflow: TextOverflow.ellipsis,
+                style: textTheme.headline5?.copyWith(color: whiteColor),
+            ),
           ),
         ),
       ],

@@ -28,3 +28,4 @@ const String faqPage = "faq-screen";
 const String legalTermsPage = "/legal-terms";
 const String staticContentPage = "/static-content";
 const String settlementRequestHistoryPage = "/settlement_request_page";
+const String earningTransactionPage = "earning_transaction_page";

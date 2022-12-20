@@ -19,8 +19,8 @@ class SettlementRequest extends Equatable{
 
   final int? id;
   final int? userId;
-  final int? amount;
-  final int? token;
+  final double? amount;
+  final String? token;
   final int? bankDetailId;
   final String? status;
   final String? payoutId;

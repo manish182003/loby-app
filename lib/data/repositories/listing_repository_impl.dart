@@ -26,9 +26,9 @@ class ListingRepositoryImpl extends ListingRepository{
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> createListing({int? listingId, int? categoryId, int? gameId, String? title, String? description, String? price, String? stockAvl, String? estimateDeliveryTime, int? priceUnitId, List<SelectedServiceOption>? serviceOptionId, List? files, List<int>? fileTypes, List<TextEditingController>? optionAnswer})async {
+  Future<Either<Failure, Map<String, dynamic>>> createListing({int? listingId, int? categoryId, int? gameId, String? title, String? description, String? price, String? stockAvl, String? estimateDeliveryTime, int? priceUnitId, List<SelectedServiceOption>? serviceOptionId, List? files, List<int>? fileTypes, String? filePathLink, List<TextEditingController>? optionAnswer})async {
     try {
-      return Right(await _listingRemoteDatasource.createListing(listingId, categoryId, gameId, title, description, price, stockAvl, estimateDeliveryTime, priceUnitId, serviceOptionId, files, fileTypes, optionAnswer ));
+      return Right(await _listingRemoteDatasource.createListing(listingId, categoryId, gameId, title, description, price, stockAvl, estimateDeliveryTime, priceUnitId, serviceOptionId, files, fileTypes, filePathLink, optionAnswer ));
     } on ServerException catch (e) {
     // Loggers can be added here for analyzation.
     return Left(ServerFailure(message: e.message.toString()));
@@ -59,6 +59,16 @@ class ListingRepositoryImpl extends ListingRepository{
   Future<Either<Failure, Map<String, dynamic>>> changeListingStatus({int? listingId, String? type})async {
     try {
       return Right(await _listingRemoteDatasource.changeListingStatus(listingId, type));
+    } on ServerException catch (e) {
+    // Loggers can be added here for analyzation.
+    return Left(ServerFailure(message: e.message.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> deleteListingImage({int? id, String? path})async {
+    try {
+      return Right(await _listingRemoteDatasource.deleteListingImage(id, path));
     } on ServerException catch (e) {
     // Loggers can be added here for analyzation.
     return Left(ServerFailure(message: e.message.toString()));

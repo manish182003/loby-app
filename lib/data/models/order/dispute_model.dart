@@ -16,6 +16,7 @@ class DisputeModel extends Dispute{
     this.result,
     this.commissionPercent,
     this.amount,
+    this.disputeWinner,
     this.disputeNumber,
     this.createdAt,
     this.updatedAt,
@@ -31,6 +32,7 @@ class DisputeModel extends Dispute{
   final String? result;
   final int? commissionPercent;
   final int? amount;
+  final String? disputeWinner;
   final String? disputeNumber;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -45,13 +47,14 @@ class DisputeModel extends Dispute{
     description: json["description"],
     result: json["result"],
     commissionPercent: json["commission_percent"],
+    disputeWinner: json['userOrder'] == null ? null : json['dispute_winner'] == json["userOrder"]["user"]["id"] ? json["userOrder"]["user"]["display_name"] : json['dispute_winner'] == json["userOrder"]["userGameService"]["user"]["id"] ? json["userOrder"]["userGameService"]["user"]["display_name"] : "None",
     amount: json["amount"],
     disputeNumber: json["dispute_number"],
     createdAt: DateTime.parse(json["createdAt"]),
     updatedAt: DateTime.parse(json["updatedAt"]),
-    userOrder: OrderModel.fromJson(json["userOrder"]),
-    user: UserModel.fromJson(json["user"]),
-    disputeProofs: List<DisputeProofModel>.from(json["disputeProofs"].map((x) => DisputeProofModel.fromJson(x))),
+    userOrder: json['userOrder'] == null ? null : OrderModel.fromJson(json["userOrder"]),
+    user: json['user'] == null ? null : UserModel.fromJson(json["user"]),
+    disputeProofs: json["disputeProofs"] == null ? null : List<DisputeProofModel>.from(json["disputeProofs"].map((x) => DisputeProofModel.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {

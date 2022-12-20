@@ -34,10 +34,11 @@ class GameCard extends StatelessWidget {
             padding: const EdgeInsets.all(8),
             child: Column(
               children: [
-                Padding(
-                  padding:  const EdgeInsets.all(8.0),
-                  child: CircleAvatar(
-                    radius: 36,
+                CircleAvatar(
+                  radius: 36,
+                  backgroundColor: aquaGreenColor,
+                  child: Padding(
+                    padding: const EdgeInsets.all(2.0),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(36),
                       child: CachedNetworkImage(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loby/core/utils/constants.dart';
 import 'package:loby/domain/entities/profile/user.dart';
 import 'package:loby/presentation/getx/controllers/home_controller.dart';
 import 'package:loby/presentation/getx/controllers/listing_controller.dart';
@@ -133,11 +134,11 @@ class _UserListingWidgetState extends State<UserListingWidget> {
         return SizedBox(height: 8.h,);
       }else{
         return GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            childAspectRatio: 6.0 / 9,
-            mainAxisSpacing: 0.h,
-            crossAxisSpacing: 3.h,
+            childAspectRatio: 0.70,
+            mainAxisSpacing: 0.1,
+            crossAxisSpacing: 0.1,
           ),
           controller: controller,
           shrinkWrap: true,
@@ -146,7 +147,7 @@ class _UserListingWidgetState extends State<UserListingWidget> {
           itemBuilder: (context, index) {
             if (index < listingController.buyerListingsProfile.length) {
               return ItemList(
-                  name: 'hello $index',
+                  from: ListingPageRedirection.profile,
                   listing: listingController.buyerListingsProfile[index]
               );
             }else{

@@ -10,6 +10,7 @@ import 'package:loby/presentation/widgets/body_padding_widget.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../core/theme/colors.dart';
+import '../../../../core/utils/constants.dart';
 import '../../../../domain/entities/listing/service_listing.dart';
 import '../../../../services/routing_service/routes_name.dart';
 import '../../../widgets/SearchFieldWidget.dart';
@@ -146,7 +147,7 @@ class _SearchScreenState extends State<SearchScreen> {
   buildListItem(TextTheme textTheme, {required ServiceListing listing}) {
     return GestureDetector(
       onTap: (){
-        context.pushNamed(gameDetailPage, queryParams: {'serviceListingId' : "${listing.id}"});
+        context.pushNamed(gameDetailPage, queryParams: {'serviceListingId' : "${listing.id}", 'from' : ListingPageRedirection.search});
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 8.0),

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -36,9 +35,9 @@ class _ProfileVerificationScreenState extends State<ProfileVerificationScreen> {
   TextEditingController displayName = TextEditingController();
   TextEditingController name = TextEditingController();
   TextEditingController message = TextEditingController();
-  TextEditingController youtube = TextEditingController();
-  TextEditingController twitch = TextEditingController();
-  TextEditingController instagram = TextEditingController();
+  TextEditingController youtube = TextEditingController(text: 'https://www.youtube.com/');
+  TextEditingController twitch = TextEditingController(text: 'https://www.twitch.tv/');
+  TextEditingController instagram = TextEditingController(text: 'https://www.instagram.com/');
 
   List<File> _paths = [];
   File imageFile = File('');
@@ -140,7 +139,7 @@ class _ProfileVerificationScreenState extends State<ProfileVerificationScreen> {
                   children: [
                     _documentTile(textTheme, "assets/icons/id_card_icon.svg", "Copy of your passport or ID card", onTap: (){Helpers.showImagePicker(context: context, onGallery: _openFileExplorer, onCamera: _docFromCamera);}, isSelected: _paths.isEmpty, type: 'Document'),
                     SizedBox(width: 1.h),
-                    _documentTile(textTheme, "assets/icons/camera_icon.svg", "Selfie", onTap: (){Helpers.showImagePicker(context: context, onGallery: _imgFromGallery, onCamera: _imgFromCamera);}, isSelected: imageFile.path.isEmpty, type: 'Selfie'),
+                    _documentTile(textTheme, "assets/icons/camera_icon.svg", "Selfie", onTap: _imgFromCamera, isSelected: imageFile.path.isEmpty, type: 'Selfie'),
                   ],
                 ),
                 SizedBox(height: 5.h,),

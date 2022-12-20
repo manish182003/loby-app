@@ -50,7 +50,7 @@ class AutoCompleteField extends StatelessWidget {
           title ?? '',
           style: textTheme.headline5?.copyWith(color: textInputTitleColor),
         ),
-        SizedBox(height: title == null ? 0.h : 2.h,),
+        SizedBox(height: title == null ? 0.h : 2.h),
         TypeAheadFormField(
           validator: (value) {
             if(isRequired){
@@ -130,14 +130,10 @@ class AutoCompleteField extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
 
-              suffixIcon: IconButton(
-                padding: const EdgeInsets.all(0.0),
-                icon: const Icon(
-                  Icons.keyboard_arrow_down,
-                  color: whiteColor,
-                  size: 20,
-                ),
-                onPressed: () {},
+              suffixIcon: const Icon(
+                Icons.keyboard_arrow_down,
+                color: whiteColor,
+                size: 20,
               ),
             ),
             controller: selectedSuggestion,

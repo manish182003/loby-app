@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +15,6 @@ import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/screens/main/profile/my_order/widgets/select_duel_winner_dialog.dart';
 import 'package:loby/presentation/widgets/rating_dialog.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../../../../../core/theme/colors.dart';
 import '../../../../../../core/utils/helpers.dart';
 import '../../../../../../services/routing_service/routes_name.dart';
@@ -104,10 +102,10 @@ class OrderStatusTile extends StatelessWidget {
           child: Row(
             children: [
               SvgPicture.asset(
-                'assets/icons/verified_user_bedge.svg',
+                isDisputedRaised ?  'assets/icons/cross.svg' : title == statusesName[sellerRejected] ?  'assets/icons/cross.svg' : 'assets/icons/verified_user_bedge.svg',
                 height: 18,
                 width: 18,
-                color: isDisputedRaised ? carminePinkColor : title == statusesName[sellerRejected] ? carminePinkColor : isDone ? null : iconWhiteColor,
+                color: isDone ? null : iconWhiteColor,
               ),
               SizedBox(width: 3.w),
               Expanded(
@@ -216,9 +214,7 @@ class OrderStatusTile extends StatelessWidget {
         //   ],
         // ),
         // SizedBox(height: 2.h),
-        _statusTile(textTheme, isDone: false,
-            title: "Select Winner",
-            date: ""),
+        _statusTile(textTheme, isDone: false, title: "Select Winner", date: "",),
         SizedBox(height: 2.h),
         CustomButton(
           color: purpleLightIndigoColor,

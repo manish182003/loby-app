@@ -189,6 +189,16 @@ class ProfileRepositoryImpl extends ProfileRepository{
     }
   }
 
+  @override
+  Future<Either<Failure, WalletTransactionResponse>> getEarningTransactions({int? page, String? type}) async{
+    try {
+      return Right(await _profileRemoteDatasource.getEarningTransactions(page, type));
+    } on ServerException catch (e) {
+    // Loggers can be added here for analyzation.
+    return Left(ServerFailure(message: e.message.toString()));
+    }
+  }
+
 
 
 }

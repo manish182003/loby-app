@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:loby/core/utils/constants.dart';
 import 'package:loby/presentation/getx/controllers/home_controller.dart';
 import 'package:loby/presentation/getx/controllers/listing_controller.dart';
 import 'package:loby/presentation/screens/main/home/widgets/ItemList.dart';
@@ -221,7 +222,7 @@ class _GameItemScreenState extends State<GameItemScreen> {
           itemBuilder: (context, index) {
             if (index < listingController.buyerListings.length) {
               return ItemList(
-                  name: 'hello $index',
+                  from: ListingPageRedirection.home,
                   menuIcon: true,
                   listing: listingController.buyerListings[index]
               );

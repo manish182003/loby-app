@@ -22,7 +22,7 @@ abstract class OrderRepository{
 
   Future<Either<Failure, Map<String, dynamic>>> raiseDispute({int? orderId, String? description});
 
-  Future<Either<Failure, DisputeResponse>> getDisputes({int? page, String? status});
+  Future<Either<Failure, DisputeResponse>> getDisputes({int? id, int? page, String? status});
 
   Future<Either<Failure, Map<String, dynamic>>> submitDisputeProof({int? disputeId, String? description, List<int>? fileTypes, List<PlatformFile>? files, String? link});
 

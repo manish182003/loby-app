@@ -3,6 +3,7 @@
 import 'package:loby/data/models/listing/service_listing_model.dart';
 import 'package:loby/data/models/profile/user_model.dart';
 import 'package:loby/domain/entities/order/order.dart';
+import 'dispute_model.dart';
 import 'order_status_model.dart';
 
 
@@ -21,6 +22,7 @@ class OrderModel extends Order{
     this.updatedAt,
     this.user,
     this.userGameService,
+    this.dispute,
     this.orderStatuses,
   });
 
@@ -37,6 +39,7 @@ class OrderModel extends Order{
   final DateTime? updatedAt;
   final UserModel? user;
   final ServiceListingModel? userGameService;
+  final DisputeModel? dispute;
   final List<OrderStatusModel>? orderStatuses;
 
   factory OrderModel.fromJson(Map<String, dynamic> json) => OrderModel(
@@ -53,6 +56,7 @@ class OrderModel extends Order{
     updatedAt: DateTime.parse(json["updatedAt"]),
     user: json['user'] == null ? null : UserModel.fromJson(json['user']),
     userGameService: json["userGameService"] == null ? null : ServiceListingModel.fromJson(json["userGameService"]),
+    dispute: json['dispute'] == null ? null : DisputeModel.fromJson(json["dispute"]),
     orderStatuses: json["orderStatuses"] == null ? null : List<OrderStatusModel>.from(json["orderStatuses"].map((x) => OrderStatusModel.fromJson(x))),
   );
 

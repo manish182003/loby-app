@@ -23,6 +23,7 @@ class CreateListing extends UseCase<Map<String, dynamic>, Params> {
       serviceOptionId: params.listingParams?.serviceOptionId,
       files: params.listingParams?.files,
       fileTypes: params.listingParams?.fileTypes,
+      filePathLink: params.listingParams?.filePathLink,
       optionAnswer: params.listingParams?.optionAnswer,
     );
   }

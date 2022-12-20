@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:loby/domain/entities/listing/service_listing.dart';
+import 'package:loby/domain/entities/order/dispute.dart';
 import 'package:loby/domain/entities/profile/user.dart';
 import 'order_status.dart';
 
@@ -18,6 +19,7 @@ class Order extends Equatable{
     this.updatedAt,
     this.user,
     this.userGameService,
+    this.dispute,
     this.orderStatuses,
   });
 
@@ -34,6 +36,7 @@ class Order extends Equatable{
   final DateTime? updatedAt;
   final User? user;
   final ServiceListing? userGameService;
+  final Dispute? dispute;
   final List<OrderStatus>? orderStatuses;
 
 

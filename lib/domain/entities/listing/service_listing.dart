@@ -19,6 +19,7 @@ class ServiceListing extends Equatable{
     this.description,
     this.price,
     this.stockAvl,
+    this.quantity = 1,
     this.edt,
     this.userId,
     this.priceUnitId,
@@ -41,7 +42,8 @@ class ServiceListing extends Equatable{
   final String? title;
   final String? description;
   final int? price;
-  final int? stockAvl;
+  int? stockAvl;
+  int quantity;
   final int? edt;
   final int? userId;
   final int? priceUnitId;

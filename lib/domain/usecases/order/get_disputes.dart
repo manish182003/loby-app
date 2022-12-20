@@ -14,6 +14,7 @@ class GetDisputes extends UseCase<DisputeResponse, Params> {
   @override
   Future<Either<Failure, DisputeResponse>> call(Params params) {
     return _repository.getDisputes(
+      id: params.orderParams?.disputeId,
       page: params.orderParams?.page,
       status: params.orderParams?.status,
     );

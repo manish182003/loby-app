@@ -27,7 +27,7 @@ class PaymentTransactionModel extends PaymentTransaction{
   final String? paymentJsonResponse;
   final String? paymentJsonRequest;
   final String? orderJsonResponse;
-  final int? totalAmount;
+  final double? totalAmount;
   final String? currency;
   final int? walletTransactionId;
   final String? paymentStatus;
@@ -44,7 +44,7 @@ class PaymentTransactionModel extends PaymentTransaction{
     paymentJsonResponse: json["payment_json_response"],
     paymentJsonRequest: json["payment_json_request"],
     orderJsonResponse: json["order_json_response"],
-    totalAmount: json["total_amount"],
+    totalAmount: json["total_amount"] == null ? null : double.tryParse(json["total_amount"]),
     currency: json["currency"],
     walletTransactionId: json["wallet_transaction_id"],
     paymentStatus: json["payment_status"],

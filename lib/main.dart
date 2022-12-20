@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/core/utils/environment.dart';
@@ -23,12 +23,8 @@ import 'core/theme/colors.dart';
 import 'core/theme/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'di/injection.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'firebase_options.dart';
-import 'package:loby/services/firebase_dynamic_link.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:flutter/cupertino.dart';
 
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =   FlutterLocalNotificationsPlugin();
@@ -49,12 +45,16 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: Environment.fileName);
-  bool isDeviceConnected = await InternetConnectionChecker().hasConnection;
-  if (!isDeviceConnected) {
-    runApp(const NoInternetConnection());
-  }else{
-    runMainApp();
-  }
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])        ;
+  // bool isDeviceConnected = await InternetConnectionChecker().hasConnection;
+  // if (!isDeviceConnected) {
+  //   runApp(const NoInternetConnection());
+  // }else{
+  //   runMainApp();
+  // }
+
+  runMainApp();
+
 }
 
 Future<void> runMainApp()async{
@@ -121,7 +121,6 @@ class _MyAppState extends State<MyApp> {
   }
 
 
-
   Future<void> initializePushNotification()async{
 
     var initializationSettingsAndroid = const AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -163,7 +162,7 @@ class _MyAppState extends State<MyApp> {
             channel.name,
             channelDescription : channel.description,
             icon: android.smallIcon,
-            importance: Importance.high,
+            importance: Importance.defaultImportance,
             ongoing: true,
             styleInformation: const BigTextStyleInformation(''),
           ),
@@ -227,7 +226,7 @@ class NoInternetConnection extends StatelessWidget {
               Image.asset('assets/images/no_internet.png', width: 10.h,height: 10.h,),
               // SvgPicture.asset(
               //   'assets/icons/tick.svg',
-              //   width: 10.h,
+              //   width: 10.h                ,
               //   height: 10.h,
               // ),
               SizedBox(height: 2.h,),

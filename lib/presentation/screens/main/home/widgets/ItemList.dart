@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/listing/service_listing.dart';
 import 'package:loby/presentation/getx/controllers/listing_controller.dart';
+import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/screens/main/profile/wallet/widgets/token_widget.dart';
 import 'package:loby/presentation/widgets/custom_cached_network_image.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
@@ -16,11 +17,11 @@ import '../../../../../core/theme/colors.dart';
 import '../../../../widgets/profile_picture.dart';
 
 class ItemList extends StatefulWidget {
-  final String name;
+  final String from;
   final bool menuIcon;
   final ServiceListing listing;
 
-  const ItemList({Key? key, required this.name, this.menuIcon = false, required this.listing}) : super(key: key);
+  const ItemList({Key? key, required this.from, this.menuIcon = false, required this.listing}) : super(key: key);
 
   @override
   State<ItemList> createState() => _ItemListState();
@@ -29,6 +30,7 @@ class ItemList extends StatefulWidget {
 class _ItemListState extends State<ItemList> {
 
   ListingController listingController = Get.find<ListingController>();
+  ProfileController profileController = Get.find<ProfileController>();
   final CustomPopupMenuController _controller = CustomPopupMenuController();
 
 
@@ -38,7 +40,7 @@ class _ItemListState extends State<ItemList> {
     return GestureDetector(
       onTap: () {
         listingController.totalPrice.value = (listingController.quantityCount.value * widget.listing.price!).toString();
-            context.pushNamed(gameDetailPage, queryParams: {'serviceListingId' : "${widget.listing.id}"});
+            context.pushNamed(gameDetailPage, queryParams: {'serviceListingId' : "${widget.listing.id}", 'from' : widget.from});
       },
       child: Card(
         color: backgroundBalticSeaColor,
@@ -87,9 +89,10 @@ class _ItemListState extends State<ItemList> {
                   const SizedBox(height: 2.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(
-                        width: 16.w,
+                        width: 13.w,
                         child: Container(
                           decoration: BoxDecoration(
                             color: orangeColor,
@@ -198,7 +201,7 @@ class _ItemListState extends State<ItemList> {
                           ],
                         ),
                       ),
-                      Container(
+                      widget.listing.user?.id == profileController.profile.id ? const SizedBox() : Container(
                         child: widget.menuIcon ? CustomPopupMenu(
                           arrowColor: lavaRedColor,
                           menuBuilder: () => ClipRRect(

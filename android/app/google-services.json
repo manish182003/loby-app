@@ -14,11 +14,35 @@
       },
       "oauth_client": [
         {
+          "client_id": "259408443986-3ktokdgoah01mho8mvp1jbrpsskphkda.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.loby.app",
+            "certificate_hash": "b21a3456a0985e10700765f497b7a0cd18f9a41b"
+          }
+        },
+        {
+          "client_id": "259408443986-fs5moj77g0nrvgacuna4jbmaa51qnfeb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.loby.app",
+            "certificate_hash": "6420d783e9aa526ea5e9c3104e8ea739d4252759"
+          }
+        },
+        {
           "client_id": "259408443986-oabd6tqaopbm0rmavl4jf9escml0gl9m.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.loby.app",
             "certificate_hash": "b57070277e506f5f255977e161ec20541361c6d6"
+          }
+        },
+        {
+          "client_id": "259408443986-q29gr9qms1tvm544nmdn1vrcncvfitv9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.loby.app",
+            "certificate_hash": "5edef5fdde756fb10f6ae7db96a2c938679b7dd1"
           }
         },
         {

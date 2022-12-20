@@ -15,12 +15,14 @@ import '../../../../../core/utils/helpers.dart';
 import '../../../../widgets/body_padding_widget.dart';
 import '../../../../widgets/buttons/custom_button.dart';
 import '../../../../widgets/custom_app_bar.dart';
+import '../../../../widgets/custom_loader.dart';
 import '../../../../widgets/input_text_widget.dart';
 import '../../../../widgets/text_fields/text_field_widget.dart';
 import 'dispute_widget.dart';
 
 class CreateNewDispute extends StatefulWidget {
   final int disputeId;
+
   const CreateNewDispute({Key? key, required this.disputeId}) : super(key: key);
 
   @override
@@ -35,65 +37,99 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
   List<String?> selectedFilesExtensions = [];
   TextEditingController fileLink = TextEditingController();
   TextEditingController comments = TextEditingController();
-
   final _formKey = GlobalKey<FormState>();
+  bool fetching = true;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_)async {
+      orderController.areMoreDisputesAvailable.value = true;
+      await orderController.getDisputes(id: widget.disputeId);
+      setState(() {
+        fetching = false;
+      });
+    });
+  }
 
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final dispute = orderController.disputes.where((e) => e.id == widget.disputeId).toList().first;
+    final textTheme = Theme
+        .of(context)
+        .textTheme;
+
     return Scaffold(
       appBar: appBar(context: context, appBarName: "My Disputes"),
-      body: SingleChildScrollView(
-        child: BodyPaddingWidget(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                dispute.disputeProofs!.isEmpty ? const SizedBox() : Carousel(
-                  images: [for(final i in dispute.disputeProofs!) CarouselList(type: i.fileType!, path: i.filePath!)],
+      body: Obx(() {
+        if(orderController.isDisputesFetching.value || fetching){
+          return const CustomLoader();
+        }else{
+          final dispute = orderController.disputes
+              .where((e) => e.id == widget.disputeId)
+              .toList()
+              .first;
+          return SingleChildScrollView(
+            child: BodyPaddingWidget(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    dispute.disputeProofs!.isEmpty ? const SizedBox() : Carousel(
+                      images: [
+                        for(final i in dispute.disputeProofs!) CarouselList(
+                            type: i.fileType!, path: i.filePath!)
+                      ],
+                    ),
+                    dispute.disputeProofs!.isEmpty ? const SizedBox() : SizedBox(
+                      height: 2.h,),
+                    DisputeWidget(
+                      disputeType: "Open",
+                      currentStatus: '',
+                      dispute: dispute,
+                    ),
+                    const SizedBox(height: 16.0),
+                    dispute.result == 'RESOLVED' ? const SizedBox() : _buildUploadField(textTheme),
+                    dispute.result == 'RESOLVED' ? const SizedBox() : const SizedBox(height: 16.0),
+                    dispute.result == 'RESOLVED' ? const SizedBox() : TextFieldWidget(
+                      textEditingController: comments,
+                      hint: "Write your comments",
+                      maxLines: 5,
+                      isRequired: true,
+                    ),
+                    dispute.result == 'RESOLVED' ? const SizedBox() : Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: 16.0, horizontal: 10.h),
+                      child: CustomButton(
+                        color: aquaGreenColor,
+                        name: "Submit",
+                        textColor: textCharcoalBlueColor,
+                        onTap: () async {
+                          if (_formKey.currentState!.validate()) {
+                            Helpers.loader();
+                            final isSuccess = await orderController.submitDisputeProof(disputeId: widget.disputeId,
+                                description: comments.text,
+                                link: fileLink.text);
+                            Helpers.hideLoader();
+                            if (isSuccess) {
+                              Helpers.toast(
+                                  "Dispute Proof Successfully Submitted");
+                              Navigator.pop(context);
+                            }
+                          }
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 16.0),
+                  ],
                 ),
-                dispute.disputeProofs!.isEmpty ? const SizedBox() : SizedBox(height: 2.h,),
-                DisputeWidget(
-                    disputeType: "Open",
-                    currentStatus: '',
-                    dispute: dispute,
-                ),
-                const SizedBox(height: 16.0),
-                _buildUploadField(textTheme),
-                const SizedBox(height: 16.0),
-                TextFieldWidget(
-                  textEditingController: comments,
-                  hint: "Write your comments",
-                  maxLines: 5,
-                  isRequired: true,
-                ),
-                dispute.result == 'RESOLVED' ? const SizedBox() : Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 10.h),
-                  child: CustomButton(
-                    color: aquaGreenColor,
-                    name: "Submit",
-                    textColor: textCharcoalBlueColor,
-                    onTap: () async {
-                      if(_formKey.currentState!.validate()){
-                        Helpers.loader();
-                        final isSuccess = await orderController.submitDisputeProof(disputeId: widget.disputeId, description: comments.text, link: fileLink.text);
-                        Helpers.hideLoader();
-                        if(isSuccess){
-                          Helpers.toast("Dispute Proof Successfully Submitted");
-                          Navigator.pop(context);
-                        }
-                      }
-                    },
-                  ),
-                ),
-                const SizedBox(height: 16.0),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
+          );
+        }
+      }),
     );
   }
 
@@ -119,9 +155,9 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
                   style: textTheme.headline4?.copyWith(color: textWhiteColor)),
               SizedBox(height: 3.h),
               Obx(() {
-                if(orderController.files.isEmpty){
+                if (orderController.files.isEmpty) {
                   return const SizedBox();
-                }else{
+                } else {
                   return GridView.builder(
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
@@ -161,7 +197,7 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
               SizedBox(height: 1.h),
               TextFieldWidget(
                 textEditingController: fileLink,
-                hint: 'Paste Youtube/Twitch/Drive Link',
+                hint: 'Paste Link of Proofs Uploaded',
                 type: 'optionalLink',
                 isRequired: true,
               ),
@@ -176,8 +212,14 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
     return Container(
       padding: const EdgeInsets.all(8),
       constraints: BoxConstraints(
-          minHeight: MediaQuery.of(context).size.height * 0.08,
-          minWidth: MediaQuery.of(context).size.width * 0.4),
+          minHeight: MediaQuery
+              .of(context)
+              .size
+              .height * 0.08,
+          minWidth: MediaQuery
+              .of(context)
+              .size
+              .width * 0.4),
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(

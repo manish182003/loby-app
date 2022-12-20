@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/widgets/custom_loader.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
@@ -24,6 +25,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
 
   ProfileController profileController = Get.find<ProfileController>();
+  AuthController authController = Get.find<AuthController>();
   double rating = 0.0;
 
   @override
@@ -200,9 +202,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _logout() async {
-    final auth = FirebaseAuth.instance;
-    final GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']);
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    authController.clearProfileDetails();
     await prefs.remove('apiToken');
     await prefs.remove('isLoggedIn');
 

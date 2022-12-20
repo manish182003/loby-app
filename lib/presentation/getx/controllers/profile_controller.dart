@@ -11,6 +11,7 @@ import 'package:loby/domain/usecases/profile/add_bank_details.dart';
 import 'package:loby/domain/usecases/profile/add_funds.dart';
 import 'package:loby/domain/usecases/profile/follow_unfollow.dart';
 import 'package:loby/domain/usecases/profile/get_duel.dart';
+import 'package:loby/domain/usecases/profile/get_earning_transaction.dart';
 import 'package:loby/domain/usecases/profile/get_payment_transactions.dart';
 import 'package:loby/domain/usecases/profile/get_profile.dart';
 import 'package:loby/domain/usecases/profile/get_ratings.dart';
@@ -46,6 +47,7 @@ class ProfileController extends GetxController{
   final WithdrawMoney _withdrawMoney;
   final GetPaymentTransactions _getPaymentTransactions;
   final GetWalletTransactions _getWalletTransactions;
+  final GetEarningTransactions _getEarningTransactions;
   final GetFollowers _getFollowers;
   final SubmitFeedback _submitFeedback;
   final GetSettlementRequests _getSettlementRequests;
@@ -68,6 +70,7 @@ class ProfileController extends GetxController{
     required SubmitFeedback submitFeedback,
     required GetSettlementRequests getSettlementRequests,
     required GetTotalEarning getTotalEarning,
+    required GetEarningTransactions getEarningTransactions,
   }) : _getProfile = getProfile,
   _getRatings = getRatings,
   _getDuel = getDuel,
@@ -84,7 +87,8 @@ class ProfileController extends GetxController{
   _getFollowers = getFollowers,
         _submitFeedback = submitFeedback,
   _getSettlementRequests = getSettlementRequests,
-  _getTotalEarning = getTotalEarning;
+  _getTotalEarning = getTotalEarning,
+        _getEarningTransactions = getEarningTransactions;
 
 
 
@@ -125,6 +129,12 @@ class ProfileController extends GetxController{
   final walletTransactionsPageNumber = 1.obs;
 
 
+  final earningTransactions = <WalletTransaction>[].obs;
+  final isEarningTransactionsFetching = false.obs;
+  final areMoreEarningTransactionsAvailable = true.obs;
+  final earningTransactionsPageNumber = 1.obs;
+
+
   final followers = <User>[].obs;
   final isFollowersFetching = false.obs;
 
@@ -133,7 +143,6 @@ class ProfileController extends GetxController{
 
   final tokenToRupee = "0".obs;
   final rupeeToToken = "0".obs;
-
 
   final settlementRequests = <SettlementRequest>[].obs;
   final isSettlementRequestsFetching = false.obs;
@@ -159,7 +168,7 @@ class ProfileController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        // Helpers.toast(errorMessage.value);
+        Helpers.toast(errorMessage.value);
         isProfileFetching.value = false;
         isSocialLinksFetching.value = false;
       },
@@ -192,7 +201,7 @@ class ProfileController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        // Helpers.toast(errorMessage.value);
+        Helpers.toast(errorMessage.value);
         isRatingsFetching.value = false;
       },
           (success) {
@@ -213,20 +222,19 @@ class ProfileController extends GetxController{
         Params(profileParams: ProfileParams(
           userId: userId,
           page: duelDetailsPageNumber.value,
-        ),),
+        )),
       );
 
       failureOrSuccess.fold(
             (failure) {
           errorMessage.value = Helpers.convertFailureToMessage(failure);
           debugPrint(errorMessage.value);
-          // Helpers.toast(errorMessage.value);
+          Helpers.toast(errorMessage.value);
           isDuelDetailsFetching.value = false;
         },
             (success) {
               areMoreDuelDetailsAvailable.value = success.duelDetailsList.length == 10;
               duelDetailsCount.value = success.duelDetailsCount;
-
 
               if (duelDetailsPageNumber > 1) {
                 duelDetailsList.addAll(success.duelDetailsList);
@@ -392,7 +400,6 @@ class ProfileController extends GetxController{
 
 
 
-
       },
     );
     return failureOrSuccess.isRight() ? true : false;
@@ -411,7 +418,7 @@ class ProfileController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        // Helpers.toast(errorMessage.value);
+        Helpers.toast(errorMessage.value);
         isBankDetailsFetching(false);
       },
           (success) {
@@ -459,7 +466,7 @@ class ProfileController extends GetxController{
             (failure) {
           errorMessage.value = Helpers.convertFailureToMessage(failure);
           debugPrint(errorMessage.value);
-          // Helpers.toast(errorMessage.value);
+          Helpers.toast(errorMessage.value);
           isPaymentTransactionsFetching.value = false;
         },
             (success) {
@@ -496,10 +503,10 @@ class ProfileController extends GetxController{
             (failure) {
           errorMessage.value = Helpers.convertFailureToMessage(failure);
           debugPrint(errorMessage.value);
-          // Helpers.toast(errorMessage.value);
+          Helpers.toast(errorMessage.value);
           isWalletTransactionsFetching.value = false;
         },
-            (success) {
+            (success)            {
               areMoreWalletTransactionsAvailable.value = success.walletTransactions.length == 10;
 
 
@@ -521,6 +528,45 @@ class ProfileController extends GetxController{
   }
 
 
+  Future<bool> getEarningTransactions({String? type}) async {
+    earningTransactionsPageNumber.value == 1 ? isEarningTransactionsFetching(true) : isEarningTransactionsFetching(false);
+
+    if(areMoreEarningTransactionsAvailable.value){
+      final failureOrSuccess = await _getEarningTransactions(
+        Params(profileParams: ProfileParams(
+          page: earningTransactionsPageNumber.value,
+        ),),
+      );
+
+      failureOrSuccess.fold(
+            (failure) {
+          errorMessage.value = Helpers.convertFailureToMessage(failure);
+          debugPrint(errorMessage.value);
+          Helpers.toast(errorMessage.value);
+          isEarningTransactionsFetching.value = false;
+        },
+            (success)            {
+          areMoreEarningTransactionsAvailable.value = success.walletTransactions.length == 10;
+
+
+          if (earningTransactionsPageNumber > 1) {
+            earningTransactions.addAll(success.walletTransactions);
+          } else {
+            earningTransactions.value = success.walletTransactions;
+          }
+
+          earningTransactionsPageNumber.value++;
+
+          isEarningTransactionsFetching.value = false;
+        },
+      );
+      return failureOrSuccess.isRight() ? true : false;
+    }
+    return false;
+  }
+
+
+
 
 
 
@@ -536,8 +582,8 @@ class ProfileController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        // Helpers.toast(errorMessage.value);
-        isBankDetailsFetching(false);
+        Helpers.toast(errorMessage.value);
+        isFollowersFetching(false);
       },
           (success) {
             if(type == 'following'){
@@ -593,7 +639,7 @@ class ProfileController extends GetxController{
             (failure) {
           errorMessage.value = Helpers.convertFailureToMessage(failure);
           debugPrint(errorMessage.value);
-          // Helpers.toast(errorMessage.value);
+          Helpers.toast(errorMessage.value);
           isSettlementRequestsFetching.value = false;
         },
             (success) {
@@ -627,7 +673,7 @@ class ProfileController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        // Helpers.toast(errorMessage.value);
+        Helpers.toast(errorMessage.value);
       },
           (success) {
             totalEarning.value = success;

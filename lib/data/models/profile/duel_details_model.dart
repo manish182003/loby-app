@@ -6,7 +6,6 @@ import 'package:loby/domain/entities/listing/service_listing.dart';
 import 'package:loby/domain/entities/profile/duel_details.dart';
 
 
-
 class DuelDetailsModel extends DuelDetails{
   const DuelDetailsModel({
     this.id,
@@ -14,6 +13,7 @@ class DuelDetailsModel extends DuelDetails{
     this.winnerSelectedBuyer,
     this.winnerSelectedSeller,
     this.userGameServiceId,
+    this.disputeWinner,
     this.createdAt,
     this.updatedAt,
     this.winner,
@@ -27,6 +27,7 @@ class DuelDetailsModel extends DuelDetails{
   final int? winnerSelectedBuyer;
   final int? winnerSelectedSeller;
   final int? userGameServiceId;
+  final int? disputeWinner;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final UserModel? winner;
@@ -40,10 +41,11 @@ factory DuelDetailsModel.fromJson(Map<String, dynamic> json) => DuelDetailsModel
   winnerSelectedBuyer: json["winner_selected_buyer"],
   winnerSelectedSeller: json["winner_selected_seller"],
   userGameServiceId: json["user_game_service_id"],
+  disputeWinner: json["dispute_winner"],
   createdAt: DateTime.parse(json["createdAt"]),
   updatedAt: DateTime.parse(json["updatedAt"]),
-  winner: json["winner_selected_buyer"] == json["userOrder"]["user"]["id"] ? UserModel.fromJson(json["userOrder"]["user"]) : UserModel.fromJson(json["userGameService"]["user"]),
-  loser: json["winner_selected_buyer"] == json["userOrder"]["user"]["id"] ? UserModel.fromJson(json["userGameService"]["user"]) : UserModel.fromJson(json["userOrder"]["user"]),
+  winner: json["dispute_winner"] != 0 ? json["dispute_winner"] == json["userOrder"]["user"]["id"] ? UserModel.fromJson(json["userOrder"]["user"]) : UserModel.fromJson(json["userGameService"]["user"]) : json["winner_selected_buyer"] == json["userOrder"]["user"]["id"] ? UserModel.fromJson(json["userOrder"]["user"]) : UserModel.fromJson(json["userGameService"]["user"]),
+  loser: json["dispute_winner"] != 0 ? json["dispute_winner"] == json["userOrder"]["user"]["id"] ? UserModel.fromJson(json["userGameService"]["user"]) : UserModel.fromJson(json["userOrder"]["user"])  : json["winner_selected_buyer"] == json["userOrder"]["user"]["id"] ? UserModel.fromJson(json["userGameService"]["user"]) : UserModel.fromJson(json["userOrder"]["user"]),
   userOrder: OrderModel.fromJson(json["userOrder"]),
   userGameService: ServiceListingModel.fromJson(json["userGameService"]),
 );

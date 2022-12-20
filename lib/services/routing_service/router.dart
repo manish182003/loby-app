@@ -2,7 +2,7 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:loby/core/utils/helpers.dart';
+import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 import 'package:loby/presentation/screens/auth/create_profile_screen.dart';
 import 'package:loby/presentation/screens/auth/sign_up_screen.dart';
 import 'package:loby/presentation/screens/main/chat/chat_page.dart';
@@ -14,8 +14,9 @@ import 'package:loby/presentation/screens/main/profile/wallet/settlement_request
 import 'package:loby/presentation/screens/onboarding/onboarding_screen.dart';
 import 'package:loby/services/routing_service/routes.dart';
 import 'package:loby/services/routing_service/routing_service.dart';
+import 'package:moment_dart/moment_dart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import '../../presentation/getx/controllers/profile_controller.dart';
 import '../../presentation/screens/auth/sign_in_screen.dart';
 import '../../presentation/screens/main/home/category_item_screen.dart';
 import '../../presentation/screens/main/profile/my_disputes/disputes_screen.dart';
@@ -30,17 +31,19 @@ import '../../presentation/screens/main/profile/my_listing/my_listing_screen.dar
 import '../../presentation/screens/main/profile/my_order/my_order_screen.dart';
 import '../../presentation/screens/main/profile/profile_verification_screen.dart';
 import '../../presentation/screens/main/profile/wallet/add_wallet_screen.dart';
+import '../../presentation/screens/main/profile/wallet/earning_transaction_history.dart';
 import '../../presentation/screens/main/profile/wallet/my_wallet_screen.dart';
 import '../../presentation/screens/main/profile/wallet/paymnet_transaction_history.dart';
 import '../../presentation/screens/main/profile/wallet/wallet_transaction_history.dart';
 import '../../presentation/screens/main/profile/wallet/withdraw_funds_screen.dart';
-import '../firebase_dynamic_link.dart';
 import 'routes_name.dart';
 
 class MyRouter {
   Future<GoRouter> appRouter({required PendingDynamicLinkData? initialLink}) async {
     // final token = await Helpers.getApiToken();
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    ProfileController profileController = Get.find<ProfileController>();
+    AuthController authController = Get.find<AuthController>();
 
     final router = GoRouter(
         redirect: (context, state)async{
@@ -54,15 +57,23 @@ class MyRouter {
           final onBoarding = state.location == onBoardingRoute;
 
 
+          print("ban till ${profileController.profile.banTill}");
+
           if(initialLink != null){
             return null;
           }else if(!onBoardingDone && !onBoarding){
             return onBoardingRoute;
           }else if(onBoardingDone && !isLoggedIn && !isLogging){
             return loginRoute;
+          }else if(profileController.profile.banTill == null){
+            return null;
+          }else if(profileController.profile.banTill! > DateTime.now() && !isLogging){
+            await authController.logout();
+            return loginRoute;
           }else{
             return null;
           }
+          // toMoment().toLocal()
         },
         debugLogDiagnostics: true,
         routes: [
@@ -104,8 +115,8 @@ class MyRouter {
                   key: state.pageKey,
                   child: const SignUpScreen(),
                 );
-              }),
-
+              }
+            ),
           GoRoute(
               name: createProfilePage,
               path: createProfileRoute,
@@ -165,7 +176,7 @@ class MyRouter {
               pageBuilder: (context, state) {
                 return CupertinoPage(
                   key: state.pageKey,
-                  child: UserProfileScreen(userId: int.tryParse(state.queryParams['userId']!)!, from: state.queryParams['from']!, ),
+                  child: UserProfileScreen(userId: int.tryParse(state.queryParams['userId']!) ?? 0, from: state.queryParams['from']!, ),
                 );
               }),
 
@@ -286,6 +297,15 @@ class MyRouter {
                 return CupertinoPage(
                   key: state.pageKey,
                   child: const WalletTransactionHistory(),
+                );
+              }),
+          GoRoute(
+              name:earningTransactionPage,
+              path: earningTransactionRoute,
+              pageBuilder: (context, state) {
+                return CupertinoPage(
+                  key: state.pageKey,
+                  child: const EarningTransactionHistory(),
                 );
               }),
 

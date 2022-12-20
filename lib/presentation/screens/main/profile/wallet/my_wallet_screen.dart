@@ -38,9 +38,9 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme
-        .of(context)
-        .textTheme;
+
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
       appBar: appBar(context: context, appBarName: "Wallet"),
       body: Obx(() {
@@ -61,10 +61,7 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                             borderRadius: BorderRadius.circular(16.0),
                           ),
                           child: Container(
-                              width: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width * 1,
+                              width: MediaQuery.of(context).size.width * 1,
                               height: 90.0,
                               decoration: BoxDecoration(
                                 color: aquaGreenColor,
@@ -109,8 +106,9 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                                             return const CustomLoader();
                                           } else {
                                             return TokenWidget(
-                                              tokens: profileController.profile.walletMoney!.toStringAsFixed(2),
-                                              textColor: aquaGreenColor,);
+                                              tokens: profileController.profile.walletMoney?.toStringAsFixed(2),
+                                              textColor: aquaGreenColor
+                                            );
                                           }
                                         }),
                                       ),
@@ -160,10 +158,7 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                             borderRadius: BorderRadius.circular(16.0),
                           ),
                           child: Container(
-                              width: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width * 1,
+                              width: MediaQuery.of(context).size.width * 1,
                               height: 90,
                               decoration: BoxDecoration(
                                 color: aquaGreenColor,
@@ -232,7 +227,7 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
                     SizedBox(height: 1.h,),
                     GestureDetector(
                       onTap: () {
-                        context.pushNamed(settlementRequestHistoryPage);
+                        context.pushNamed(earningTransactionPage);
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(right: 20.0),

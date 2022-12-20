@@ -8,7 +8,7 @@ import '../../../core/theme/colors.dart';
 class BuildDropdown extends StatefulWidget {
 
   final ValueChanged<dynamic>? onChanged;
-  final String? defaultValue, selectedValue, dropdownHint;
+  final dynamic defaultValue, selectedValue, dropdownHint;
   final List<DropdownMenuItem<dynamic>>? itemsList;
   final double? height;
   final double? width;

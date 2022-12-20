@@ -86,23 +86,23 @@ class _MyListingTileState extends State<MyListingTile> {
                   Text("${widget.listing.stockAvl} Stocks Available",
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
-                      style: textTheme.headline6?.copyWith(color: textInputTitleColor)),
+                      style: textTheme.headline6?.copyWith(color: widget.listing.stockAvl == 0 ? carminePinkColor : textInputTitleColor)),
                   SizedBox(height: 1.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Container(
-                        width: 18.w,
-                        margin: const EdgeInsets.only(right: 4.0),
-                        alignment: Alignment.center,
+                      SizedBox(
+                        width: 14.w,
                         child: Container(
                           decoration: BoxDecoration(
                             color: orangeColor,
                             borderRadius: BorderRadius.circular(16),
                           ),
+                          margin: const EdgeInsets.only(right: 4.0),
+                          alignment: Alignment.center,
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 4.0, horizontal: 6.0),
+                            padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 6.0),
                             child: Text(widget.listing.category?.name! ?? '', style: textTheme.headline6?.copyWith(color: textWhiteColor), maxLines: 1, overflow: TextOverflow.ellipsis,),
                           ),
                         ),
@@ -119,36 +119,38 @@ class _MyListingTileState extends State<MyListingTile> {
                   ),
                   const SizedBox(height: 4.0),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.18,
-                        child: _actionButton(textTheme, title: "Edit", onTap: (){
+                        // width: 38.w,
+                        child: _actionButton(textTheme, title: "Edit", onTap: ()async{
+                          Helpers.loader();
+                          await listingController.getConfigurations(categoryId: widget.listing.categoryId, gameId: widget.listing.gameId);
+                          Helpers.hideLoader();
                           _showEditListingBottomSheet(context, widget.listing);
                         }, color: butterflyBlueColor)
                       ),
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.18,
-                          child: _actionButton(textTheme, title: "Delete", color: lavaRedColor, onTap: (){
-                            ConfirmationBottomDialog(
-                                textTheme: textTheme,
-                                contentName: "Are you sure you want delete this listing ?",
-                                yesBtnClick: ()async{
-                                  Helpers.loader();
-                                  final isSuccess = await listingController.changeListingStatus(listingId: widget.listing.id!, type: 'delete');
-                                  Helpers.hideLoader();
-                                  if(isSuccess){
-                                    listingController.buyerListingsProfile.removeWhere((element) => element.id == widget.listing.id);
-                                    listingController.buyerListingsProfile.refresh();
-                                    Navigator.pop(context);
-                                    SuccessfullyDeleteListingDialog(
-                                      textTheme: textTheme,
-                                      contentName: "Your listing has been completely deleted. Any ongoing order still needs to be completed",)
-                                        .showBottomDialog(context);
-                                  }
-                            }).showBottomDialog(context);
-                          })
-                      ),
+                      // SizedBox(
+                      //     width: MediaQuery.of(context).size.width * 0.18,
+                      //     child: _actionButton(textTheme, title: "Delete", color: lavaRedColor, onTap: (){
+                      //       ConfirmationBottomDialog(
+                      //           textTheme: textTheme,
+                      //           contentName: "Are you sure you want delete this listing ?",
+                      //           yesBtnClick: ()async{
+                      //             Helpers.loader();
+                      //             final isSuccess = await listingController.changeListingStatus(listingId: widget.listing.id!, type: 'delete');
+                      //             Helpers.hideLoader();
+                      //             if(isSuccess){
+                      //               listingController.buyerListingsProfile.removeWhere((element) => element.id == widget.listing.id);
+                      //               listingController.buyerListingsProfile.refresh();
+                      //               Navigator.pop(context);
+                      //               SuccessfullyDeleteListingDialog(
+                      //                 textTheme: textTheme,
+                      //                 contentName: "Your listing has been completely deleted. Any ongoing order still needs to be completed",).showBottomDialog(context);
+                      //             }
+                      //       }).showBottomDialog(context);
+                      //     })
+                      // ),
                     ],
                   ),
                   const SizedBox(height: 8.0),

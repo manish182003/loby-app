@@ -5,6 +5,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../../core/theme/colors.dart';
 import '../../../../widgets/buttons/custom_button.dart';
+import '../../profile/wallet/widgets/token_widget.dart';
 
 class FilterBottomSheet extends StatefulWidget {
   final ScrollController controller;
@@ -94,10 +95,10 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('₹ ${listingController.rangeSliderDiscreteValues.value.start.floor()}',
-                              style: textTheme.headline4?.copyWith(color: textWhiteColor)),
-                          Text('₹ ${listingController.rangeSliderDiscreteValues.value.end.floor()}',
-                              style: textTheme.headline4?.copyWith(color: textWhiteColor)),
+                          TokenWidget(text:  Text('${listingController.rangeSliderDiscreteValues.value.start.floor()}',
+                              style: textTheme.headline4?.copyWith(color: textWhiteColor)), size: 20,),
+                          TokenWidget(text: Text('${listingController.rangeSliderDiscreteValues.value.end.floor()}',
+                              style: textTheme.headline4?.copyWith(color: textWhiteColor)), size: 20,),
                         ],
                       );
                     }),

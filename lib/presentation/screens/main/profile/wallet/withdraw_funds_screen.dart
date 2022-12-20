@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/profile/bank_detail.dart';
 import 'package:loby/presentation/getx/controllers/home_controller.dart';
@@ -10,6 +11,7 @@ import 'package:loby/presentation/widgets/text_fields/custom_drop_down.dart';
 import 'package:loby/presentation/widgets/text_fields/text_field_widget.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../core/theme/colors.dart';
+import '../../../../../services/routing_service/routes_name.dart';
 import '../../../../widgets/bottom_dialog.dart';
 import '../../../../widgets/custom_app_bar.dart';
 import '../../../../widgets/buttons/custom_button.dart';
@@ -95,7 +97,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.only(left : 16.0, right: 16.0, top: 16.0, bottom: 8.0),
                     child: Stack(
                       children: [
                         Card(
@@ -189,6 +191,9 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                           if(value.isNotEmpty){
                                             profileController.tokenToRupee.value = (int.tryParse(value)! * int.tryParse(homeController.staticData[5].realValue!)!).floor().toString();
                                             profileController.rupeeToToken.value = (int.tryParse(value)! / int.tryParse(homeController.staticData[5].key!)!).floor().toString();
+                                          }else{
+                                            profileController.tokenToRupee.value = '0';
+                                            profileController.rupeeToToken.value = '0';
                                           }
                                         },
                                       )),
@@ -212,7 +217,32 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                         FocusManager.instance.primaryFocus?.unfocus();
                                         ConfirmationBottomDialog(
                                             textTheme: textTheme,
-                                            contentName: "Are you sure you want to withdraw amount ?",
+                                            confirmationWidget: SizedBox(
+                                              child: Wrap(
+                                                alignment: WrapAlignment.center,
+                                                children: [
+                                                  Text(
+                                                   'Are you sure you want to withdraw ',
+                                                    style: textTheme.headline3?.copyWith(color: textLightColor),
+                                                  ),
+                                                  TokenWidget(
+                                                      size: 18,
+                                                      text: Text(
+                                                        profileController.rupeeToToken.value,
+                                                        style: textTheme.headline3?.copyWith(color: textLightColor),
+                                                      )),
+                                                  Text(
+                                                      ' ( ₹${profileController.tokenToRupee.value} ) ',
+                                                      style: textTheme.headline3?.copyWith(color: aquaGreenColor)
+                                                  ),
+                                                  Text(
+                                                    'from your Loby Wallet?',
+                                                    style: textTheme.headline3?.copyWith(color: textLightColor),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            contentName: "Are you sure you want to withdraw From Your Loby Wallet?",
                                             yesBtnClick: ()async{
                                               Navigator.pop(context);
                                               Helpers.loader();
@@ -253,9 +283,24 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                       ],
                     ),
                   ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: GestureDetector(
+                      onTap: () {
+                        context.pushNamed(settlementRequestHistoryPage);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 20.0),
+                        child: Text('View all Transactions',
+                            textAlign: TextAlign.end,
+                            style: textTheme.subtitle2?.copyWith(
+                                color: textWhiteColor)),
+                      ),
+                    ),
+                  ),
                   Padding(
-                    padding: const EdgeInsets.only(
-                      top: 16.0,
+                    padding: EdgeInsets.only(
+                      top: 3.h,
                       bottom: 32.0,
                     ),
                     child: SizedBox(
@@ -411,6 +456,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                               if (isSuccess) {
                                 await profileController.getBankDetails();
                                 clearAddBankDetails();
+                                Helpers.toast("Successfully Added");
                                 Helpers.hideLoader();
                                 Navigator.of(context).pop();
                               }else{
@@ -464,10 +510,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                     ),
                     SizedBox(height: 2.h),
                     SizedBox(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width * 0.35,
+                      width: MediaQuery.of(context).size.width * 0.35,
                       child: CustomButton(
                         color: purpleLightIndigoColor,
                         textColor: textWhiteColor,
@@ -484,6 +527,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                             clearAddBankDetails();
                             Helpers.hideLoader();
                             if (isSuccess) {
+                              Helpers.toast("Successfully Added");
                               Navigator.of(context).pop();
                             }
                           }

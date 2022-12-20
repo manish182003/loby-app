@@ -53,8 +53,6 @@ class _ProfileHeaderState extends State<ProfileHeader> {
   ChatController chatController = Get.find<ChatController>();
   ListingController listingController = Get.find<ListingController>();
 
-
-
   final CustomPopupMenuController _controller = CustomPopupMenuController();
 
 
@@ -71,12 +69,15 @@ class _ProfileHeaderState extends State<ProfileHeader> {
               width: double.infinity,
               child: CustomCachedNetworkImage(
                 imageUrl: widget.user.coverImage,
-                placeHolder: Image.asset("assets/images/cover_placeholder.png", fit: BoxFit.cover,)
+                placeHolder: Image.asset("assets/images/cover_placeholder.png", fit: BoxFit.cover)
               ),
             ),
             appBar(context: context, appBarName: widget.title),
             widget.from == 'myProfile' ? GestureDetector(
-              onTap: (){
+              onTap: ()async{
+                Helpers.loader();
+                await authController.getProfileDetails();
+                Helpers.hideLoader();
                 _showCreateProfileBottomSheet(context);
               },
               child: Align(
@@ -247,7 +248,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                   profileController.followUnfollow(userId: widget.user.id);
                                   setState(() {
                                     widget.user.userFollowStatus = widget.user.userFollowStatus == 'N' ? 'Y' : 'N';
-                                    widget.user.followersCount = widget.user.userFollowStatus == 'N' ? widget.user.followersCount+1 : widget.user.followersCount-1;
+                                    widget.user.followersCount = widget.user.userFollowStatus == 'N' ? widget.user.followersCount-1 : widget.user.followersCount+1;
                                   });
                                 },
                                 child: SvgPicture.asset(
@@ -368,7 +369,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
     final textTheme = Theme.of(context).textTheme;
     return Positioned(
         top: 0.0,
-        right: 0.0,
+        right: 10.0,
         child: CustomPopupMenu(
           arrowColor: lavaRedColor,
           menuBuilder: () => ClipRRect(
@@ -378,9 +379,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
               child: IntrinsicWidth(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: ['Report Account']
-                      .map(
-                        (item) => GestureDetector(
+                  children: ['Report Account'].map((item) => GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
                         _controller.hideMenu();
@@ -416,8 +415,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                         ),
                       ),
                     ),
-                  )
-                      .toList(),
+                  ).toList(),
                 ),
               ),
             ),

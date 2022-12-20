@@ -12,6 +12,7 @@ class Dispute extends Equatable{
     this.description,
     this.result,
     this.commissionPercent,
+    this.disputeWinner,
     this.amount,
     this.disputeNumber,
     this.createdAt,
@@ -27,6 +28,7 @@ class Dispute extends Equatable{
   final String? description;
   final String? result;
   final int? commissionPercent;
+  final String? disputeWinner;
   final int? amount;
   final String? disputeNumber;
   final DateTime? createdAt;

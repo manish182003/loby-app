@@ -90,9 +90,9 @@ class OrderRepositoryImpl extends OrderRepository{
   }
 
   @override
-  Future<Either<Failure, DisputeResponse>> getDisputes({int? page, String? status})async {
+  Future<Either<Failure, DisputeResponse>> getDisputes({int? id, int? page, String? status})async {
     try {
-      return Right(await _orderRemoteDatasource.getDisputes(page, status));
+      return Right(await _orderRemoteDatasource.getDisputes(id, page, status));
     } on ServerException catch (e) {
     // Loggers can be added here for analyzation.
     return Left(ServerFailure(message: e.message.toString()));

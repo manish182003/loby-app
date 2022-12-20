@@ -38,15 +38,17 @@ class _StaticTermsState extends State<StaticTerms> {
             return const CustomLoader();
           }else{
             final staticData = homeController.staticData.where((e) => e.label == widget.termName).toList();
-            return Column(
-              children: [
-                Text(
-                    staticData.isEmpty ? "No Data Found" : staticData.first.realValue!,
-                    style: textTheme.headline5?.copyWith(color: textWhiteColor, height: 0.2.h),
-                    textAlign: TextAlign.start,
-                ),
-                SizedBox(height: 2.h),
-              ],
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  Text(
+                      staticData.isEmpty ? "No Data Found" : staticData.first.realValue!,
+                      style: textTheme.headline5?.copyWith(color: textWhiteColor, height: 0.2.h),
+                      textAlign: TextAlign.start,
+                  ),
+                  SizedBox(height: 2.h),
+                ],
+              ),
             );
           }
         }),

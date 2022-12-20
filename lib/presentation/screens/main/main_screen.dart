@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../main.dart';
 import 'widgets/custom_tabbed_bar.dart';
 
+
 class MainScreen extends StatelessWidget {
   const MainScreen({Key? key}) : super(key: key);
 
@@ -15,7 +16,7 @@ class MainScreen extends StatelessWidget {
         body: const SafeArea(
             child: CustomTabbedAppBar()
         ),
-      ),
+      ),  
     );
   }
 }

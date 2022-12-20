@@ -26,7 +26,7 @@ class PaymentTransaction extends Equatable{
   final String? paymentJsonResponse;
   final String? paymentJsonRequest;
   final String? orderJsonResponse;
-  final int? totalAmount;
+  final double? totalAmount;
   final String? currency;
   final int? walletTransactionId;
   final String? paymentStatus;

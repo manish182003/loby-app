@@ -5,6 +5,7 @@ import 'package:loby/domain/usecases/listing/get_buyer_listings.dart';
 import 'package:loby/domain/usecases/listing/get_configurations.dart';
 import 'package:loby/domain/usecases/listing/report_listing.dart';
 
+import '../../../domain/usecases/listing/delete_listing_image.dart';
 import '../controllers/listing_controller.dart';
 
 class ListingBinding extends Bindings {
@@ -17,14 +18,15 @@ class ListingBinding extends Bindings {
     final getBuyerListings = Get.find<GetBuyerListings>();
     final reportListing = Get.find<ReportListing>();
     final changeListingStatus = Get.find<ChangeListingStatus>();
-
+    final deleteListingImage = Get.find<DeleteListingImage>();
 
     Get.lazyPut(() => ListingController(
       getConfigurations: getConfigurations,
       createListing: createListing,
       getBuyerListings: getBuyerListings,
       reportListing: reportListing,
-      changeListingStatus: changeListingStatus
+      changeListingStatus: changeListingStatus,
+      deleteListingImage: deleteListingImage,
     ));
   }
 

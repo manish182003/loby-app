@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loby/core/utils/helpers.dart';
-import 'package:loby/domain/entities/profile/wallet_transaction.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/screens/main/profile/wallet/widgets/transaction_tile.dart';
 import 'package:loby/presentation/widgets/custom_loader.dart';
 import 'package:sizer/sizer.dart';
-import '../../../../../core/theme/colors.dart';
 import '../../../../widgets/body_padding_widget.dart';
 import '../../../../widgets/custom_app_bar.dart';
+
 
 class WalletTransactionHistory extends StatefulWidget {
   const WalletTransactionHistory({Key? key}) : super(key: key);
@@ -22,7 +20,6 @@ class _WalletTransactionHistoryState extends State<WalletTransactionHistory> {
   ProfileController profileController = Get.find<ProfileController>();
   final controller = ScrollController();
 
-
   @override
   void initState() {
     // TODO: implement initState
@@ -33,13 +30,13 @@ class _WalletTransactionHistoryState extends State<WalletTransactionHistory> {
       profileController.getWalletTransactions();
     });
 
-
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
         profileController.getWalletTransactions();
       }
     });
   }
+
 
   @override
   void dispose() {
@@ -97,7 +94,7 @@ class _WalletTransactionHistoryState extends State<WalletTransactionHistory> {
             ),
           ),
         );
-      }
+        }
       }),
     );
   }

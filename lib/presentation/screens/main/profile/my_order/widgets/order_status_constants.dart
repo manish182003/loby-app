@@ -71,7 +71,7 @@ const List sellerStatuses = [
   'Order Completed',
 ];
 
-const List duelStatuses = [
+List duelStatuses = [
   'Duel Placed',
   'Seller Accepted',
   'Duel in Progress',

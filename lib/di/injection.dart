@@ -86,6 +86,8 @@ import '../data/datasource_impl/order_remote_datasource_impl.dart';
 import '../data/repositories/order_repository_impl.dart';
 import '../domain/usecases/auth/forgot_and_reset_password.dart';
 import '../domain/usecases/listing/change_listing_status.dart';
+import '../domain/usecases/listing/delete_listing_image.dart';
+import '../domain/usecases/profile/get_earning_transaction.dart';
 import '../domain/usecases/profile/get_wallet_transactions.dart';
 import '../presentation/getx/bindings/network_binding.dart';
 
@@ -102,7 +104,6 @@ class DependencyInjector{
     _injectChatUsecases();
     _injectProfileUsecases();
 
-    NetworkBinding().dependencies();
     AuthBinding().dependencies();
     HomeBinding().dependencies();
     ListingBinding().dependencies();
@@ -110,6 +111,7 @@ class DependencyInjector{
     ChatBinding().dependencies();
     ProfileBinding().dependencies();
     CoreBinding().dependencies();
+    NetworkBinding().dependencies();
   }
 
 
@@ -187,7 +189,9 @@ class DependencyInjector{
     Get.lazyPut(() => GetBuyerListings(listingRepository));
     Get.lazyPut(() => ReportListing(listingRepository));
     Get.lazyPut(() => ChangeListingStatus(listingRepository));
+    Get.lazyPut(() => DeleteListingImage(listingRepository));
   }
+
 
 
   static void _injectChatUsecases() {
@@ -230,6 +234,7 @@ class DependencyInjector{
     Get.lazyPut(() => GetBankDetails(profileRepository));
     Get.lazyPut(() => WithdrawMoney(profileRepository));
     Get.lazyPut(() => GetWalletTransactions(profileRepository));
+    Get.lazyPut(() => GetEarningTransactions(profileRepository));
     Get.lazyPut(() => GetPaymentTransactions(profileRepository));
     Get.lazyPut(() => GetFollowers(profileRepository));
     Get.lazyPut(() => SubmitFeedback(profileRepository));

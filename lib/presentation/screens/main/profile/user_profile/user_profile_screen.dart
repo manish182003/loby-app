@@ -45,13 +45,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       listingController.areMoreListingAvailable.value = true;
       listingController.buyerListingsProfile.clear();
       if(widget.from == 'other'){
+
         await profileController.getProfile(userId: widget.userId);
         setState(() {
           isFetching = false;
         });
       }else{
         await profileController.getProfile();
-        await authController.getProfileDetails();
         setState(() {
           isFetching = false;
         });
@@ -77,7 +77,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       body: SafeArea(
         child: Obx(() {
           if(profileController.isProfileFetching.value || isFetching){
-            return const Center(child: CircularProgressIndicator(),);
+            return const Center(child: CircularProgressIndicator());
           }else{
             final user = widget.from == "other" ? profileController.otherUserProfile : profileController.profile;
             return SingleChildScrollView(

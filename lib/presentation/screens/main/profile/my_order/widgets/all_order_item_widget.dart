@@ -12,8 +12,10 @@ import 'package:loby/presentation/widgets/custom_cached_network_image.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../../core/theme/colors.dart';
+import '../../../../../../core/utils/constants.dart';
 import '../../../../../../data/models/ItemModel.dart';
 import '../../../../../../services/routing_service/routes_name.dart';
+import '../../../../../getx/controllers/listing_controller.dart';
 import '../../../../../widgets/ConfirmationRiseDisputeBottomDialog.dart';
 import '../../../../../widgets/UpdateStatusDialog.dart';
 import '../../../../../widgets/buttons/custom_button.dart';
@@ -25,6 +27,7 @@ class OrderItem extends StatelessWidget {
 
   final CustomPopupMenuController _controller = CustomPopupMenuController();
   final OrderController orderController = Get.find<OrderController>();
+  final ListingController listingController =  Get.find<ListingController>();
 
   @override
   Widget build(BuildContext context) {
@@ -48,15 +51,21 @@ class OrderItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.2,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10.0),
-                          child: SizedBox(
-                            height: 55.0,
-                            child: CustomCachedNetworkImage(
-                              imageUrl: Helpers.getListingImage(order.userGameService!),
-                              placeHolder: Image.asset("assets/images/listing_placeholder.jpg", fit: BoxFit.cover,),
+                      InkWell(
+                        onTap: (){
+                          listingController.totalPrice.value = (listingController.quantityCount.value * order.userGameService!.price!).toString();
+                          context.pushNamed(gameDetailPage, queryParams: {'serviceListingId' : "${order.userGameService!.id}", 'from' : ListingPageRedirection.order});
+                        },
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.2,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: SizedBox(
+                              height: 55.0,
+                              child: CustomCachedNetworkImage(
+                                imageUrl: Helpers.getListingImage(order.userGameService!),
+                                placeHolder: Image.asset("assets/images/listing_placeholder.jpg", fit: BoxFit.cover,),
+                              ),
                             ),
                           ),
                         ),
@@ -169,7 +178,8 @@ class OrderItem extends StatelessWidget {
                           },
                         );// await Helpers.hideLoader();
                       }else{
-                        context.pushNamed(myDisputePage);
+                        orderController.disputes.clear();
+                        context.pushNamed(createNewDisputePage, queryParams: {'disputeId' : "${order.disputeId}"});
                       }
                     }
                   ),

@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:loby/core/usecases/auth_params.dart';
 import 'package:loby/core/usecases/usecase.dart';
@@ -31,6 +32,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../data/models/profile/user_model.dart';
 import '../../../domain/entities/auth/state.dart' as state;
 import '../../../domain/usecases/auth/add_fcm_token.dart';
+import '../../../services/routing_service/routes_name.dart';
 import 'profile_controller.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 
@@ -121,20 +123,34 @@ class AuthController extends GetxController{
      final apiToken = await Helpers.getString('apiToken');
      final fcmToken = await Helpers.getString('fcmToken');
      if(userId != null && apiToken != null){
+
+       print("user id token");
        profileController.getProfile();
        addFCMToken(fcmToken: fcmToken);
        analytics.setUserId(id: '$userId');
        analytics.logEvent(name: 'loggedInUser', parameters: ({'userId' : '$userId'}));
        coreController.connect(userId);
      }else if(apiToken != null){
+
+       print("api token");
+
        profileController.getProfile();
      }
    }
+
 
    Future<void> loggedUserIn()async{
        SharedPreferences prefs = await SharedPreferences.getInstance();
        prefs.setBool('isLoggedIn', true);
    }
+
+
+  Future<void> logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    clearProfileDetails();
+    await prefs.remove('apiToken');
+    await prefs.remove('isLoggedIn');
+  }
 
 
   Future<bool> googleSignInMethod(BuildContext context) async{
@@ -164,9 +180,9 @@ class AuthController extends GetxController{
 
       return isGoogleSignInSuccess.value;
     }catch(e){
+      debugPrint('Error is $e');
       Helpers.hideLoader();
       Helpers.toast("Can't sign in with google at this moment.");
-
       return false;
     }
   }
@@ -237,7 +253,7 @@ class AuthController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        // Helpers.toast(errorMessage.value);
+        Helpers.toast(errorMessage.value);
         isCountriesFetching.value = false;
         },
           (success) {
@@ -266,7 +282,7 @@ class AuthController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        // Helpers.toast(errorMessage.value);
+        Helpers.toast(errorMessage.value);
         isCountriesFetching.value = false;
       },
           (success) {
@@ -292,7 +308,7 @@ class AuthController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        // Helpers.toast(errorMessage.value);
+        Helpers.toast(errorMessage.value);
 
       },
           (success) {
@@ -316,7 +332,7 @@ class AuthController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        // Helpers.toast(errorMessage.value);
+        Helpers.toast(errorMessage.value);
       },
           (success) {
         profileTags.value = success.profileTags;
@@ -350,17 +366,7 @@ class AuthController extends GetxController{
       },
           (success) {
             if(from == 'signIn'){
-              profileImageFile.value = File('');
-              coverImageFile.value = File('');
-              fullName.value.clear();
-              displayName.value.clear();
-              selectedCountry.value = SelectedOption(id: 0, name: "");
-              selectedState.value = SelectedOption(id: 0, name: "");
-              selectedCity.value = SelectedOption(id: 0, name: "");
-              DOB.value.clear();
-              selectedProfileTags.clear();
-              bio.value.clear();
-
+              clearProfileDetails();
               saveProfileDetails();
             }
             // Helpers.toast('Profile Changed');
@@ -369,11 +375,24 @@ class AuthController extends GetxController{
     return failureOrSuccess.isRight() ? true : false;
   }
 
+  void clearProfileDetails(){
+    profileImageFile.value = File('');
+    coverImageFile.value = File('');
+    fullName.value.clear();
+    displayName.value.clear();
+    selectedCountry.value = SelectedOption(id: 0, name: "");
+    selectedState.value = SelectedOption(id: 0, name: "");
+    selectedCity.value = SelectedOption(id: 0, name: "");
+    DOB.value.clear();
+    selectedProfileTags.clear();
+    bio.value.clear();
+  }
+
 
   Future<void> getProfileDetails()async{
      ProfileController profileController = Get.find<ProfileController>();
      final profile = profileController.profile;
-     profileController.isProfileFetching(true);
+     // profileController.isProfileFetching(true);
      coverImageFile.value = (profile.coverImage == null ? File('') : await Helpers.urlToFile(profile.coverImage!));
      profileImageFile.value = (profile.image == null ? File('') : await Helpers.urlToFile(profile.image!));
      fullName.value.text = profile.name ?? '';
@@ -390,7 +409,7 @@ class AuthController extends GetxController{
         });
       }
       bio.value.text = profile.bio!;
-     profileController.isProfileFetching(false);
+     // profileController.isProfileFetching(false);
   }
 
 

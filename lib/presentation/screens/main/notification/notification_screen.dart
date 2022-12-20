@@ -8,7 +8,6 @@ import 'package:sizer/sizer.dart';
 import '../../../widgets/body_padding_widget.dart';
 
 
-
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({Key? key}) : super(key: key);
 

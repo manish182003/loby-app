@@ -128,7 +128,7 @@ class OrderController extends GetxController{
             (failure) {
           errorMessage.value = Helpers.convertFailureToMessage(failure);
           debugPrint(errorMessage.value);
-          // Helpers.toast(errorMessage.value);
+          Helpers.toast(errorMessage.value);
           isOrdersFetching(false);
         },
             (success) {
@@ -274,12 +274,13 @@ class OrderController extends GetxController{
   }
 
 
-  Future<bool> getDisputes({String? status}) async {
+  Future<bool> getDisputes({int? id, String? status}) async {
     disputesPageNumber.value == 1 ? isDisputesFetching(true) : isDisputesFetching(false);
 
     if(areMoreDisputesAvailable.value){
       final failureOrSuccess = await _getDisputes(
         Params(orderParams: OrderParams(
+          disputeId: id,
           page: disputesPageNumber.value,
           status: status,
         ),),
@@ -289,7 +290,7 @@ class OrderController extends GetxController{
             (failure) {
           errorMessage.value = Helpers.convertFailureToMessage(failure);
           debugPrint(errorMessage.value);
-          // Helpers.toast(errorMessage.value);
+          Helpers.toast(errorMessage.value);
           isDisputesFetching.value = false;
         },
             (success) {

@@ -179,14 +179,14 @@ class OrderRemoteDatasourceImpl extends OrderRemoteDatasource{
   }
 
   @override
-  Future<DisputeResponseModel> getDisputes(int? page, String? status) async{
+  Future<DisputeResponseModel> getDisputes(int? id, int? page, String? status) async{
     try {
       final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(
         _dio,
         RequestType.get,
         ApiEndpoints.getDisputes,
-        queryParams: {'page': "${page ?? ""}", 'status': status ?? ""},
+        queryParams: {'page': "${id != null ? '' : page ?? ""}", 'status': status ?? "", "id": "$id"},
         headers: headers,
       );
 
@@ -203,7 +203,6 @@ class OrderRemoteDatasourceImpl extends OrderRemoteDatasource{
 
     try {
       final headers = await Helpers.getApiHeaders();
-
 
       FormData formData = FormData()
         ..fields.add(

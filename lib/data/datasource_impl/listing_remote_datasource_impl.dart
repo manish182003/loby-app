@@ -37,7 +37,7 @@ class ListingRemoteDatasourceImpl extends ListingRemoteDatasource{
   }
 
   @override
-  Future<Map<String, dynamic>> createListing(int? listingId, int? categoryId, int? gameId, String? title, String? description, String? price, String? stockAvl, String? estimateDeliveryTime, int? priceUnitId, List<SelectedServiceOption>? serviceOptionId, List? files, List<int>? fileTypes, List<TextEditingController>? optionAnswer)async {
+  Future<Map<String, dynamic>> createListing(int? listingId, int? categoryId, int? gameId, String? title, String? description, String? price, String? stockAvl, String? estimateDeliveryTime, int? priceUnitId, List<SelectedServiceOption>? serviceOptionId, List? files, List<int>? fileTypes, String? filePathLink, List<TextEditingController>? optionAnswer)async {
     try {
       String token = await Helpers.getApiToken();
       final Map<String, dynamic> headers = {
@@ -60,7 +60,7 @@ class ListingRemoteDatasourceImpl extends ListingRemoteDatasource{
       // print(stockAvl);
 
 
-
+      print('filePathLink $filePathLink');
 
       FormData formData = FormData();
 
@@ -90,6 +90,12 @@ class ListingRemoteDatasourceImpl extends ListingRemoteDatasource{
           MapEntry('price_unit_id', "$priceUnitId"),
         );
 
+        if(filePathLink != null && filePathLink.isNotEmpty ) {
+          formData.fields.add(
+            MapEntry('file_path_link', filePathLink),
+          );
+        }
+
         if(serviceOptionId!.isNotEmpty){
           formData.fields.add(
             MapEntry('service_option_id', serviceOptionId.map((e) => e.id).toList().join(",")),
@@ -118,6 +124,18 @@ class ListingRemoteDatasourceImpl extends ListingRemoteDatasource{
         formData.fields.add(
           MapEntry('stock_avl', "$stockAvl"),
         );
+        formData.fields.add(
+          MapEntry('edt', "$estimateDeliveryTime"),
+        );
+        formData.fields.add(
+          MapEntry('price_unit_id', "$priceUnitId"),
+        );
+        if(filePathLink != null && filePathLink.isNotEmpty){
+          formData.fields.add(
+            MapEntry('file_path_link', filePathLink),
+          );
+
+        }
       }
 
 
@@ -166,7 +184,7 @@ class ListingRemoteDatasourceImpl extends ListingRemoteDatasource{
           'game_id' : '${gameId ?? ''}',
           'listing_id' : '${listingId ?? ''}',
           'user_id' : '${userId ?? ''}',
-          'page' : '${search != null ? '0' : page ?? ''}',
+          'page' : '${search != null ? '0' : listingId != null ? '0' : page ?? ''}',
           'name': search ?? '',
           'priceFrom' : '${priceFrom ?? ''}',
           'priceTo' : '${priceTo ?? ''}',
@@ -207,14 +225,31 @@ class ListingRemoteDatasourceImpl extends ListingRemoteDatasource{
   Future<Map<String, dynamic>> changeListingStatus(int? listingId, String? type) async{
     try {
 
-      
-
       final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(
         _dio,
         type == 'delete' ? RequestType.delete : RequestType.post,
         type == 'delete' ? ApiEndpoints.deleteListing : ApiEndpoints.changeListingStatus,
         queryParams: {'user_game_service_id': "$listingId"},
+        headers: headers,
+      );
+
+      return response!;
+    } on ServerException catch (e) {
+      throw ServerException(message: e.message);
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> deleteListingImage(int? id, String? path) async {
+    try {
+
+      final headers = await Helpers.getApiHeaders();
+      final response = await Helpers.sendRequest(
+        _dio,
+        RequestType.delete,
+        ApiEndpoints.deleteListingImage,
+        queryParams: {'id': "$id", "path" : path},
         headers: headers,
       );
 

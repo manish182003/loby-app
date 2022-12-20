@@ -58,6 +58,7 @@ class ApiEndpoints{
   static const String reportListing = "/report-listing-user";
   static const String changeListingStatus = "/change-user-game-service-listing-status";
   static const String deleteListing = "/delete-user-game-service";
+  static const String deleteListingImage = "/delete-s3-object";
 
 
   /// Chat APIs ///
@@ -84,6 +85,7 @@ class ApiEndpoints{
   static const String withdrawMoney = "/request-settlement";
   static const String getPaymentTransactions = "/get-transaction-history";
   static const String getWalletTransactions = "/get-wallet-transactions";
+  static const String getEarningTransactions = "/get-earning-history";
   static const String getFollowers = "/get-followers-users";
   static const String getFollowing = "/get-following-users";
   static const String submitFeedback = "/submit-feedback";
@@ -101,3 +103,14 @@ class ConditionalConstants{
   static const String fromMyListing = "myListing";
 
 }
+
+
+class ListingPageRedirection{
+
+  static const String search = "search";
+  static const String home = "home";
+  static const String profile = "profile";
+  static const String order = "order";
+
+}
+

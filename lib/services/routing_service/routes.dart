@@ -28,3 +28,4 @@ const String faqRoute = "/faq";
 const String legalTermsRoute = "/legal_terms";
 const String staticContentRoute = "/static_content";
 const String settlementRequestHistoryRoute = "/settlement-request";
+const String earningTransactionRoute = "/earning_transaction_page";

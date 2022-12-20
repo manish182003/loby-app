@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,12 +9,14 @@ import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/listing/configuration.dart';
 import 'package:loby/domain/entities/listing/selected_service_option.dart';
 import 'package:loby/domain/entities/listing/service_listing.dart';
+import 'package:loby/domain/entities/listing/user_game_service_image.dart';
 import 'package:loby/domain/usecases/listing/create_listing.dart';
 import 'package:loby/domain/usecases/listing/get_buyer_listings.dart';
 import 'package:loby/domain/usecases/listing/get_configurations.dart';
 import 'package:loby/domain/usecases/listing/report_listing.dart';
 
 import '../../../domain/usecases/listing/change_listing_status.dart';
+import '../../../domain/usecases/listing/delete_listing_image.dart';
 
 class ListingController extends GetxController{
   final GetConfigurations _getConfigurations;
@@ -20,6 +24,7 @@ class ListingController extends GetxController{
   final GetBuyerListings _getBuyerListings;
   final ReportListing _reportListing;
   final ChangeListingStatus _changeListingStatus;
+  final DeleteListingImage _deleteListingImage;
 
 
   ListingController({
@@ -28,11 +33,13 @@ class ListingController extends GetxController{
     required GetBuyerListings getBuyerListings,
     required ReportListing reportListing,
     required ChangeListingStatus changeListingStatus,
+    required DeleteListingImage deleteListingImage,
   }) : _getConfigurations = getConfigurations,
         _createListing = createListing,
   _getBuyerListings = getBuyerListings,
   _reportListing = reportListing,
-  _changeListingStatus = changeListingStatus;
+  _changeListingStatus = changeListingStatus,
+  _deleteListingImage = deleteListingImage;
 
 
   final errorMessage = ''.obs;
@@ -50,10 +57,14 @@ class ListingController extends GetxController{
   final serviceOptionId = <SelectedServiceOption>[].obs;
   final files = <PlatformFile>[].obs;
   final fileTypes = <int>[].obs;
+  final filePathLink = TextEditingController().obs;
   final optionAnswer = <TextEditingController>[].obs;
+
+  final downloadedListingFiles = <UserGameServiceImage>[].obs;
 
 
   final buyerListings = <ServiceListing>[].obs;
+  final buyerSingleListing = ServiceListing().obs;
   final isBuyerListingsFetching = false.obs;
   final areMoreListingAvailable = true.obs;
   final buyerListingPageNumber = 1.obs;
@@ -90,7 +101,7 @@ class ListingController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        // Helpers.toast(errorMessage.value);
+        Helpers.toast(errorMessage.value);
       },
           (success) {
             configuration = success.configuration;
@@ -116,6 +127,7 @@ class ListingController extends GetxController{
           serviceOptionId: serviceOptionId,
           files: files,
           fileTypes: fileTypes,
+          filePathLink: filePathLink.value.text,
           optionAnswer: optionAnswer,
 
 
@@ -129,9 +141,7 @@ class ListingController extends GetxController{
         Helpers.toast(errorMessage.value);
       },
           (success) {
-
             clearListing();
-
       },
     );
     return failureOrSuccess.isRight() ? true : false;
@@ -151,7 +161,10 @@ class ListingController extends GetxController{
     files.clear();
     fileTypes.clear();
     optionAnswer.clear();
+    filePathLink.value.clear();
     isServicesAvailable.value = false;
+
+    downloadedListingFiles.clear();
 
     tokenToRupee.value = "0";
     rupeeToToken.value = "0";
@@ -166,6 +179,7 @@ class ListingController extends GetxController{
     // print(areMoreListingAvailable);
 
     buyerListingPageNumber.value == 1 ? isBuyerListingsFetching(true) : isBuyerListingsFetching(false);
+
 
     if(areMoreListingAvailable.value){
       final failureOrSuccess = await _getBuyerListings(
@@ -188,35 +202,42 @@ class ListingController extends GetxController{
             (failure) {
           errorMessage.value = Helpers.convertFailureToMessage(failure);
           debugPrint(errorMessage.value);
-          // Helpers.toast(errorMessage.value);
+          Helpers.toast(errorMessage.value);
           isBuyerListingsFetching.value = false;
         },
             (success) {
 
-          if(from == 'other' || from == 'myProfile'){
-            areMoreListingAvailable.value = success.serviceListings.length == 10;
 
-            if (buyerListingPageNumber > 1) {
-              buyerListingsProfile.addAll(success.serviceListings);
-            } else {
-              buyerListingsProfile.value = success.serviceListings;
-            }
+              if(listingId != null){
+                buyerSingleListing.value = success.serviceListings.first;
+                areMoreListingAvailable.value = false;
+              }else{
 
-          }else{
-            maxFilterPrice.value = success.maxFilterPrice;
-            print("macxx price ${maxFilterPrice.value}");
-            areMoreListingAvailable.value = success.serviceListings.length == 10;
+                if(from == 'other' || from == 'myProfile'){
+                  areMoreListingAvailable.value = success.serviceListings.length == 10;
+                  if (buyerListingPageNumber > 1) {
+                    buyerListingsProfile.addAll(success.serviceListings);
+                  } else {
+                    buyerListingsProfile.value = success.serviceListings;
+                  }
+
+                }else{
+                  maxFilterPrice.value = success.maxFilterPrice;
+                  log("'${success.maxFilterPrice}', '${success.serviceListings}'");
+                  areMoreListingAvailable.value = success.serviceListings.length == 10;
+                  if (buyerListingPageNumber > 1) {
+                    buyerListings.addAll(success.serviceListings);
+                  } else {
+                    buyerListings.value = success.serviceListings;
+                  }
+                }}
 
 
-            if (buyerListingPageNumber > 1) {
-              buyerListings.addAll(success.serviceListings);
-            } else {
-              buyerListings.value = success.serviceListings;
-            }
-            }
-          buyerListingPageNumber.value++;
+              buyerListingPageNumber.value++;
+              debugPrint("Are More Listing Available $areMoreListingAvailable");
+              debugPrint("page $buyerListingPageNumber");
 
-          isBuyerListingsFetching.value = false;
+              isBuyerListingsFetching.value = false;
         },
       );
       return failureOrSuccess.isRight() ? true : false;
@@ -267,5 +288,28 @@ class ListingController extends GetxController{
     );
     return failureOrSuccess.isRight() ? true : false;
   }
+
+  Future<bool> deleteListingImage({required int id, required String path}) async {
+
+    final failureOrSuccess = await _deleteListingImage(
+      Params(listingParams: ListingParams(
+        imageId: id,
+        imagePath: path,
+      ),),
+    );
+
+    failureOrSuccess.fold(
+          (failure) {
+        errorMessage.value = Helpers.convertFailureToMessage(failure);
+        debugPrint(errorMessage.value);
+        Helpers.toast(errorMessage.value);
+      },
+          (success) {
+
+      },
+    );
+    return failureOrSuccess.isRight() ? true : false;
+  }
+
 
 }

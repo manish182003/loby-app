@@ -1,3 +1,4 @@
+// ignore_for_file: must_be_immutable
 import 'package:equatable/equatable.dart';
 import 'package:loby/domain/entities/auth/city.dart';
 import 'package:loby/domain/entities/auth/country.dart';
@@ -22,6 +23,7 @@ class User extends Equatable{
       this.stateId,
       this.dob,
       this.bio,
+        this.banTill,
       this.walletMoney,
       this.verifiedProfile,
       this.lobbyCoins,
@@ -66,7 +68,8 @@ class User extends Equatable{
   final int? stateId;
   final DateTime? dob;
   final String? bio;
-  final double? walletMoney;
+  final DateTime? banTill;
+  double? walletMoney;
   final bool? verifiedProfile;
   final int? lobbyCoins;
   final String? fcmToken;

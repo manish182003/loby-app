@@ -127,7 +127,6 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                     selectedCategoryName = value.name;
                     homeController.selectedCategoryId.value = value.id;
                     homeController.disclaimer.value = value.disclaimer;
-
                     _getConfigurations();
                   },
                 );
@@ -275,6 +274,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
               TextFieldWidget(
                 textEditingController: listingController.stockAvl.value,
                 hint: 'Available Stock',
+                type: 'stock',
                 isNumber: true,
                 isRequired: true,
               ),
@@ -793,6 +793,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
               child: TextFieldWidget(
                 textEditingController: listingController.price.value,
                 hint: "Enter Token",
+                type: "token",
                 isNumber: true,
                 isRequired: true,
                 onChanged: (value) {
@@ -807,6 +808,9 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                             int.tryParse(homeController.staticData[5].key!)!)
                             .floor()
                             .toString();
+                  }else{
+                    listingController.tokenToRupee.value = '0';
+                    listingController.rupeeToToken.value = '0';
                   }
                 },
               ),
@@ -935,7 +939,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   style: textTheme.headline4?.copyWith(color: textWhiteColor)),
               SizedBox(height: 1.h),
               TextFieldWidget(
-                textEditingController: fileLink,
+                textEditingController: listingController.filePathLink.value,
                 hint: 'Paste Youtube/Twitch/Drive Link',
                 type: 'optionalLink',
                 isRequired: true,

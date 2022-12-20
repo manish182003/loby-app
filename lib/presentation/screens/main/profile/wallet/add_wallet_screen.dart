@@ -133,12 +133,16 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
                                     child: TextFieldWidget(
                                       textEditingController: amount,
                                       hint: "Enter Token Quantity",
+                                      type: "add",
                                       isNumber: true,
                                       isRequired: true,
                                       onChanged: (value) {
                                         if (value.isNotEmpty) {
                                           profileController.tokenToRupee.value = (int.tryParse(value)! * int.tryParse(homeController.staticData[5].realValue!)!).floor().toString();
                                           profileController.rupeeToToken.value = (int.tryParse(value)! / int.tryParse(homeController.staticData[5].key!)!).floor().toString();
+                                        }else{
+                                          profileController.tokenToRupee.value = '0';
+                                          profileController.rupeeToToken.value = '0';
                                         }
                                       },
                                     )

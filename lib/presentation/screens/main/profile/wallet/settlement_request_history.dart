@@ -77,7 +77,7 @@ class _SettlementRequestHistoryState extends State<SettlementRequestHistory> {
                             final transaction = profileController.settlementRequests[index];
                             return transactionTile(
                               orderID: transaction.payoutId!,
-                              amount: transaction.amount.toString(),
+                              amount: transaction.amount!,
                               date: Helpers.formatDateTime(dateTime: transaction.createdAt!),
                               status: transaction.status!,
                             );
@@ -111,7 +111,7 @@ class _SettlementRequestHistoryState extends State<SettlementRequestHistory> {
   }
 
 
-  Widget transactionTile({required String orderID,required  String amount,required  String date,required  String status}) {
+  Widget transactionTile({required String orderID,required  double amount,required  String date,required  String status}) {
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
@@ -121,7 +121,7 @@ class _SettlementRequestHistoryState extends State<SettlementRequestHistory> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          RowWidget(text1: orderID, text2: 'Rs. $amount', isLast: true,),
+          RowWidget(text1: orderID, text2: 'Rs. ${amount.toStringAsFixed(2)}', isLast: true,),
           RowWidget(text1: date, text2: status, isLast: true, textColor: textLightColor,),
         ],
       ),

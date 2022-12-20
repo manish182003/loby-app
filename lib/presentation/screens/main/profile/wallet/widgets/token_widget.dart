@@ -16,10 +16,11 @@ class TokenWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         SvgPicture.asset("assets/icons/token.svg", height: size ?? 30, width: size ?? 30,),
         SizedBox(width: 1.w,),
-        text ?? Text(tokens!,
+        text ?? Text(tokens ?? '0',
             textAlign: TextAlign.center,
             style: size == 20 ? textTheme.headline3?.copyWith(
                 color: textColor ?? textTunaBlueColor,

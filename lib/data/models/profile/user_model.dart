@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_null_aware_operators
+// ignore_for_file: prefer_null_aware_operators, must_be_immutable
 
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/data/models/auth/city_model.dart';
@@ -27,6 +27,7 @@ class UserModel extends User{
         this.stateId,
         this.dob,
         this.bio,
+        this.banTill,
         this.walletMoney,
         this.verifiedProfile,
         this.lobbyCoins,
@@ -71,7 +72,8 @@ class UserModel extends User{
   final int? stateId;
   final DateTime? dob;
   final String? bio;
-  final double? walletMoney;
+  final DateTime? banTill;
+  double? walletMoney;
   final bool? verifiedProfile;
   final int? lobbyCoins;
   final String? fcmToken;
@@ -116,7 +118,8 @@ class UserModel extends User{
     stateId: json["state_id"],
     dob: json["dob"] == null ? null : DateTime.parse(json["dob"]),
     bio: json["bio"],
-    walletMoney: json["wallet_money"] == null ? null : double.tryParse(json["wallet_money"]),
+    banTill: json["ban_till"] == null ? null : DateTime.parse(json['ban_till']) ,
+    walletMoney: json["wallet_money"] == null ? null : double.tryParse(json["wallet_money"].toString()),
     verifiedProfile: json["verified_profile"],
     lobbyCoins: json["lobby_coins"],
     fcmToken: json["fcm_token"],
@@ -131,15 +134,15 @@ class UserModel extends User{
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
     updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
     followersCount: json["followersCount"] ?? 0,
-    listingsCount: json["listingsCount"],
-    orderCount: json["orderCount"],
+    listingsCount: json["listingsCount"] ?? 0,
+    orderCount: json["orderCount"] ?? 0,
     avgRatingCount: json["avg_rating_count"],
     commentCount: json["comment_count"],
-    userFollowStatus: json["user_follow_status"] == 0 ? 'N' : 'Y',
+    userFollowStatus: json["user_follow_status"] == 0 ? 'N' : json["user_follow_status"] == null ? 'N' : 'Y',
     state: json["state"] == null ? null : StateModel.fromJson(json["state"]),
     country: json["country"] == null ? null : CountryModel.fromJson(json["country"]),
     city: json["city"] == null ? null : CityModel.fromJson(json["city"]),
-    profileTags: json["profileTags"] == null ? null : json["profileTags"].map<ProfileTagModel>((profileTags) => ProfileTagModel.fromJson(profileTags)).toList(),
+    profileTags: json["profileTags"] == null ? [] : json["profileTags"].map<ProfileTagModel>((profileTags) => ProfileTagModel.fromJson(profileTags)).toList(),
     followStatus: json["userFollowingTo"] == null ? json["userFollowers"] == null ? null : json["userFollowers"]["followStatus"] == 0 ? 'N' : 'Y' : json["userFollowingTo"]["followStatus"] == 0 ? 'N' : 'Y',
   );
 

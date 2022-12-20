@@ -52,7 +52,7 @@ class _PaymentTransactionHistoryState extends State<PaymentTransactionHistory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(context: context, appBarName: 'Transaction History'),
+      appBar: appBar(context: context, appBarName: 'Payment Transaction'),
       body: Obx(() {
         if (profileController.isPaymentTransactionsFetching.value) {
           return const Center(child: CircularProgressIndicator());
@@ -76,7 +76,7 @@ class _PaymentTransactionHistoryState extends State<PaymentTransactionHistory> {
                             final transaction = profileController.paymentTransactions[index];
                             return transactionTile(
                               orderID: transaction.orderId!,
-                              amount: transaction.totalAmount.toString(),
+                              amount: transaction.totalAmount!,
                               date: Helpers.formatDateTime(dateTime: transaction.createdAt!),
                               status: transaction.paymentStatus!,
                             );
@@ -110,7 +110,7 @@ class _PaymentTransactionHistoryState extends State<PaymentTransactionHistory> {
   }
 
 
-  Widget transactionTile({required String orderID,required  String amount,required  String date,required  String status}) {
+  Widget transactionTile({required String orderID,required  double amount,required  String date,required  String status}) {
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
@@ -120,7 +120,7 @@ class _PaymentTransactionHistoryState extends State<PaymentTransactionHistory> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          RowWidget(text1: orderID, text2: 'Rs. $amount', isLast: true,),
+          RowWidget(text1: orderID, text2: 'Rs. ${amount.toStringAsFixed(2)}', isLast: true,),
           RowWidget(text1: date, text2: status, isLast: true, textColor: textLightColor,),
         ],
       ),

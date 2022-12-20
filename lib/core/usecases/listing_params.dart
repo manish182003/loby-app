@@ -28,11 +28,14 @@ class ListingParams extends Equatable {
   final String? sortByRating;
   final String? from;
   final String? type;
+  final int? imageId;
+  final String? imagePath;
+  final String? filePathLink;
 
 
 
 
-  const ListingParams({
+  const ListingParams( {
     this.priceFrom, this.priceTo, this.sortByPrice, this.sortByRating,
     this.categoryId,
     this.gameId,
@@ -43,7 +46,9 @@ class ListingParams extends Equatable {
     this.userGameServiceId,
     this.search,
     this.from,
-    this.type
+    this.type,
+    this.imageId, this.imagePath,
+    this.filePathLink,
   });
 
   @override

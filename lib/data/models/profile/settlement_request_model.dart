@@ -1,3 +1,4 @@
+// ignore_for_file: overridden_fields, annotate_overrides
 import 'package:equatable/equatable.dart';
 
 import '../../../domain/entities/profile/settlement_request.dart';
@@ -21,8 +22,8 @@ class SettlementRequestModel extends SettlementRequest{
 
   final int? id;
   final int? userId;
-  final int? amount;
-  final int? token;
+  final double? amount;
+  final String? token;
   final int? bankDetailId;
   final String? status;
   final String? payoutId;
@@ -36,7 +37,7 @@ class SettlementRequestModel extends SettlementRequest{
   factory SettlementRequestModel.fromJson(Map<String, dynamic> json) => SettlementRequestModel(
     id: json["id"],
     userId: json["user_id"],
-    amount: json["amount"],
+    amount: json["amount"] == null ? 0.0: double.tryParse(json["amount"]),
     token: json["token"],
     bankDetailId: json["bank_detail_id"],
     status: json["status"],

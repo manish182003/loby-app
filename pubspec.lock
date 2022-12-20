@@ -524,6 +524,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.5.5+3"
+  flutter_staggered_grid_view:
+    dependency: "direct main"
+    description:
+      name: flutter_staggered_grid_view
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.2"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -758,6 +765,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+  moment_dart:
+    dependency: "direct main"
+    description:
+      name: moment_dart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.12.0"
   nested:
     dependency: transitive
     description:

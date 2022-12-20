@@ -84,11 +84,11 @@ class BottomDialog {
   }
 
   Widget _buildCongratulationsText() {
-    return tileName != null? Padding(
+    return tileName != null ? Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Text(
-        tileName?? 'Loby',
-        style: textTheme?.headline2?.copyWith(color: titleColor, fontWeight: FontWeight.w400),
+        tileName ?? 'Loby',
+        style: textTheme?.headline2?.copyWith(color: titleColor ?? aquaGreenColor, fontWeight: FontWeight.w400),
       ),
     ) :  Container();
   }

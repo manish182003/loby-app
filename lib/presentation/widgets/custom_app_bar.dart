@@ -52,8 +52,7 @@ class CustomAppBar extends StatelessWidget {
                     appBarName!,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: textTheme.headline2
-                        ?.copyWith(color: txtColor ?? textWhiteColor),
+                    style: textTheme.headline2?.copyWith(color: txtColor ?? textWhiteColor),
                   ),
                 ),
               ),

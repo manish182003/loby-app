@@ -112,7 +112,7 @@ class HomeController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        // Helpers.toast(errorMessage.value);
+        Helpers.toast(errorMessage.value);
         isCategoryFetching(false);
       },
           (success) {
@@ -139,7 +139,7 @@ class HomeController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        // Helpers.toast(errorMessage.value);
+        Helpers.toast(errorMessage.value);
         isGamesFetching(false);
 
 
@@ -173,7 +173,7 @@ class HomeController extends GetxController{
             (failure) {
           errorMessage.value = Helpers.convertFailureToMessage(failure);
           debugPrint(errorMessage.value);
-          // Helpers.toast(errorMessage.value);
+          Helpers.toast(errorMessage.value);
           isCategoryGamesFetching(false);
 
         },
@@ -204,7 +204,7 @@ class HomeController extends GetxController{
             (failure) {
           errorMessage.value = Helpers.convertFailureToMessage(failure);
           debugPrint(errorMessage.value);
-          // Helpers.toast(errorMessage.value);
+          Helpers.toast(errorMessage.value);
           isNotificationFetching(false);
         },
             (success) {
@@ -260,7 +260,7 @@ class HomeController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        Helpers.toast("Something Went Wrong in $type Api");
+        // Helpers.toast("Something Went Wrong in $type Api");
       },
           (success) {
 
@@ -320,7 +320,7 @@ class HomeController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        // Helpers.toast(errorMessage.value);
+        Helpers.toast(errorMessage.value);
         isStaticDataFetching(false);
       },
           (success) {

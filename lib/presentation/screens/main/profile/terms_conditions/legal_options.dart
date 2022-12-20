@@ -14,7 +14,7 @@ class LegalOptions extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      appBar: appBar(context: context),
+      appBar: appBar(context: context, appBarName: 'Terms & Conditions'),
       body: BodyPaddingWidget(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

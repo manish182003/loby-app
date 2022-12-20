@@ -67,7 +67,7 @@ class ChatController extends GetxController{
             (failure) {
           errorMessage.value = Helpers.convertFailureToMessage(failure);
           debugPrint(errorMessage.value);
-          // Helpers.toast(errorMessage.value);
+          Helpers.toast(errorMessage.value);
           isChatsFetching(false);
         },
             (success) {
@@ -101,7 +101,7 @@ class ChatController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        // Helpers.toast(errorMessage.value);
+        Helpers.toast(errorMessage.value);
         isMessagesFetching(false);
       },
           (success) {
@@ -146,11 +146,12 @@ class ChatController extends GetxController{
               'name' : i.orderId == null ? "" : i.userOrder?.userGameService?.title,
               'desc' : i.orderId == null ? "" : i.userOrder?.userGameService?.description,
               'category' : i.orderId == null ? "" : i.userOrder?.userGameService?.category!.name,
-              'price' : i.orderId == null ? "" : i.userOrder?.userGameService?.price,
+              'price' : i.orderId == null ? "" : i.userOrder?.price,
             }
           });
         }
         chatMessages.value = chatMessagesMap.map((e) => types.Message.fromJson(e)).toList();
+        chatMessages.refresh();
         isMessagesFetching(false);
       },
     );
@@ -174,7 +175,7 @@ class ChatController extends GetxController{
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        // Helpers.toast(errorMessage.value);
+        Helpers.toast(errorMessage.value);
       },
           (success) {
             if(coreController.socket.connected){
@@ -211,7 +212,5 @@ class ChatController extends GetxController{
     );
     return failureOrSuccess.isRight() ? true : false;
   }
-
-
 
 }

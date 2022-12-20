@@ -64,7 +64,6 @@ class _CarouselState extends State<Carousel> {
   }
 
 
-
   @override
   void dispose() {
     videoPlayerController.dispose();
@@ -76,6 +75,7 @@ class _CarouselState extends State<Carousel> {
   @override
   Widget build(BuildContext context) {
     final list = widget.images.where((element) => element.type != 3).toList();
+
     return Stack(
       children: [
         CarouselSlider.builder(
@@ -102,8 +102,7 @@ class _CarouselState extends State<Carousel> {
                 urlImage: widget.images[index].path,
                 index: index,
                 onTap: (){
-                  Navigator.push(context, CupertinoPageRoute(
-                      builder: (context) => FullImageView(image: list[index])));
+                  Navigator.push(context, CupertinoPageRoute(builder: (context) => FullImageView(image: list[index])));
                 }
               );
             }else if(list[index].type == 1){
@@ -245,10 +244,7 @@ class _CarouselState extends State<Carousel> {
   }
 
   void _videoPlayerDialog(BuildContext context) {
-    print("aspect ratio ${videoPlayerController.value.aspectRatio}");
-    print("width ${videoPlayerController.value.size.width}");
-    print("height ${videoPlayerController.value.size.height}");
-    // print("height ${chewieController.value.size.height}");
+
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -264,28 +260,26 @@ class _CarouselState extends State<Carousel> {
             backgroundColor: backgroundDarkJungleGreenColor,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16.0)),
-            child: SizedBox(
-              height: videoPlayerController.value.size.height / 2,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    InkWell(
-                        onTap: (){
-                          videoPlayerController.pause();
-                          chewieController?.pause();
-                          Navigator.pop(context);
-                        }, child: const Icon(Icons.close, color: whiteColor)),
-                    SizedBox(height: 2.h),
-                    AspectRatio(
-                      aspectRatio: videoPlayerController.value.aspectRatio,
-                      child: Chewie(
-                        controller: chewieController!,
-                      ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  InkWell(
+                      onTap: (){
+                        videoPlayerController.pause();
+                        chewieController?.pause();
+                        Navigator.pop(context);
+                      }, child: const Icon(Icons.close, color: whiteColor)),
+                  SizedBox(height: 2.h),
+                  AspectRatio(
+                    aspectRatio: videoPlayerController.value.aspectRatio,
+                    child: Chewie(
+                      controller: chewieController!,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

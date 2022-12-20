@@ -13,10 +13,11 @@ class ConfirmationBottomDialog {
   String? contentName;
   String? contentLinkName;
   String? contentNameLast;
+  Widget? confirmationWidget;
   dynamic yesBtnClick;
   dynamic cancelBtnClick;
 
-  ConfirmationBottomDialog({this.textTheme, this.tileName, this.titleColor, this.contentName, this.contentLinkName, this.contentNameLast, this.yesBtnClick, this.cancelBtnClick});
+  ConfirmationBottomDialog({this.textTheme, this.tileName, this.titleColor, this.contentName, this.contentLinkName, this.contentNameLast, this.confirmationWidget, this.yesBtnClick, this.cancelBtnClick});
 
   void showBottomDialog(BuildContext context) {
     showGeneralDialog(
@@ -63,7 +64,7 @@ class ConfirmationBottomDialog {
           child: Column(
             children: [
               const SizedBox(height: 16),
-              _buildContentText(),
+              confirmationWidget ?? _buildContentText(),
               const SizedBox(height: 44),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -145,14 +146,14 @@ class ConfirmationBottomDialog {
         text: TextSpan(
           children: [
             TextSpan(
-              text: contentName??'',
+              text: contentName ?? '',
               style: textTheme?.headline3?.copyWith(color: textLightColor),
             ),
             TextSpan(
-                text: contentLinkName?? '',
+                text: contentLinkName ?? '',
                 style: textTheme?.headline3?.copyWith(color: aquaGreenColor)),
             TextSpan(
-              text: contentNameLast??'',
+              text: contentNameLast ??'',
               style: textTheme?.headline3?.copyWith(color: textLightColor),
             ),
           ],

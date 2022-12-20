@@ -8,6 +8,7 @@ import 'package:loby/presentation/widgets/custom_cached_network_image.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../../core/theme/colors.dart';
+import '../../../../../widgets/custom_loader.dart';
 
 class UserDuelsWidget extends StatefulWidget {
   final User user;
@@ -53,7 +54,9 @@ class _UserDuelsWidgetState extends State<UserDuelsWidget> {
     return Obx(() {
       if(profileController.isDuelDetailsFetching.value){
         return const Center(child: CircularProgressIndicator(),);
-      }else{
+      }if(profileController.duelDetailsList.isEmpty){
+        return const NoDataFoundWidget();
+      } else{
         final duelDetailsCount = profileController.duelDetailsCount;
         return Column(
           children: <Widget>[

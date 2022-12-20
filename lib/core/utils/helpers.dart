@@ -24,6 +24,7 @@ import 'dart:math';
 import 'exceptions.dart';
 import 'failure.dart';
 
+
 enum RequestType { get, post, delete }
 
 class Helpers {
@@ -71,9 +72,41 @@ class Helpers {
     }
   }
 
+
+  static validateTokenLimit(String? value) {
+    if(value == null || value.isEmpty){
+      return "Field Required";
+    }else if (int.tryParse(value)! > 100000) {
+      return 'Max Limit 1,00,000';
+    } else {
+      return null;
+    }
+  }
+
+  static validateStockLimit(String? value) {
+    if(value == null || value.isEmpty){
+      return "Field Required";
+    }else if (int.tryParse(value)! > 999) {
+      return 'Max Limit 999';
+    } else {
+      return null;
+    }
+  }
+
+
   static validatePassword(String value) {
     if (value.length < 6) {
       return 'Password should be minimum 6 characters long';
+    } else {
+      return null;
+    }
+  }
+
+  static validateWalletAdd(String? value) {
+    if(value == null || value.isEmpty){
+      return "Field Required";
+    }else if (int.tryParse(value)! > 5000 || int.tryParse(value)! < 20) {
+      return 'Add tokens between 20 - 5,000';
     } else {
       return null;
     }
@@ -83,6 +116,8 @@ class Helpers {
     if(value != ''){
       if (balance - double.parse(value) < 200) {
         return 'Minimum Balance Left Should be 200';
+      } else if(int.tryParse(value)! > 5000 || int.tryParse(value)! < 50){
+        return 'Withdraw tokens between 50 - 5,000';
       } else {
         return null;
       }
@@ -90,6 +125,8 @@ class Helpers {
       return 'Field Required';
     }
   }
+
+
 
   static validateStartDate(DateTime? value) {
     if (value == null) {
@@ -203,6 +240,14 @@ class Helpers {
 
     debugPrint("Payload ${queryParams ?? data}");
 
+
+    // bool isDeviceConnected = await InternetConnectionChecker().hasConnection;
+    // if (!isDeviceConnected) {
+    //   runApp(const NoInternetConnection());
+    // }else{
+    //   runMainApp();
+    // }
+
     try {
       Response response;
 
@@ -254,11 +299,10 @@ class Helpers {
       }
     } on ServerException catch (e) {
       throw ServerException(message: e.message, code: e.code);
-    } catch (e) {
-      throw ServerException(message: e.toString());
+    } on DioError catch (e) {
+      throw ServerException(message: e.error is SocketException ? 'No Internet Connection' : e.error.toString());
     }
   }
-
 
 
   static Future getApiToken() async {
@@ -293,7 +337,6 @@ class Helpers {
     if (failure is ServerFailure) {
       return failure.message;
     }
-
     return "Unknown error occurred";
   }
 
@@ -442,8 +485,10 @@ class Helpers {
     final format = DateFormat.yMd().add_jms().format(dateTime);
     final dateSplit = format.split(" ")[0].split("/");
     final timeSplit = format.split(" ")[1].split(":");
-    final result = "${formatDigits(dateSplit[1])}/${formatDigits(dateSplit[0])}/${dateSplit[2]} at ${formatDigits(timeSplit[0])}:${timeSplit[1]} ${format.split(" ")[2]}";
+    final result = "${formatDigits(dateSplit[1])}/${formatDigits(dateSplit[0])}/${dateSplit[2]} ${formatDigits(timeSplit[0])}:${timeSplit[1]} ${format.split(" ")[2]}";
     return result;
+
+    // dateTime.toMoment().toLocal().format("DD/MM/YYYY hh:mm A").toString();
   }
 
   static formatDigits(String number){
@@ -455,7 +500,8 @@ class Helpers {
   }
 
   static String? getListingImage(ServiceListing listing){
-    return listing.userGameServiceImages!.isEmpty ? null : listing.userGameServiceImages?.first.type == 2 ? listing.userGameServiceImages!.first.path! : null;
+    final listingImages = listing.userGameServiceImages!.where((element) => element.type != 3).toList();
+    return listingImages.isEmpty ? null : listingImages.first.path!;
   }
 
   static Future<File> urlToFile(String imageUrl) async {

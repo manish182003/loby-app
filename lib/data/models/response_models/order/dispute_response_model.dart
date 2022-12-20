@@ -21,8 +21,8 @@ class DisputeResponseModel extends DisputeResponse {
 
   factory DisputeResponseModel.fromJSON(Map<String, dynamic> json) =>
       DisputeResponseModel(
-        count: json['data']['count'],
-        disputes: (json['data']['rows'] as List<dynamic>)
+        count: json['data']['count'] ?? 0,
+        disputes: json['data']['rows'] == null ? [DisputeModel.fromJson(json['data'])] : (json['data']['rows'] as List<dynamic>)
             .map<DisputeModel>((dispute) => DisputeModel.fromJson(dispute))
             .toList(),
       );

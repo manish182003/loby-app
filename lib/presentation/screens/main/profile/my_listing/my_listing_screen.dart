@@ -5,11 +5,8 @@ import 'package:loby/presentation/getx/controllers/listing_controller.dart';
 import 'package:loby/presentation/screens/main/profile/my_listing/widgets/my_listing_tile.dart';
 import 'package:loby/presentation/widgets/body_padding_widget.dart';
 import 'package:loby/presentation/widgets/custom_loader.dart';
-import 'package:sizer/sizer.dart';
-
-import '../../../../../core/theme/colors.dart';
 import '../../../../widgets/custom_app_bar.dart';
-import '../../home/widgets/ItemList.dart';
+
 
 class MyListingScreen extends StatefulWidget {
   const MyListingScreen({Key? key}) : super(key: key);
@@ -96,7 +93,6 @@ class _MyListingScreenState extends State<MyListingScreen> {
             },
           );
         }
-
       }),
     );
   }

@@ -90,8 +90,7 @@ class DisputeWidget extends StatelessWidget {
                                   maxLines: 1,
                                   textAlign: TextAlign.center,
                                   overflow: TextOverflow.ellipsis,
-                                  style: textTheme.headline6
-                                      ?.copyWith(color: textWhiteColor)),
+                                  style: textTheme.headline6?.copyWith(color: textWhiteColor)),
                             ),
                           ),
                         ),
@@ -153,6 +152,24 @@ class DisputeWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
+                  dispute.disputeWinner == 'None' ? const SizedBox() : Align(
+                    alignment: Alignment.center,
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'Winner : ',
+                            style: textTheme.headline6?.copyWith(color: textLightColor),
+                          ),
+                          TextSpan(
+                              text: dispute.disputeWinner,
+                              style: textTheme.headline6?.copyWith(color: textWhiteColor)),
+                        ],
+                      ),
+                    ),
+                  ) ,
+                  dispute.disputeWinner == 'None' ? const SizedBox(height: 0) : const SizedBox(height: 8),
                 Align(
                   alignment: Alignment.center,
                   child: RichText(

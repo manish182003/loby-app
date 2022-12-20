@@ -118,7 +118,7 @@ class _SignInScreenState extends State<SignInScreen> {
       }else{
         await authController.loggedUserIn();
         Helpers.hideLoader();
-        context.pushNamed(mainPage);
+        context.goNamed(mainPage);
       }
     }else{
       Helpers.hideLoader();

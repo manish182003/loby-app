@@ -38,6 +38,8 @@ abstract class ProfileRemoteDatasource{
 
   Future<WalletTransactionResponseModel> getWalletTransactions(int? page, String? type);
 
+  Future<WalletTransactionResponseModel> getEarningTransactions(int? page, String? type);
+
   Future<FollowerResponseModel> getFollowers(int? page, String? type);
 
   Future<Map<String, dynamic>> submitFeedback(String? feedback, String? email);

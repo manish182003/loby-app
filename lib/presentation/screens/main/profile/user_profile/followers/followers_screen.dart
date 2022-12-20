@@ -8,6 +8,7 @@ import 'package:loby/presentation/widgets/custom_app_bar.dart';
 import 'package:loby/presentation/widgets/custom_cached_network_image.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../../core/theme/colors.dart';
+import '../../../../../widgets/profile_picture.dart';
 import 'follower_tab.dart';
 
 class FollowersScreen extends StatefulWidget {
@@ -61,13 +62,7 @@ class _FollowersScreenState extends State<FollowersScreen> {
                                     radius: 36,
                                     child: Padding(
                                       padding: const EdgeInsets.all(1.0),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(36),
-                                        child: CustomCachedNetworkImage(
-                                          imageUrl: profileController.profile.image,
-                                          name: profileController.profile.displayName,
-                                        ),
-                                      ),
+                                      child: ProfilePicture(profile: profileController.profile, radius: 36,),
                                     ), //CircleAvatar
                                   ),
                                   GestureDetector(
@@ -89,11 +84,6 @@ class _FollowersScreenState extends State<FollowersScreen> {
                                                     color: textWhiteColor)),
                                           ),
                                           const SizedBox(width: 8.0),
-                                          profileController.profile.verifiedProfile ?? false ? SvgPicture.asset(
-                                            'assets/icons/verified_user_bedge.svg',
-                                            height: 15,
-                                            width: 15,
-                                          ) : const SizedBox(),
                                         ],
                                       ),
                                     ),

@@ -33,7 +33,7 @@ class UserAboutWidget extends StatelessWidget {
         SizedBox(
           width: double.infinity,
           child: MyText(
-            name: user.name!,
+            name: user.name ?? '',
             textColor: textWhiteColor,
             myBackgroundColor: textFieldColor,
           ),
@@ -105,7 +105,7 @@ class UserAboutWidget extends StatelessWidget {
         SizedBox(
           width: double.infinity,
           child: MyText(
-            name: user.profileTags!.map((e) => e.name).join(", "),
+            name: user.profileTags?.map((e) => e.name).join(", ") ?? '',
             textColor: textWhiteColor,
             myBackgroundColor: textFieldColor,
           ),
@@ -138,7 +138,7 @@ class UserAboutWidget extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Text(
-            Helpers.formatDateTime(dateTime: user.createdAt!),
+          Helpers.formatDateTime(dateTime: user.createdAt ?? DateTime.now()),
           style: textTheme.headline5?.copyWith(color: whiteColor),
           textAlign: TextAlign.left,
         ),

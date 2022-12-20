@@ -11,6 +11,7 @@ class DuelDetails extends Equatable {
     this.winnerSelectedBuyer,
     this.winnerSelectedSeller,
     this.userGameServiceId,
+    this.disputeWinner,
     this.createdAt,
     this.updatedAt,
     this.winner,
@@ -24,6 +25,7 @@ class DuelDetails extends Equatable {
   final int? winnerSelectedBuyer;
   final int? winnerSelectedSeller;
   final int? userGameServiceId;
+  final int? disputeWinner;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final User? winner;

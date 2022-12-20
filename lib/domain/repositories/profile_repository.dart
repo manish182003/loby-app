@@ -48,6 +48,8 @@ abstract class ProfileRepository{
 
   Future<Either<Failure, double>> getTotalEarning();
 
+  Future<Either<Failure, WalletTransactionResponse>> getEarningTransactions({int? page, String? type});
+
 
 }
 

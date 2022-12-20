@@ -18,6 +18,7 @@ class ServiceListingModel extends ServiceListing{
     this.description,
     this.price,
     this.stockAvl,
+    this.quantity = 1,
     this.edt,
     this.userId,
     this.priceUnitId,
@@ -40,7 +41,8 @@ class ServiceListingModel extends ServiceListing{
   final String? title;
   final String? description;
   final int? price;
-  final int? stockAvl;
+  int? stockAvl;
+  int quantity;
   final int? edt;
   final int? userId;
   final int? priceUnitId;
@@ -105,5 +107,5 @@ class ServiceListingModel extends ServiceListing{
   };
 
   @override
-  List<Object?> get props => [id, categoryId, gameId, title];
+  List<Object?> get props => [id, categoryId, gameId, title, userGameServiceImages];
 }

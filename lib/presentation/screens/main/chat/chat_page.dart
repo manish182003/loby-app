@@ -55,24 +55,23 @@ class _ChatPageState extends State<ChatPage> {
       chatController.getMessages(chatId: widget.chatId);
       profileController.getProfile();
     });
-
-    print("chat ${widget.chatId}");
   }
 
   @override
   void dispose() {
-    chatController.chatMessagesMap.clear();
-    // chatController.messages.clear();
-    chatController.chatMessages.clear();
+
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+
+      chatController.chatMessagesMap.clear();
+      // chatController.messages.clear();
+      chatController.chatMessages.clear();
+
       chatController.chatsPageNumber.value = 1;
       chatController.areMoreChatsAvailable.value = true;
       chatController.getChats();
     });
 
-
-    // coreController.socket.off('receive_message');
     super.dispose();
   }
 
@@ -88,7 +87,7 @@ class _ChatPageState extends State<ChatPage> {
         if(chatController.isMessagesFetching.value || profileController.isProfileFetching.value){
           return const CustomLoader();
         }else {
-          chatController.chatMessages.refresh();
+          // chatController.chatMessages.refresh();
           _user = types.User(id: widget.senderId.toString());
           return Column(
             children: [
@@ -96,12 +95,12 @@ class _ChatPageState extends State<ChatPage> {
                 padding: const EdgeInsets.all(6.0),
                 margin: const EdgeInsets.symmetric(horizontal: 15.0),
                 decoration: BoxDecoration(
-                  border: Border.all(color: textErrorColor, width: 1),
+                  border: Border.all(color: carminePinkColor, width: 1),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: Text(
                   'Disclaimer : This chat may be reviewed by Loby Team in case of a dispute. Use of inappropriate language will lead to suspension of user account & might result to legal actions.',
-                  style: textTheme.headline6?.copyWith(color: textErrorColor),
+                  style: textTheme.headline6?.copyWith(color: carminePinkColor),
                 ),
               ),
               Expanded(

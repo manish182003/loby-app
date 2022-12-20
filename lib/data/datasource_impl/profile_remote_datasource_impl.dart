@@ -314,8 +314,6 @@ class ProfileRemoteDatasourceImpl extends ProfileRemoteDatasource{
         headers: headers,
       );
 
-      log("$response");
-
       return WalletTransactionResponseModel.fromJSON(response!);
     } on ServerException catch (e) {
       throw ServerException(message: e.message);
@@ -398,6 +396,24 @@ class ProfileRemoteDatasourceImpl extends ProfileRemoteDatasource{
       );
 
       return double.tryParse(response!["data"]["totalEarning"] ?? "0.00") ?? 0.00;
+    } on ServerException catch (e) {
+      throw ServerException(message: e.message);
+    }
+  }
+
+  @override
+  Future<WalletTransactionResponseModel> getEarningTransactions(int? page, String? type) async{
+    try {
+      final headers = await Helpers.getApiHeaders();
+      final response = await Helpers.sendRequest(
+        _dio,
+        RequestType.get,
+        ApiEndpoints.getEarningTransactions,
+        queryParams: {'page': page ?? "", 'type' : type ?? ""},
+        headers: headers,
+      );
+
+      return WalletTransactionResponseModel.fromJSON(response!);
     } on ServerException catch (e) {
       throw ServerException(message: e.message);
     }

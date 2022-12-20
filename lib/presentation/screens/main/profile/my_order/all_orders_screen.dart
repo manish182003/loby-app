@@ -18,6 +18,7 @@ class _AllOrdersTabScreenState extends State<AllOrdersTabScreen> {
   OrderController orderController = Get.find<OrderController>();
   final controller = ScrollController();
 
+
   @override
   void initState() {
     // TODO: implement initState
@@ -30,15 +31,16 @@ class _AllOrdersTabScreenState extends State<AllOrdersTabScreen> {
     });
   }
 
+
   @override
   void dispose() {
     controller.dispose();
     super.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
-
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: Obx(() {
