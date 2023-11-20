@@ -14,6 +14,7 @@ class Login extends UseCase<bool, Params> {
   @override
   Future<Either<Failure, bool>> call(Params params) {
     return _repository.login(
+      mobile: params.authParams?.mobile,
       email: params.authParams?.email,
       password: params.authParams?.password,
       socialLoginId: params.authParams?.socialLoginId,

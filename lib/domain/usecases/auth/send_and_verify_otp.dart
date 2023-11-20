@@ -14,7 +14,7 @@ class SendAndVerifyOTP extends UseCase<Map<String, dynamic>, Params> {
   @override
   Future<Either<Failure, Map<String, dynamic>>> call(Params params) {
     return _repository.sendAndVerifyOTP(
-      email: params.authParams?.email,
+      mobile: params.authParams?.mobile,
       otp: params.authParams?.otp,
     );
   }

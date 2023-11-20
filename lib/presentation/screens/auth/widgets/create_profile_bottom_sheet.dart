@@ -21,8 +21,8 @@ import '../../../widgets/buttons/custom_button.dart';
 
 
 class CreateProfileCard extends StatefulWidget {
-  final String from;
-  const CreateProfileCard({Key? key, required this.from}) : super(key: key);
+  final String? from;
+  const CreateProfileCard({Key? key, this.from}) : super(key: key);
 
   @override
   State<CreateProfileCard> createState() => _CreateProfileCardState();
@@ -75,7 +75,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                   textEditingController: authController.fullName.value,
                   title: "Full Name",
                   hint: "Ex: John Doe",
-                  isRequired: true,
+                  isRequired: false,
                 ),
                 SizedBox(height: 3.h,),
                 TextFieldWidget(
@@ -83,7 +83,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                   title: "Display Name",
                   hint: "Ex: Commander",
                   type: 'username',
-                  isRequired: true,
+                  isRequired: false,
                   onChanged: (value){
                     authController.usernameString.value = value;
                     if(value.isNotEmpty){
@@ -105,7 +105,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                   selectedSuggestion: TextEditingController(text: authController.selectedCountry.value.name),
                   hint: 'Select Countries',
                   title: 'Country',
-                  isRequired: true,
+                  isRequired: false,
                   suggestionsCallback: (pattern) async {
                     await authController.getCountries(search: pattern);
                     List finalList = [];
@@ -127,7 +127,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                   selectedSuggestion: TextEditingController(text: authController.selectedState.value.name),
                   hint: 'Select State',
                   title: 'State',
-                  isRequired: true,
+                  isRequired: false,
                   suggestionsCallback: (pattern) async {
                     await authController.getStates(search: pattern, countryId: authController.selectedCountry.value.id);
                     List finalList = [];
@@ -150,7 +150,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                   selectedSuggestion: TextEditingController(text: authController.selectedCity.value.name),
                   hint: 'Select City',
                   title: 'City',
-                  isRequired: true,
+                  isRequired: false,
                   suggestionsCallback: (pattern) async {
                     await authController.getCities(search: pattern, stateId: authController.selectedState.value.id);
                     List finalList = [];
@@ -173,7 +173,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                   type: "date",
                   title: "Date Of Birth",
                   hint: "Select DOB",
-                  isRequired: true,
+                  isRequired: false,
                 ),
                 SizedBox(height: 3.h,),
                 AutoCompleteField(
@@ -182,7 +182,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                   hint: 'Search Tag',
                   icon: 'assets/icons/search.svg',
                   isMultiple: true,
-                  isRequired: true,
+                  isRequired: false,
                   selectedValuesList: authController.selectedProfileTags,
                   suggestionsCallback: (pattern) async {
                     await authController.getProfileTags(search: pattern);
@@ -243,7 +243,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                   textEditingController: authController.bio.value,
                   title: "Bio",
                   hint: "Ex: John Doe",
-                  isRequired: true,
+                  isRequired: false,
                   maxLines: 5,
                   textInputAction: TextInputAction.newline,
                 ),
@@ -257,16 +257,17 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                     onTap: () async {
                       if (_formKey.currentState!.validate()) {
                         await Helpers.loader();
-                        final isSuccess = await authController.updateProfile(from: widget.from);
+                        final isSuccess = await authController.updateProfile();
                         await Helpers.hideLoader();
                         if (isSuccess) {
-                          if(widget.from == 'signIn'){
-                            Navigator.pop(context);
-                            context.goNamed(mainPage);
-                          }else{
-                            await profileController.getProfile();
-                            Navigator.pop(context);
-                          }
+                          context.goNamed(mainPage);
+                          // if(widget.from == 'signIn'){
+                          //   Navigator.pop(context);
+                          //   context.goNamed(mainPage);
+                          // }else{
+                          //   await profileController.getProfile();
+                          //   Navigator.pop(context);
+                          // }
                         }
                       }
                     },

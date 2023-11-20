@@ -3,39 +3,40 @@ import 'package:flutter/services.dart';
 import 'package:loby/core/theme/colors.dart';
 import 'package:sizer/sizer.dart';
 
-
 class CustomTextField extends StatefulWidget {
-  const CustomTextField({Key? key,
-    this.input,
-    this.hintText,
-    this.length,
-    this.onTap,
-    this.labelText,
-    this.helperText,
-    this.onSaved,
-    this.validator,
-    this.preFilledValue,
-    this.onFieldSubmitted,
-    this.isReadableOnly = false,
-    this.onChanged,
-    this.keyboardType,
-    this.inputFormatters,
-    this.textInputAction,
-    this.enabled = true,
-    this.textSize,
-    this.errorText,
-    this.maxLines = 1,
-    this.textCapitalization,
-    this.borderRadius = 4,
-    this.borderColor = Colors.grey,
-    this.focusedBorderColor = Colors.grey,
-    this.enabledBorderColor = Colors.grey,
-    this.onEditingComplete,
-    this.focusNode,
-    this.iconButton,
-    this.obscureText = false,
-    this.scrollBottomPadding
-  }) : super(key: key);
+  const CustomTextField(
+      {Key? key,
+      this.input,
+      this.hintText,
+      this.length,
+      this.onTap,
+      this.labelText,
+      this.helperText,
+      this.onSaved,
+      this.validator,
+      this.preFilledValue,
+      this.onFieldSubmitted,
+      this.isReadableOnly = false,
+      this.onChanged,
+      this.keyboardType,
+      this.inputFormatters,
+      this.textInputAction,
+      this.enabled = true,
+      this.textSize,
+      this.errorText,
+      this.maxLines = 1,
+      this.textCapitalization,
+      this.borderRadius = 4,
+      this.borderColor = Colors.grey,
+      this.focusedBorderColor = Colors.grey,
+      this.enabledBorderColor = Colors.grey,
+      this.onEditingComplete,
+      this.focusNode,
+      this.iconButton,
+      this.prefix,
+      this.obscureText = false,
+      this.scrollBottomPadding})
+      : super(key: key);
   final TextEditingController? input;
   final String? hintText, labelText, helperText, preFilledValue, errorText;
   final TextInputAction? textInputAction;
@@ -57,13 +58,13 @@ class CustomTextField extends StatefulWidget {
   final IconButton? iconButton;
   final bool obscureText;
   final double? scrollBottomPadding;
+  final String? prefix;
 
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
-
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -86,57 +87,50 @@ class _CustomTextFieldState extends State<CustomTextField> {
       textCapitalization: widget.textCapitalization!,
       obscureText: widget.obscureText,
       // maxLengthEnforced: true,
-      style: textTheme.headline4?.copyWith(color: widget.isReadableOnly ? textInputTitleColor : textWhiteColor),
+      style: textTheme.headline4?.copyWith(
+          color: widget.isReadableOnly ? textInputTitleColor : textWhiteColor),
       scrollPadding: EdgeInsets.only(bottom: widget.scrollBottomPadding!),
 
       decoration: InputDecoration(
+      prefixText: widget.prefix,
           suffixIcon: widget.iconButton,
-        counterText: '',
-        filled: true,
-        fillColor: textFieldColor,
-
+          counterText: '',
+          filled: true,
+          fillColor: textFieldColor,
           focusedBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: aquaGreenColor, width: 0.5),
             borderRadius: BorderRadius.circular(8.0),
           ),
-          border:  OutlineInputBorder(
-              borderSide: const BorderSide(color: textFieldColor, width: 0),
-              borderRadius: BorderRadius.circular(8.0),
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(color: textFieldColor, width: 0),
+            borderRadius: BorderRadius.circular(8.0),
           ),
-
           enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color:textFieldColor, width: 0),
-              borderRadius:  BorderRadius.circular(8.0),),
-
+            borderSide: const BorderSide(color: textFieldColor, width: 0),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
           errorBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: textErrorColor, width: 0.5),
-              borderRadius:  BorderRadius.circular(8.0),),
-
+            borderSide: const BorderSide(color: textErrorColor, width: 0.5),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
           focusedErrorBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color:textErrorColor, width: 0.5),
-              borderRadius:  BorderRadius.circular(8.0),),
-
-        labelStyle: textTheme.headline4?.copyWith(color: Colors.black.withOpacity(0.6),),
-        errorStyle: textTheme.headline5?.copyWith(color: Colors.red),
-        hintText: widget.hintText,
-        errorText: widget.errorText,
-        hintStyle: textTheme.headline4?.copyWith(color: textInputTitleColor),
-        labelText: widget.labelText,
-        helperText: widget.helperText
-      ),
+            borderSide: const BorderSide(color: textErrorColor, width: 0.5),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          labelStyle: textTheme.headline4?.copyWith(
+            color: Colors.black.withOpacity(0.6),
+          ),
+          errorStyle: textTheme.headline5?.copyWith(color: Colors.red),
+          hintText: widget.hintText,
+          errorText: widget.errorText,
+          hintStyle: textTheme.headline1?.copyWith(
+            color: textTunaBlueColor,
+          ),
+          labelText: widget.labelText,
+          helperText: widget.helperText),
       maxLines: widget.maxLines,
       keyboardType: widget.keyboardType,
       cursorColor: whiteColor,
     );
   }
 }
-
-
-
-
-
-
-
-
-
-

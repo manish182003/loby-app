@@ -19,7 +19,7 @@ class OrderRemoteDatasourceImpl extends OrderRemoteDatasource{
 
 
   @override
-  Future<Map<String, dynamic>> createOrder(int? listingId, int? quantity, String? price)async {
+  Future<Map<String, dynamic>> createOrder(int? listingId, int? quantity, String? price, String? bookFromTime, String? bookToTime, String? bookDate)async {
     String token = await Helpers.getApiToken();
     final Map<String, dynamic> headers = {
       'Authorization': 'Bearer $token',
@@ -30,10 +30,10 @@ class OrderRemoteDatasourceImpl extends OrderRemoteDatasource{
         _dio,
         RequestType.post,
         ApiEndpoints.createOrder,
-        queryParams: {'user_game_service_id': "${listingId ?? ''}", 'quantity' : "${quantity ?? ''}", 'price' : price ?? '',},
+        queryParams: {'user_game_service_id': "${listingId ?? ''}", 'quantity' : "${quantity ?? ''}", 'price' : price ?? '', 'booked_from_time': bookToTime ?? '', 'booked_to_time' : bookDate ?? '', 'booked_date' : bookFromTime ?? ''},
         headers: headers,
       );
-
+      print("orderremoteimpl >> $bookDate");
       return response!;
     } on ServerException catch (e) {
       throw ServerException(message: e.message);

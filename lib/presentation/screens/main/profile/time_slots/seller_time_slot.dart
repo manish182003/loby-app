@@ -1,0 +1,282 @@
+import 'package:drop_shadow_image/drop_shadow_image.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:intl/intl.dart';
+import 'package:loby/core/theme/colors.dart';
+import 'package:loby/core/utils/helpers.dart';
+import 'package:loby/data/models/slots/get_slots_model.dart';
+import 'package:loby/domain/entities/slots/get_slots_for_seller.dart';
+import 'package:loby/domain/usecases/slots/get_slots.dart';
+import 'package:loby/presentation/getx/controllers/auth_controller.dart';
+import 'package:loby/presentation/getx/controllers/slots_controller.dart';
+import 'package:loby/presentation/screens/main/profile/time_slots/add_slot_dialog.dart';
+import 'package:loby/presentation/screens/main/profile/time_slots/widget/seller_time_slot_box.dart';
+import 'package:loby/presentation/widgets/bottom_dialog.dart';
+import 'package:loby/presentation/widgets/buttons/custom_button.dart';
+import 'package:loby/presentation/widgets/custom_app_bar.dart';
+import 'package:loby/services/routing_service/routes_name.dart';
+import 'package:sizer/sizer.dart';
+import 'package:custom_clippers/custom_clippers.dart';
+import 'package:drop_shadow/drop_shadow.dart';
+
+class SellerTimeSlot extends StatefulWidget {
+  // final GetSlotsForSeller getSlots;
+  // final int? slotId;
+  SellerTimeSlot({
+    super.key,
+  });
+
+  @override
+  State<SellerTimeSlot> createState() => _SellerTimeSlotState();
+}
+
+class _SellerTimeSlotState extends State<SellerTimeSlot> {
+  SlotsController slotsController = Get.find<SlotsController>();
+  AuthController authController = Get.find<AuthController>();
+  final controller = ScrollController();
+  Rx<DateFormat> format2 = DateFormat('MMMM yyyy').obs;
+
+  DateTime _currentDate = DateTime.now();
+
+  void _initializeDateFormat() {
+    // initializeDateFormat('fr_FR');
+  }
+
+  void _changeMonth(int monthsToAdd) {
+    setState(() {
+      _currentDate =
+          DateTime(_currentDate.year, _currentDate.month + monthsToAdd);
+    });
+  }
+
+  bool _isBeforeCurrentDate(DateTime date) {
+    final today = DateTime.now();
+    return date.isBefore(DateTime(today.year, today.month, today.day));
+  }
+
+  int selectedIndex = 0;
+  DateTime now = DateTime.now();
+  late DateTime lastDayOfMonth;
+  // @override
+  // void initState() {
+  //   super.initState();
+
+  // }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
+    getSlots();
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   slotsController.getSlots(sellerId: 1);
+
+    //   controller.addListener(() {
+    //     if (controller.position.maxScrollExtent == controller.offset) {
+    //       slotsController.getSlots();
+    //     }
+    //   });
+    // });
+  }
+
+  Future<void> getSlots() async {
+    // slotsController.getSlots();
+    slotsController.areMoreSlotsAvailable.value = true;
+    slotsController.getSlots();
+  }
+
+  void onTap(String day) {
+    setState(() {
+      if (slotsController.selectedDay.contains(day)) {
+        // Remove the day if it's already selected
+        slotsController.selectedDay.remove(day);
+      } else {
+        // Add the day if it's not selected
+        slotsController.selectedDay = [day];
+      }
+    });
+    // int indexOfDay = days.indexOf(day);
+    // selectedDay.add(day);
+    // selectedDay
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    print("length >>>> ${slotsController.slots.length}");
+    print("selecteddayyyyy 46547687 ${slotsController.selectedDay}");
+    return Scaffold(
+      body: Stack(children: [
+        Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/images/login_bg_img.jpeg"),
+                  opacity: 0.5,
+                  fit: BoxFit.fill)),
+        ),
+        Obx(() {
+          if (slotsController.selectedDay.isNotEmpty) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Stack(
+                  children: [
+                    Padding(
+                      padding:
+                          EdgeInsets.only(top: 19.0.w, left: 15, right: 15),
+                      child: Align(
+                          child: Container(
+                        width: 100.w,
+                        height: 15.h,
+                        decoration: BoxDecoration(
+                            color: backgroundColor,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: const [
+                              BoxShadow(
+                                  color: aquaGreenColor,
+                                  blurRadius: 10,
+                                  offset: Offset(0, 0))
+                            ]),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 16),
+                          child: Column(
+                            children: [
+                              Text(
+                                "Weekly Schedule",
+                                style: textTheme.headline2
+                                    ?.copyWith(color: textWhiteColor),
+                              ),
+                              SizedBox(height: 4.h),
+                              Expanded(
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  // shrinkWrap: true,
+                                  itemCount: slotsController.days.length,
+                                  itemBuilder: (context, index) {
+                                    return InkWell(
+                                      onTap: () {
+                                        onTap(slotsController.days[index]);
+                                        slotsController.getSlots();
+                                      },
+                                      child: Container(
+                                        height: 26,
+                                        width: 37,
+                                        margin:
+                                            EdgeInsets.symmetric(horizontal: 6),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          color: slotsController.selectedDay
+                                                  .contains(slotsController
+                                                      .days[index])
+                                              ? orangeColor
+                                              : shipGreyColor,
+                                        ),
+                                        child: Padding(
+                                          padding: EdgeInsets.all(4),
+                                          child: CircleAvatar(
+                                            backgroundColor: whiteColor,
+                                            child: Text(
+                                              slotsController.days[index],
+                                              style: TextStyle(
+                                                  color: textBlackColor,
+                                                  fontSize: 8),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 5.h,
+                ),
+                Container(
+                  height: 51.h,
+                  width: MediaQuery.of(context).size.width,
+                  // child: Text("hellooo", style: TextStyle(color: Colors.amber , fontSize: 60),),
+                  decoration: const BoxDecoration(
+                      color: backgroundColor,
+                      // border: Border(top: BorderSide(color: Colors.white)),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30),
+                      )),
+                  // child: Text("Login", style: textTheme.headline2?.copyWith(color: textWhiteColor)),
+                  child: Column(
+                    children: [
+                      Padding(
+                          padding:
+                              const EdgeInsets.only(left: 0, right: 0, top: 0),
+                          child: Column(
+                            children: [
+                              Container(
+                                height: 39.h,
+                                child: Expanded(
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    itemCount: slotsController.slots.length,
+                                    itemBuilder: (context, index) {
+                                      return SellerTimeSlotBox(
+                                          getSlots: slotsController.slots[index]);
+                                    },
+                                  ),
+                                ),
+                              ),
+                              // SellerTimeSlotBox(getSlots: slotsController.slots[0]),
+                              SizedBox(
+                                height: 1.h,
+                              ),
+                              CustomButton(
+                                  name: "Add New Slot",
+                                  textColor: textWhiteColor,
+                                  color: purpleLightIndigoColor,
+                                  left: 4.w,
+                                  right: 4.w,
+                                  bottom: 5.h,
+                                  onTap: () async {
+                                    // _loginDialog(context);
+                                    _addSlotDialog(
+                                        context,
+                                        slotsController.days.indexOf(
+                                            slotsController.selectedDay[0]));
+                                  }),
+                            ],
+                          )),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          }
+          return Text("Empty selectedDay");
+        })
+      ]),
+    );
+  }
+}
+
+
+
+void _addSlotDialog(BuildContext context, int selectedDayIndex) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AddSlotDialog(selectedDayIndex: selectedDayIndex);
+    },
+  );
+}

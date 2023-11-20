@@ -7,7 +7,7 @@ import '../models/response_models/order/dispute_response_model.dart';
 
 abstract class OrderRemoteDatasource{
 
-  Future<Map<String, dynamic>> createOrder(int? listingId, int? quantity, String? price);
+  Future<Map<String, dynamic>> createOrder(int? listingId, int? quantity, String? price, String? bookFromTime, String? bookToTime, String? bookDate);
 
   Future<OrderResponseModel> getOrders(int? orderId, String? status, int? page);
 

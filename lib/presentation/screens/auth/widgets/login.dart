@@ -78,31 +78,33 @@ class _LoginState extends State<Login> {
               left: 15.w,
               right: 15.w,
               onTap: () async {
-                if (_formKey.currentState!.validate()) {
-                  Helpers.loader();
-                  final isSuccess = await authController.login(email: email.text, password: password.text);
-                  if(isSuccess){
-                    await profileController.getProfile();
-                    if(profileController.profile.emailVerified == 'N' || profileController.profile.emailVerified == null){
-                      final isSuccess = await authController.sendAndVerifyOTP(email: email.text);
-                      Helpers.hideLoader();
-                      if(isSuccess){
-                        _otpDialog(context);
-                      }
-                    }else if(profileController.profile.displayName == null){
-                      Helpers.hideLoader();
-                      Navigator.pop(context);
-                      _showCreateProfileBottomSheet(context);
-                    }else{
-                      await authController.loggedUserIn();
-                      Helpers.hideLoader();
-                      Navigator.pop(context);
-                      context.goNamed(mainPage);
-                    }
-                  }else{
-                    Helpers.hideLoader();
-                  }
-                }},
+                // if (_formKey.currentState!.validate()) {
+                //   Helpers.loader();
+                //   final isSuccess = await authController.login(email: email.text, password: password.text);
+                //   if(isSuccess){
+                //     await profileController.getProfile();
+                //     if(profileController.profile.emailVerified == 'N' || profileController.profile.emailVerified == null){
+                //       // final isSuccess = await authController.sendAndVerifyOTP(email: email.text);
+                //       // Helpers.hideLoader();
+                //       // if(isSuccess){
+                //       //   _otpDialog(context);
+                //       // }
+                //       _showCreateProfileBottomSheet(context);
+                //     }else if(profileController.profile.displayName == null){
+                //       Helpers.hideLoader();
+                //       Navigator.pop(context);
+                //       _showCreateProfileBottomSheet(context);
+                //     }else{
+                //       await authController.loggedUserIn();
+                //       Helpers.hideLoader();
+                //       Navigator.pop(context);
+                //       context.goNamed(mainPage);
+                //     }
+                //   }else{
+                //     Helpers.hideLoader();
+                //   }
+                // }
+                },
             ),
             SizedBox(height: 4.h,),
       ]),
@@ -119,7 +121,7 @@ class _LoginState extends State<Login> {
             otp: otp,
             onVerify: () async{
               Helpers.loader();
-              final isSuccess = await authController.sendAndVerifyOTP(email: email.text, otp: otp.text);
+              final isSuccess = await authController.sendAndVerifyOTP(mobile: email.text, otp: otp.text);
               Helpers.hideLoader();
               if(isSuccess) {
                 if (profileController.profile.displayName == null) {

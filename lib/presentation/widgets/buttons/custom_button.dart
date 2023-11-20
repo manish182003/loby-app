@@ -6,6 +6,7 @@ import '../../../core/theme/colors.dart';
 
 class CustomButton extends StatelessWidget {
   final String? name;
+  final double? fontSize;
   final Color? color;
   final Color? textColor;
   final Color? borderColor;
@@ -20,6 +21,7 @@ class CustomButton extends StatelessWidget {
     this.color,
     required this.name,
     required this.onTap,
+    this.fontSize,
     this.outlineBtn = false,
     this.borderColor,
     this.textColor, this.iconWidget, this.top, this.bottom, this.left, this.right, this.radius, this.height})
@@ -62,7 +64,8 @@ class CustomButton extends StatelessWidget {
                   ) : Container()),
               Text(name ?? 'Next',
                   textAlign: TextAlign.center,
-                  style: textTheme.button?.copyWith(color: textColor ?? textCharcoalBlueColor)),
+                  // ignore: deprecated_member_use
+                  style: textTheme.button?.copyWith(color: textColor ?? textCharcoalBlueColor , fontSize: fontSize)),
             ],
           ),
         ),

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
+import 'package:loby/presentation/getx/controllers/kyc_controller.dart';
 import 'package:loby/presentation/screens/auth/create_profile_screen.dart';
 import 'package:loby/presentation/screens/auth/sign_up_screen.dart';
 import 'package:loby/presentation/screens/main/chat/chat_page.dart';
@@ -10,6 +11,12 @@ import 'package:loby/presentation/screens/main/profile/my_disputes/create_new_di
 import 'package:loby/presentation/screens/main/profile/faqs.dart';
 import 'package:loby/presentation/screens/main/profile/terms_conditions/legal_options.dart';
 import 'package:loby/presentation/screens/main/profile/terms_conditions/static_terms.dart';
+import 'package:loby/presentation/screens/main/profile/time_slots/buyer_time_slot.dart';
+import 'package:loby/presentation/screens/main/profile/time_slots/seller_time_slot.dart';
+import 'package:loby/presentation/screens/main/profile/wallet/kycscreen/account_detail_screen.dart';
+import 'package:loby/presentation/screens/main/profile/wallet/kycscreen/my_kyc_screen.dart';
+import 'package:loby/presentation/screens/main/profile/wallet/kycscreen/sendotpscreen.dart';
+import 'package:loby/presentation/screens/main/profile/wallet/kycscreen/upi_detail_screen.dart';
 import 'package:loby/presentation/screens/main/profile/wallet/settlement_request_history.dart';
 import 'package:loby/presentation/screens/onboarding/onboarding_screen.dart';
 import 'package:loby/services/routing_service/routes.dart';
@@ -43,6 +50,7 @@ class MyRouter {
     // final token = await Helpers.getApiToken();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     ProfileController profileController = Get.find<ProfileController>();
+    KycController kycController = Get.find<KycController>();
     AuthController authController = Get.find<AuthController>();
 
     final router = GoRouter(
@@ -144,6 +152,7 @@ class MyRouter {
                   key: state.pageKey,
                   child: CategoryItemScreen(
                     categoryId: int.tryParse(state.queryParams['categoryId']!),
+                    catName: state.queryParams['catName'],
                   ),
                 );
               }),
@@ -212,12 +221,40 @@ class MyRouter {
               }),
 
           GoRoute(
+              name: myKycScreen,
+              path: myKycRoute,
+              pageBuilder: (context, state) {
+                return CupertinoPage(
+                  key: state.pageKey,
+                  child: MyKycScreen(),
+                );
+              }),
+
+          GoRoute(
               name: myListingPage,
               path: myListingRoute,
               pageBuilder: (context, state) {
                 return CupertinoPage(
                   key: state.pageKey,
                   child: const MyListingScreen(),
+                );
+              }),
+          GoRoute(
+              name: sendOtppage,
+              path: sendotproute,
+              pageBuilder: (context, state) {
+                return CupertinoPage(
+                  key: state.pageKey,
+                  child: const sendOtpScreen(),
+                );
+              }),
+            GoRoute(
+              name: addAccountpage,
+              path: addAccountRoute,
+              pageBuilder: (context, state) {
+                return CupertinoPage(
+                  key: state.pageKey,
+                  child: const AddAccount(),
                 );
               }),
 
@@ -320,12 +357,39 @@ class MyRouter {
                 );
               }),
           GoRoute(
+              name: upiDetailpage,
+              path: upiDetailRoute,
+              pageBuilder: (context, state) {
+                return CupertinoPage(
+                  key: state.pageKey,
+                  child: const UpiScreen(),
+                );
+              }),
+          GoRoute(
               name: faqPage,
               path: faqRoute,
               pageBuilder: (context, state) {
                 return CupertinoPage(
                   key: state.pageKey,
                   child: const FAQs(),
+                );
+              }),
+              GoRoute(
+              name: buyerTimeSlotScreen,
+              path: buyerTimeSlotRoute,
+              pageBuilder: (context, state) {
+                return CupertinoPage(
+                  key: state.pageKey,
+                  child: BuyerTimeSlot(id: int.parse(state.params["id"]!), isEditing: state.queryParams['isEditing'] == "true" ? true : false),
+                );
+              }),
+              GoRoute(
+              name: sellerTimeSlotScreen,
+              path: sellerTimeSlotRoute,
+              pageBuilder: (context, state) {
+                return CupertinoPage(
+                  key: state.pageKey,
+                  child: SellerTimeSlot(),
                 );
               }),
           GoRoute(

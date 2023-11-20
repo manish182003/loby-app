@@ -175,7 +175,6 @@ class HomeController extends GetxController{
           debugPrint(errorMessage.value);
           Helpers.toast(errorMessage.value);
           isCategoryGamesFetching(false);
-
         },
             (success) {
           categoryGames.value = success.categoryGames.categoryGames ?? [];

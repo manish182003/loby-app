@@ -215,18 +215,19 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
   }
 
   @override
-  Future<bool> login(String? email, String? password, String? socialLoginId, int? socialLoginType, String? name)async {
+  Future<bool> login(String? mobile, String? email, String? password, String? socialLoginId, int? socialLoginType, String? name)async {
     try {
       final response = await Helpers.sendRequest(
         _dio,
         RequestType.post,
         socialLoginId == null ? ApiEndpoints.login : ApiEndpoints.socialLogin,
-        queryParams: socialLoginId == null ? {'email' : email, 'password' : password,} : {'social_login_id' : socialLoginId, 'social_login_type' : '${socialLoginType ?? ''}', 'name' : name, 'email' : email},
+        queryParams: socialLoginId == null ? {'mobile' : mobile} : {'social_login_id' : socialLoginId, 'social_login_type' : '${socialLoginType ?? ''}', 'name' : name, 'email' : email},
       );
 
       if(response != null){
+        print("token >^&* ${response['data']['reset_token']}");
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('apiToken', response['data']['reset_token']);
+        prefs.setString('apiToken', response['data']['reset_token']??"");
         prefs.setString('userId', "${response['data']['id']}");
       }
 
@@ -273,20 +274,19 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
   }
 
   @override
-  Future<Map<String, dynamic>> sendAndVerifyOTP(String? email, String? otp) async{
+  Future<Map<String, dynamic>> sendAndVerifyOTP(String? mobile, String? otp) async{
     try {
       final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(
         _dio,
         RequestType.post,
-        otp == null ? ApiEndpoints.sendOTP : ApiEndpoints.verifyOTP,
-        queryParams: otp == null ? {
-          'email': email,
-        } : {
-          'email': email,
+        ApiEndpoints.verifyOTP,
+        queryParams: {
+          'mobile': mobile,
           'otp' : otp,
         },
         headers: headers,
+        encoded: true
       );
 
       return response!;

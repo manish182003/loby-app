@@ -58,10 +58,10 @@ class _ItemListState extends State<ItemList> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: aquaGreenColor,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(10),
                     child: CustomCachedNetworkImage(
                       imageUrl: Helpers.getListingImage(widget.listing),
                       placeHolder: Image.asset("assets/images/listing_placeholder.jpg", fit: BoxFit.cover,),

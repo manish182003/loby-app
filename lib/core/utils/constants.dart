@@ -1,13 +1,11 @@
 import 'environment.dart';
 
-class ApiEndpoints{
-
+class ApiEndpoints {
   static String baseURL = Environment.apiBaseUrl;
-
 
   /// Auth APIs ///
   static const String signup = "/signup";
-  static const String login = "/login";
+  static const String login = "/loginV2";
   static const String socialLogin = "/social-login";
   static const String getCountries = "/get-country-list";
   static const String getStates = "/get-state-list";
@@ -17,10 +15,9 @@ class ApiEndpoints{
   static const String checkUsername = "/check-user-name-availability";
   static const String addFCMToken = "/add-user-fcm-token";
   static const String sendOTP = "/send-otp-email";
-  static const String verifyOTP = "/verify-user-email";
+  static const String verifyOTP = "/verify-otp";
   static const String forgotPassword = "/forgot-password";
   static const String resetPassword = "/reset-password";
-
 
   /// Home APIs ///
   static const String getCategories = "/get-all-categories";
@@ -28,10 +25,9 @@ class ApiEndpoints{
   static const String getCategoryGames = "/get-category-games";
   static const String getNotifications = "/get-notifications";
   static const String deleteNotification = "/delete-notification";
-  static const String getUnreadNotificationCount = "/get-unread-notification-count";
+  static const String getUnreadNotificationCount =
+      "/get-unread-notification-count";
   static const String getStaticData = "/get-static-content";
-
-
 
   /// Order APIs ///
   static const String createOrder = "/create-user-order";
@@ -44,11 +40,6 @@ class ApiEndpoints{
   static const String getDisputes = "/get-disputes";
   static const String submitDeliveryProof = "/add-dispute-proof";
 
-
-
-
-
-
   /// Listing APIs ///
   static const String getConfigurations = "/get-congfiguration";
   static const String createListing = "/create-listing-for-user-game-service";
@@ -56,10 +47,10 @@ class ApiEndpoints{
   static const String getBuyerListings = "/get-all-game-service-listing-buyer";
   static const String getSelfListings = "/get-all-game-service-listing";
   static const String reportListing = "/report-listing-user";
-  static const String changeListingStatus = "/change-user-game-service-listing-status";
+  static const String changeListingStatus =
+      "/change-user-game-service-listing-status";
   static const String deleteListing = "/delete-user-game-service";
   static const String deleteListingImage = "/delete-s3-object";
-
 
   /// Chat APIs ///
   static const String getChats = "/get-all-contacts";
@@ -68,7 +59,17 @@ class ApiEndpoints{
   static const String getUnreadMessageCount = "/get-unread-message-count";
   static const String messageCapability = "/message-capability";
 
+  /// Slots APIs ///
+  static const String addSlots = "/add-slots";
+  static const String getSlots = "/get-slots";
+  static const String getSlotsForSeller = "/get-slots-for-seller";
+  static const String deleteSlot = "/delete-slots";
+  static const String editSlot = "/change-order-slot";
 
+  /// Kyc APIs ///
+  static const String getKycToken = "/get-kyc-token";
+  static const String sendKycOtp = "/send-kyc-otp";
+  static const String verifyKycOtp = "/verify-aadhar-otp";
 
   /// Profile APIs ///
   static const String getProfile = "/user-profile";
@@ -91,26 +92,17 @@ class ApiEndpoints{
   static const String submitFeedback = "/submit-feedback";
   static const String getSettlementRequests = "/get-settlement-request";
   static const String getTotalEarning = "/total-earning";
-
 }
 
-
-
-class ConditionalConstants{
-
+class ConditionalConstants {
   static const String otherProfile = "other";
   static const String myProfile = "myProfile";
   static const String fromMyListing = "myListing";
-
 }
 
-
-class ListingPageRedirection{
-
+class ListingPageRedirection {
   static const String search = "search";
   static const String home = "home";
   static const String profile = "profile";
   static const String order = "order";
-
 }
-

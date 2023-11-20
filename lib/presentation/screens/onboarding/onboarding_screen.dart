@@ -41,7 +41,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   OnBoarding1(
                     backgroundImage: "1b",
                     frontImage: "1a",
-                    title: "monetize your game time \n& experience",
+                    title: "monetize your game time \n& skills",
                     desc: "Earn money for your time & skills while helping other gamers achieve their goals",
                     frontImageSize: 33.h,
                   ),
@@ -56,7 +56,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   OnBoarding1(
                     backgroundImage: "3b",
                     frontImage: "3a",
-                    title: "hire pro-gamers & \ncoaches",
+                    title: "hire pro-gamers & coaches \nto learn from them",
                     desc: "Users can hire pro-gamers or coaches for push-rank, improve gameplay, competitive gaming, streaming & much more",
                     frontImageSize: 37.h,
                     frontImagePosition: -2.h,
@@ -64,7 +64,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   OnBoarding1(
                     backgroundImage: "4b",
                     frontImage: "4a",
-                    title: "play with your fav. gaming celebrity",
+                    title: "play with your favourite \ne-athlete & streamer",
                     desc: "Book and play with your favourite streamer or gaming celebrity",
                     frontImageSize: 37.h,
                     frontImagePosition: -4.h,
@@ -72,7 +72,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   OnBoarding1(
                     backgroundImage: "5b",
                     frontImage: "5a",
-                    title: "duel with other gamers & earn",
+                    title: "challenge other gamers for a duel",
                     desc: "Play duel matches or compete with other gamers",
                     frontImageSize: 42.h,
                     backImageSize: 42.h,
@@ -81,7 +81,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 ],
               ),
               CustomButton(
-                  name: selectedIndex < 4 ? "Next" : "Finish",
+                  name: selectedIndex < 4 ? "Next" : "Next",
                   color: aquaGreenColor,
                   left: 46.w,
                   right: 12.w,

@@ -213,9 +213,17 @@ class AuthController extends GetxController{
     return failureOrSuccess.isRight() ? true : false;
   }
 
-  Future<bool> login({String? email, String? password, String? socialLoginId, int? socialLoginType, String? name}) async {
+  Future<bool> login({
+    String? mobile, 
+    String? email, 
+    String? password, 
+    String? socialLoginId, 
+    int? socialLoginType, 
+    String? name
+    }) async {
     final failureOrSuccess = await _login(
       Params(authParams: AuthParams(
+          mobile: mobile,
           email: email,
           password: password,
         socialLoginId: socialLoginId,
@@ -458,11 +466,11 @@ class AuthController extends GetxController{
     return failureOrSuccess.isRight() ? true : false;
   }
 
-  Future<bool> sendAndVerifyOTP({required String email, String? otp}) async {
+  Future<bool> sendAndVerifyOTP({required String mobile, String? otp}) async {
 
     final failureOrSuccess = await _sendAndVerifyOTP(
       Params(authParams: AuthParams(
-          email: email,
+          mobile: mobile,
         otp: otp,
       ),),
     );

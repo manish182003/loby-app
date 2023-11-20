@@ -15,7 +15,6 @@ import '../main/main_screen.dart';
 
 class CreateProfileScreen extends StatefulWidget {
   const CreateProfileScreen({Key? key}) : super(key: key);
-
   @override
   State<CreateProfileScreen> createState() => _CreateProfileScreenState();
 }

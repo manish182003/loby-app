@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -136,11 +136,11 @@ class TabTitle extends StatelessWidget {
     final textTheme = Theme
         .of(context)
         .textTheme;
-    return Badge(
+    return badge.Badge(
       badgeContent: Text(
           '$count', style: textTheme.headline6?.copyWith(color: Colors.white)
       ),
-      position: BadgePosition.topEnd(end: 10, top: 0),
+      position: badge.BadgePosition.topEnd(end: 10, top: 0),
       badgeColor: badgeColor,
       showBadge: count == 0 ? false : true,
       child: AnimatedContainer(

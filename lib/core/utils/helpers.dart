@@ -1,6 +1,3 @@
-
-
-
 // ignore_for_file: depend_on_referenced_packages
 
 import 'dart:convert';
@@ -24,11 +21,9 @@ import 'dart:math';
 import 'exceptions.dart';
 import 'failure.dart';
 
-
 enum RequestType { get, post, delete }
 
 class Helpers {
-
   static toast(String text) {
     return Fluttertoast.showToast(
         msg: text,
@@ -39,13 +34,12 @@ class Helpers {
         fontSize: 16.0);
   }
 
-
-
   static validateEmail(String value) {
     if (value.isEmpty) {
       return "field required";
     }
-    String p = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@'
+    String p =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@'
         r'((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]'
         r'+\.)+[a-zA-Z]{2,}))$';
     RegExp regExp = RegExp(p);
@@ -56,8 +50,6 @@ class Helpers {
   }
 
   static validateField(String value) {
-
-
     if (value.isEmpty || value == 'null') {
       return "field required";
     }
@@ -72,11 +64,10 @@ class Helpers {
     }
   }
 
-
   static validateTokenLimit(String? value) {
-    if(value == null || value.isEmpty){
+    if (value == null || value.isEmpty) {
       return "Field Required";
-    }else if (int.tryParse(value)! > 100000) {
+    } else if (int.tryParse(value)! > 100000) {
       return 'Max Limit 1,00,000';
     } else {
       return null;
@@ -84,15 +75,14 @@ class Helpers {
   }
 
   static validateStockLimit(String? value) {
-    if(value == null || value.isEmpty){
+    if (value == null || value.isEmpty) {
       return "Field Required";
-    }else if (int.tryParse(value)! > 999) {
+    } else if (int.tryParse(value)! > 999) {
       return 'Max Limit 999';
     } else {
       return null;
     }
   }
-
 
   static validatePassword(String value) {
     if (value.length < 6) {
@@ -103,9 +93,9 @@ class Helpers {
   }
 
   static validateWalletAdd(String? value) {
-    if(value == null || value.isEmpty){
+    if (value == null || value.isEmpty) {
       return "Field Required";
-    }else if (int.tryParse(value)! > 5000 || int.tryParse(value)! < 20) {
+    } else if (int.tryParse(value)! > 5000 || int.tryParse(value)! < 20) {
       return 'Add tokens between 20 - 5,000';
     } else {
       return null;
@@ -113,20 +103,18 @@ class Helpers {
   }
 
   static validateWalletWithdraw(String value, double balance) {
-    if(value != ''){
+    if (value != '') {
       if (balance - double.parse(value) < 200) {
         return 'Minimum Balance Left Should be 200';
-      } else if(int.tryParse(value)! > 5000 || int.tryParse(value)! < 50){
+      } else if (int.tryParse(value)! > 5000 || int.tryParse(value)! < 50) {
         return 'Withdraw tokens between 50 - 5,000';
       } else {
         return null;
       }
-    }else{
+    } else {
       return 'Field Required';
     }
   }
-
-
 
   static validateStartDate(DateTime? value) {
     if (value == null) {
@@ -140,7 +128,6 @@ class Helpers {
         (key, value) => value == null || value == '' || value == 'null');
     return data;
   }
-
 
   static validateDate(DateTime? value) {
     if (value == null) {
@@ -157,21 +144,21 @@ class Helpers {
   }
 
   static validateLink(String? value) {
-    if(value == null){
+    if (value == null) {
       return "Field Required";
-    }else if (Uri.tryParse(value)!.hasAbsolutePath ) {
+    } else if (Uri.tryParse(value)!.hasAbsolutePath) {
       return null;
-    }else{
+    } else {
       return "Invalid URL";
     }
   }
 
   static validateOptionalLink(String? value) {
-    if(value == null || value.isEmpty){
+    if (value == null || value.isEmpty) {
       return null;
-    }else if (Uri.tryParse(value)!.hasAbsolutePath ) {
+    } else if (Uri.tryParse(value)!.hasAbsolutePath) {
       return null;
-    }else{
+    } else {
       return "Invalid URL";
     }
   }
@@ -201,7 +188,6 @@ class Helpers {
     }
   }
 
-
   static String getFileExtension(int type) {
     switch (type) {
       case 0:
@@ -217,29 +203,28 @@ class Helpers {
     }
   }
 
-
   static Future<Map<String, dynamic>?> sendRequest(
-      Dio dio,
-      RequestType type,
-      String path, {
-        Map<String, dynamic>? queryParams,
-        Map<String, dynamic>? headers,
-        dynamic data,
-      }) async {
-
+    Dio dio,
+    RequestType type,
+    String path, {
+    Map<String, dynamic>? queryParams,
+    Map<String, dynamic>? headers,
+    bool encoded = false,
+    dynamic data,
+  }) async {
     final logger = Logger(
       printer: PrettyPrinter(
           methodCount: 2, // number of method calls to be displayed
-          errorMethodCount: 8, // number of method calls if stacktrace is provided
+          errorMethodCount:
+              8, // number of method calls if stacktrace is provided
           lineLength: 200, // width of the output
           colors: true, // Colorful log messages
           printEmojis: true, // Print an emoji for each log message
           printTime: false // Should each log print contain a timestamp
-      ),
+          ),
     );
 
     debugPrint("Payload ${queryParams ?? data}");
-
 
     // bool isDeviceConnected = await InternetConnectionChecker().hasConnection;
     // if (!isDeviceConnected) {
@@ -263,16 +248,20 @@ class Helpers {
         case RequestType.post:
           response = await dio.post(
             path,
-            options: Options(headers: headers, validateStatus: (code) => true),
+            options: Options(
+                headers: headers,
+                contentType:
+                    encoded == true ? Headers.formUrlEncodedContentType : null,
+                validateStatus: (code) => true),
             data: queryParams ?? data,
           );
           break;
 
         case RequestType.delete:
           response = await dio.delete(
-              path,
-              queryParameters: queryParams,
-              options: Options(headers: headers),
+            path,
+            queryParameters: queryParams,
+            options: Options(headers: headers),
           );
           break;
 
@@ -280,18 +269,20 @@ class Helpers {
           return null;
       }
 
-      debugPrint("$path response ${response.statusCode} with ${response.statusMessage}");
+      debugPrint(
+          "$path response ${response.statusCode} with ${response.statusMessage}");
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 202) {
         logger.i(jsonEncode(response.data as Map<String, dynamic>));
         return response.data as Map<String, dynamic>;
-      }else if (response.statusCode == 400  || response.statusCode == 401 || response.statusCode == 202) {
-        logger.i('Failed Response ${const JsonEncoder().convert(response.data as Map<String, dynamic>)}');
+      } else if (response.statusCode == 400 || response.statusCode == 401) {
+        logger.i(
+            'Failed Response ${const JsonEncoder().convert(response.data as Map<String, dynamic>)}');
         throw ServerException(
           message: response.data['message'],
           code: response.statusCode,
         );
-      }else {
+      } else {
         throw ServerException(
           message: response.data['message'],
           code: response.statusCode,
@@ -300,10 +291,12 @@ class Helpers {
     } on ServerException catch (e) {
       throw ServerException(message: e.message, code: e.code);
     } on DioError catch (e) {
-      throw ServerException(message: e.error is SocketException ? 'No Internet Connection' : e.error.toString());
+      throw ServerException(
+          message: e.error is SocketException
+              ? 'No Internet Connection'
+              : e.error.toString());
     }
   }
-
 
   static Future getApiToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -311,7 +304,7 @@ class Helpers {
   }
 
   static Future getApiHeaders() async {
-    String token = await getApiToken();
+    dynamic? token = await getApiToken();
     final Map<String, dynamic> headers = {
       'Authorization': 'Bearer $token',
     };
@@ -323,15 +316,13 @@ class Helpers {
     return prefs.getBool('isLoggedIn') ?? false;
   }
 
-
-  static loader(){
+  static loader() {
     SmartDialog.showLoading();
   }
 
-  static hideLoader(){
+  static hideLoader() {
     SmartDialog.dismiss();
   }
-
 
   static String convertFailureToMessage(Failure failure) {
     if (failure is ServerFailure) {
@@ -340,8 +331,10 @@ class Helpers {
     return "Unknown error occurred";
   }
 
-
-  static void showImagePicker({required BuildContext context, required Function() onGallery, required Function() onCamera})async{
+  static void showImagePicker(
+      {required BuildContext context,
+      required Function() onGallery,
+      required Function() onCamera}) async {
     final textTheme = Theme.of(context).textTheme;
     showGeneralDialog(
       barrierLabel: "showGeneralDialog",
@@ -379,7 +372,11 @@ class Helpers {
                       },
                       child: Align(
                         alignment: AlignmentDirectional.centerStart,
-                        child: Text('Camera', style: textTheme.headline3?.copyWith(color: aquaGreenColor),),
+                        child: Text(
+                          'Camera',
+                          style: textTheme.headline3
+                              ?.copyWith(color: aquaGreenColor),
+                        ),
                       ),
                     ),
                     TextButton(
@@ -389,14 +386,22 @@ class Helpers {
                       },
                       child: Align(
                         alignment: AlignmentDirectional.centerStart,
-                        child: Text('Gallery', style: textTheme.headline3?.copyWith(color: aquaGreenColor),),
+                        child: Text(
+                          'Gallery',
+                          style: textTheme.headline3
+                              ?.copyWith(color: aquaGreenColor),
+                        ),
                       ),
                     ),
                     TextButton(
                       onPressed: () => Navigator.pop(context),
                       child: Align(
                         alignment: AlignmentDirectional.centerStart,
-                        child: Text('Cancel', style: textTheme.headline3?.copyWith(color: aquaGreenColor),),
+                        child: Text(
+                          'Cancel',
+                          style: textTheme.headline3
+                              ?.copyWith(color: aquaGreenColor),
+                        ),
                       ),
                     ),
                   ],
@@ -416,8 +421,6 @@ class Helpers {
         );
       },
     );
-
-
 
     // showModalBottomSheet(
     //     context: context,
@@ -453,54 +456,59 @@ class Helpers {
     //     });
   }
 
-  static getImage(String image){
-    if(image.contains(Environment.apiUrl)){
+  static getImage(String image) {
+    if (image.contains(Environment.apiUrl)) {
       return image;
-    }else{
+    } else {
       return "${Environment.apiUrl}$image";
     }
   }
 
-  static getDateFormat(String date){
+  static getDateFormat(String date) {
     final year = date.split("/");
     return "${year[2]}-${year[1]}-${year[0]}";
   }
 
-  static getUserId() async{
+  static getUserId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('userId') == null ? null : int.tryParse(prefs.getString('userId')!);
+    return prefs.getString('userId') == null
+        ? null
+        : int.tryParse(prefs.getString('userId')!);
   }
 
-  static saveString(String key, String value) async{
+  static saveString(String key, String value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(key, value);
   }
 
-  static getString(String string) async{
+  static getString(String string) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(string);
   }
 
-  static formatDateTime({required DateTime dateTime}){
+  static formatDateTime({required DateTime dateTime}) {
     final format = DateFormat.yMd().add_jms().format(dateTime);
     final dateSplit = format.split(" ")[0].split("/");
     final timeSplit = format.split(" ")[1].split(":");
-    final result = "${formatDigits(dateSplit[1])}/${formatDigits(dateSplit[0])}/${dateSplit[2]} ${formatDigits(timeSplit[0])}:${timeSplit[1]} ${format.split(" ")[2]}";
+    final result =
+        "${formatDigits(dateSplit[1])}/${formatDigits(dateSplit[0])}/${dateSplit[2]} ${formatDigits(timeSplit[0])}:${timeSplit[1]} ${format.split(" ")[2]}";
     return result;
 
     // dateTime.toMoment().toLocal().format("DD/MM/YYYY hh:mm A").toString();
   }
 
-  static formatDigits(String number){
-    if(number.length < 2) {
+  static formatDigits(String number) {
+    if (number.length < 2) {
       return '0$number';
-    }else{
+    } else {
       return number;
     }
   }
 
-  static String? getListingImage(ServiceListing listing){
-    final listingImages = listing.userGameServiceImages!.where((element) => element.type != 3).toList();
+  static String? getListingImage(ServiceListing listing) {
+    final listingImages = listing.userGameServiceImages!
+        .where((element) => element.type != 3)
+        .toList();
     return listingImages.isEmpty ? null : listingImages.first.path!;
   }
 
@@ -513,7 +521,6 @@ class Helpers {
     await file.writeAsBytes(response.bodyBytes);
     return file;
   }
-
 
   static int daysBetween(DateTime from, DateTime to) {
     from = DateTime(from.year, from.month, from.day);

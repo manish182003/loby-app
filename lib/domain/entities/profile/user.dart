@@ -5,7 +5,7 @@ import 'package:loby/domain/entities/auth/country.dart';
 import 'package:loby/domain/entities/auth/profile_tag.dart';
 import 'package:loby/domain/entities/auth/state.dart';
 
-class User extends Equatable{
+class User extends Equatable {
   User(
       {this.id,
       this.name,
@@ -23,10 +23,11 @@ class User extends Equatable{
       this.stateId,
       this.dob,
       this.bio,
-        this.banTill,
+      this.banTill,
       this.walletMoney,
       this.verifiedProfile,
       this.lobbyCoins,
+      this.kycverify,
       this.fcmToken,
       this.socialLoginId,
       this.socialLoginType,
@@ -49,8 +50,7 @@ class User extends Equatable{
       this.country,
       this.city,
       this.profileTags,
-      this.followStatus
-      });
+      this.followStatus});
 
   final int? id;
   final String? name;
@@ -72,6 +72,7 @@ class User extends Equatable{
   double? walletMoney;
   final bool? verifiedProfile;
   final int? lobbyCoins;
+  final String? kycverify;
   final String? fcmToken;
   final String? socialLoginId;
   final int? socialLoginType;
@@ -95,7 +96,6 @@ class User extends Equatable{
   final City? city;
   final List<ProfileTag>? profileTags;
   String? followStatus;
-
 
   @override
   // TODO: implement props

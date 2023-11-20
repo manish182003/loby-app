@@ -11,7 +11,7 @@ abstract class AuthRemoteDatasource{
 
   Future<Map<String, dynamic>> signup(String? name, String? email, String? password, String? confirmPassword);
 
-  Future<bool> login(String? email, String? password, String? socialLoginId, int? socialLoginType, String? name);
+  Future<bool> login(String? mobile, String? email, String? password, String? socialLoginId, int? socialLoginType, String? name);
 
   Future<CountryResponseModel> getCountries(String? name, int? page);
 
@@ -27,7 +27,7 @@ abstract class AuthRemoteDatasource{
 
   Future<Map<String, dynamic>> addFCMToken(String? fcmToken);
 
-  Future<Map<String, dynamic>> sendAndVerifyOTP(String? email, String? otp);
+  Future<Map<String, dynamic>> sendAndVerifyOTP(String? mobile, String? otp);
 
   Future<Map<String, dynamic>> forgotAndResetPassword(String? email, String? otp, String? password, String? confirmPassword);
 

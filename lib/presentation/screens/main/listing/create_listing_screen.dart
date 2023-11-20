@@ -29,6 +29,7 @@ import '../../../widgets/custom_checkbox.dart';
 import '../../../widgets/input_text_widget.dart';
 import '../../../widgets/text_fields/text_field_widget.dart';
 import '../profile/wallet/widgets/token_widget.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class CreateListingScreen extends StatefulWidget {
   const CreateListingScreen({Key? key}) : super(key: key);
@@ -38,7 +39,6 @@ class CreateListingScreen extends StatefulWidget {
 }
 
 class _CreateListingScreenState extends State<CreateListingScreen> {
-
   HomeController homeController = Get.find<HomeController>();
   AuthController authController = Get.find<AuthController>();
   ListingController listingController = Get.find<ListingController>();
@@ -61,9 +61,8 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
 
   List<List<SelectedServiceOption>> multiSelectionServices = [];
   List<SelectedServiceOption> singleSelectionService = [];
-  List<TextEditingController> singleSelectedServiceController = <
-      TextEditingController>[];
-
+  List<TextEditingController> singleSelectedServiceController =
+      <TextEditingController>[];
 
   @override
   void initState() {
@@ -84,12 +83,9 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme
-        .of(context)
-        .textTheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return SingleChildScrollView(
       child: BodyPaddingWidget(
@@ -99,30 +95,33 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 2.h,),
+              SizedBox(
+                height: 2.h,
+              ),
               Align(
                 alignment: Alignment.center,
                 child: Text(
                   'Create New Listing',
                   overflow: TextOverflow.ellipsis,
-                  style: textTheme.headline2?.copyWith(color: textWhiteColor),
+                  style: textTheme.headline2?.copyWith(color: aquaGreenColor),
                 ),
               ),
-              SizedBox(height: 2.h,),
+              SizedBox(
+                height: 2.h,
+              ),
               Obx(() {
                 return BuildDropdown(
                   selectedValue: selectedCategoryName,
                   dropdownHint: "Select Category",
                   isRequired: true,
-                  itemsList: homeController.categories.map((item) =>
-                      DropdownMenuItem<Category>(
-                        value: item,
-                        child: Text(
-                            item.name!,
-                            style: textTheme.headline3?.copyWith(
-                                color: whiteColor)
-                        ),
-                      )).toList(),
+                  itemsList: homeController.categories
+                      .map((item) => DropdownMenuItem<Category>(
+                            value: item,
+                            child: Text(item.name!,
+                                style: textTheme.headline3
+                                    ?.copyWith(color: whiteColor)),
+                          ))
+                      .toList(),
                   onChanged: (value) {
                     selectedCategoryName = value.name;
                     homeController.selectedCategoryId.value = value.id;
@@ -131,55 +130,69 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   },
                 );
               }),
-              SizedBox(height: 2.h,),
+              SizedBox(
+                height: 2.h,
+              ),
               Obx(() {
                 if (homeController.disclaimer.value.isEmpty) {
                   return const SizedBox();
                 } else {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 2.h),
-                      Text(textAlign: TextAlign.start,
-                          "Disclaimer",
-                          style: textTheme.headline4?.copyWith(
-                              color: textWhiteColor)),
-                      SizedBox(height: 2.h),
-                      StyledText(
-                        text: homeController.disclaimer.value,
-                        style: textTheme.headline6?.copyWith(
-                          fontWeight: FontWeight.w300,
-                          color: textLightColor,
-                        ),
-                        tags: {
-                          'bold': StyledTextTag(
+                  return DefaultTextHeightBehavior(
+                    textHeightBehavior: const TextHeightBehavior(
+                      // textHeight: 1.2, // Adjust the text height as needed (1.0 is the default)
+                      leadingDistribution: TextLeadingDistribution
+                          .proportional, // You can use proportional or uniform
+                      // leading: 1.2, // Adjust the line spacing as needed (1.0 is the default)
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 2.h),
+                        Text(
+                            textAlign: TextAlign.start,
+                            "Disclaimer",
+                            style: textTheme.headline4
+                                ?.copyWith(color: textWhiteColor)),
+                        SizedBox(height: 2.h),
+                        StyledText(
+                          text: homeController.disclaimer.value,
+                          style: textTheme.headline6?.copyWith(
+                            fontWeight: FontWeight.w300,
+                            color: textLightColor,
+                          ),
+                          tags: {
+                            'bold': StyledTextTag(
+                                style: textTheme.headline6!.copyWith(
+                                    fontWeight: FontWeight.w500,
+                                    color: textLightColor)),
+                            'click': StyledTextActionTag(
+                              (text, attrs) {
+                                BottomDialog(
+                                        textTheme: textTheme,
+                                        tileName: text,
+                                        titleColor: aquaGreenColor,
+                                        contentName: attrs['href'],
+                                        contentLinkName: '')
+                                    .showBottomDialog(context);
+                              },
                               style: textTheme.headline6!.copyWith(
                                   fontWeight: FontWeight.w500,
-                                  color: textLightColor)),
-                          'click': StyledTextActionTag((text, attrs) {
-                            BottomDialog(
-                                textTheme: textTheme,
-                                tileName: text,
-                                titleColor: aquaGreenColor,
-                                contentName: attrs['href'],
-                                contentLinkName: '')
-                                .showBottomDialog(context);
+                                  color: aquaGreenColor),
+                            ),
                           },
-                            style: textTheme.headline6!.copyWith(
-                                fontWeight: FontWeight.w500,
-                                color: aquaGreenColor),
-                          ),
-                        },
-                      ),
-                      SizedBox(height: 2.h,),
-                    ],
+                        ),
+                        SizedBox(
+                          height: 2.h,
+                        ),
+                      ],
+                    ),
                   );
                 }
               }),
               AutoCompleteField(
                 selectedSuggestion: selectedGameName,
-                hint: 'Select Game',
+                hint: 'Select Game (Dropdown + Search)',
                 isRequired: true,
                 suggestionsCallback: (pattern) async {
                   if (pattern == selectedGameString) {
@@ -194,26 +207,27 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   return finalList;
                 },
                 onSuggestionSelected: (value) {
-                  final index = homeController.games.indexWhere((
-                      element) => element.name == value);
+                  final index = homeController.games
+                      .indexWhere((element) => element.name == value);
                   homeController.selectedGameId.value =
-                  homeController.games[index].id!;
+                      homeController.games[index].id!;
                   selectedGameName.text = homeController.games[index].name!;
                   selectedGameString = homeController.games[index].name!;
                   _getConfigurations();
                 },
               ),
-              SizedBox(height: 2.h,),
+              SizedBox(
+                height: 2.h,
+              ),
               Obx(() {
                 if (listingController.isServicesAvailable.value) {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
                       ListView.separated(
-                        itemCount: listingController.configuration
-                            .gameCategoryServices!.length,
+                        itemCount: listingController
+                            .configuration.gameCategoryServices!.length,
                         shrinkWrap: true,
                         padding: const EdgeInsets.only(top: 0),
                         physics: const ClampingScrollPhysics(),
@@ -221,7 +235,9 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                           return services2(index);
                         },
                         separatorBuilder: (BuildContext context, int index) {
-                          return SizedBox(height: 2.h,);
+                          return SizedBox(
+                            height: 2.h,
+                          );
                         },
                       ),
                     ],
@@ -242,17 +258,18 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   textAlign: TextAlign.justify,
                   text: TextSpan(children: [
                     TextSpan(
-                      text: "For safety reasons, sellers are not allowed to leave their personal contacts. All communications with the buyers can only be made using Loby chat. Any conversation outside Loby Chat will not be insured/covered by ",
-                      style: textTheme.headline6?.copyWith(
-                          color: textLightColor),
+                      text:
+                          "For safety reasons, sellers are not allowed to leave their personal contacts. All communications with the buyers can only be made using Loby chat. Any conversation outside Loby Chat will not be insured/covered by ",
+                      style:
+                          textTheme.headline6?.copyWith(color: textLightColor),
                     ),
                     TextSpan(
                         text: "Loby Protection",
                         recognizer: TapGestureRecognizer()
                           ..onTap = () => context.pushNamed(staticContentPage,
                               queryParams: {'termName': 'Loby Protection'}),
-                        style: textTheme.headline6?.copyWith(
-                            color: aquaGreenColor)),
+                        style: textTheme.headline6
+                            ?.copyWith(color: aquaGreenColor)),
                   ])),
               SizedBox(height: 2.h),
               TextFieldWidget(
@@ -266,35 +283,54 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
               SizedBox(height: 2.h),
               _buildUploadField(textTheme),
               SizedBox(height: 2.h),
-              Text('Token',
+              Text('Price',
                   style: textTheme.headline4?.copyWith(color: textLightColor)),
               SizedBox(height: 2.h),
               _buildPrice(textTheme),
               SizedBox(height: 2.h),
-              TextFieldWidget(
-                textEditingController: listingController.stockAvl.value,
-                hint: 'Available Stock',
-                type: 'stock',
-                isNumber: true,
-                isRequired: true,
-              ),
-              SizedBox(height: 2.h),
-              RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(children: [
-                    TextSpan(
-                      text: "‘Loby Protection’",
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () => context.pushNamed(staticContentPage,
-                            queryParams: {'termName': 'Loby Protection'}),
-                      style: textTheme.headline4
-                          ?.copyWith(color: aquaGreenColor),
+              Row(
+                children: [
+                  Text('Available Stock',
+                      style:
+                          textTheme.headline4?.copyWith(color: textLightColor)),
+                  SizedBox(
+                    width: 18.w,
+                  ),
+                  Expanded(
+                    child: TextFieldWidget(
+                      textEditingController: listingController.stockAvl.value,
+                      // hint: 'Available Stock',
+                      type: 'stock',
+                      isNumber: true,
+                      isRequired: true,
                     ),
-                    TextSpan(
-                        text: " Insurance",
-                        style: textTheme.headline4
-                            ?.copyWith(color: textLightColor)),
-                  ])),
+                  ),
+                ],
+              ),
+              // TextFieldWidget(
+              //   textEditingController: listingController.stockAvl.value,
+              //   hint: 'Available Stock',
+              //   type: 'stock',
+              //   isNumber: true,
+              //   isRequired: true,
+              // ),
+              SizedBox(height: 2.h),
+              // RichText(
+              //     textAlign: TextAlign.center,
+              //     text: TextSpan(children: [
+              //       TextSpan(
+              //         text: "‘Loby Protection’",
+              //         recognizer: TapGestureRecognizer()
+              //           ..onTap = () => context.pushNamed(staticContentPage,
+              //               queryParams: {'termName': 'Loby Protection'}),
+              //         style:
+              //             textTheme.headline4?.copyWith(color: aquaGreenColor),
+              //       ),
+              //       TextSpan(
+              //           text: " Insurance",
+              //           style: textTheme.headline4
+              //               ?.copyWith(color: textLightColor)),
+              //     ])),
               SizedBox(height: 2.h),
               Row(
                 children: [
@@ -319,45 +355,73 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                             textAlign: TextAlign.start,
                             text: TextSpan(children: [
                               TextSpan(
-                                text: '7 Days Insurance',
-                                style: textTheme.subtitle2?.copyWith(
-                                    color: textLightColor),
+                                text: "‘Loby Protection’",
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () => context.pushNamed(
+                                          staticContentPage,
+                                          queryParams: {
+                                            'termName': 'Loby Protection'
+                                          }),
+                                style: textTheme.headline4
+                                    ?.copyWith(color: aquaGreenColor),
                               ),
-                            ])
-                        )
-                    ),
+                              TextSpan(
+                                  text: " Insurance",
+                                  style: textTheme.headline4
+                                      ?.copyWith(color: textLightColor)),
+                              // TextSpan(
+                              //   text: '7 Days Insurance',
+                              //   style: textTheme.subtitle2
+                              //       ?.copyWith(color: textLightColor),
+                              // ),
+                            ]))),
                   ),
                 ],
               ),
               SizedBox(height: 2.h),
-              Text(
-                  textAlign: TextAlign.start,
-                  'Estimated Delivery Time (Days)',
-                  style: textTheme.headline4?.copyWith(
-                      color: textLightColor)),
-              SizedBox(height: 2.h),
-              BuildDropdown(
-                selectedValue: listingController.estimateDeliveryTime.value,
-                dropdownHint: "Select",
-                isRequired: true,
-                itemsList: [
-                  for(var i = 1; i <= int.tryParse(
-                      listingController.configuration
-                          .maximumEstimatedDeliveryTimeDays == ""
-                          ? '0'
-                          : listingController.configuration
-                          .maximumEstimatedDeliveryTimeDays ?? '0')!; i++) i
-                ].map((item) =>
-                    DropdownMenuItem<String>(
-                      value: "$item",
-                      child: Text("$item", style: textTheme.headline3?.copyWith(
-                          color: whiteColor)
-                      ),
-                    )).toList(),
-                onChanged: (value) {
-                  listingController.estimateDeliveryTime.value = value;
-                },
+              Row(
+                children: [
+                  Text(
+                      maxLines: 2,
+                      textAlign: TextAlign.start,
+                      'Estimated Delivery \nTime (Days)',
+                      style:
+                          textTheme.headline4?.copyWith(color: textLightColor)),
+                  SizedBox(width: 10.w),
+                  Expanded(
+                    child: BuildDropdown(
+                      selectedValue:
+                          listingController.estimateDeliveryTime.value,
+                      dropdownHint: "Select",
+                      isRequired: true,
+                      itemsList: [
+                        for (var i = 1;
+                            i <=
+                                int.tryParse(listingController.configuration
+                                            .maximumEstimatedDeliveryTimeDays ==
+                                        ""
+                                    ? '0'
+                                    : listingController.configuration
+                                            .maximumEstimatedDeliveryTimeDays ??
+                                        '0')!;
+                            i++)
+                          i
+                      ]
+                          .map((item) => DropdownMenuItem<String>(
+                                value: "$item",
+                                child: Text("$item",
+                                    style: textTheme.headline3
+                                        ?.copyWith(color: whiteColor)),
+                              ))
+                          .toList(),
+                      onChanged: (value) {
+                        listingController.estimateDeliveryTime.value = value;
+                      },
+                    ),
+                  ),
+                ],
               ),
+
               SizedBox(height: 2.h),
               _buildTermsCheckbox(
                   textTheme,
@@ -365,10 +429,9 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   'Terms of Service.'),
               SizedBox(height: showErrorMessage ? 1.h : 0),
               showErrorMessage
-                  ?
-              Text(
-                  'Please accept the terms of use and privacy policy to proceed...',
-                  style: textTheme.headline5?.copyWith(color: Colors.red))
+                  ? Text(
+                      'Please accept the terms of use and privacy policy to proceed...',
+                      style: textTheme.headline5?.copyWith(color: Colors.red))
                   : const SizedBox(),
               SizedBox(height: 5.h),
               CustomButton(
@@ -396,7 +459,6 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
     );
   }
 
-
   Future<void> _getConfigurations() async {
     if (homeController.selectedCategoryId.value != 0 &&
         homeController.selectedGameId.value != 0) {
@@ -408,8 +470,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
 
       await listingController.getConfigurations(
           categoryId: homeController.selectedCategoryId.value,
-          gameId: homeController.selectedGameId.value
-      );
+          gameId: homeController.selectedGameId.value);
       await homeController.getStaticData();
       int multiFieldsCount = 0;
       int singleFieldsCount = 0;
@@ -441,7 +502,6 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
     }
   }
 
-
   Future<void> _createListing(TextTheme textTheme) async {
     Helpers.loader();
 
@@ -456,8 +516,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
 
     final isSuccess = await listingController.createListing(
         categoryId: homeController.selectedCategoryId.value,
-        gameId: homeController.selectedGameId.value
-    );
+        gameId: homeController.selectedGameId.value);
 
     Helpers.hideLoader();
     if (isSuccess) {
@@ -472,7 +531,8 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
           textTheme: textTheme,
           tileName: "Congratulations",
           titleColor: aquaGreenColor,
-          contentName: "Your service has been successfully listed. You can edit your listings from My Listings.",
+          contentName:
+              "Your service has been successfully listed. You can edit your listings from My Listings.",
           contentLinkName: ' My Listings',
           onOk: () {
             Navigator.pop(context);
@@ -481,15 +541,47 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
     }
   }
 
-
   void _openFileExplorer() async {
     try {
+      // final permissionStatus = await Permission.storage.status;
+      // if (permissionStatus.isDenied) {
+      //   // Here just ask for the permission for the first time
+      //   await Permission.storage.request();
+
+      //   // I noticed that sometimes popup won't show after user press deny
+      //   // so I do the check once again but now go straight to appSettings
+      //   if (permissionStatus.isDenied) {
+      //     await openAppSettings();
+      //   }
+      // } else if (permissionStatus.isPermanentlyDenied) {
+      //   // Here open app settings for user to manually enable permission in case
+      //   // where permission was permanently denied
+      //   await openAppSettings();
+      // } else {
+      //   // Do stuff that require permission here
+      //   _paths = (await FilePicker.platform.pickFiles(
+      //   allowMultiple: true,
+      //   onFileLoading: (FilePickerStatus status) => print(status),
+      //   type: FileType.custom,
+      //   allowedExtensions: ['jpg', 'png', 'mp4'],
+      // ))!
+      //     .files;
+
+      // listingController.files.addAll(_paths);
+      // selectedFilesExtensions = _paths.map((e) => e.extension).toList();
+
+      // for (final i in selectedFilesExtensions) {
+      //   listingController.fileTypes.add(Helpers.getFileType(i!));
+      // }
+      // }
+
       _paths = (await FilePicker.platform.pickFiles(
         allowMultiple: true,
         onFileLoading: (FilePickerStatus status) => print(status),
         type: FileType.custom,
         allowedExtensions: ['jpg', 'png', 'mp4'],
-      ))!.files;
+      ))!
+          .files;
 
       listingController.files.addAll(_paths);
       selectedFilesExtensions = _paths.map((e) => e.extension).toList();
@@ -505,15 +597,12 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
     if (!mounted) return;
   }
 
-
   Widget services2(int index) {
-    final textTheme = Theme
-        .of(context)
-        .textTheme;
-    final service = listingController.configuration.gameCategoryServices![index]
-        .service;
-    final serviceOption = listingController.configuration
-        .gameCategoryServices![index].gameCategoryServiceOptions;
+    final textTheme = Theme.of(context).textTheme;
+    final service =
+        listingController.configuration.gameCategoryServices![index].service;
+    final serviceOption = listingController
+        .configuration.gameCategoryServices![index].gameCategoryServiceOptions;
 
     switch (service?.selectionType) {
       case 0:
@@ -527,18 +616,18 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
               isMultiple: true,
               isRequired: true,
               selectedItemList: multiSelectionServices[service.index],
-              itemsList: serviceOption?.map((item) =>
-                  DropdownMenuItem<GameCategoryServiceOption>(
-                    value: item,
-                    child: Text(
-                        item.serviceOption!.serviceOptionName!,
-                        style: textTheme.headline3?.copyWith(color: whiteColor)
-                    ),
-                  )).toList(),
+              itemsList: serviceOption
+                  ?.map((item) => DropdownMenuItem<GameCategoryServiceOption>(
+                        value: item,
+                        child: Text(item.serviceOption!.serviceOptionName!,
+                            style: textTheme.headline3
+                                ?.copyWith(color: whiteColor)),
+                      ))
+                  .toList(),
               onChanged: (value) {
                 setState(() {
                   final index2 = serviceOption?.indexWhere((element) =>
-                  element.serviceOption?.serviceOptionName ==
+                      element.serviceOption?.serviceOptionName ==
                       value.serviceOption.serviceOptionName);
 
                   print(multiSelectionServices[service.index]);
@@ -549,16 +638,16 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                       .contains(value.serviceOption.serviceOptionName)) {
                     debugPrint('do nothing');
                   } else {
-                    multiSelectionServices[service.index].add(
-                        SelectedServiceOption(
-                          id: serviceOption?[index2!].serviceOption?.id,
-                          name: serviceOption?[index2!].serviceOption
-                              ?.serviceOptionName,
-                        ));
+                    multiSelectionServices[service.index]
+                        .add(SelectedServiceOption(
+                      id: serviceOption?[index2!].serviceOption?.id,
+                      name: serviceOption?[index2!]
+                          .serviceOption
+                          ?.serviceOptionName,
+                    ));
 
                     debugPrint(
-                        "Multi Selection Array ${multiSelectionServices[service
-                            .index]}");
+                        "Multi Selection Array ${multiSelectionServices[service.index]}");
                   }
                 });
               },
@@ -566,32 +655,31 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
             multiSelectionServices[service.index].isEmpty
                 ? const SizedBox()
                 : Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(8.0),
-              decoration: const BoxDecoration(
-                  color: textFieldColor,
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(8.0),
-                      bottomRight: Radius.circular(8.0))
-              ),
-              child: Wrap(
-                spacing: 12.0,
-                runSpacing: 0.0,
-                children: List.from(
-                  multiSelectionServices[service.index].map((services) {
-                    return CustomChips(
-                        chipName: services.name,
-                        removeItem: () {
-                          setState(() {
-                            multiSelectionServices[service.index].removeWhere((
-                                element) => element.name == services.name);
-                          });
-                        }
-                    );
-                  }).toList(),
-                ),
-              ),
-            ),
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: const BoxDecoration(
+                        color: textFieldColor,
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(8.0),
+                            bottomRight: Radius.circular(8.0))),
+                    child: Wrap(
+                      spacing: 12.0,
+                      runSpacing: 0.0,
+                      children: List.from(
+                        multiSelectionServices[service.index].map((services) {
+                          return CustomChips(
+                              chipName: services.name,
+                              removeItem: () {
+                                setState(() {
+                                  multiSelectionServices[service.index]
+                                      .removeWhere((element) =>
+                                          element.name == services.name);
+                                });
+                              });
+                        }).toList(),
+                      ),
+                    ),
+                  ),
             // AutoCompleteField(
             //   hint: service.name,
             //   isMultiple: true,
@@ -635,57 +723,56 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
           selectedValue: singleSelectedServiceController[service.index].text,
           isMultiple: false,
           isRequired: true,
-          itemsList: serviceOption?.map((item) =>
-              DropdownMenuItem<GameCategoryServiceOption>(
-                value: item,
-                child: Text(
-                    item.serviceOption!.serviceOptionName!,
-                    style: textTheme.headline3?.copyWith(color: whiteColor)
-                ),
-              )).toList(),
+          itemsList: serviceOption
+              ?.map((item) => DropdownMenuItem<GameCategoryServiceOption>(
+                    value: item,
+                    child: Text(item.serviceOption!.serviceOptionName!,
+                        style:
+                            textTheme.headline3?.copyWith(color: whiteColor)),
+                  ))
+              .toList(),
           onChanged: (value) {
             setState(() {
               final index2 = serviceOption?.indexWhere((element) =>
-              element.serviceOption?.serviceOptionName ==
+                  element.serviceOption?.serviceOptionName ==
                   value.serviceOption.serviceOptionName);
               singleSelectedServiceController[service.index].text =
-              serviceOption![index2!].serviceOption!.serviceOptionName!;
+                  serviceOption![index2!].serviceOption!.serviceOptionName!;
               singleSelectionService[service.index].name =
                   serviceOption[index2].serviceOption?.serviceOptionName;
               singleSelectionService[service.index].id =
                   serviceOption[index2].serviceOption?.id;
             });
-            debugPrint("Single Selection Array ${singleSelectionService[service
-                .index]}");
+            debugPrint(
+                "Single Selection Array ${singleSelectionService[service.index]}");
           },
         );
 
-
-    // AutoCompleteField(
-    //     hint: service!.name,
-    //     selectedSuggestion: singleSelectedServiceController[service.index],
-    //     isMultiple: false,
-    //     isRequired: true,
-    //     suggestionsCallback: (pattern) async {
-    //       final result = serviceOption?.where((suggestion) =>
-    //           suggestion.toString().toLowerCase().contains(
-    //               pattern.toLowerCase())).toList();
-    //       List finalList = [];
-    //       for (int i = 0; i < result!.length; i++) {
-    //         finalList.add(result[i].serviceOption?.serviceOptionName);
-    //       }
-    //       return finalList;
-    //     },
-    //     onSuggestionSelected: (value) {
-    //       setState(() {
-    //         final index2 = serviceOption?.indexWhere((element) => element.serviceOption?.serviceOptionName == value);
-    //         singleSelectedServiceController[service.index].text = serviceOption![index2!].serviceOption!.serviceOptionName!;
-    //         singleSelectionService[service.index].name = serviceOption[index2].serviceOption?.serviceOptionName;
-    //         singleSelectionService[service.index].id = serviceOption[index2].serviceOption?.id;
-    //       });
-    //       debugPrint("Single Selection Array ${singleSelectionService[service.index]}");
-    //     },
-    //   );
+      // AutoCompleteField(
+      //     hint: service!.name,
+      //     selectedSuggestion: singleSelectedServiceController[service.index],
+      //     isMultiple: false,
+      //     isRequired: true,
+      //     suggestionsCallback: (pattern) async {
+      //       final result = serviceOption?.where((suggestion) =>
+      //           suggestion.toString().toLowerCase().contains(
+      //               pattern.toLowerCase())).toList();
+      //       List finalList = [];
+      //       for (int i = 0; i < result!.length; i++) {
+      //         finalList.add(result[i].serviceOption?.serviceOptionName);
+      //       }
+      //       return finalList;
+      //     },
+      //     onSuggestionSelected: (value) {
+      //       setState(() {
+      //         final index2 = serviceOption?.indexWhere((element) => element.serviceOption?.serviceOptionName == value);
+      //         singleSelectedServiceController[service.index].text = serviceOption![index2!].serviceOption!.serviceOptionName!;
+      //         singleSelectionService[service.index].name = serviceOption[index2].serviceOption?.serviceOptionName;
+      //         singleSelectionService[service.index].id = serviceOption[index2].serviceOption?.id;
+      //       });
+      //       debugPrint("Single Selection Array ${singleSelectionService[service.index]}");
+      //     },
+      //   );
 
       case 2:
         return TextFieldWidget(
@@ -699,25 +786,16 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
     }
   }
 
-
   Widget selectedFileTile({required File image, required int index}) {
     return Container(
       padding: const EdgeInsets.all(8),
       constraints: BoxConstraints(
-          minHeight: MediaQuery
-              .of(context)
-              .size
-              .height * 0.08,
-          minWidth: MediaQuery
-              .of(context)
-              .size
-              .width * 0.4),
+          minHeight: MediaQuery.of(context).size.height * 0.08,
+          minWidth: MediaQuery.of(context).size.width * 0.4),
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-              spreadRadius: 1,
-              blurRadius: 5,
-              color: Colors.black.withAlpha(50))
+              spreadRadius: 1, blurRadius: 5, color: Colors.black.withAlpha(50))
         ],
         borderRadius: BorderRadius.circular(12),
         color: iconWhiteColor,
@@ -764,17 +842,16 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   text: TextSpan(children: [
                     TextSpan(
                       text: content,
-                      style: textTheme.subtitle2?.copyWith(
-                          color: textLightColor),
+                      style:
+                          textTheme.subtitle2?.copyWith(color: textLightColor),
                     ),
                     TextSpan(
                         text: textSpan,
                         recognizer: TapGestureRecognizer()
                           ..onTap = () => context.pushNamed(staticContentPage,
                               queryParams: {'termName': 'Terms of Use'}),
-                        style: textTheme.subtitle2?.copyWith(
-                            color: aquaGreenColor)
-                    ),
+                        style: textTheme.subtitle2
+                            ?.copyWith(color: aquaGreenColor)),
                   ]))),
         ),
       ],
@@ -787,28 +864,33 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Image.asset("assets/images/token.png", height: 20, width: 20,),
+            Image.asset(
+              "assets/images/token.png",
+              height: 20,
+              width: 20,
+            ),
             SizedBox(width: 2.w),
             Expanded(
               child: TextFieldWidget(
                 textEditingController: listingController.price.value,
-                hint: "Enter Token",
+                hint: "Enter Price",
                 type: "token",
                 isNumber: true,
                 isRequired: true,
                 onChanged: (value) {
                   if (value.isNotEmpty) {
                     listingController.tokenToRupee.value =
-                        (int.tryParse(value)! * int.tryParse(
-                            homeController.staticData[5].realValue!)!)
+                        (int.tryParse(value)! *
+                                int.tryParse(
+                                    homeController.staticData[5].realValue!)!)
                             .floor()
                             .toString();
-                    listingController.rupeeToToken.value =
-                        (int.tryParse(value)! /
+                    listingController
+                        .rupeeToToken.value = (int.tryParse(value)! /
                             int.tryParse(homeController.staticData[5].key!)!)
-                            .floor()
-                            .toString();
-                  }else{
+                        .floor()
+                        .toString();
+                  } else {
                     listingController.tokenToRupee.value = '0';
                     listingController.rupeeToToken.value = '0';
                   }
@@ -820,33 +902,29 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
               "per",
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
-              style: textTheme.headline4?.copyWith(
-                  fontSize: 13.0, color: textLightColor),
+              style: textTheme.headline4
+                  ?.copyWith(fontSize: 13.0, color: textLightColor),
             ),
             SizedBox(width: 2.w),
             Expanded(
                 child: BuildDropdown(
-                  selectedValue: selectedUnitName,
-                  dropdownHint: "Select Unit",
-                  isRequired: true,
-                  itemsList: listingController.configuration.units?.map((
-                      item) =>
-                      DropdownMenuItem<Unit>(
+              selectedValue: selectedUnitName,
+              dropdownHint: "Select Unit",
+              isRequired: true,
+              itemsList: listingController.configuration.units
+                  ?.map((item) => DropdownMenuItem<Unit>(
                         value: item,
-                        child: Text(
-                            item.name!,
-                            style: textTheme.headline3?.copyWith(
-                                color: whiteColor)
-                        ),
-                      )).toList(),
-                  onChanged: (value) {
-                    selectedUnitName = value.name;
-                    listingController.priceUnitId.value = value.id;
-                    debugPrint(
-                        "unit id ${listingController.priceUnitId.value}");
-                  },
-                )),
-
+                        child: Text(item.name!,
+                            style: textTheme.headline3
+                                ?.copyWith(color: whiteColor)),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                selectedUnitName = value.name;
+                listingController.priceUnitId.value = value.id;
+                debugPrint("unit id ${listingController.priceUnitId.value}");
+              },
+            )),
           ],
         ),
         SizedBox(height: 2.h),
@@ -865,11 +943,12 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                 TokenWidget(
                   tokens: listingController.rupeeToToken.value,
                   textColor: whiteColor,
-                  size: 20,),
+                  size: 20,
+                ),
                 Text(
                   " = ₹ ${listingController.tokenToRupee}",
-                  style: textTheme.headline3?.copyWith(
-                      color: whiteColor),),
+                  style: textTheme.headline3?.copyWith(color: whiteColor),
+                ),
               ],
             );
           }),
@@ -877,7 +956,6 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
       ],
     );
   }
-
 
   _buildUploadField(TextTheme textTheme) {
     return DottedBorder(
@@ -904,7 +982,8 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   return const SizedBox();
                 } else {
                   return GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       childAspectRatio: 2.5,
                       mainAxisSpacing: 15.0,
@@ -917,8 +996,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                     itemBuilder: (context, index) {
                       return selectedFileTile(
                           image: File(listingController.files[index].path!),
-                          index: index
-                      );
+                          index: index);
                     },
                   );
                 }
@@ -932,8 +1010,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   name: "Choose file",
                   textColor: textWhiteColor,
                   iconWidget: 'assets/icons/upload_img_icon.svg',
-                  onTap: _openFileExplorer
-              ),
+                  onTap: _openFileExplorer),
               SizedBox(height: 2.h),
               Text("or",
                   style: textTheme.headline4?.copyWith(color: textWhiteColor)),

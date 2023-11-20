@@ -1,7 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sizer/sizer.dart';
+import 'package:cupertino_icons/cupertino_icons.dart';
 
 import '../../core/theme/colors.dart';
+import '../../services/routing_service/routes_name.dart';
 
 class CustomAppBar extends StatelessWidget {
   final String? appBarName;
@@ -20,27 +24,27 @@ class CustomAppBar extends StatelessWidget {
         children: [
           Stack(
             children: [
-              SizedBox(
-                width: 42,
-                height: 42,
-                child: MaterialButton(
-                  shape: const CircleBorder(),
-                  color: textCharcoalBlueColor,
-                  onPressed: () {
-                    if(onBack == null){
-                      Navigator.pop(context);
-                    }else{
-                      onBack!();
-                      Navigator.pop(context);
-                    }
-                  },
-                  child: const Icon(
-                    Icons.arrow_back_ios,
-                    size: 18,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+              // SizedBox(
+              //   width: 42,
+              //   height: 42,
+              //   child: MaterialButton(
+              //     shape: const CircleBorder(),
+              //     color: textCharcoalBlueColor,
+              //     onPressed: () {
+              //       if(onBack == null){
+              //         Navigator.pop(context);
+              //       }else{
+              //         onBack!();
+              //         Navigator.pop(context);
+              //       }
+              //     },
+              //     child: const Icon(
+              //       Icons.arrow_back_ios,
+              //       size: 18,
+              //       color: Colors.white,
+              //     ),
+              //   ),
+              // ),
               Container(
                 width: MediaQuery.of(context).size.width * 0.9,
                 alignment: Alignment.center,
@@ -56,6 +60,17 @@ class CustomAppBar extends StatelessWidget {
                   ),
                 ),
               ),
+              // `InkWell(
+              //   onTap: () {
+                  
+              //   },
+              //   child: Padding(
+              //     padding: const EdgeInsets.all(8.0),
+              //     child: Container( 
+              //       color: textCharcoalBlueColor,
+              //       child: Icon(Icons.search)),
+              //   ),
+              // )`
             ],
           ),
         ],
@@ -79,13 +94,54 @@ PreferredSizeWidget appBar({required BuildContext context, String? appBarName,
         child: Stack(
           children: [
             Align(
+              alignment: Alignment.centerRight,
+              child: GestureDetector(
+                onTap: () {
+                  context.pushNamed(searchScreenPage);
+                },
+                child: Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    color: textCharcoalBlueColor,
+                    borderRadius: BorderRadius.circular(10)
+                  ),
+                  child: const Icon(CupertinoIcons.search, size: 23, color: Colors.white,),
+                ),
+              ),
+            //   child: SizedBox(
+            //   // width: 40,
+            //   // height: 42,
+            //   child: Padding(
+            //     padding: const EdgeInsets.all(8.0),
+            //     child: MaterialButton(
+            //       shape:  RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            //       color: textCharcoalBlueColor,
+            //       onPressed: () {
+            //         if(onBack == null){
+            //           Navigator.pop(context);
+            //         }else{
+            //           onBack();
+            //           Navigator.pop(context);
+            //         }
+            //       },
+            //       child: const Icon(
+            //           CupertinoIcons.search,                    
+            //           size: 25,
+            //           color: Colors.white,
+            //         ),
+            //     ),
+            //   ),
+            // )
+            ),
+            Align(
               alignment: Alignment.center,
               child: Text(
                 textAlign: TextAlign.center,
                 appBarName ?? '',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: textTheme.headline2?.copyWith(color: txtColor ?? textWhiteColor),
+                style: textTheme.headline2?.copyWith(color: txtColor ?? aquaGreenColor),
               ),
             ),
             isBackIcon ? SizedBox(
@@ -109,6 +165,7 @@ PreferredSizeWidget appBar({required BuildContext context, String? appBarName,
                 ),
               ),
             ) : const SizedBox() ,
+            
           ],
         ),
       ),

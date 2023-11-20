@@ -90,11 +90,12 @@ class _CreateAccountState extends State<CreateAccount> {
                   final result = await authController.signup(name: name.text, email: email.text, password: password.text, confirmPassword: confirmPassword.text);
                   if (!mounted) return;
                   if(result){
-                    final isSuccess = await authController.sendAndVerifyOTP(email: email.text);
-                    Helpers.hideLoader();
-                    if(isSuccess){
-                      _otpDialog(context);
-                    }
+                    // final isSuccess = await authController.sendAndVerifyOTP(email: email.text);
+                    // Helpers.hideLoader();
+                    // if(isSuccess){
+                    //   _otpDialog(context);
+                    // }
+                    _showCreateProfileBottomSheet(context);
                   }else{
                     Helpers.hideLoader();
                   }
@@ -142,7 +143,7 @@ class _CreateAccountState extends State<CreateAccount> {
             otp: otp,
             onVerify: () async{
               Helpers.loader();
-              final isSuccess = await authController.sendAndVerifyOTP(email: email.text, otp: otp.text);
+              final isSuccess = await authController.sendAndVerifyOTP(mobile: email.text, otp: otp.text);
               Helpers.hideLoader();
               if (!mounted) return;
               if(isSuccess) {

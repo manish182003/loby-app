@@ -15,6 +15,7 @@ class TextFieldWidget extends StatefulWidget {
   final String? title;
   final String? hint;
   final int? maxLines;
+  final int? length;
   final bool isNumber;
   final ValueChanged<String>? onChanged;
   final bool isRequired;
@@ -24,14 +25,32 @@ class TextFieldWidget extends StatefulWidget {
   final bool isReadableOnly;
   final double? scrollBottomPadding;
   final Color? titleColor;
-  const TextFieldWidget({Key? key, required this.textEditingController, this.type = 'normal', this.hint, this.maxLines, this.isNumber = false, this.onChanged, this.isRequired = false, this.textInputAction, this.icon, this.onTap, this.title, this.isReadableOnly = false, this.scrollBottomPadding, this.titleColor}) : super(key: key);
+  final String? prefix;
+  const TextFieldWidget(
+      {Key? key,
+      required this.textEditingController,
+      this.type = 'normal',
+      this.hint,
+      this.maxLines,
+      this.isNumber = false,
+      this.onChanged,
+      this.isRequired = false,
+      this.textInputAction,
+      this.icon,
+      this.onTap,
+      this.length,
+      this.title,
+      this.isReadableOnly = false,
+      this.scrollBottomPadding,
+      this.prefix,
+      this.titleColor})
+      : super(key: key);
 
   @override
   State<TextFieldWidget> createState() => _TextFieldWidgetState();
 }
 
 class _TextFieldWidgetState extends State<TextFieldWidget> {
-
   bool isVisible = false;
 
   DateTime selectedDate = DateTime.now();
@@ -44,7 +63,6 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
         firstDate: DateTime(1900),
         lastDate: DateTime.now());
     if (picked != null && picked != date) {
-
       setState(() {
         date = picked;
       });
@@ -58,15 +76,20 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        widget.title == null ? const SizedBox() :  Text(
-          widget.title ?? "",
-          style: textTheme.headline5?.copyWith(color: widget.titleColor ?? textInputTitleColor),
+        widget.title == null
+            ? const SizedBox()
+            : Text(
+                widget.title ?? "",
+                style: textTheme.headline5
+                    ?.copyWith(color: widget.titleColor ?? textInputTitleColor),
+              ),
+        SizedBox(
+          height: widget.title == null ? 0.h : 2.h,
         ),
-        SizedBox(height:widget.title == null ?  0.h : 2.h,),
         CustomTextField(
           validator: (value) {
-            if(widget.isRequired){
-              switch(widget.type){
+            if (widget.isRequired) {
+              switch (widget.type) {
                 case 'normal':
                   return Helpers.validateField(value!);
                 case 'email':
@@ -76,7 +99,8 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                 case 'password':
                   return Helpers.validatePassword(value!);
                 case 'withdraw':
-                  return Helpers.validateWalletWithdraw(value!, Get.find<ProfileController>().profile.walletMoney!);
+                  return Helpers.validateWalletWithdraw(value!,
+                      Get.find<ProfileController>().profile.walletMoney!);
                 case 'add':
                   return Helpers.validateWalletAdd(value!);
                 case 'link':
@@ -93,48 +117,71 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
             }
             return null;
           },
-          onTap: ()async{
-            if(widget.type == "date"){
-
+          onTap: () async {
+            if (widget.type == "date") {
               FocusScope.of(context).requestFocus(FocusNode());
               await _selectDate(context);
-              widget.textEditingController.text = DateFormat('dd/MM/yyyy').format(date);
-              }
-            },
-          onChanged: (value){
-            if(widget.onChanged != null){
+              widget.textEditingController.text =
+                  DateFormat('dd/MM/yyyy').format(date);
+            }
+          },
+          onChanged: (value) {
+            if (widget.onChanged != null) {
               widget.onChanged!(value);
             }
           },
-          inputFormatters: widget.isNumber ? [
-            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-          ] : widget.type == "username" ? [
-              FilteringTextInputFormatter.deny(
-                  RegExp(r'\s')),
-          ] : null,
+          inputFormatters: widget.isNumber
+              ? [
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                ]
+              : widget.type == "username"
+                  ? [
+                      FilteringTextInputFormatter.deny(RegExp(r'\s')),
+                    ]
+                  : null,
           input: widget.textEditingController,
           obscureText: widget.type == 'password' ? !isVisible : isVisible,
           hintText: widget.hint,
           textCapitalization: TextCapitalization.none,
-          keyboardType: widget.isNumber ? TextInputType.number :  widget.type == 'email' ? TextInputType.emailAddress : widget.textInputAction == TextInputAction.newline ? TextInputType.multiline : TextInputType.name,
+          length: widget.length,
+          keyboardType: widget.isNumber
+              ? TextInputType.number
+              : widget.type == 'email'
+                  ? TextInputType.emailAddress
+                  : widget.textInputAction == TextInputAction.newline
+                      ? TextInputType.multiline
+                      : TextInputType.name,
           textInputAction: widget.textInputAction ?? TextInputAction.next,
           isReadableOnly: widget.isReadableOnly,
           maxLines: widget.maxLines ?? 1,
-          scrollBottomPadding: widget.scrollBottomPadding ?? MediaQuery.of(context).viewInsets.bottom,
-          iconButton: widget.type == 'password' ? IconButton(
-            padding: const EdgeInsets.all(0.0),
-            icon: Icon(
-              isVisible ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-              color: iconTintColor,
-              size: 15,
-            ),
-            onPressed: () {
-              setState(() {
-                isVisible = !isVisible;
-              });
-            },) : widget.icon != null ? IconButton(
-            padding: const EdgeInsets.all(0.0),
-            icon: SvgPicture.asset(widget.icon!,), onPressed: widget.onTap, color: Colors.black,) : null,
+          scrollBottomPadding: widget.scrollBottomPadding ??
+              MediaQuery.of(context).viewInsets.bottom,
+          iconButton: widget.type == 'password'
+              ? IconButton(
+                  padding: const EdgeInsets.all(0.0),
+                  icon: Icon(
+                    isVisible
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined,
+                    color: iconTintColor,
+                    size: 15,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      isVisible = !isVisible;
+                    });
+                  },
+                )
+              : widget.icon != null
+                  ? IconButton(
+                      padding: const EdgeInsets.all(0.0),
+                      icon: SvgPicture.asset(
+                        widget.icon!,
+                      ),
+                      onPressed: widget.onTap,
+                      color: Colors.black,
+                    )
+                  : null,
         ),
       ],
     );

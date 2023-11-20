@@ -80,9 +80,9 @@ class AuthRepositoryImpl extends AuthRepository{
   }
 
   @override
-  Future<Either<Failure, bool>> login({String? email, String? password, String? socialLoginId, int? socialLoginType, String? name})async {
+  Future<Either<Failure, bool>> login({String? mobile, String? email, String? password, String? socialLoginId, int? socialLoginType, String? name})async {
     try {
-      return Right(await _authRemoteDatasource.login(email, password, socialLoginId, socialLoginType, name));
+      return Right(await _authRemoteDatasource.login(mobile, email, password, socialLoginId, socialLoginType, name));
     } on ServerException catch (e) {
     // Loggers can be added here for analyzation.
     return Left(ServerFailure(message: e.message.toString()));
@@ -110,9 +110,9 @@ class AuthRepositoryImpl extends AuthRepository{
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> sendAndVerifyOTP({String? email, String? otp})async {
+  Future<Either<Failure, Map<String, dynamic>>> sendAndVerifyOTP({String? mobile, String? otp})async {
     try {
-      return Right(await _authRemoteDatasource.sendAndVerifyOTP(email, otp));
+      return Right(await _authRemoteDatasource.sendAndVerifyOTP(mobile, otp));
     } on ServerException catch (e) {
     // Loggers can be added here for analyzation.
     return Left(ServerFailure(message: e.message.toString()));

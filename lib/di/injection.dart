@@ -4,25 +4,33 @@ import 'package:loby/core/utils/constants.dart';
 import 'package:loby/data/datasource_impl/auth_remote_datasource_impl.dart';
 import 'package:loby/data/datasource_impl/chat_remote_datasource_impl.dart';
 import 'package:loby/data/datasource_impl/home_remote_datasource_impl.dart';
+import 'package:loby/data/datasource_impl/kyc_remote_datasource_impl.dart';
 import 'package:loby/data/datasource_impl/listing_remote_datasource_impl.dart';
 import 'package:loby/data/datasource_impl/profile_remote_datasource_impl.dart';
+import 'package:loby/data/datasource_impl/slots_remote_datasource_impl.dart';
 import 'package:loby/data/datasources/auth_remote_datasource.dart';
 import 'package:loby/data/datasources/chat_remote_datasource.dart';
 import 'package:loby/data/datasources/home_remote_datasource.dart';
+import 'package:loby/data/datasources/key_remote_datasource.dart';
 import 'package:loby/data/datasources/listing_remote_datasource.dart';
 import 'package:loby/data/datasources/order_remote_datasource.dart';
 import 'package:loby/data/datasources/profile_remote_datasource.dart';
+import 'package:loby/data/datasources/slots_remote_datasource.dart';
 import 'package:loby/data/repositories/auth_repository_impl.dart';
 import 'package:loby/data/repositories/chat_repository_impl.dart';
 import 'package:loby/data/repositories/home_repsitory_impl.dart';
+import 'package:loby/data/repositories/kyc_repository.dart';
 import 'package:loby/data/repositories/listing_repository_impl.dart';
 import 'package:loby/data/repositories/profile_repository_impl.dart';
+import 'package:loby/data/repositories/slots_repository_impl.dart';
 import 'package:loby/domain/repositories/auth_repository.dart';
 import 'package:loby/domain/repositories/chat_repository.dart';
 import 'package:loby/domain/repositories/home_repository.dart';
+import 'package:loby/domain/repositories/kyc_repository.dart';
 import 'package:loby/domain/repositories/listing_repository.dart';
 import 'package:loby/domain/repositories/order_repository.dart';
 import 'package:loby/domain/repositories/profile_repository.dart';
+import 'package:loby/domain/repositories/slots_repository.dart';
 import 'package:loby/domain/usecases/auth/add_fcm_token.dart';
 import 'package:loby/domain/usecases/auth/check_username.dart';
 import 'package:loby/domain/usecases/auth/get_cities.dart';
@@ -39,6 +47,9 @@ import 'package:loby/domain/usecases/chat/get_messages.dart';
 import 'package:loby/domain/usecases/chat/send_message.dart';
 import 'package:loby/domain/usecases/home/get_static_data.dart';
 import 'package:loby/domain/usecases/home/global_search.dart';
+import 'package:loby/domain/usecases/kyc/get_kyc_token.dart';
+import 'package:loby/domain/usecases/kyc/send_kyc_otp.dart';
+import 'package:loby/domain/usecases/kyc/verify_kyc_otp.dart';
 import 'package:loby/domain/usecases/order/change_order_status.dart';
 import 'package:loby/domain/usecases/order/create_order.dart';
 import 'package:loby/domain/usecases/order/get_disputes.dart';
@@ -74,13 +85,20 @@ import 'package:loby/domain/usecases/profile/submit_feedback.dart';
 import 'package:loby/domain/usecases/profile/update_social_links.dart';
 import 'package:loby/domain/usecases/profile/verify_payment.dart';
 import 'package:loby/domain/usecases/profile/withdraw_money.dart';
+import 'package:loby/domain/usecases/slots/add_slots.dart';
+import 'package:loby/domain/usecases/slots/delete_slot.dart';
+import 'package:loby/domain/usecases/slots/edit_slot.dart';
+import 'package:loby/domain/usecases/slots/get_buyer_slots.dart';
+import 'package:loby/domain/usecases/slots/get_slots.dart';
 import 'package:loby/presentation/getx/bindings/auth_binding.dart';
 import 'package:loby/presentation/getx/bindings/chat_binding.dart';
 import 'package:loby/presentation/getx/bindings/core_binding.dart';
 import 'package:loby/presentation/getx/bindings/home_binding.dart';
+import 'package:loby/presentation/getx/bindings/kyc_binding.dart';
 import 'package:loby/presentation/getx/bindings/listing_binding.dart';
 import 'package:loby/presentation/getx/bindings/order_binding.dart';
 import 'package:loby/presentation/getx/bindings/profile_binding.dart';
+import 'package:loby/presentation/getx/bindings/slots_binding.dart';
 
 import '../data/datasource_impl/order_remote_datasource_impl.dart';
 import '../data/repositories/order_repository_impl.dart';
@@ -91,8 +109,7 @@ import '../domain/usecases/profile/get_earning_transaction.dart';
 import '../domain/usecases/profile/get_wallet_transactions.dart';
 import '../presentation/getx/bindings/network_binding.dart';
 
-class DependencyInjector{
-
+class DependencyInjector {
   static void inject() {
     _injectExternalDependencies();
     _injectDataSources();
@@ -103,6 +120,8 @@ class DependencyInjector{
     _injectOrderUsecases();
     _injectChatUsecases();
     _injectProfileUsecases();
+    _injectSlotUsecases();
+    _injectKycUsecases();
 
     AuthBinding().dependencies();
     HomeBinding().dependencies();
@@ -112,8 +131,9 @@ class DependencyInjector{
     ProfileBinding().dependencies();
     CoreBinding().dependencies();
     NetworkBinding().dependencies();
+    SlotsBinding().dependencies();
+    KycBinding().dependencies();
   }
-
 
   static void _injectExternalDependencies() {
     final dio = Dio(
@@ -122,33 +142,40 @@ class DependencyInjector{
     Get.lazyPut<Dio>(() => dio);
   }
 
-
   static void _injectDataSources() {
     final dio = Get.find<Dio>();
     Get.lazyPut<AuthRemoteDatasource>(() => AuthRemoteDatasourceImpl(dio));
     Get.lazyPut<HomeRemoteDatasource>(() => HomeRemoteDatasourceImpl(dio));
-    Get.lazyPut<ListingRemoteDatasource>(() => ListingRemoteDatasourceImpl(dio));
+    Get.lazyPut<ListingRemoteDatasource>(
+        () => ListingRemoteDatasourceImpl(dio));
     Get.lazyPut<OrderRemoteDatasource>(() => OrderRemoteDatasourceImpl(dio));
     Get.lazyPut<ChatRemoteDatasource>(() => ChatRemoteDatasourceImpl(dio));
-    Get.lazyPut<ProfileRemoteDatasource>(() => ProfileRemoteDatasourceImpl(dio));
-
+    Get.lazyPut<ProfileRemoteDatasource>(
+        () => ProfileRemoteDatasourceImpl(dio));
+    Get.lazyPut<SlotsRemoteDatasource>(() => SlotsRemoteDatasourceImpl(dio));
+    Get.lazyPut<KycRemoteDatasource>(() => KycRemoteDatasourceImpl(dio));
   }
 
   static void _injectRepositories() {
-
     final authDatasource = Get.find<AuthRemoteDatasource>();
     final homeDatasource = Get.find<HomeRemoteDatasource>();
     final listingDatasource = Get.find<ListingRemoteDatasource>();
     final orderDatasource = Get.find<OrderRemoteDatasource>();
     final chatDatasource = Get.find<ChatRemoteDatasource>();
     final profileDatasource = Get.find<ProfileRemoteDatasource>();
+    final slotDataSource = Get.find<SlotsRemoteDatasource>();
+    final kycDataSource = Get.find<KycRemoteDatasource>();
 
     Get.lazyPut<AuthRepository>(() => AuthRepositoryImpl(authDatasource));
     Get.lazyPut<HomeRepository>(() => HomeRepositoryImpl(homeDatasource));
-    Get.lazyPut<ListingRepository>(() => ListingRepositoryImpl(listingDatasource));
+    Get.lazyPut<ListingRepository>(
+        () => ListingRepositoryImpl(listingDatasource));
     Get.lazyPut<OrderRepository>(() => OrderRepositoryImpl(orderDatasource));
     Get.lazyPut<ChatRepository>(() => ChatRepositoryImpl(chatDatasource));
-    Get.lazyPut<ProfileRepository>(() => ProfileRepositoryImpl(profileDatasource));
+    Get.lazyPut<ProfileRepository>(
+        () => ProfileRepositoryImpl(profileDatasource));
+    Get.lazyPut<SlotsRepository>(() => SlotsRepositoryImpl(slotDataSource));
+    Get.lazyPut<KycRepository>(() => KycRepositoryImpl(kycDataSource));
   }
 
   static void _injectAuthUsecases() {
@@ -178,7 +205,6 @@ class DependencyInjector{
     Get.lazyPut(() => GetUnreadCount(homeRepository));
     Get.lazyPut(() => GlobalSearch(homeRepository));
     Get.lazyPut(() => GetStaticData(homeRepository));
-
   }
 
   static void _injectListingUsecases() {
@@ -192,7 +218,23 @@ class DependencyInjector{
     Get.lazyPut(() => DeleteListingImage(listingRepository));
   }
 
+  static void _injectSlotUsecases() {
+    final slotsRepository = Get.find<SlotsRepository>();
 
+    Get.lazyPut(() => AddSlots(slotsRepository));
+    Get.lazyPut(() => GetSlots(slotsRepository));
+    Get.lazyPut(() => GetBuyerSlots(slotsRepository));
+    Get.lazyPut(() => DeleteSlots(slotsRepository));
+    Get.lazyPut(() => EditSlot(slotsRepository));
+  }
+
+  static void _injectKycUsecases() {
+    final kycRepository = Get.find<KycRepository>();
+
+    Get.lazyPut(() => GetKycToken(kycRepository));
+    Get.lazyPut(() => SendKycOtp(kycRepository));
+    Get.lazyPut(() => VerifyKycOtp(kycRepository));
+  }
 
   static void _injectChatUsecases() {
     final chatRepository = Get.find<ChatRepository>();
@@ -201,7 +243,6 @@ class DependencyInjector{
     Get.lazyPut(() => GetMessages(chatRepository));
     Get.lazyPut(() => SendMessage(chatRepository));
     Get.lazyPut(() => CheckEligibility(chatRepository));
-
   }
 
   static void _injectOrderUsecases() {
@@ -216,7 +257,6 @@ class DependencyInjector{
     Get.lazyPut(() => RaiseDispute(orderRepository));
     Get.lazyPut(() => GetDisputes(orderRepository));
     Get.lazyPut(() => SubmitDisputeProof(orderRepository));
-
   }
 
   static void _injectProfileUsecases() {
@@ -241,5 +281,4 @@ class DependencyInjector{
     Get.lazyPut(() => GetSettlementRequests(profileRepository));
     Get.lazyPut(() => GetTotalEarning(profileRepository));
   }
-
 }

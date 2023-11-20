@@ -18,14 +18,26 @@ class CategoryItemCard extends StatelessWidget {
   final String? images;
   final Game game;
 
-  const CategoryItemCard({Key? key, required this.index, this.images, required this.categoryId, required this.gameId, required this.gameName, required this.game}) : super(key: key);
+  const CategoryItemCard(
+      {Key? key,
+      required this.index,
+      this.images,
+      required this.categoryId,
+      required this.gameId,
+      required this.gameName,
+      required this.game})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return InkWell(
       onTap: () {
-        context.pushNamed(gamePage, queryParams: {'categoryId' : '$categoryId', 'gameId' : '$gameId', 'gameName' : gameName});
+        context.pushNamed(gamePage, queryParams: {
+          'categoryId': '$categoryId',
+          'gameId': '$gameId',
+          'gameName': gameName
+        });
       },
       child: Card(
         color: Colors.transparent,
@@ -37,14 +49,15 @@ class CategoryItemCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Padding(
-              padding:  const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(0.0),
               child: CircleAvatar(
-                radius: 36,
+                radius: 50,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(36),
+                  borderRadius: BorderRadius.circular(6),
                   child: CustomCachedNetworkImage(
                     imageUrl: images!,
-                    placeHolder: Image.asset("assets/images/listing_placeholder.jpg"),
+                    placeHolder:
+                        Image.asset("assets/images/listing_placeholder.jpg"),
                   ),
                 ),
               ),
@@ -56,9 +69,8 @@ class CategoryItemCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
                   style: textTheme.headline6?.copyWith(color: textWhiteColor)),
-
             ),
-            SizedBox(height: 1.h,),
+            // SizedBox(height: 0.5.h,),
             Text("${game.listingCount} Listings",
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,

@@ -15,7 +15,7 @@ abstract class AuthRepository{
 
   Future<Either<Failure, Map<String, dynamic>>> signup({String? name, String? email, String? password, String? confirmPassword});
 
-  Future<Either<Failure, bool>> login({String? email, String? password, String? socialLoginId, int? socialLoginType, String? name});
+  Future<Either<Failure, bool>> login({String? mobile, String? email, String? password, String? socialLoginId, int? socialLoginType, String? name});
 
   Future<Either<Failure, CountryResponse>> getCountries({required String? search, int? page});
 
@@ -31,7 +31,7 @@ abstract class AuthRepository{
 
   Future<Either<Failure, Map<String, dynamic>>> addFCMToken({String? fcmToken});
 
-  Future<Either<Failure, Map<String, dynamic>>> sendAndVerifyOTP({String? email, String? otp});
+  Future<Either<Failure, Map<String, dynamic>>> sendAndVerifyOTP({String? mobile, String? otp});
 
   Future<Either<Failure, Map<String, dynamic>>> forgotAndResetPassword({String? email, String? otp, String? password, String? confirmPassword});
 

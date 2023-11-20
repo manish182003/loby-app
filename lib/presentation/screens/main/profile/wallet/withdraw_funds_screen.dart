@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/profile/bank_detail.dart';
 import 'package:loby/presentation/getx/controllers/home_controller.dart';
+import 'package:loby/presentation/getx/controllers/kyc_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/screens/main/profile/wallet/widgets/token_widget.dart';
 import 'package:loby/presentation/widgets/confirmation_dialog.dart';
@@ -28,7 +29,6 @@ class WithdrawFundsScreen extends StatefulWidget {
 }
 
 class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
-
   ProfileController profileController = Get.find<ProfileController>();
   HomeController homeController = Get.find<HomeController>();
 
@@ -48,7 +48,6 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
   final _formKey2 = GlobalKey<FormState>();
   final _formKey3 = GlobalKey<FormState>();
 
-
   @override
   void initState() {
     // TODO: implement initState
@@ -63,33 +62,101 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
     profileController.rupeeToToken.value = "0";
     profileController.tokenToRupee.value = "0";
     super.dispose();
-
   }
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme
-        .of(context)
-        .textTheme;
+    final textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      appBar: appBar(context: context, appBarName: "Withdraw Funds"),
+      appBar: appBar(context: context, appBarName: "Withdraw Token"),
       body: Obx(() {
         if (profileController.isBankDetailsFetching.value) {
           return const CustomLoader();
-        } else if(profileController.bankDetails.isEmpty){
-          return Center(
-            child: CustomButton(
-              color: purpleLightIndigoColor,
-              textColor: textWhiteColor,
-              left: 20.w,
-              right: 20.w,
-              height: 7.5.h,
-              name: "Add Withdraw Method",
-              onTap: () {
-                _addNewWithdrawMethodDialog(context, textTheme);
-              },
+        } else if (profileController.bankDetails.isEmpty) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              // mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                      "Safely Access Your Funds: Initiate \n Withdrawal Process Today!",
+                      style: textTheme.headline2?.copyWith(
+                        
+                          color: whiteColor, fontWeight: FontWeight.w500)),
+                ),
+                SizedBox(
+                  height: 3.h,
+                ),
+                Container(
+                  height: 30.h,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: concordColor.withOpacity(0.2)
+                  ),
+                  child: Center(
+                    child: Column(
+                      // mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(height: 3.h,),
+                        Text(
+                            "Get Started with KYC Verification \n Secure Your Account Now!",
+                            style: textTheme.headline3?.copyWith(
+                                color: whiteColor,
+                                fontWeight: FontWeight.w500)),
+                        SizedBox(
+                          height: 3.h,
+                        ),
+                        CustomButton(
+                          color: purpleLightIndigoColor,
+                          textColor: textWhiteColor,
+                          left: 20.w,
+                          right: 20.w,
+                          height: 7.5.h,
+                          name: "Get Started",
+                          onTap: () {
+                            context.pushNamed(myKycScreen);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 5.h,
+                ),
+                CustomButton(
+                  color: purpleLightIndigoColor,
+                  textColor: textWhiteColor,
+                  left: 20.w,
+                  
+                  right: 20.w,
+                  height: 7.5.h,
+                  name: "Add Withdraw Method",
+                  onTap: () {
+                    _addNewWithdrawMethodDialog(context, textTheme);
+                  },
+                ),
+              ],
             ),
           );
+          // return Center(
+          //   child: CustomButton(
+          //     color: purpleLightIndigoColor,
+          //     textColor: textWhiteColor,
+          //     left: 20.w,
+          //     right: 20.w,
+          //     height: 7.5.h,
+          //     name: "Add Withdraw Method",
+          //     onTap: () {
+          //       _addNewWithdrawMethodDialog(context, textTheme);
+          //     },
+          //   ),
+          // );
         } else {
           return SingleChildScrollView(
             child: Form(
@@ -97,7 +164,8 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left : 16.0, right: 16.0, top: 16.0, bottom: 8.0),
+                    padding: const EdgeInsets.only(
+                        left: 16.0, right: 16.0, top: 16.0, bottom: 8.0),
                     child: Stack(
                       children: [
                         Card(
@@ -127,10 +195,14 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 8.0, vertical: 16.0),
                                       child: Obx(() {
-                                        if(profileController.isProfileFetching.value){
+                                        if (profileController
+                                            .isProfileFetching.value) {
                                           return const CustomLoader();
-                                        }else{
-                                          return TokenWidget(tokens: profileController.profile.walletMoney!.toStringAsFixed(2));
+                                        } else {
+                                          return TokenWidget(
+                                              tokens: profileController
+                                                  .profile.walletMoney!
+                                                  .toStringAsFixed(2));
                                         }
                                       }),
                                     ),
@@ -161,14 +233,20 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                         selectedValue: selectedBankName,
                                         dropdownHint: "Select Withdraw Method",
                                         isRequired: true,
-                                        itemsList: profileController.bankDetails.map((item) =>
-                                            DropdownMenuItem<BankDetail>(
-                                              value: item,
-                                              child: Text(
-                                                  item.upiId == null ? "${item.bankName} ${item.bankAccountNumber?.replaceAll("\\w(?=\\w{4})", "X")}" : "UPI ID: ${item.upiId}",
-                                                  style: textTheme.headline3?.copyWith(color: whiteColor)
-                                              ),
-                                            )).toList(),
+                                        itemsList: profileController.bankDetails
+                                            .map((item) =>
+                                                DropdownMenuItem<BankDetail>(
+                                                  value: item,
+                                                  child: Text(
+                                                      item.upiId == null
+                                                          ? "${item.bankName} ${item.bankAccountNumber?.replaceAll("\\w(?=\\w{4})", "X")}"
+                                                          : "UPI ID: ${item.upiId}",
+                                                      style: textTheme.headline3
+                                                          ?.copyWith(
+                                                              color:
+                                                                  whiteColor)),
+                                                ))
+                                            .toList(),
                                         onChanged: (value) {
                                           // selectedBankName = value.name;
                                           selectedBankId = value.id;
@@ -187,22 +265,44 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                         type: 'withdraw',
                                         isRequired: true,
                                         isNumber: true,
-                                        onChanged: (value){
-                                          if(value.isNotEmpty){
-                                            profileController.tokenToRupee.value = (int.tryParse(value)! * int.tryParse(homeController.staticData[5].realValue!)!).floor().toString();
-                                            profileController.rupeeToToken.value = (int.tryParse(value)! / int.tryParse(homeController.staticData[5].key!)!).floor().toString();
-                                          }else{
-                                            profileController.tokenToRupee.value = '0';
-                                            profileController.rupeeToToken.value = '0';
+                                        onChanged: (value) {
+                                          if (value.isNotEmpty) {
+                                            profileController.tokenToRupee
+                                                .value = (int.tryParse(value)! *
+                                                    int.tryParse(homeController
+                                                        .staticData[5]
+                                                        .realValue!)!)
+                                                .floor()
+                                                .toString();
+                                            profileController.rupeeToToken
+                                                .value = (int.tryParse(value)! /
+                                                    int.tryParse(homeController
+                                                        .staticData[5].key!)!)
+                                                .floor()
+                                                .toString();
+                                          } else {
+                                            profileController
+                                                .tokenToRupee.value = '0';
+                                            profileController
+                                                .rupeeToToken.value = '0';
                                           }
                                         },
                                       )),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      TokenWidget(tokens: profileController.rupeeToToken.value, textColor: whiteColor, size: 20,),
-                                      Text("₹ ${profileController.tokenToRupee}",
-                                        style: textTheme.headline3?.copyWith(color: whiteColor),),
+                                      TokenWidget(
+                                        tokens: profileController
+                                            .rupeeToToken.value,
+                                        textColor: whiteColor,
+                                        size: 20,
+                                      ),
+                                      Text(
+                                        "₹ ${profileController.tokenToRupee}",
+                                        style: textTheme.headline3
+                                            ?.copyWith(color: whiteColor),
+                                      ),
                                     ],
                                   ),
                                   CustomButton(
@@ -211,10 +311,12 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                     right: 20.w,
                                     color: carminePinkColor,
                                     textColor: textWhiteColor,
-                                    name: "Withdraw ₹ ${profileController.tokenToRupee}",
+                                    name:
+                                        "Withdraw ₹ ${profileController.tokenToRupee}",
                                     onTap: () async {
                                       if (_formKey.currentState!.validate()) {
-                                        FocusManager.instance.primaryFocus?.unfocus();
+                                        FocusManager.instance.primaryFocus
+                                            ?.unfocus();
                                         ConfirmationBottomDialog(
                                             textTheme: textTheme,
                                             confirmationWidget: SizedBox(
@@ -222,45 +324,68 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                                 alignment: WrapAlignment.center,
                                                 children: [
                                                   Text(
-                                                   'Are you sure you want to withdraw ',
-                                                    style: textTheme.headline3?.copyWith(color: textLightColor),
+                                                    'Are you sure you want to withdraw ',
+                                                    style: textTheme.headline3
+                                                        ?.copyWith(
+                                                            color:
+                                                                textLightColor),
                                                   ),
                                                   TokenWidget(
                                                       size: 18,
                                                       text: Text(
-                                                        profileController.rupeeToToken.value,
-                                                        style: textTheme.headline3?.copyWith(color: textLightColor),
+                                                        profileController
+                                                            .rupeeToToken.value,
+                                                        style: textTheme
+                                                            .headline3
+                                                            ?.copyWith(
+                                                                color:
+                                                                    textLightColor),
                                                       )),
                                                   Text(
                                                       ' ( ₹${profileController.tokenToRupee.value} ) ',
-                                                      style: textTheme.headline3?.copyWith(color: aquaGreenColor)
-                                                  ),
+                                                      style: textTheme.headline3
+                                                          ?.copyWith(
+                                                              color:
+                                                                  aquaGreenColor)),
                                                   Text(
                                                     'from your Loby Wallet?',
-                                                    style: textTheme.headline3?.copyWith(color: textLightColor),
+                                                    style: textTheme.headline3
+                                                        ?.copyWith(
+                                                            color:
+                                                                textLightColor),
                                                   ),
                                                 ],
                                               ),
                                             ),
-                                            contentName: "Are you sure you want to withdraw From Your Loby Wallet?",
-                                            yesBtnClick: ()async{
+                                            contentName:
+                                                "Are you sure you want to withdraw From Your Loby Wallet?",
+                                            yesBtnClick: () async {
                                               Navigator.pop(context);
                                               Helpers.loader();
-                                              final isSuccess = await profileController.withdrawMoney(
-                                                  bankDetailId: selectedBankId,
-                                                  amount: int.tryParse(profileController.tokenToRupee.value)
-                                              );
-                                              await profileController.getProfile();
+                                              final isSuccess =
+                                                  await profileController
+                                                      .withdrawMoney(
+                                                          bankDetailId:
+                                                              selectedBankId,
+                                                          amount: int.tryParse(
+                                                              profileController
+                                                                  .tokenToRupee
+                                                                  .value));
+                                              await profileController
+                                                  .getProfile();
                                               Helpers.hideLoader();
                                               if (isSuccess) {
                                                 amount.clear();
-                                                profileController.rupeeToToken.value = "0";
-                                                profileController.tokenToRupee.value = "0";
+                                                profileController
+                                                    .rupeeToToken.value = "0";
+                                                profileController
+                                                    .tokenToRupee.value = "0";
                                                 BottomDialog(
                                                   textTheme: textTheme,
                                                   tileName: "Withdraw Success",
-                                                  contentName: "Amount has been successfully withdrawn. It will be credited to your account within 48 hours.",
-)                                                    .showBottomDialog(context);
+                                                  contentName:
+                                                      "Amount has been successfully withdrawn. It will be credited to your account within 48 hours.",
+                                                ).showBottomDialog(context);
                                               }
                                             }).showBottomDialog(context);
                                       }
@@ -272,8 +397,8 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                     child: Text(
                                         'Attention: Razorpay may charge a fee for receiving the earnings',
                                         textAlign: TextAlign.center,
-                                        style: textTheme.headline6?.copyWith(
-                                            color: textWhiteColor)),
+                                        style: textTheme.headline6
+                                            ?.copyWith(color: textWhiteColor)),
                                   ),
                                 ],
                               ),
@@ -293,8 +418,8 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                         padding: const EdgeInsets.only(right: 20.0),
                         child: Text('View all Transactions',
                             textAlign: TextAlign.end,
-                            style: textTheme.subtitle2?.copyWith(
-                                color: textWhiteColor)),
+                            style: textTheme.subtitle2
+                                ?.copyWith(color: textWhiteColor)),
                       ),
                     ),
                   ),
@@ -304,10 +429,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                       bottom: 32.0,
                     ),
                     child: SizedBox(
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width * 0.7,
+                        width: MediaQuery.of(context).size.width * 0.7,
                         child: CustomButton(
                           color: purpleLightIndigoColor,
                           textColor: textWhiteColor,
@@ -333,7 +455,8 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
         return Dialog(
           elevation: 0,
           backgroundColor: backgroundDarkJungleGreenColor,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
           child: SizedBox(
             height: 24.h,
             child: Padding(
@@ -344,11 +467,11 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                   Text('Add Withdraw Method',
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
-                      style: textTheme.headline4?.copyWith(
-                          color: textWhiteColor)),
+                      style:
+                          textTheme.headline4?.copyWith(color: textWhiteColor)),
                   SizedBox(height: 4.h),
-                  _addBankDetailOption(
-                      textTheme, context, 'Bank Account', onTap: () {
+                  _addBankDetailOption(textTheme, context, 'Bank Account',
+                      onTap: () {
                     Navigator.of(context).pop();
                     _addBankDetailDialog(context, textTheme);
                   }),
@@ -373,13 +496,10 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
         return Dialog(
           elevation: 0,
           backgroundColor: backgroundDarkJungleGreenColor,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.0)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
           child: SizedBox(
-            height: MediaQuery
-                .of(context)
-                .size
-                .height,
+            height: MediaQuery.of(context).size.height,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: SingleChildScrollView(
@@ -433,10 +553,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                       ),
                       SizedBox(height: 2.h),
                       SizedBox(
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width * 0.35,
+                        width: MediaQuery.of(context).size.width * 0.35,
                         child: CustomButton(
                           color: purpleLightIndigoColor,
                           textColor: textWhiteColor,
@@ -444,7 +561,8 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                           onTap: () async {
                             if (_formKey2.currentState!.validate()) {
                               Helpers.loader();
-                              final isSuccess = await profileController.addBankDetails(
+                              final isSuccess =
+                                  await profileController.addBankDetails(
                                 bankName: bankName.text,
                                 branchName: branchName.text,
                                 accountNumber: accountNumber.text,
@@ -459,7 +577,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                 Helpers.toast("Successfully Added");
                                 Helpers.hideLoader();
                                 Navigator.of(context).pop();
-                              }else{
+                              } else {
                                 Helpers.hideLoader();
                               }
                             }
@@ -484,8 +602,8 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
         return Dialog(
           elevation: 0,
           backgroundColor: backgroundDarkJungleGreenColor,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.0)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
           child: SizedBox(
             height: 45.h,
             child: Padding(
@@ -516,9 +634,10 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                         textColor: textWhiteColor,
                         name: "Add",
                         onTap: () async {
-                          if(_formKey3.currentState!.validate()){
+                          if (_formKey3.currentState!.validate()) {
                             Helpers.loader();
-                            final isSuccess = await profileController.addBankDetails(
+                            final isSuccess =
+                                await profileController.addBankDetails(
                               holderName: holderName.text,
                               upiId: upiId.text,
                               type: "vpa",
@@ -544,7 +663,9 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
     );
   }
 
-  Widget _addBankDetailOption(TextTheme textTheme, BuildContext context, String title, {Function()? onTap}) {
+  Widget _addBankDetailOption(
+      TextTheme textTheme, BuildContext context, String title,
+      {Function()? onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -562,7 +683,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
     );
   }
 
-  void clearAddBankDetails(){
+  void clearAddBankDetails() {
     bankName.clear();
     branchName.clear();
     accountNumber.clear();

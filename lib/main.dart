@@ -25,9 +25,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'di/injection.dart';
 import 'firebase_options.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:phonepe_payment_sdk/phonepe_payment_sdk.dart';
 
-
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =   FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 GlobalKey<ScaffoldState> contextKey = GlobalKey<ScaffoldState>();
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -38,14 +39,16 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'high_importance_channel', // id
   'High Importance Notifications', // title
-  description : 'This channel is used for important notifications.', // description
+  description:
+      'This channel is used for important notifications.', // description
   importance: Importance.max,
 );
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: Environment.fileName);
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])        ;
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  PhonePePaymentSdk.init("UAT", , "PGTESTPAYUAT", true);
   // bool isDeviceConnected = await InternetConnectionChecker().hasConnection;
   // if (!isDeviceConnected) {
   //   runApp(const NoInternetConnection());
@@ -54,12 +57,14 @@ Future<void> main() async {
   // }
 
   runMainApp();
-
 }
 
-Future<void> runMainApp()async{
+Future<void> runMainApp() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(channel);
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -78,20 +83,19 @@ Future<void> runMainApp()async{
 
   Helpers.hideLoader();
   runApp(MyApp(appRouter: appRouter, initialLink: initialLink));
-
 }
 
 class MyApp extends StatefulWidget {
   final GoRouter appRouter;
   final PendingDynamicLinkData? initialLink;
-  const MyApp({Key? key, required this.appRouter, this.initialLink}) : super(key: key);
+  const MyApp({Key? key, required this.appRouter, this.initialLink})
+      : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-
   CoreController coreController = Get.find<CoreController>();
 
   @override
@@ -101,7 +105,6 @@ class _MyAppState extends State<MyApp> {
     initializePushNotification();
     _handleDynamicLink();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -120,15 +123,17 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-
-  Future<void> initializePushNotification()async{
-
-    var initializationSettingsAndroid = const AndroidInitializationSettings('@mipmap/ic_launcher');
+  Future<void> initializePushNotification() async {
+    var initializationSettingsAndroid =
+        const AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettingsIOs = const IOSInitializationSettings();
-    var initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOs);
+    var initializationSettings = InitializationSettings(
+        android: initializationSettingsAndroid, iOS: initializationSettingsIOs);
 
-    flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: (data){
-      Get.find<CoreController>().onNotificationClick(data!, contextKey.currentContext!);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: (data) {
+      Get.find<CoreController>()
+          .onNotificationClick(data!, contextKey.currentContext!);
     });
 
     FirebaseMessaging.onMessage.listen(_showNotification);
@@ -137,7 +142,6 @@ class _MyAppState extends State<MyApp> {
     getToken();
   }
 
-
   Future getToken() async {
     String? token = await FirebaseMessaging.instance.getToken();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -145,8 +149,7 @@ class _MyAppState extends State<MyApp> {
     debugPrint('FCM Notification Token ${prefs.getString('fcmToken')}');
   }
 
-
-  void _showNotification(RemoteMessage message){
+  void _showNotification(RemoteMessage message) {
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
     final data = jsonEncode(message.data);
@@ -160,7 +163,7 @@ class _MyAppState extends State<MyApp> {
           android: AndroidNotificationDetails(
             channel.id,
             channel.name,
-            channelDescription : channel.description,
+            channelDescription: channel.description,
             icon: android.smallIcon,
             importance: Importance.defaultImportance,
             ongoing: true,
@@ -173,7 +176,7 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  void _handleDynamicLink(){
+  void _handleDynamicLink() {
     FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
 
     dynamicLinks.onLink.listen((dynamicLinkData) {
@@ -182,23 +185,26 @@ class _MyAppState extends State<MyApp> {
       String? id = deepLink.queryParameters['listingId'];
 
       if (isListingPage) {
-        contextKey.currentContext?.goNamed(gameDetailPage, queryParams: {'serviceListingId' : "$id"});
+        contextKey.currentContext
+            ?.goNamed(gameDetailPage, queryParams: {'serviceListingId': "$id"});
       } else {
-        contextKey.currentContext?.goNamed(gameDetailPage, queryParams: {'serviceListingId' : "$id"});
+        contextKey.currentContext
+            ?.goNamed(gameDetailPage, queryParams: {'serviceListingId': "$id"});
       }
-    }).onError((error){
+    }).onError((error) {
       print(error);
     });
 
-
-    if(widget.initialLink != null){
+    if (widget.initialLink != null) {
       final Uri deepLink = widget.initialLink!.link;
       bool isListingPage = deepLink.pathSegments.contains('user-game-service');
       String? id = deepLink.queryParameters['listingId'];
       if (isListingPage) {
-        contextKey.currentContext?.goNamed(gameDetailPage, queryParams: {'serviceListingId' : "$id"});
+        contextKey.currentContext
+            ?.goNamed(gameDetailPage, queryParams: {'serviceListingId': "$id"});
       } else {
-        contextKey.currentContext?.goNamed(gameDetailPage, queryParams: {'serviceListingId' : "$id"});
+        contextKey.currentContext
+            ?.goNamed(gameDetailPage, queryParams: {'serviceListingId': "$id"});
       }
     }
   }
@@ -210,7 +216,7 @@ class NoInternetConnection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return Sizer(builder: (context, orientation, deviceType){
+    return Sizer(builder: (context, orientation, deviceType) {
       return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Loby',
@@ -223,28 +229,37 @@ class NoInternetConnection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset('assets/images/no_internet.png', width: 10.h,height: 10.h,),
+              Image.asset(
+                'assets/images/no_internet.png',
+                width: 10.h,
+                height: 10.h,
+              ),
               // SvgPicture.asset(
               //   'assets/icons/tick.svg',
               //   width: 10.h                ,
               //   height: 10.h,
               // ),
-              SizedBox(height: 2.h,),
+              SizedBox(
+                height: 2.h,
+              ),
               Text('No Internet Connection',
                   textAlign: TextAlign.center,
                   style: textTheme.subtitle1?.copyWith(color: whiteColor)),
-              SizedBox(height: 5.h,),
+              SizedBox(
+                height: 5.h,
+              ),
               CustomButton(
                   name: "Retry",
                   color: aquaGreenColor,
                   left: 10.w,
                   right: 10.w,
                   bottom: 5.h,
-                  onTap: () async{
-                    bool isDeviceConnected = await InternetConnectionChecker().hasConnection;
+                  onTap: () async {
+                    bool isDeviceConnected =
+                        await InternetConnectionChecker().hasConnection;
                     if (!isDeviceConnected) {
                       Helpers.toast('Internet Not Connected');
-                    }else{
+                    } else {
                       Helpers.loader();
                       runMainApp();
                     }
@@ -256,4 +271,3 @@ class NoInternetConnection extends StatelessWidget {
     });
   }
 }
-

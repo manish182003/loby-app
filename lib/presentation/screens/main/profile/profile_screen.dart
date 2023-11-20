@@ -73,11 +73,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     Container(
                                       constraints: BoxConstraints(
                                           maxWidth: MediaQuery.of(context).size.width * 0.55),
-                                      child: Text(profileController.profile.displayName ?? "",
-                                          overflow: TextOverflow.ellipsis,
-                                          style: textTheme.headline3
-                                              ?.copyWith(
-                                              color: textWhiteColor)),
+                                      child: Row(
+                                        children: [
+                                          Text(profileController.profile.displayName ?? "",
+                                              overflow: TextOverflow.ellipsis,
+                                              style: textTheme.headline3
+                                                  ?.copyWith(
+                                                  color: textWhiteColor)),
+                                          SizedBox(width: 2.w,),
+                                          profileController.profile.kycverify == "Y"
+                                                ? Image(
+                                                    image: AssetImage(
+                                                        "assets/images/sheild.png"),
+                                                    height: 20,
+                                                  )
+                                                : SizedBox()
+                                        ],
+                                      ),
                                     ),
                                     const SizedBox(width: 8.0),
                                   ],
@@ -104,6 +116,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          // Row(
+
+                          // )
                           ProfileOptionsWidget(
                               name: "Wallet",
                               onTap: () {
@@ -144,6 +159,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               onTap: () {
                                 context.pushNamed(faqPage);
                               }),
+                          ProfileOptionsWidget(
+                              name: "Seller Time Slots",
+                              onTap: () {
+                                context.pushNamed(sellerTimeSlotScreen);
+                              }),
+                              // ProfileOptionsWidget(
+                              // name: "buyer Time slots",
+                              // onTap: () {
+                              //   context.pushNamed(buyerTimeSlotScreen);
+                              // }),
                           // ProfileOptionsWidget(
                           //     name: "App Setting",
                           //     onTap: () {

@@ -7,11 +7,12 @@ import 'package:loby/presentation/screens/main/profile/wallet/widgets/token_widg
 import 'package:loby/presentation/widgets/body_padding_widget.dart';
 import 'package:loby/presentation/widgets/custom_loader.dart';
 import 'package:loby/presentation/widgets/text_fields/text_field_widget.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
+// import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../../core/theme/colors.dart';
 import '../../../../widgets/custom_app_bar.dart';
 import '../../../../widgets/buttons/custom_button.dart';
+import 'package:phonepe_payment_sdk/phonepe_payment_sdk.dart';
 
 class AddFundsScreen extends StatefulWidget {
   const AddFundsScreen({Key? key}) : super(key: key);
@@ -26,21 +27,21 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
   HomeController homeController = Get.find<HomeController>();
   TextEditingController amount = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  final Razorpay _razorpay = Razorpay();
+  // final Razorpay _razorpay = Razorpay();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    // _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    // _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    // _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    _razorpay.clear();
+    // _razorpay.clear();
     amount.clear();
     profileController.rupeeToToken.value = "0";
     profileController.tokenToRupee.value = "0";
@@ -189,37 +190,37 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
   }
 
 
-  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
-    await profileController.verifyPayment(
-        signature: response.signature,
-        paymentId: response.paymentId,
-        paymentStatus: 'success',
-        orderId: response.orderId,
-    );
-    await Helpers.hideLoader();
-    Helpers.toast("Payment Successful");
-  }
+  // void _handlePaymentSuccess(PaymentSuccessResponse response) async {
+  //   await profileController.verifyPayment(
+  //       signature: response.signature,
+  //       paymentId: response.paymentId,
+  //       paymentStatus: 'success',
+  //       orderId: response.orderId,
+  //   );
+  //   await Helpers.hideLoader();
+  //   Helpers.toast("Payment Successful");
+  // }
 
-  void _handlePaymentError(PaymentFailureResponse response) async{
-    await profileController.verifyPayment(
-      paymentStatus: 'failed',
-      orderId: profileController.addFundsResponse['order_id'],
-    );
-    Helpers.hideLoader();
-    // Helpers.toast("Payment Failed ");
-    print('Payment Error : ${response.code.toString()} ${response.message.toString()}');
-    Helpers.toast("Payment Failed");
-    // Helpers.toast("ERROR: ${response.code} - ${response.message!}");
-  }
+  // void _handlePaymentError(PaymentFailureResponse response) async{
+  //   await profileController.verifyPayment(
+  //     paymentStatus: 'failed',
+  //     orderId: profileController.addFundsResponse['order_id'],
+  //   );
+  //   Helpers.hideLoader();
+  //   // Helpers.toast("Payment Failed ");
+  //   print('Payment Error : ${response.code.toString()} ${response.message.toString()}');
+  //   Helpers.toast("Payment Failed");
+  //   // Helpers.toast("ERROR: ${response.code} - ${response.message!}");
+  // }
 
-  void _handleExternalWallet(ExternalWalletResponse response) async{
-    await profileController.verifyPayment(
-      paymentStatus: 'failed',
-      orderId: profileController.addFundsResponse['order_id'],
-    );
-    Helpers.hideLoader();
-    Helpers.toast("Payment Failed");
-  }
+  // void _handleExternalWallet(ExternalWalletResponse response) async{
+  //   await profileController.verifyPayment(
+  //     paymentStatus: 'failed',
+  //     orderId: profileController.addFundsResponse['order_id'],
+  //   );
+  //   Helpers.hideLoader();
+  //   Helpers.toast("Payment Failed");
+  // }
 
   Future<void> _openCheckout() async {
     if (_formKey.currentState!.validate()) {
@@ -243,7 +244,7 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
           }
         };
         try {
-          _razorpay.open(options);
+          // _razorpay.open(options);
         } catch (e) {
           debugPrint("Error : $e");
         }
