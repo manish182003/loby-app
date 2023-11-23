@@ -12,6 +12,7 @@ class CreateOrder extends UseCase<Map<String, dynamic>, Params> {
   Future<Either<Failure, Map<String, dynamic>>> call(Params params) {
     print("params.orderParams?.bookDate >>> ${params.orderParams?.bookDate}");
     return _repository.createOrder(
+        isUpdatingTime: params.orderParams?.isUpdatingTime??false,
         listingId: params.orderParams?.listingId,
         quantity: params.orderParams?.quantity,
         price: params.orderParams?.price,

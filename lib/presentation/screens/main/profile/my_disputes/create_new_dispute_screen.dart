@@ -111,6 +111,7 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
                             Helpers.loader();
                             final isSuccess = await orderController.submitDisputeProof(disputeId: widget.disputeId,
                                 description: comments.text,
+
                                 link: fileLink.text);
                             Helpers.hideLoader();
                             if (isSuccess) {

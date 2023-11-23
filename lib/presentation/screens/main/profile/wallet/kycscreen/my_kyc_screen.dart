@@ -11,13 +11,11 @@ import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:loby/domain/entities/kyc/get_kyc_token.dart';
+import 'package:flutter/services.dart';
 
 class MyKycScreen extends StatefulWidget {
   final GetKycToken? geTKyctoken;
-  const MyKycScreen({
-    Key? key,
-    this.geTKyctoken
-  }) : super(key: key);
+  const MyKycScreen({Key? key, this.geTKyctoken}) : super(key: key);
 
   @override
   State<MyKycScreen> createState() => _MyKycScreenState();
@@ -28,30 +26,35 @@ class _MyKycScreenState extends State<MyKycScreen>
   KycController kycController = Get.find<KycController>();
   late TabController _tabController;
   int _currentTabIndex = 0;
+  String formattedText = '';
+
+  // final aadharNumberFormatter = MaskTextInputFormatter(
+  //   mask: '#### #### ####', // Define the format
+  //   filter: {"#": RegExp(r'[0-9]')}, // Allow only numeric input
+  // );
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     getKycToken();
-
-    // _tabController =
-    //     TabController(length: 3, vsync: this, initialIndex: _currentTabIndex);
-    // _tabController.addListener(() {
-    //   if (_tabController.animation?.value == _tabController.index) {
-    //     setState(() {
-    //       _currentTabIndex = _tabController.index;
-    //     });
-
-    //     getKycToken();
-    //     debugPrint('current tab $_currentTabIndex');
-    //   }
-    // });
   }
 
   Future<void> getKycToken() async {
     kycController.getKycToken();
+  }
+
+  String formatNumber(int number) {
+    String numberString = number.toString();
+    List<String> chunks = [];
+
+    for (int i = numberString.length; i > 0; i -= 4) {
+      int start = (i - 4 > 0) ? i - 4 : 0;
+      int end = i;
+      chunks.add(numberString.substring(start, end));
+    }
+
+    return chunks.reversed.join(' ');
   }
 
   @override
@@ -119,21 +122,34 @@ class _MyKycScreenState extends State<MyKycScreen>
                   padding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                   child: TextField(
+                    // inputFormatters: [formatNumber()],
                     keyboardType: TextInputType.number,
                     maxLength: 12,
                     controller: kycController.aadharNumbercontroller.value,
                     textAlign: TextAlign.center,
-                    style: textTheme.headline2?.copyWith(color: textWhiteColor),
+                    // onChanged: (text) {
+                    //   // Format the input as the user types
+                    //   String formattedText = formatNumber(int.parse(text));
+                    //   // Update the controller to display the formatted text
+                    //   // kycController
+                    //   //                     .aadharNumbercontroller.value.text = TextEditingValue(
+                    //   //   text: formattedText,
+
+                    //   // );
+                    //   kycController.aadharNumbercontroller.value =
+                    //       TextEditingController(text: formattedText);
+                    //   kycController.aadharNumbercontroller.refresh();
+                    // },
+                    style: textTheme.headline2?.copyWith(
+                      color: textWhiteColor,
+                    ),
                     decoration: InputDecoration(
+                      fillColor: textTunaBlueColor,
                       counterText: "",
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: textCharcoalBlueColor)),
                       enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: textCharcoalBlueColor)),
-                      // suffixIcon: IconButton(
-                      //   icon: Icon(Icons.access_time),
-                      //   onPressed: () => _selectFromTimePick(context),
-                      // ),
                     ),
                   ),
                 ),
@@ -147,13 +163,14 @@ class _MyKycScreenState extends State<MyKycScreen>
                 right: 4.w,
                 bottom: 5.h,
                 onTap: () async {
-                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
                   kycController
                       .sendKycOtp(
                           kycToken: prefs.getString("kycToken"),
                           aadharNumber: kycController
                               .aadharNumbercontroller.value.text
-                              .trim())
+                              .replaceAll(" ", ""))
                       .then((value) {
                     if (value) {
                       context.pushNamed(sendOtppage);
@@ -166,3 +183,16 @@ class _MyKycScreenState extends State<MyKycScreen>
     );
   }
 }
+
+// String formatNumber(int number) {
+//   String numberString = number.toString();
+//   List<String> chunks = [];
+
+//   for (int i = numberString.length; i > 0; i -= 4) {
+//     int start = (i - 4 > 0) ? i - 4 : 0;
+//     int end = i;
+//     chunks.add(numberString.substring(start, end));
+//   }
+
+//   return chunks.reversed.join(' ');
+// }

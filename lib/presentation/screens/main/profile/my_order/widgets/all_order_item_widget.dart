@@ -31,8 +31,10 @@ class OrderItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("myyyorderssssssssssss   ${orderController.orders}");
     print("orderrdata $order");
-    print("orderbooktime ${order.bookfromTime} --- ${order.booktoTime}");
+    print("dateeee ${order.bookDate}");
+    print("${order.bookfromTime}");
     print("order.slotId ${order.slotId}");
     print("useriddddd ${order.userGameService?.userId}");
     final textTheme = Theme.of(context).textTheme;
@@ -198,40 +200,39 @@ class OrderItem extends StatelessWidget {
                               queryParams: {'disputeId': "${order.disputeId}"});
                         }
                       }),
-                  order.slotId == null
-                      ?
-                      CustomButton(
-                          color: backgroundBalticSeaColor,
-                          borderColor: butterflyBlueColor,
-                          name: 'Book Available Slots',
-                          top: 2.h,
-                          bottom: 2.h,
-                          textColor: whiteColor,
-                          onTap: () {
-                            orderController.selectedOrder.value = order;
-                            orderController.selectedOrder.refresh();
-                            context.pushNamed(buyerTimeSlotScreen, params: {
-                              "id": "${order.userGameService?.userId}"
-                            }, queryParams: {
-                              "isEditing" : "false"
-                            });
-                          })
-                      : CustomButton(
-                          color: backgroundBalticSeaColor,
-                          borderColor: butterflyBlueColor,
-                          name: "${orderController.orders[0].bookfromTime} - ${orderController.orders[0].bookfromTime}",
-                          top: 2.h,
-                          bottom: 2.h,
-                          textColor: whiteColor,
-                          onTap: () {
-                            orderController.selectedOrder.value = order;
-                            orderController.selectedOrder.refresh();
-                            context.pushNamed(buyerTimeSlotScreen, params: {
-                              "id": "${order.userGameService?.userId}"
-                            }, queryParams: {
-                              "isEditing" : "true"
-                            });
-                          }),
+                  // order.slotId == null
+                  //     ?
+                  CustomButton(
+                      color: backgroundBalticSeaColor,
+                      borderColor: butterflyBlueColor,
+                      name: "Book Available Slots",
+                      top: 2.h,
+                      bottom: 2.h,
+                      textColor: whiteColor,
+                      onTap: () {
+                        orderController.selectedOrder.value = order;
+                        orderController.selectedOrder.refresh();
+                        context.pushNamed(buyerTimeSlotScreen,
+                            params: {"id": "${order.id}"}
+                            // queryParams: {"isEditing": "false"}
+                            );
+                      })
+                  // : CustomButton(
+                  //     color: backgroundBalticSeaColor,
+                  //     borderColor: butterflyBlueColor,
+                  //     name: "${order.bookDate}",
+                  //     top: 2.h,
+                  //     bottom: 2.h,
+                  //     textColor: whiteColor,
+                  //     onTap: () {
+                  //       orderController.selectedOrder.value = order;
+                  //       orderController.selectedOrder.refresh();
+                  //       context.pushNamed(buyerTimeSlotScreen, params: {
+                  //         "id": "${order.userGameService?.userId}"
+                  //       }, queryParams: {
+                  //         "isEditing" : "true"
+                  //       });
+                  //     }),
                 ],
               ),
               order.orderStatuses!.last.status! == orderCompleted

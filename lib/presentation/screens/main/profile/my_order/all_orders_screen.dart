@@ -26,7 +26,7 @@ class _AllOrdersTabScreenState extends State<AllOrdersTabScreen> {
 
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
-        orderController.getOrders(status: widget.status);
+        orderController.getOrders(status: widget.status,);
       }
     });
   }

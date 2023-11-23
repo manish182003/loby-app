@@ -13,24 +13,29 @@ import 'package:loby/data/models/response_models/auth/state_response_model.dart'
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/response_models/auth/country_response_model.dart';
 
-class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
-
+class AuthRemoteDatasourceImpl extends AuthRemoteDatasource {
   final Dio _dio;
   AuthRemoteDatasourceImpl(this._dio);
 
   @override
-  Future<Map<String, dynamic>> signup(String? name, String? email, String? password, String? confirmPassword) async{
+  Future<Map<String, dynamic>> signup(String? name, String? email,
+      String? password, String? confirmPassword) async {
     try {
       final response = await Helpers.sendRequest(
         _dio,
         RequestType.post,
         ApiEndpoints.signup,
-        queryParams: {'name': name, 'email' : email, 'password' : password, 'confirm_password' : confirmPassword},
+        queryParams: {
+          'name': name,
+          'email': email,
+          'password': password,
+          'confirm_password': confirmPassword
+        },
       );
 
       debugPrint("login $response");
 
-      if(response != null){
+      if (response != null) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('apiToken', response['data']['reset_token']);
       }
@@ -42,7 +47,7 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
   }
 
   @override
-  Future<CountryResponseModel> getCountries(String? name, int? page) async{
+  Future<CountryResponseModel> getCountries(String? name, int? page) async {
     try {
       String token = await Helpers.getApiToken();
       final Map<String, dynamic> headers = {
@@ -53,7 +58,7 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
         _dio,
         RequestType.get,
         ApiEndpoints.getCountries,
-        queryParams: {'name': name, 'page' : '${page ?? ""}'},
+        queryParams: {'name': name, 'page': '${page ?? ""}'},
         headers: headers,
       );
 
@@ -64,7 +69,8 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
   }
 
   @override
-  Future<StateResponseModel> getStates(String? search, int? stateId, int? countryId, int? page)async {
+  Future<StateResponseModel> getStates(
+      String? search, int? stateId, int? countryId, int? page) async {
     try {
       String token = await Helpers.getApiToken();
       final Map<String, dynamic> headers = {
@@ -75,7 +81,12 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
         _dio,
         RequestType.get,
         ApiEndpoints.getStates,
-        queryParams: {'name': search, 'state_id': '${stateId ?? ''}', 'country_id' : '${countryId ?? ''}', 'page' : '${page ?? ''}'},
+        queryParams: {
+          'name': search,
+          'state_id': '${stateId ?? ''}',
+          'country_id': '${countryId ?? ''}',
+          'page': '${page ?? ''}'
+        },
         headers: headers,
       );
 
@@ -86,7 +97,8 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
   }
 
   @override
-  Future<CityResponseModel> getCities(String? search, int? stateId, int? cityId, int? page)async {
+  Future<CityResponseModel> getCities(
+      String? search, int? stateId, int? cityId, int? page) async {
     try {
       String token = await Helpers.getApiToken();
       final Map<String, dynamic> headers = {
@@ -97,7 +109,12 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
         _dio,
         RequestType.get,
         ApiEndpoints.getCities,
-        queryParams: {'name': search,'state_id': '${stateId ?? ''}', 'city_id' : '${cityId ?? ''}', 'page' : '${page ?? ''}'},
+        queryParams: {
+          'name': search,
+          'state_id': '${stateId ?? ''}',
+          'city_id': '${cityId ?? ''}',
+          'page': '${page ?? ''}'
+        },
         headers: headers,
       );
 
@@ -108,7 +125,8 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
   }
 
   @override
-  Future<ProfileTagResponseModel> getProfileTags(String? search, int? page) async{
+  Future<ProfileTagResponseModel> getProfileTags(
+      String? search, int? page) async {
     try {
       String token = await Helpers.getApiToken();
       final Map<String, dynamic> headers = {
@@ -119,20 +137,29 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
         _dio,
         RequestType.get,
         ApiEndpoints.getProfileTags,
-        queryParams: {'name': search, 'page' : '${page ?? ''}'},
+        queryParams: {'name': search, 'page': '${page ?? ''}'},
         headers: headers,
       );
 
-      return ProfileTagResponseModel.fromJSON(response ?? {'data' : []});
+      return ProfileTagResponseModel.fromJSON(response ?? {'data': []});
     } on ServerException catch (e) {
       throw ServerException(message: e.message);
     }
   }
 
   @override
-  Future<bool> updateProfile(File? cover, File? avatar, String? fullName, String? displayName, int? countryId, int? stateId, int? cityId, String? DOB, List<Map<String, dynamic>>? profileTags, String? bio)async {
+  Future<bool> updateProfile(
+      File? cover,
+      File? avatar,
+      String? fullName,
+      String? displayName,
+      int? countryId,
+      int? stateId,
+      int? cityId,
+      String? DOB,
+      List<Map<String, dynamic>>? profileTags,
+      String? bio) async {
     try {
-
       String token = await Helpers.getApiToken();
       final Map<String, dynamic> headers = {
         'Authorization': 'Bearer $token',
@@ -148,7 +175,6 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
       // print(DOB);
       // print(profileTags);
       // print(bio);
-
 
       FormData formData = FormData()
         ..fields.add(
@@ -172,36 +198,35 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
         ..fields.add(
           MapEntry('bio', bio!),
         )
-        ..fields.add(
-          MapEntry('profile_tags', profileTags == null ? '' : profileTags.map((e) => e['id']).toList().join(','))
-        );
+        ..fields.add(MapEntry(
+            'profile_tags',
+            profileTags == null
+                ? ''
+                : profileTags.map((e) => e['id']).toList().join(',')));
 
-
-      if(avatar != null && avatar.path.isNotEmpty) {
-        formData.files.add(MapEntry('image',
-            MultipartFile.fromFileSync(avatar.path,
+      if (avatar != null && avatar.path.isNotEmpty) {
+        formData.files.add(MapEntry(
+            'image',
+            MultipartFile.fromFileSync(
+              avatar.path,
               // contentType: MediaType('image', 'jpg'),
             )));
       }
 
-      if(cover != null && cover.path.isNotEmpty) {
-        formData.files.add(MapEntry('cover_image',
-            MultipartFile.fromFileSync(cover.path,
+      if (cover != null && cover.path.isNotEmpty) {
+        formData.files.add(MapEntry(
+            'cover_image',
+            MultipartFile.fromFileSync(
+              cover.path,
               // contentType: MediaType('image', 'jpg'),
             )));
       }
-
 
       final response = await Helpers.sendRequest(
-        _dio,
-        RequestType.post,
-        ApiEndpoints.updateProfile,
-        data: formData,
-        headers: headers
-      );
+          _dio, RequestType.post, ApiEndpoints.updateProfile,
+          data: formData, headers: headers);
 
-
-      if(response != null){
+      if (response != null) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setBool('isLoggedIn', true);
         prefs.setString('userId', "${response['data']['id']}");
@@ -215,19 +240,27 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
   }
 
   @override
-  Future<bool> login(String? mobile, String? email, String? password, String? socialLoginId, int? socialLoginType, String? name)async {
+  Future<bool> login(String? mobile, String? email, String? password,
+      String? socialLoginId, int? socialLoginType, String? name) async {
     try {
       final response = await Helpers.sendRequest(
         _dio,
         RequestType.post,
         socialLoginId == null ? ApiEndpoints.login : ApiEndpoints.socialLogin,
-        queryParams: socialLoginId == null ? {'mobile' : mobile} : {'social_login_id' : socialLoginId, 'social_login_type' : '${socialLoginType ?? ''}', 'name' : name, 'email' : email},
+        queryParams: socialLoginId == null
+            ? {'mobile': mobile}
+            : {
+                'social_login_id': socialLoginId,
+                'social_login_type': '${socialLoginType ?? ''}',
+                'name': name,
+                'email': email
+              },
       );
 
-      if(response != null){
+      if (response != null) {
         print("token >^&* ${response['data']['reset_token']}");
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('apiToken', response['data']['reset_token']??"");
+        prefs.setString('apiToken', response['data']['reset_token'] ?? "");
         prefs.setString('userId', "${response['data']['id']}");
       }
 
@@ -238,7 +271,7 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
   }
 
   @override
-  Future<String> checkUsername(String? username) async{
+  Future<String> checkUsername(String? username) async {
     try {
       final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(
@@ -256,7 +289,7 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
   }
 
   @override
-  Future<Map<String, dynamic>> addFCMToken(String? fcmToken) async{
+  Future<Map<String, dynamic>> addFCMToken(String? fcmToken) async {
     try {
       final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(
@@ -274,20 +307,24 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
   }
 
   @override
-  Future<Map<String, dynamic>> sendAndVerifyOTP(String? mobile, String? otp) async{
+  Future<Map<String, dynamic>> sendAndVerifyOTP(
+      String? mobile, String? otp) async {
     try {
       final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(
-        _dio,
-        RequestType.post,
-        ApiEndpoints.verifyOTP,
-        queryParams: {
-          'mobile': mobile,
-          'otp' : otp,
-        },
-        headers: headers,
-        encoded: true
-      );
+          _dio, RequestType.post, ApiEndpoints.verifyOTP,
+          queryParams: {
+            'mobile': mobile,
+            'otp': otp,
+          },
+          headers: headers,
+          encoded: true);
+
+      if (response != null &&
+          response["data"]["reset_token"].runtimeType == String &&
+          response["data"]["reset_token"].length != 0) {
+        Helpers.saveString("apiToken", response["data"]["reset_token"]);
+      }
 
       return response!;
     } on ServerException catch (e) {
@@ -296,21 +333,24 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource{
   }
 
   @override
-  Future<Map<String, dynamic>> forgotAndResetPassword(String? email, String? otp, String? password, String? confirmPassword) async{
+  Future<Map<String, dynamic>> forgotAndResetPassword(String? email,
+      String? otp, String? password, String? confirmPassword) async {
     try {
       // final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(
         _dio,
         RequestType.post,
         otp == null ? ApiEndpoints.forgotPassword : ApiEndpoints.resetPassword,
-        queryParams: otp == null ? {
-          'email': email,
-        } : {
-          'email': email,
-          'otp' : otp,
-          'password' : password,
-          'confirm_password' : confirmPassword,
-        },
+        queryParams: otp == null
+            ? {
+                'email': email,
+              }
+            : {
+                'email': email,
+                'otp': otp,
+                'password': password,
+                'confirm_password': confirmPassword,
+              },
         // headers: headers,
       );
 

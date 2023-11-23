@@ -98,6 +98,7 @@ class SlotsController extends GetxController {
         Helpers.toast(errorMessage.value);
       },
       (success) {
+        Helpers.toast('Slots added Successfully');
         clearListing();
       },
     );
@@ -207,7 +208,7 @@ class SlotsController extends GetxController {
 
           isSlotsFetching.value = false;
 
-          Helpers.toast('slotsss');
+          // Helpers.toast('slotsss');
         },
       );
       return failureOrSuccess.isRight() ? true : false;

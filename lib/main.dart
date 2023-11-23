@@ -25,7 +25,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'di/injection.dart';
 import 'firebase_options.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:phonepe_payment_sdk/phonepe_payment_sdk.dart';
+// import 'package:phonepe_payment_sdk/phonepe_payment_sdk.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -48,7 +48,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: Environment.fileName);
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  PhonePePaymentSdk.init("UAT", , "PGTESTPAYUAT", true);
+  // PhonePePaymentSdk.init("UAT", , "PGTESTPAYUAT", true);
   // bool isDeviceConnected = await InternetConnectionChecker().hasConnection;
   // if (!isDeviceConnected) {
   //   runApp(const NoInternetConnection());

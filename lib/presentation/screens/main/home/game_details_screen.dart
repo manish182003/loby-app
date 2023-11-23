@@ -576,6 +576,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                           Helpers.loader();
                                           final response =
                                               await orderController.createOrder(
+                                            isUpdatingTime: false,   
                                             listingId: listing.id!,
                                             quantity: listing.quantity,
                                             price: (listing.quantity *

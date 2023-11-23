@@ -1,4 +1,4 @@
-package com.app.mocktest_flutter
+package com.loby.app
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -79,14 +79,17 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
               // mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                      "Safely Access Your Funds: Initiate \n Withdrawal Process Today!",
+                Text(
+                      "Safely Access Your Funds: Initiate",
                       style: textTheme.headline2?.copyWith(
                         
                           color: whiteColor, fontWeight: FontWeight.w500)),
-                ),
+                          SizedBox(height: 1.h,),
+                          Text(
+                      "Withdrawal Process Today!",
+                      style: textTheme.headline2?.copyWith(
+                        
+                          color: whiteColor, fontWeight: FontWeight.w500)),
                 SizedBox(
                   height: 3.h,
                 ),
@@ -104,12 +107,18 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                       children: [
                         SizedBox(height: 3.h,),
                         Text(
-                            "Get Started with KYC Verification \n Secure Your Account Now!",
+                            "Get Started with KYC Verification",
+                            style: textTheme.headline3?.copyWith(
+                                color: whiteColor,
+                                fontWeight: FontWeight.w500)),
+                                SizedBox(height: 1.h,),
+                                Text(
+                            "Secure Your Account Now!",
                             style: textTheme.headline3?.copyWith(
                                 color: whiteColor,
                                 fontWeight: FontWeight.w500)),
                         SizedBox(
-                          height: 3.h,
+                          height: 5.h,
                         ),
                         CustomButton(
                           color: purpleLightIndigoColor,

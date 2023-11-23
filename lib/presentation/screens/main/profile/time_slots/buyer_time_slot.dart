@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:loby/core/theme/colors.dart';
+import 'package:loby/domain/entities/slots/get_slots_for_buyer.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 import 'package:loby/presentation/getx/controllers/order_controller.dart';
 import 'package:loby/presentation/getx/controllers/slots_controller.dart';
@@ -97,6 +98,7 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
 
   @override
   Widget build(BuildContext context) {
+    print("slecteddddd ${slotsController.selectSlotArr}");
     print("lenghttttttttttttttttttttt >> ${slotsController.buyerSlots.length}");
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
@@ -132,11 +134,17 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
                   padding: EdgeInsets.only(top: 21.0.w),
                   child: Align(
                     child: SizedBox(
-                      child: CircleAvatar(
+                      child: 
+                      orderController.selectedOrder.value.userGameService?.user?.image != null ?
+                      CircleAvatar(
                         radius: 32,
                         backgroundColor: whiteColor,
-                        backgroundImage:
-                            AssetImage("assets/images/user_placeholder.png"),
+                        backgroundImage: NetworkImage("${orderController.selectedOrder.value.userGameService?.user?.image}"),
+                        // backgroundImage: AssetImage("assets/images/view.png"),
+                      ) : CircleAvatar(
+                        radius: 32,
+                        backgroundColor: whiteColor,
+                        backgroundImage: AssetImage("assets/images/user_placeholder.png"),
                         // backgroundImage: AssetImage("assets/images/view.png"),
                       ),
                     ),
@@ -149,7 +157,7 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
                       child: Column(
                         children: [
                           Text(
-                            "Akshay Gupta",
+                            "${orderController.selectedOrder.value.userGameService?.user?.name}",
                             style: textTheme.headline4
                                 ?.copyWith(color: textWhiteColor),
                           ),
@@ -326,7 +334,7 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
               height: 5.h,
             ),
             Container(
-              // height: 52.h,
+              height: 52.h,
               width: MediaQuery.of(context).size.width,
               // child: Text("hellooo", style: TextStyle(color: Colors.amber , fontSize: 60),),
               decoration: const BoxDecoration(
@@ -345,14 +353,19 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
                         if (slotsController.buyerSlots.isNotEmpty) {
                           return Column(
                             children: [
-                              ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: slotsController.buyerSlots.length,
-                                itemBuilder: (context, index) {
-                                  return BuyerTimeSlotBox(
-                                      getBuyerSlots:
-                                          slotsController.buyerSlots[index]);
-                                },
+                              Container(
+                                height: 40.h,
+                                child: ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    itemCount: slotsController.buyerSlots.length,
+                                    itemBuilder: (context, index) {
+                                      return BuyerTimeSlotBox(
+                                          getBuyerSlots:
+                                              slotsController.buyerSlots[index]);
+                                    },
+                                  ),
+                                // ),
                               ),
                               SizedBox(
                                 height: 1.h,
@@ -365,24 +378,31 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
                                   right: 4.w,
                                   bottom: 5.h,
                                   onTap: () async {
-                                    orderController
-                                        .createOrder(
-                                          listingId: orderController
-                                              .selectedOrder
-                                              .value
-                                              .userGameServiceId!,
-                                          quantity: orderController
-                                              .selectedOrder.value.quantity!,
-                                          price: orderController
-                                              .selectedOrder.value.price
-                                              .toString(),
-                                          bookDate: slotsController
+                                    slotsController.editSlot(
+                                      date: slotsController
                                               .selectDateofCale.first
                                               .toString(),
-                                          bookFromTime: slotsController
-                                              .selectSlotArr.first.from,
-                                          bookToTime: slotsController
-                                              .selectSlotArr.first.to,
+                                      orderId: orderController
+                                              .selectedOrder.value.id,
+                                              
+                                      slotId: slotsController.selectSlotArr.first.id,
+                                          // isUpdatingTime: true,
+                                          // listingId: orderController
+                                          //     .selectedOrder
+                                          //     .value
+                                          //     .userGameServiceId!,
+                                          // quantity: orderController
+                                          //     .selectedOrder.value.quantity!,
+                                          // price: orderController
+                                          //     .selectedOrder.value.price
+                                          //     .toString(),
+                                          // bookDate: slotsController
+                                          //     .selectDateofCale.first
+                                          //     .toString(),
+                                          // bookFromTime: slotsController
+                                          //     .selectSlotArr.first.from,
+                                          // bookToTime: slotsController
+                                          //     .selectSlotArr.first.to,
                                         )
                                         .then(
                                             (value) => _successDialog(context));
@@ -510,7 +530,7 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
                 style: TextStyle(color: aquaGreenColor),
               ),
               onPressed: () {
-                context.pushNamed(myOrderPage);
+                context.pushNamed(mainPage);
               },
             ),
           ],

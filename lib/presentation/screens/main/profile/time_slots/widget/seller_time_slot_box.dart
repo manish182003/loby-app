@@ -147,7 +147,7 @@ class _SellerTimeSlotBoxState extends State<SellerTimeSlotBox> {
                 Navigator.of(context).pop();
               },
             ),
-            SizedBox(width: 6.w,),
+            SizedBox(width: 28.w,),
             TextButton(
               child: Text('Delete', style: TextStyle(color: aquaGreenColor),),
               onPressed: () {

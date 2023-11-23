@@ -30,7 +30,7 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   AuthController authController = Get.find<AuthController>();
   ProfileController profileController = Get.find<ProfileController>();
-  TextEditingController mobile = TextEditingController();
+  // TextEditingController mobile = TextEditingController();
   TextEditingController otp = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -123,7 +123,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                     child: TextFormField(
                                       style: textTheme.headline1?.copyWith(color: textWhiteColor),
                                       maxLength: 10,
-                                      controller: mobile,
+                                      controller: authController.mobile,
                                       textAlign: TextAlign.center,
                                       scrollPadding: EdgeInsets.symmetric(horizontal: 20),
                                       keyboardType: TextInputType.phone,
@@ -193,9 +193,9 @@ class _SignInScreenState extends State<SignInScreen> {
                                   onTap: () async {
                                     // _createAccountDialog(context);
                                     if (_formKey.currentState!.validate() &&
-                                        mobile.text.trim().length == 10) {
+                                        authController.mobile.text.trim().length == 10) {
                                       authController
-                                          .login(mobile: mobile.text.trim())
+                                          .login(mobile: authController.mobile.text.trim())
                                           .then((value) {
                                         if (value) {
                                           _otpDialog(context);
@@ -204,7 +204,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                     } else if (!_formKey.currentState!
                                         .validate()) {
                                       // Helpers.toast("")
-                                    } else if (mobile.text.trim().length < 10) {
+                                    } else if (authController.mobile.text.trim().length < 10) {
                                       Helpers.toast(
                                           "Number should be must 10 digits");
                                     }
@@ -511,7 +511,7 @@ class _SignInScreenState extends State<SignInScreen> {
             onVerify: () async {
               Helpers.loader();
               final isSuccess = await authController.sendAndVerifyOTP(
-                  mobile: mobile.text, otp: otp.text);
+                  mobile: authController.mobile.text, otp: otp.text);
               Helpers.hideLoader();
               if (!mounted) return;
               if (isSuccess) {

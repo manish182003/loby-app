@@ -93,7 +93,7 @@ class _BuyerTimeSlotBoxState extends State<BuyerTimeSlotBox> {
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(
                           color: slotsController.selectSlotArr.any((element) =>
-                                  element.id == widget.getBuyerSlots.id) || orderController.orders[0].slotId != null
+                                  element.id == widget.getBuyerSlots.id)
                               ? gambogeOrangeColor
                               : widget.getBuyerSlots.isBooked == "N"
                                   ? aquaGreenColor
@@ -129,5 +129,9 @@ class _BuyerTimeSlotBoxState extends State<BuyerTimeSlotBox> {
         return Text("null");
       }),
     );
+  }
+
+  Widget name() {
+    return Text("${widget.getBuyerSlots.userdetail!.name}");
   }
 }

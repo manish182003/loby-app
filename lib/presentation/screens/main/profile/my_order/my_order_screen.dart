@@ -13,8 +13,8 @@ class MyOrderScreen extends StatefulWidget {
   State<MyOrderScreen> createState() => _MyOrderScreenState();
 }
 
-class _MyOrderScreenState extends State<MyOrderScreen> with SingleTickerProviderStateMixin {
-
+class _MyOrderScreenState extends State<MyOrderScreen>
+    with SingleTickerProviderStateMixin {
   OrderController orderController = Get.find<OrderController>();
   late TabController _tabController;
   int _currentTabIndex = 0;
@@ -26,7 +26,8 @@ class _MyOrderScreenState extends State<MyOrderScreen> with SingleTickerProvider
 
     getOrders();
 
-    _tabController = TabController(length: 3, vsync: this, initialIndex: _currentTabIndex);
+    _tabController =
+        TabController(length: 3, vsync: this, initialIndex: _currentTabIndex);
     _tabController.addListener(() {
       if (_tabController.animation?.value == _tabController.index) {
         setState(() {
@@ -39,14 +40,21 @@ class _MyOrderScreenState extends State<MyOrderScreen> with SingleTickerProvider
     });
   }
 
-  Future<void> getOrders()async{
+  Future<void> getOrders() async {
     orderController.ordersPageNumber.value = 1;
     orderController.areMoreOrdersAvailable.value = true;
-    orderController.getOrders(status: _currentTabIndex == 0 ? 'ALL' : _currentTabIndex == 1 ? 'BOUGHT' : 'SOLD');
+    orderController.getOrders(
+      
+        status: _currentTabIndex == 0
+            ? 'ALL'
+            : _currentTabIndex == 1
+                ? 'BOUGHT'
+                : 'SOLD');
   }
-  
+
   @override
   Widget build(BuildContext context) {
+    
     final textTheme = Theme.of(context).textTheme;
     return DefaultTabController(
       length: 3,
@@ -62,7 +70,7 @@ class _MyOrderScreenState extends State<MyOrderScreen> with SingleTickerProvider
               indicatorWeight: 4.0,
               labelColor: textWhiteColor,
               labelStyle: textTheme.headline5,
-              onTap: (value){
+              onTap: (value) {
                 setState(() => _currentTabIndex = value);
               },
               tabs: const [
@@ -75,9 +83,15 @@ class _MyOrderScreenState extends State<MyOrderScreen> with SingleTickerProvider
               child: TabBarView(
                 controller: _tabController,
                 children: const <Widget>[
-                  AllOrdersTabScreen(status: 'ALL',),
-                  AllOrdersTabScreen(status: 'BOUGHT',),
-                  AllOrdersTabScreen(status: 'SOLD',)
+                  AllOrdersTabScreen(
+                    status: 'ALL',
+                  ),
+                  AllOrdersTabScreen(
+                    status: 'BOUGHT',
+                  ),
+                  AllOrdersTabScreen(
+                    status: 'SOLD',
+                  )
                 ],
               ),
             ),

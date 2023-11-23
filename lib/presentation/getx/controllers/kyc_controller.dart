@@ -47,7 +47,7 @@ class KycController extends GetxController {
       },
       (success) {
         // kyctoken;
-        Helpers.toast('gettoken');
+        // Helpers.toast('gettoken');
       },
     );
     return failureOrSuccess.isRight() ? true : false;
@@ -104,8 +104,8 @@ class KycController extends GetxController {
         Helpers.toast(errorMessage.value);
       },
       (success) async{
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-                  prefs.setString("kycToken", '');
+        // SharedPreferences prefs = await SharedPreferences.getInstance();
+        //           prefs.setString("kycToken", '');
         // Helpers.toast('Profile Changed');
       },
     );

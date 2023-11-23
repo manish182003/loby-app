@@ -8,7 +8,7 @@ import 'package:loby/domain/entities/response_entities/order/order_response.dart
 
 abstract class OrderRepository{
 
-  Future<Either<Failure, Map<String, dynamic>>> createOrder({int? listingId, int? quantity, String? price, String? bookFromTime, String? bookToTime, String? bookDate});
+  Future<Either<Failure, Map<String, dynamic>>> createOrder({int? listingId, int? quantity, String? price, String? bookFromTime, String? bookToTime, String? bookDate, bool isUpdatingTime});
 
   Future<Either<Failure, OrderResponse>> getOrders({int? orderId, String? status, int? page});
 

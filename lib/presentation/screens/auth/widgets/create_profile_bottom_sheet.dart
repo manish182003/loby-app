@@ -75,7 +75,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                   textEditingController: authController.fullName.value,
                   title: "Full Name",
                   hint: "Ex: John Doe",
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 SizedBox(height: 3.h,),
                 TextFieldWidget(
@@ -83,7 +83,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                   title: "Display Name",
                   hint: "Ex: Commander",
                   type: 'username',
-                  isRequired: false,
+                  isRequired: true,
                   onChanged: (value){
                     authController.usernameString.value = value;
                     if(value.isNotEmpty){
@@ -105,7 +105,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                   selectedSuggestion: TextEditingController(text: authController.selectedCountry.value.name),
                   hint: 'Select Countries',
                   title: 'Country',
-                  isRequired: false,
+                  isRequired: true,
                   suggestionsCallback: (pattern) async {
                     await authController.getCountries(search: pattern);
                     List finalList = [];
@@ -127,7 +127,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                   selectedSuggestion: TextEditingController(text: authController.selectedState.value.name),
                   hint: 'Select State',
                   title: 'State',
-                  isRequired: false,
+                  isRequired: true,
                   suggestionsCallback: (pattern) async {
                     await authController.getStates(search: pattern, countryId: authController.selectedCountry.value.id);
                     List finalList = [];
@@ -150,7 +150,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                   selectedSuggestion: TextEditingController(text: authController.selectedCity.value.name),
                   hint: 'Select City',
                   title: 'City',
-                  isRequired: false,
+                  isRequired: true,
                   suggestionsCallback: (pattern) async {
                     await authController.getCities(search: pattern, stateId: authController.selectedState.value.id);
                     List finalList = [];
@@ -173,7 +173,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                   type: "date",
                   title: "Date Of Birth",
                   hint: "Select DOB",
-                  isRequired: false,
+                  isRequired: true,
                 ),
                 SizedBox(height: 3.h,),
                 AutoCompleteField(
@@ -182,7 +182,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                   hint: 'Search Tag',
                   icon: 'assets/icons/search.svg',
                   isMultiple: true,
-                  isRequired: false,
+                  isRequired: true,
                   selectedValuesList: authController.selectedProfileTags,
                   suggestionsCallback: (pattern) async {
                     await authController.getProfileTags(search: pattern);

@@ -74,7 +74,7 @@ class KycRemoteDatasourceImpl extends KycRemoteDatasource {
           'token' : kycToken,
           // 'mobile': mobile,
           'otp' : otp,
-          'ref_id' : refId
+          'ref_id' : "111111"
         },
         headers: headers,
         encoded: true

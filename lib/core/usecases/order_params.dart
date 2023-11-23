@@ -23,6 +23,7 @@ class OrderParams extends Equatable {
   final List<PlatformFile>? files;
   final List<int>? fileTypes;
   final String? link;
+  final bool? isUpdatingTime;
 
   const OrderParams({
     this.orderId,
@@ -44,6 +45,7 @@ class OrderParams extends Equatable {
     this.files,
     this.fileTypes,
     this.link,
+    this.isUpdatingTime,
   });
 
   @override

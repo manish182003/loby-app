@@ -89,7 +89,9 @@ class _MyListingTileState extends State<MyListingTile> {
                         maxLines: 1,
                         style: textTheme.headline5
                             ?.copyWith(color: textWhiteColor)),
-                            SizedBox(width: 2.w,),
+                    SizedBox(
+                      width: 2.w,
+                    ),
                     CustomSwitch(
                       value: widget.listing.status == "0" ? false : true,
                       onChanged: (bool val) {
@@ -104,7 +106,9 @@ class _MyListingTileState extends State<MyListingTile> {
                         });
                       },
                     ),
-                    SizedBox(width: 2.w,),
+                    SizedBox(
+                      width: 2.w,
+                    ),
                     Text("Active",
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
@@ -123,85 +127,98 @@ class _MyListingTileState extends State<MyListingTile> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  // widget.listing.title!
-                  children: <Widget>[
-                    Text(widget.listing.title!,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                        style: textTheme.headline5?.copyWith(color: textWhiteColor)),
-                    // SizedBox(height: 1.h,),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10.0),
-                      child: Text(widget.listing.game?.name! ?? '',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          style: textTheme.headline6?.copyWith(color: textInputTitleColor)),)])
-                    ),
-                    SizedBox(height: 2.h,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      // crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(
-                          width: 14.w,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: orangeColor,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            margin: const EdgeInsets.only(right: 4.0),
-                            alignment: Alignment.center,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 6.0),
-                              child: Text(widget.listing.category?.name! ?? '', style: textTheme.headline6?.copyWith(color: textWhiteColor), maxLines: 1, overflow: TextOverflow.ellipsis,),
+                      padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          // widget.listing.title!
+                          children: <Widget>[
+                            Text(widget.listing.title!,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                                style: textTheme.headline5
+                                    ?.copyWith(color: textWhiteColor)),
+                            // SizedBox(height: 1.h,),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: Text(widget.listing.game?.name! ?? '',
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: textTheme.headline6
+                                      ?.copyWith(color: textInputTitleColor)),
+                            )
+                          ])),
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(
+                        width: 14.w,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: orangeColor,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          margin: const EdgeInsets.only(right: 4.0),
+                          alignment: Alignment.center,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4.0, horizontal: 6.0),
+                            child: Text(
+                              widget.listing.category?.name! ?? '',
+                              style: textTheme.headline6
+                                  ?.copyWith(color: textWhiteColor),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ),
-                        
-                        TokenWidget(
-                          size: 20,
-                          text: Text( "${widget.listing.price!}",
-                              overflow: TextOverflow.ellipsis,
-                              style: textTheme.headline2
-                                  ?.copyWith(color: aquaGreenColor)),
-                        )
-            
-                      ],
-                    ),
-                    SizedBox(height: 2.h,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      // crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
+                      ),
+                      TokenWidget(
+                        size: 20,
+                        text: Text("${widget.listing.price!}",
+                            overflow: TextOverflow.ellipsis,
+                            style: textTheme.headline2
+                                ?.copyWith(color: aquaGreenColor)),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
                           // width: 38.w,
-                          child: _actionButton(textTheme, title: "Edit", onTap: ()async{
-                            Helpers.loader();
-                            await listingController.getConfigurations(categoryId: widget.listing.categoryId, gameId: widget.listing.gameId);
-                            Helpers.hideLoader();
-                            _showEditListingBottomSheet(context, widget.listing);
-                          }, color: butterflyBlueColor)
-                        ),
-                        SizedBox(
+                          child: _actionButton(textTheme, title: "Edit",
+                              onTap: () async {
+                        Helpers.loader();
+                        await listingController.getConfigurations(
+                            categoryId: widget.listing.categoryId,
+                            gameId: widget.listing.gameId);
+                        Helpers.hideLoader();
+                        _showEditListingBottomSheet(context, widget.listing);
+                      }, color: butterflyBlueColor)),
+                      SizedBox(
                           // width: 38.w,
-                          child: _actionButton(textTheme, title: "Delete", onTap: ()async{
-                            Helpers.loader();
-                            await listingController.getConfigurations(categoryId: widget.listing.categoryId, gameId: widget.listing.gameId);
-                            Helpers.hideLoader();
-                            _showEditListingBottomSheet(context, widget.listing);
-                          }, color: lavaRedColor)
-                        ),
-                      ],
-                    ),
+                          child: _actionButton(textTheme, title: "Delete",
+                              onTap: () {
+                        // Helpers.loader();
+                        _deleteDialog(context);
+                        // Helpers.hideLoader();
+                      }, color: lavaRedColor)),
+                    ],
+                  ),
                 ],
               ),
             )
           ],
         ),
-        
+
         // child: Column(
         //   // crossAxisAlignment: CrossAxisAlignment.stretch,
         //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -347,6 +364,65 @@ class _MyListingTileState extends State<MyListingTile> {
         //   ],
         // ),
       ),
+    );
+  }
+
+  Future<void> _deleteDialog(BuildContext context) async {
+    final textTheme = Theme.of(context).textTheme;
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: backgroundDarkJungleGreenColor,
+
+          // title: Text('Delete Slot'),
+
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Text('Are you sure?',
+                    style:
+                        textTheme.headline5?.copyWith(color: textWhiteColor)),
+                Text('You want to delete this Listing',
+                    style:
+                        textTheme.headline5?.copyWith(color: textWhiteColor)),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'Cancel',
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            SizedBox(
+              width: 28.w,
+            ),
+            TextButton(
+              child: Text(
+                'Delete',
+                style: TextStyle(color: aquaGreenColor),
+              ),
+              onPressed: () {
+                listingController
+                    .changeListingStatus(
+                        listingId: widget.listing.id!, type: 'delete')
+                    .then((value) {
+                  listingController.buyerListingsProfile.removeWhere(
+                      (element) => element.id == widget.listing.id);
+                  listingController.buyerListingsProfile.refresh();
+                  Navigator.of(context).pop();
+                });
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 

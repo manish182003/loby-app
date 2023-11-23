@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/core/theme/colors.dart';
+import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 import 'package:loby/presentation/getx/controllers/slots_controller.dart';
 import 'package:loby/presentation/widgets/buttons/custom_button.dart';
@@ -26,7 +27,7 @@ class _AddSlotDialogState extends State<AddSlotDialog> {
   // TimeOfDay _selectedTime = TimeOfDay.now();
 
   TimeOfDay? _selectedFromTime;
-TimeOfDay? _selectedToTime;
+  TimeOfDay? _selectedToTime;
 
   Future<void> _selectFromTimePick(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
@@ -40,12 +41,12 @@ TimeOfDay? _selectedToTime;
         slotController.fromTime.value.text = _selectedFromTime!.format(context);
 
         if (_selectedToTime != null &&
-          _selectedFromTime!.hour > _selectedToTime!.hour ||
-          (_selectedFromTime!.hour == _selectedToTime!.hour &&
-          _selectedFromTime!.minute > _selectedToTime!.minute)) {
-        _selectedToTime = null;
-        slotController.toTime.value.text = "";
-      }
+                _selectedFromTime!.hour > _selectedToTime!.hour ||
+            (_selectedFromTime!.hour == _selectedToTime!.hour &&
+                _selectedFromTime!.minute > _selectedToTime!.minute)) {
+          _selectedToTime = null;
+          slotController.toTime.value.text = "";
+        }
       });
     }
   }
@@ -93,27 +94,20 @@ TimeOfDay? _selectedToTime;
                     ),
                     InkWell(
                       onTap: () {
-                        slotController
-                            .addSlots(
-                                from: slotController.fromTime.value.text,
-                                to: slotController.toTime.value.text,
-                                sellerId: 104,
-                                day: slotController.days
-                                    .indexOf(slotController.selectedDay[0]))
-                            .then((value) {
-                          context.pushNamed(sellerTimeSlotScreen);
-                        });
                         if (_formKey.currentState!.validate()) {
-                          // slotController
-                          //     .addSlots(
-                          //         sellerId: 104,
-                          //         day: slotController.days
-                          //             .indexOf(slotController.selectedDay[0]))
-                          //     .then((value) {
-                          //   context.pop();
-                          // });
+                          slotController
+                              .addSlots(
+                                  from: slotController.fromTime.value.text,
+                                  to: slotController.toTime.value.text,
+                                  sellerId: 104,
+                                  day: slotController.days
+                                      .indexOf(slotController.selectedDay[0]))
+                              .then((value) {
+                            Navigator.of(context).pop();
+                            // context.pushNamed(sellerTimeSlotScreen);
+                          });
                         } else if (!_formKey.currentState!.validate()) {
-                          // Helpers.toast("")
+                          // Helpers.toast("Please fill details");
                         }
                       },
                       child: Text("Save",
@@ -133,8 +127,14 @@ TimeOfDay? _selectedToTime;
                               color: whiteColor, fontWeight: FontWeight.w300)),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: TextField(
+                        child: TextFormField(
                           controller: slotController.fromTime.value,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter start time';
+                            }
+                            return null;
+                          },
                           onTap: () {
                             _selectFromTimePick(context);
                           },
@@ -149,6 +149,9 @@ TimeOfDay? _selectedToTime;
                                 borderSide: BorderSide(color: aquaGreenColor)),
                             enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: aquaGreenColor)),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide.none
+                            )
                             // suffixIcon: IconButton(
                             //   icon: Icon(Icons.access_time),
                             //   onPressed: () => _selectFromTimePick(context),
@@ -170,11 +173,17 @@ TimeOfDay? _selectedToTime;
                               color: whiteColor, fontWeight: FontWeight.w300)),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: TextField(
+                        child: TextFormField(
                           controller: slotController.toTime.value,
                           // readOnly: true,
                           onTap: () {
                             _selectToTimePick(context);
+                          },
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter End time';
+                            }
+                            return null;
                           },
                           textAlign: TextAlign.center,
                           style: textTheme.headline2
@@ -191,7 +200,9 @@ TimeOfDay? _selectedToTime;
                                 borderSide: BorderSide(color: aquaGreenColor)),
                             enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: aquaGreenColor)),
-
+                            errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide.none
+                            )
                             // ),
                           ),
                         ),

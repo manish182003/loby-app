@@ -104,5 +104,5 @@ class OrderModel extends Order {
 
   @override
   List<Object?> get props =>
-      [id, userGameServiceId, userId, disputeId, quantity];
+      [id, userGameServiceId, userId, disputeId, quantity,bookfromtime,booktotime,bookDate];
 }

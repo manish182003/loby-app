@@ -96,7 +96,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           suffixIcon: widget.iconButton,
           counterText: '',
           filled: true,
-          fillColor: textFieldColor,
+          fillColor: textTunaBlueColor,
           focusedBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: aquaGreenColor, width: 0.5),
             borderRadius: BorderRadius.circular(8.0),
@@ -123,7 +123,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           errorStyle: textTheme.headline5?.copyWith(color: Colors.red),
           hintText: widget.hintText,
           errorText: widget.errorText,
-          hintStyle: textTheme.headline1?.copyWith(
+          hintStyle: textTheme.headline3?.copyWith(
             color: textTunaBlueColor,
           ),
           labelText: widget.labelText,

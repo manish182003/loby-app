@@ -224,7 +224,7 @@ class Helpers {
           ),
     );
 
-    debugPrint("Payload ${queryParams ?? data}");
+    debugPrint("Api Url => '${dio.options.baseUrl}$path' Payload ${queryParams ?? data}");
 
     // bool isDeviceConnected = await InternetConnectionChecker().hasConnection;
     // if (!isDeviceConnected) {

@@ -55,5 +55,8 @@ class Order extends Equatable {
         userId,
         disputeId,
         quantity,
+        bookfromTime,
+        booktoTime,
+        bookDate
       ];
 }

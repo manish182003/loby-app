@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:loby/core/theme/colors.dart';
+import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 import 'package:loby/presentation/widgets/buttons/custom_button.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:sizer/sizer.dart';
@@ -19,6 +21,7 @@ class OTPDialog extends StatefulWidget {
 class _OTPDialogState extends State<OTPDialog> {
   StreamController<ErrorAnimationType> errorController =
       StreamController<ErrorAnimationType>();
+  AuthController authController = Get.find<AuthController>();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -38,7 +41,7 @@ class _OTPDialogState extends State<OTPDialog> {
         Positioned(
           bottom: 0,
           child: Container(
-            height: 50.h,
+            height: 60.h,
             width: MediaQuery.of(context).size.width,
             // child: Text("hellooo", style: TextStyle(color: Colors.amber , fontSize: 60),),
             decoration: const BoxDecoration(
@@ -52,7 +55,7 @@ class _OTPDialogState extends State<OTPDialog> {
             child: Padding(
               padding: const EdgeInsets.only(left: 28, right: 28, top: 40),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                // mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text("Login",
                       style:
@@ -136,7 +139,47 @@ class _OTPDialogState extends State<OTPDialog> {
                             onChanged: (String value) {},
                           ),
                         ),
-                        SizedBox(height: 1.h,),
+                        SizedBox(
+                          height: 4.h,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Didn't Received ?",
+                                  style: textTheme.headline4?.copyWith(
+                                      color: textWhiteColor,
+                                      fontWeight: FontWeight.w300)),
+                              InkWell(
+                                onTap: () async {
+                                  authController.login(
+                                      mobile:
+                                          authController.mobile.text.trim());
+                                },
+                                child: Container(
+                                    height: 35,
+                                    width: 90,
+                                    decoration: BoxDecoration(
+                                        color: aquaGreenColor,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: Center(
+                                      child: Text("Resend",
+                                          style: textTheme.headline4?.copyWith(
+                                              color: textWhiteColor,
+                                              fontWeight: FontWeight.w300)),
+                                    )),
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 4.h,
+                        ),
+                        SizedBox(
+                          height: 1.h,
+                        ),
                         CustomButton(
                             height: 8.h,
                             fontSize: 15.sp,
@@ -149,11 +192,11 @@ class _OTPDialogState extends State<OTPDialog> {
                             top: 2.h,
                             onTap: () async {
                               widget.onVerify();
-                    //           if(_formKey.currentState!.validate()){
-                    //   widget.onVerify();
-                    // }else{
-                    //   errorController.add(ErrorAnimationType.shake);
-                    // }
+                              //           if(_formKey.currentState!.validate()){
+                              //   widget.onVerify();
+                              // }else{
+                              //   errorController.add(ErrorAnimationType.shake);
+                              // }
                               // _otpDialog(context);
                             }),
                       ],

@@ -82,12 +82,15 @@ class OrderController extends GetxController {
       required String price,
       String? bookFromTime,
       String? bookToTime,
-      String? bookDate}) async {
+      String? bookDate, 
+      required bool isUpdatingTime,
+      }) async {
     Map<String, dynamic> response = {};
 
     final failureOrSuccess = await _createOrder(
       Params(
         orderParams: OrderParams(
+          isUpdatingTime: isUpdatingTime,
             listingId: listingId,
             quantity: quantity,
             price: price,

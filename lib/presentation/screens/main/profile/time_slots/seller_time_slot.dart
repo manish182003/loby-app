@@ -160,14 +160,19 @@ class _SellerTimeSlotState extends State<SellerTimeSlot> {
                                   itemBuilder: (context, index) {
                                     return InkWell(
                                       onTap: () {
-                                        onTap(slotsController.days[index]);
+                                        if (!slotsController.selectedDay
+                                                  .contains(slotsController
+                                                      .days[index])) {
+                                          onTap(slotsController.days[index]);
                                         slotsController.getSlots();
+                                        }
+                                        
                                       },
                                       child: Container(
-                                        height: 26,
-                                        width: 37,
+                                        height: 14.h,
+                                        width: 10.w,
                                         margin:
-                                            EdgeInsets.symmetric(horizontal: 6),
+                                            EdgeInsets.symmetric(horizontal: 1.2.w),
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(20),
@@ -217,16 +222,10 @@ class _SellerTimeSlotState extends State<SellerTimeSlot> {
                       )),
                   // child: Text("Login", style: textTheme.headline2?.copyWith(color: textWhiteColor)),
                   child: Column(
-                    children: [
-                      Padding(
-                          padding:
-                              const EdgeInsets.only(left: 0, right: 0, top: 0),
-                          child: Column(
                             children: [
                               Container(
                                 height: 39.h,
-                                child: Expanded(
-                                  child: ListView.builder(
+                                child: ListView.builder(
                                     scrollDirection: Axis.vertical,
                                     shrinkWrap: true,
                                     itemCount: slotsController.slots.length,
@@ -235,7 +234,7 @@ class _SellerTimeSlotState extends State<SellerTimeSlot> {
                                           getSlots: slotsController.slots[index]);
                                     },
                                   ),
-                                ),
+                                // ),
                               ),
                               // SellerTimeSlotBox(getSlots: slotsController.slots[0]),
                               SizedBox(
@@ -256,9 +255,8 @@ class _SellerTimeSlotState extends State<SellerTimeSlot> {
                                             slotsController.selectedDay[0]));
                                   }),
                             ],
-                          )),
-                    ],
-                  ),
+                          )
+
                 ),
               ],
             );

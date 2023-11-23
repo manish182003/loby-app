@@ -142,7 +142,7 @@ class _sendOtpScreenState extends State<sendOtpScreen>
             Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 17),
                   child: PinCodeTextField(
                     appContext: context,
                     autoDisposeControllers: false,
@@ -196,6 +196,52 @@ class _sendOtpScreenState extends State<sendOtpScreen>
                     onChanged: (String value) {},
                   ),
                 ),
+                SizedBox(
+                  height: 3.h,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Didn't Received ?",
+                          style: textTheme.headline4?.copyWith(
+                              color: textWhiteColor,
+                              fontWeight: FontWeight.w300)),
+                      InkWell(
+                        onTap: () async {
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          kycController.sendKycOtp(
+                              kycToken: prefs.getString("kycToken"),
+                              aadharNumber: kycController
+                                  .aadharNumbercontroller.value.text
+                                  .trim());
+                          //     .then((value) {
+                          //   if (value) {
+                          //     context.pushNamed(sendOtppage);
+                          //   }
+                          // });
+                        },
+                        child: Container(
+                            height: 35,
+                            width: 90,
+                            decoration: BoxDecoration(
+                                color: purpleLightIndigoColor,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Center(
+                              child: Text("Resend",
+                                  style: textTheme.headline4?.copyWith(
+                                      color: textWhiteColor,
+                                      fontWeight: FontWeight.w300)),
+                            )),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 3.h,
+                ),
                 CustomButton(
                     name: "Next",
                     textColor: textWhiteColor,
@@ -208,20 +254,52 @@ class _sendOtpScreenState extends State<sendOtpScreen>
                           await SharedPreferences.getInstance();
                       kycController
                           .verifyKycOtp(
-                            refId: prefs.getString("refId"),
+                              refId: prefs.getString("refId"),
                               kycToken: prefs.getString("kycToken"),
                               otp: otp.value.text.trim())
-                          .then((value) {
-                        if (value) {
-                          _addNewWithdrawMethodDialog(context, textTheme);
-                        }
-                      });
+                          .then((value) => _successDialog(context));
                     }),
               ],
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _successDialog(BuildContext context) async {
+    final textTheme = Theme.of(context).textTheme;
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: backgroundDarkJungleGreenColor,
+
+          // title: Text('Delete Slot'),
+
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Image(image: AssetImage("assets/images/success.jpg")),
+                Text("KYC Verification Complete",
+                    style: textTheme.headline5?.copyWith(color: textWhiteColor))
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'Done',
+                style: TextStyle(color: aquaGreenColor),
+              ),
+              onPressed: () {
+                _addNewWithdrawMethodDialog(context, textTheme);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 

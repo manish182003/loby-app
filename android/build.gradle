@@ -5,7 +5,6 @@ buildscript {
         mavenCentral()
         maven { 
             url  'https://jitpack.io'
-            url  "https://phonepe.mycloudrepo.io/public/repositories/phonepe-intentsdk-android"
             }
     }
 
