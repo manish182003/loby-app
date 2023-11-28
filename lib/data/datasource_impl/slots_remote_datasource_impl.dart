@@ -21,14 +21,14 @@ class SlotsRemoteDatasourceImpl extends SlotsRemoteDatasource {
 
   @override
   Future<Map<String, dynamic>> addSlots(
-      int? slotId, int? sellerId, int? day, String? from, String? to) async {
+      int? slotId, int? day, String? from, String? to) async {
     try {
       String token = await Helpers.getApiToken();
       final Map<String, dynamic> headers = {
         'Authorization': 'Bearer $token',
       };
 
-      var data = {"seller_id": sellerId, "day": day, "from": from, "to": to};
+      var data = {"day": day, "from": from, "to": to};
 
       final response = await Helpers.sendRequest(
         _dio,
@@ -104,18 +104,18 @@ class SlotsRemoteDatasourceImpl extends SlotsRemoteDatasource {
   }
   
   @override
-  Future<GetSlotsForBuyerResponse> editSlots(String? date, int? orderId, int? slotId) async {
+  Future<Map<String,dynamic>> editSlots(String? date, int? orderId, int? slotId) async {
     try {
       final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(
         _dio,
-        RequestType.get,
+        RequestType.post,
         ApiEndpoints.editSlot,
-        queryParams: {'date': date, "slot_id" : slotId, "order_id" : orderId},
+        queryParams: {'booked_date': date, "slot_id" : slotId, "order_id" : orderId},
         headers: headers,
       );
 
-      return GetBuyerSlotResponseModel.fromJSON(response!);
+      return response!;
     } on ServerException catch (e) {
       throw ServerException(message: e.message);
     }

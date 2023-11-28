@@ -124,22 +124,28 @@ class _MyKycScreenState extends State<MyKycScreen>
                   child: TextField(
                     // inputFormatters: [formatNumber()],
                     keyboardType: TextInputType.number,
-                    maxLength: 12,
-                    controller: kycController.aadharNumbercontroller.value,
+                    maxLength: 14,
+                    controller: kycController.aadharNumbercontroller,
                     textAlign: TextAlign.center,
-                    // onChanged: (text) {
-                    //   // Format the input as the user types
-                    //   String formattedText = formatNumber(int.parse(text));
-                    //   // Update the controller to display the formatted text
-                    //   // kycController
-                    //   //                     .aadharNumbercontroller.value.text = TextEditingValue(
-                    //   //   text: formattedText,
-
-                    //   // );
-                    //   kycController.aadharNumbercontroller.value =
-                    //       TextEditingController(text: formattedText);
-                    //   kycController.aadharNumbercontroller.refresh();
-                    // },
+                    onChanged: (value) {
+                if (value.isNotEmpty) {
+                  String unformattedText = value.replaceAll(' ', '');
+                  String formattedText = '';
+                  for (int i = 0; i < unformattedText.length; i++) {
+                    formattedText += unformattedText[i];
+                    if ((i + 1) % 4 == 0 && i != unformattedText.length - 1) {
+                      formattedText += ' ';
+                    }
+                  }
+                  kycController.aadharNumbercontroller.value = TextEditingValue(
+                    text: formattedText,
+                    selection: TextSelection.collapsed(
+                      offset: formattedText.length,
+                    ),
+                  );
+                }
+              // },
+              },
                     style: textTheme.headline2?.copyWith(
                       color: textWhiteColor,
                     ),
@@ -165,12 +171,13 @@ class _MyKycScreenState extends State<MyKycScreen>
                 onTap: () async {
                   SharedPreferences prefs =
                       await SharedPreferences.getInstance();
+                      print("orgtext ${kycController.aadharNumbercontroller.text}");
+                      String textToSend = kycController.aadharNumbercontroller.text.replaceAll(' ', '');
+                      print('Text to send: $textToSend');
                   kycController
                       .sendKycOtp(
                           kycToken: prefs.getString("kycToken"),
-                          aadharNumber: kycController
-                              .aadharNumbercontroller.value.text
-                              .replaceAll(" ", ""))
+                          aadharNumber: kycController.aadharNumbercontroller.text.replaceAll(' ', ''))
                       .then((value) {
                     if (value) {
                       context.pushNamed(sendOtppage);

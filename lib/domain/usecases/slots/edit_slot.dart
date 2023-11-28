@@ -6,13 +6,13 @@ import 'package:loby/domain/entities/response_entities/slots/get_slots_for_selle
 import 'package:loby/domain/repositories/slots_repository.dart';
 import 'package:loby/core/usecases/slots_params.dart';
 
-class EditSlot extends UseCase<GetSlotsForBuyerResponse, Params> {
+class EditSlot extends UseCase<Map<String,dynamic>, Params> {
   final SlotsRepository _repository;
 
   EditSlot(this._repository);
 
   @override
-  Future<Either<Failure, GetSlotsForBuyerResponse>> call(Params params) {
+  Future<Either<Failure, Map<String,dynamic>>> call(Params params) {
     return _repository.updateSlot(
       date: params.editSlotParams?.date,
       slotId: params.editSlotParams?.slotId,

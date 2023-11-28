@@ -97,7 +97,7 @@ class AuthController extends GetxController {
   final DOB = TextEditingController().obs;
   final selectedProfileTags = <Map<String, dynamic>>[].obs;
   final bio = TextEditingController().obs;
-  TextEditingController mobile = TextEditingController();
+  TextEditingController mobilecontroller = TextEditingController();
 
   final errorMessage = ''.obs;
 
@@ -113,7 +113,22 @@ class AuthController extends GetxController {
     final apiToken = await Helpers.getString('apiToken');
     final fcmToken = await Helpers.getString('fcmToken');
     // print('token =>>>>>>> ${apiToken.runtimeType}, tokennnnn =>>>>>>> ${apiToken.length}' );
-    if(userId != null && apiToken.runtimeType == String && apiToken.length != 0){
+    // if(userId != null && apiToken != null){
+
+    //    print("user id token");
+    //    profileController.getProfile();
+    //    addFCMToken(fcmToken: fcmToken);
+    //    analytics.setUserId(id: '$userId');
+    //    analytics.logEvent(name: 'loggedInUser', parameters: ({'userId' : '$userId'}));
+    //    coreController.connect(userId);
+    //  }else if(apiToken != null){
+
+    //    print("api token");
+
+    //    profileController.getProfile();
+    //  }
+
+     if(userId != null && apiToken.runtimeType == String && apiToken.length != 0){
 
        print("user id token");
        profileController.getProfile();
@@ -136,10 +151,10 @@ class AuthController extends GetxController {
 
   Future<void> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    clearProfileDetails();
+    // clearProfileDetails();
     await prefs.remove('apiToken');
     await prefs.remove('isLoggedIn');
-    await prefs.remove('kycToken');
+    // await prefs.remove('kycToken');
   }
 
   Future<bool> googleSignInMethod(BuildContext context) async {
@@ -221,7 +236,7 @@ class AuthController extends GetxController {
     final failureOrSuccess = await _login(
       Params(
         authParams: AuthParams(
-          mobile: mobile,
+          mobile: mobilecontroller.value.text.replaceAll(' ', ''),
           email: email,
           password: password,
           socialLoginId: socialLoginId,

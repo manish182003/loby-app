@@ -79,14 +79,14 @@ class SlotsController extends GetxController {
   // }
 
   Future<bool> addSlots(
-      {int? sellerId, int? day, String? from, String? to}) async {
+      {int? day, String? from, String? to}) async {
     final failureOrSuccess = await _addSlots(
       Params(
         slotsParams: SlotsParams(
           day: day,
           from: fromTime.value.text,
           to: toTime.value.text,
-          sellerId: sellerId,
+          // sellerId: sellerId,
         ),
       ),
     );
@@ -235,8 +235,8 @@ class SlotsController extends GetxController {
         (success) {
           // areMoreSlotsAvailable.value = success.getSlotForBuyer.length == 10;
           // buyerSlots.value = success.getSlotForBuyer;
-          buyerSlots.value = success.getSlotForBuyer;
-          buyerSlots.refresh();
+          // buyerSlots.value = success.getSlotForBuyer;
+          // buyerSlots.refresh();
           // buyerSlots.addAll(success.getSlotForBuyer);
           // if (providerid == 1) {
 
@@ -248,7 +248,7 @@ class SlotsController extends GetxController {
 
           isSlotsFetching.value = false;
 
-          Helpers.toast('slotsss');
+          // Helpers.toast(success["message"]);
         },
       );
       return failureOrSuccess.isRight() ? true : false;

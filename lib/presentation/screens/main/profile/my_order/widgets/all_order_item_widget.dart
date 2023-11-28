@@ -9,6 +9,7 @@ import 'package:loby/presentation/getx/controllers/order_controller.dart';
 import 'package:loby/presentation/screens/main/profile/my_order/widgets/status_bottom_sheet.dart';
 import 'package:loby/presentation/widgets/custom_bottom_sheet.dart';
 import 'package:loby/presentation/widgets/custom_cached_network_image.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../../core/theme/colors.dart';
@@ -33,9 +34,12 @@ class OrderItem extends StatelessWidget {
   Widget build(BuildContext context) {
     print("myyyorderssssssssssss   ${orderController.orders}");
     print("orderrdata $order");
-    print("dateeee ${order.bookDate}");
-    print("${order.bookfromTime}");
     print("order.slotId ${order.slotId}");
+    print("createee ${order.createdAt}");
+    print("quant >>>> ${order.quantity}");
+    print("frommmm ${orderController.orders[1].bookfromTime}");
+    print("tooooooooo ${order.booktoTime}");
+    print("dateeee ${order.bookDate}");
     print("useriddddd ${order.userGameService?.userId}");
     final textTheme = Theme.of(context).textTheme;
     return Card(
@@ -202,10 +206,12 @@ class OrderItem extends StatelessWidget {
                       }),
                   // order.slotId == null
                   //     ?
+                  //  orderController.orders.first.orderStatuses!.first.status == "BOUGHT" ?
+                  
                   CustomButton(
                       color: backgroundBalticSeaColor,
                       borderColor: butterflyBlueColor,
-                      name: "Book Available Slots",
+                      name: order.bookDate == null ? "Book Available Slots" : "${order.bookDate}",
                       top: 2.h,
                       bottom: 2.h,
                       textColor: whiteColor,
@@ -213,7 +219,7 @@ class OrderItem extends StatelessWidget {
                         orderController.selectedOrder.value = order;
                         orderController.selectedOrder.refresh();
                         context.pushNamed(buyerTimeSlotScreen,
-                            params: {"id": "${order.id}"}
+                            params: {"id": "${order.userGameService?.userId}"}
                             // queryParams: {"isEditing": "false"}
                             );
                       })

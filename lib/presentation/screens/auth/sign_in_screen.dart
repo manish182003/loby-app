@@ -2,6 +2,7 @@ import 'package:country_pickers/country.dart';
 import 'package:country_pickers/country_pickers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -38,6 +39,34 @@ class _SignInScreenState extends State<SignInScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+  }
+
+String formatText(String text) {
+    // Remove any non-numeric characters from the input
+    String formattedText = text.replaceAll(RegExp(r'[^0-9]'), '');
+
+    // Apply the desired format (1111222233 -> 1111 222 333)
+    if (formattedText.length >= 4) {
+      formattedText = formattedText.substring(0, 4) +
+          ' ' +
+          formattedText.substring(4, formattedText.length);
+    }
+    if (formattedText.length >= 8) {
+      formattedText = formattedText.substring(0, 8) +
+          ' ' +
+          formattedText.substring(8, formattedText.length);
+    }
+
+    return formattedText;
+  }
+
+
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    authController.mobilecontroller.clear();
+    super.dispose();
   }
 
   @override
@@ -123,12 +152,23 @@ class _SignInScreenState extends State<SignInScreen> {
                                     child: TextFormField(
                                       style: textTheme.headline1?.copyWith(color: textWhiteColor),
                                       maxLength: 10,
-                                      controller: authController.mobile,
+                                      controller: authController.mobilecontroller,
                                       textAlign: TextAlign.center,
                                       scrollPadding: EdgeInsets.symmetric(horizontal: 20),
                                       keyboardType: TextInputType.phone,
+                                      onChanged: (value) {
+              // Update the text in the TextField with the formatted text
+              setState(() {
+                authController.mobilecontroller.text = formatText(value);
+                // Move the cursor to the end of the text
+                authController.mobilecontroller.selection = TextSelection.fromPosition(
+                  TextPosition(offset: authController.mobilecontroller.text.length),
+                );
+              });
+            },
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                                       decoration: InputDecoration(
-                                        
+                                      
                                         focusedBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: aquaGreenColor, width: 0.5),
             borderRadius: BorderRadius.circular(8.0),
@@ -193,18 +233,17 @@ class _SignInScreenState extends State<SignInScreen> {
                                   onTap: () async {
                                     // _createAccountDialog(context);
                                     if (_formKey.currentState!.validate() &&
-                                        authController.mobile.text.trim().length == 10) {
-                                      authController
-                                          .login(mobile: authController.mobile.text.trim())
-                                          .then((value) {
-                                        if (value) {
+                                        authController.mobilecontroller.text.replaceAll(' ', '').length == 10) {
+                                          await Helpers.loader();
+                                          final isSuccess = await authController.login(mobile: authController.mobilecontroller.text.replaceAll(' ', ''));
+                                          await Helpers.hideLoader();
+                                        if (isSuccess) {
                                           _otpDialog(context);
                                         }
-                                      });
                                     } else if (!_formKey.currentState!
                                         .validate()) {
                                       // Helpers.toast("")
-                                    } else if (authController.mobile.text.trim().length < 10) {
+                                    } else if (authController.mobilecontroller.text.trim().length < 10) {
                                       Helpers.toast(
                                           "Number should be must 10 digits");
                                     }
@@ -511,7 +550,7 @@ class _SignInScreenState extends State<SignInScreen> {
             onVerify: () async {
               Helpers.loader();
               final isSuccess = await authController.sendAndVerifyOTP(
-                  mobile: authController.mobile.text, otp: otp.text);
+                  mobile: authController.mobilecontroller.text.replaceAll(' ', ''), otp: otp.text);
               Helpers.hideLoader();
               if (!mounted) return;
               if (isSuccess) {

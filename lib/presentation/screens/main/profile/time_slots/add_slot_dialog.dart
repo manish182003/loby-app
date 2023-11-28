@@ -99,12 +99,12 @@ class _AddSlotDialogState extends State<AddSlotDialog> {
                               .addSlots(
                                   from: slotController.fromTime.value.text,
                                   to: slotController.toTime.value.text,
-                                  sellerId: 104,
+                                  // sellerId: 104,
                                   day: slotController.days
                                       .indexOf(slotController.selectedDay[0]))
                               .then((value) {
                             Navigator.of(context).pop();
-                            // context.pushNamed(sellerTimeSlotScreen);
+                            context.pushNamed(sellerTimeSlotScreen);
                           });
                         } else if (!_formKey.currentState!.validate()) {
                           // Helpers.toast("Please fill details");

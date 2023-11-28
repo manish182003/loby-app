@@ -26,7 +26,7 @@ class KycController extends GetxController {
   final errorMessage = ''.obs;
   final kycto = '';
 
-  final aadharNumbercontroller = TextEditingController().obs;
+ TextEditingController aadharNumbercontroller = TextEditingController();
 
 
   Future<bool> getKycToken({String? kycToken}) async {
@@ -62,7 +62,7 @@ class KycController extends GetxController {
     final failureOrSuccess = await _kycOtp(
       Params(
         sendKycOtpParams: SendKycOtpParams(
-            aadharNumber: aadharNumbercontroller.value.text,
+            aadharNumber: aadharNumbercontroller.text.replaceAll(' ', ''),
             kycToken: kycToken,
             type: type),
       ),

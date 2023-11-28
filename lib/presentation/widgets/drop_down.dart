@@ -68,8 +68,8 @@ class _MyDropDownWidgetState extends State<MyDropDownWidget> {
             ),
           ),
           items: _addDividersAfterItems(items, textTheme),
-          customItemsIndexes: _getDividersIndexes(),
-          customItemsHeight: 4,
+          // customItemsIndexes: _getDividersIndexes(),
+          // customItemsHeight: 4,
           value: selectedValue,
           onChanged: (value) {
             setState(() {

@@ -228,7 +228,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    authController.clearProfileDetails();
+    // authController.clearProfileDetails();
     await prefs.remove('apiToken');
     await prefs.remove('isLoggedIn');
 

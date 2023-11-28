@@ -61,6 +61,8 @@ class _ProfileHeaderState extends State<ProfileHeader> {
   Widget build(BuildContext context) {
     final maxWidth = MediaQuery.of(context).size.width * 0.55;
     final textTheme = Theme.of(context).textTheme;
+    print("uid  >>> ${widget.user.uid}");
+    print("userrrrrr ${widget.user}");
     print( "kyc   ${widget.user.kycverify}");
     return Stack(
       children: <Widget>[
@@ -193,6 +195,43 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                         ),
                                       ),
                                       const SizedBox(width: 8.0),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 4,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                    children: [
+                                          RichText(
+                                              textAlign: TextAlign.start,
+                                              text: TextSpan(
+                                                children: [
+                                                  TextSpan(
+                                                      text: 'User ID : ',
+                                                      style: textTheme.headline5
+                                                          ?.copyWith(
+                                                        color:
+                                                            selectiveYellowColor,
+                                                        fontWeight:
+                                                            FontWeight.w200,
+                                                      )),
+                                                  TextSpan(
+                                                    text:
+                                                        "${widget.user.uid}",
+                                                    style: textTheme.headline5
+                                                        ?.copyWith(
+                                                      color:
+                                                          selectiveYellowColor,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                    ),
+                                                  ),
+                                                  
+                                                ],
+                                              ),
+                                            ),
                                     ],
                                   ),
                                   const SizedBox(

@@ -122,7 +122,7 @@ class _MyListingTileState extends State<MyListingTile> {
               ],
             ),
             SizedBox(
-              width: 43.w,
+              width: 44.w,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

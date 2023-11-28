@@ -13,7 +13,7 @@ class AddSlots extends UseCase<Map<String, dynamic>, Params> {
   @override
   Future<Either<Failure, Map<String, dynamic>>> call(Params params) {
     return _repository.addSlot(
-      sellerId: params.slotsParams?.sellerId,
+      // sellerId: params.slotsParams?.sellerId,
       day: params.slotsParams?.day,
       from: params.slotsParams?.from,
       to: params.slotsParams?.to,

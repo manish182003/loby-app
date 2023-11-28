@@ -9,6 +9,7 @@ import 'package:loby/domain/entities/slots/get_slots_for_seller.dart';
 import 'package:loby/domain/usecases/slots/get_slots.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 import 'package:loby/presentation/getx/controllers/order_controller.dart';
+import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/getx/controllers/slots_controller.dart';
 import 'package:loby/presentation/screens/main/profile/time_slots/add_slot_dialog.dart';
 import 'package:loby/presentation/widgets/buttons/custom_button.dart';
@@ -73,6 +74,7 @@ class _BuyerTimeSlotBoxState extends State<BuyerTimeSlotBox> {
   Widget build(BuildContext context) {
     print('frommmm >>> ${widget.getBuyerSlots.from}');
     final textTheme = Theme.of(context).textTheme;
+    final me = Get.find<ProfileController>();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 1),
       child: Obx(() {
@@ -95,7 +97,7 @@ class _BuyerTimeSlotBoxState extends State<BuyerTimeSlotBox> {
                           color: slotsController.selectSlotArr.any((element) =>
                                   element.id == widget.getBuyerSlots.id)
                               ? gambogeOrangeColor
-                              : widget.getBuyerSlots.isBooked == "N"
+                              : orderController.orders.any((element) => element.userId == me.profile.id && element.slotId == widget.getBuyerSlots.id)  ? iconYellowColor  :  widget.getBuyerSlots.isBooked == "N"
                                   ? aquaGreenColor
                                   : lavaRedColor,
                           strokeAlign: 1)),
@@ -112,11 +114,11 @@ class _BuyerTimeSlotBoxState extends State<BuyerTimeSlotBox> {
                 height: 1.h,
               ),
               Text(
-                  widget.getBuyerSlots.isBooked == "N"
+                  orderController.orders.any((element) => element.userId == me.profile.id && element.slotId == widget.getBuyerSlots.id)  ? "Your Booking" : widget.getBuyerSlots.isBooked == "N"
                       ? "Available"
                       : "Not Available",
                   style: textTheme.headline6?.copyWith(
-                      color: widget.getBuyerSlots.isBooked == "N"
+                      color: orderController.orders.any((element) => element.userId == me.profile.id && element.slotId == widget.getBuyerSlots.id)  ? iconYellowColor : widget.getBuyerSlots.isBooked == "N"
                           ? aquaGreenColor
                           : lavaRedColor,
                       fontWeight: FontWeight.w100)),

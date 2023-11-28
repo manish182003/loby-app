@@ -7,7 +7,7 @@ import 'package:loby/domain/entities/response_entities/slots/get_slots_for_selle
 
 abstract class SlotsRepository {
   Future<Either<Failure, Map<String, dynamic>>> addSlot(
-      {int? sellerId, int? day, String? from, String? to});
+      {int? day, String? from, String? to});
 
   Future<Either<Failure, GetSlotsForSellerResponse>> getSlots(
       {int? day, int? providerId});
@@ -17,7 +17,7 @@ abstract class SlotsRepository {
 
   Future<Either<Failure, Map<String, dynamic>>> deleteSlot({int? slotId});
 
-  Future<Either<Failure, GetSlotsForBuyerResponse>> updateSlot(
+  Future<Either<Failure, Map<String,dynamic>>> updateSlot(
       {String? date, int? slotId, int? orderId});
 }
 

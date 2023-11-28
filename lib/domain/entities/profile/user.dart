@@ -50,7 +50,9 @@ class User extends Equatable {
       this.country,
       this.city,
       this.profileTags,
-      this.followStatus});
+      this.followStatus,
+      this.uid
+      });
 
   final int? id;
   final String? name;
@@ -96,8 +98,9 @@ class User extends Equatable {
   final City? city;
   final List<ProfileTag>? profileTags;
   String? followStatus;
+  final dynamic uid;
 
   @override
   // TODO: implement props
-  List<Object?> get props => [id, name, email, image, followStatus];
+  List<Object?> get props => [id, name, email, image, followStatus, uid];
 }

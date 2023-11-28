@@ -6,7 +6,7 @@ import 'package:loby/domain/entities/response_entities/slots/get_slots_for_selle
 
 abstract class SlotsRemoteDatasource {
   Future<Map<String, dynamic>> addSlots(
-      int? slotId, int? sellerId, int? day, String? from, String? to);
+      int? slotId, int? day, String? from, String? to);
 
   Future<GetSlotsForSellerResponse> getSlots(
     // int? slotId,
@@ -23,7 +23,7 @@ abstract class SlotsRemoteDatasource {
     int? slotId, 
   );
 
-  Future<GetSlotsForBuyerResponse> editSlots(
+  Future<Map<String,dynamic>> editSlots(
     String? date,
     int? orderId,
     int? slotId

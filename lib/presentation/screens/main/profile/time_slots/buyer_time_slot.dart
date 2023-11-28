@@ -356,15 +356,16 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
                               Container(
                                 height: 40.h,
                                 child: ListView.builder(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    itemCount: slotsController.buyerSlots.length,
-                                    itemBuilder: (context, index) {
-                                      return BuyerTimeSlotBox(
-                                          getBuyerSlots:
-                                              slotsController.buyerSlots[index]);
-                                    },
-                                  ),
+                                      scrollDirection: Axis.vertical,
+                                      shrinkWrap: true,
+                                      itemCount: slotsController.buyerSlots.length,
+                                      itemBuilder: (context, index) {
+                                        return BuyerTimeSlotBox(
+                                            getBuyerSlots:
+                                                slotsController.buyerSlots[index]);
+                                      },
+                                    ),
+                                // ),
                                 // ),
                               ),
                               SizedBox(

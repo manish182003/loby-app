@@ -67,7 +67,7 @@ class _HoursDropDownDividerState extends State<HoursDropDownDivider> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return DropdownButtonHideUnderline(
-      child: DropdownButton2(
+      child: DropdownButton2(               
         isExpanded: true,
         // Reduces the dropdowns height by +/- 50%
         icon: const Icon(
@@ -75,8 +75,9 @@ class _HoursDropDownDividerState extends State<HoursDropDownDivider> {
           color: iconWhiteColor,
         ),
         items: _addDividersAfterItems(items, textTheme),
-        customItemsIndexes: _getDividersIndexes(),
-        customItemsHeight: 4,
+
+        // customItemsIndexes: _getDividersIndexes(),
+        // customItemsHeight: 4,
         value: selectedValue,
         onChanged: (value) {
           setState(() {

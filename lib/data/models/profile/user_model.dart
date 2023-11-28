@@ -54,7 +54,9 @@ class UserModel extends User {
       this.country,
       this.city,
       this.profileTags,
-      this.followStatus});
+      this.followStatus,
+      this.uid
+      });
 
   final int? id;
   final String? name;
@@ -100,6 +102,7 @@ class UserModel extends User {
   final CityModel? city;
   final List<ProfileTagModel>? profileTags;
   String? followStatus;
+  final dynamic uid;
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         id: json["id"],
@@ -174,6 +177,7 @@ class UserModel extends User {
             : json["userFollowingTo"]["followStatus"] == 0
                 ? 'N'
                 : 'Y',
+        uid: json["uid"]
       );
 
   Map<String, dynamic> toJson() => {
@@ -218,8 +222,9 @@ class UserModel extends User {
         "profileTags": profileTags == null
             ? null
             : List<dynamic>.from(profileTags!.map((x) => x)),
+        "uid": uid
       };
 
   @override
-  List<Object?> get props => [id, name, email, image, followStatus];
+  List<Object?> get props => [id, name, email, image, followStatus, uid];
 }
