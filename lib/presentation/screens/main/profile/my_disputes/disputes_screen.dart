@@ -51,7 +51,7 @@ class _DisputeScreenState extends State<DisputeScreen> with SingleTickerProvider
     return DefaultTabController(
       length: 2,
       child:  Scaffold(
-        appBar: appBar(context: context, appBarName: "My Disputes"),
+        appBar: appBar(context: context, appBarName: "My Disputes", isBackIcon: true),
         body:  Column(
           children: [
             TabBar(

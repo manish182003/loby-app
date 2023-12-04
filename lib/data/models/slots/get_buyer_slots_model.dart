@@ -1,7 +1,7 @@
 import 'package:loby/data/models/profile/user_model.dart';
-import 'package:loby/domain/entities/response_entities/slots/get_slots_for_seller_response.dart';
+// import 'package:loby/domain/entities/response_entities/slots/get_slots_for_seller_response.dart';
 import 'package:loby/domain/entities/slots/get_slots_for_buyer.dart';
-import 'package:loby/domain/entities/slots/get_slots_for_seller.dart';
+// import 'package:loby/domain/entities/slots/get_slots_for_seller.dart';
 
 class GetBuyerSlotsModel extends GetSlotsForBuyer {
   @override

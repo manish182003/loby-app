@@ -42,7 +42,7 @@ class _MyWalletScreenState extends State<MyWalletScreen> {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      appBar: appBar(context: context, appBarName: "Wallet"),
+      appBar: appBar(context: context, appBarName: "My Wallet", isBackIcon: true),
       body: Obx(() {
         if(profileController.isProfileFetching.value || homeController.isStaticDataFetching.value){
           return const CustomLoader();

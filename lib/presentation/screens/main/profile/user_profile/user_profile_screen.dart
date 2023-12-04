@@ -47,6 +47,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       if(widget.from == 'other'){
 
         await profileController.getProfile(userId: widget.userId);
+        print("userrrrrrrrrrrrr ${widget.userId}");
         setState(() {
           isFetching = false;
         });

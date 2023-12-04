@@ -5,5 +5,5 @@ abstract class KycRemoteDatasource {
       String? kycToken);
   Future<bool> sendKycOtp(String? kycToken, String? aadharNumber, String? type);
 
-  Future<Map<String, dynamic>> verifyKycOtp(String? kycToken, String? otp, String? refId);
+  Future<Map<String, dynamic>> verifyKycOtp(String? kycToken, String? otp, String? refId, String? aadharNum);
 }

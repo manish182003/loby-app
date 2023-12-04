@@ -81,7 +81,7 @@ class _sendOtpScreenState extends State<sendOtpScreen>
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       backgroundColor: backgroundDarkJungleGreenColor,
-      appBar: appBar(context: context, appBarName: "KYC Verification"),
+      appBar: appBar(context: context, appBarName: "KYC Verification", isBackIcon: true),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -215,8 +215,8 @@ class _sendOtpScreenState extends State<sendOtpScreen>
                           kycController.sendKycOtp(
                               kycToken: prefs.getString("kycToken"),
                               aadharNumber: kycController
-                                  .aadharNumbercontroller.value.text
-                                  .trim());
+                                  .aadharNumbercontroller.value.text.
+                                  replaceAll(' ', ''));
                           //     .then((value) {
                           //   if (value) {
                           //     context.pushNamed(sendOtppage);
@@ -254,10 +254,19 @@ class _sendOtpScreenState extends State<sendOtpScreen>
                           await SharedPreferences.getInstance();
                       kycController
                           .verifyKycOtp(
+                            // aadharNumber: kycController
+                            //       .aadharNumbercontroller.value.text
+                            //       .replaceAll(' ', ''),
                               refId: prefs.getString("refId"),
                               kycToken: prefs.getString("kycToken"),
-                              otp: otp.value.text.trim())
-                          .then((value) => _successDialog(context));
+                              otp: otp.value.text.trim(),
+                              aadharNum: kycController.aadharNumbercontroller.text.replaceAll(' ', ''),
+                              )
+                          .then((value) {
+                            if (value) {
+                      _successDialog(context);
+                    }
+                          });
                     }),
               ],
             ),
@@ -281,22 +290,39 @@ class _sendOtpScreenState extends State<sendOtpScreen>
           content: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                Image(image: AssetImage("assets/images/success.jpg")),
-                Text("KYC Verification Complete",
-                    style: textTheme.headline5?.copyWith(color: textWhiteColor))
+                Text("KYC Verification Done", style: textTheme.headline2?.copyWith(color: textWhiteColor, fontSize: 17.sp, fontWeight: FontWeight.w500)),
+                SizedBox(height: 2.h,),
+                Image(image: AssetImage("assets/images/success_logo.png")),
+                SizedBox(height: 2.h,),
+                Text("Now continue your transaction securely",
+                    style: textTheme.headline5?.copyWith(color: textWhiteColor, fontSize: 9.sp))
               ],
             ),
           ),
+          
           actions: <Widget>[
-            TextButton(
-              child: Text(
-                'Done',
-                style: TextStyle(color: aquaGreenColor),
-              ),
-              onPressed: () {
-                _addNewWithdrawMethodDialog(context, textTheme);
-              },
-            ),
+            CustomButton(
+                                  height: 8.h,
+                                  fontSize: 15.sp,
+                                  name: "Continue",
+                                  color: aquaGreenColor,
+
+                                  // left: 0.w,
+                                  // right: 0.w,
+                                  bottom: 3.h,
+                                  top: 2.h,
+                                  onTap: () async {
+                                    _addNewWithdrawMethodDialog(context, textTheme);
+                                  }),
+            // TextButton(
+            //   child: Text(
+            //     'Done',
+            //     style: TextStyle(color: aquaGreenColor),
+            //   ),
+            //   onPressed: () {
+            //     _addNewWithdrawMethodDialog(context, textTheme);
+            //   },
+            // ),
           ],
         );
       },
@@ -364,19 +390,19 @@ class _sendOtpScreenState extends State<sendOtpScreen>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      TextFieldWidget(
-                        textEditingController: bankName,
-                        title: "Bank Name",
-                        titleColor: textWhiteColor,
-                        isRequired: true,
-                      ),
-                      SizedBox(height: 2.h),
-                      TextFieldWidget(
-                        textEditingController: branchName,
-                        title: "Branch Name",
-                        titleColor: textWhiteColor,
-                        isRequired: true,
-                      ),
+                      // TextFieldWidget(
+                      //   textEditingController: bankName,
+                      //   title: "Bank Name",
+                      //   titleColor: textWhiteColor,
+                      //   isRequired: true,
+                      // ),
+                      // SizedBox(height: 2.h),
+                      // TextFieldWidget(
+                      //   textEditingController: branchName,
+                      //   title: "Branch Name",
+                      //   titleColor: textWhiteColor,
+                      //   isRequired: true,
+                      // ),
                       SizedBox(height: 2.h),
                       TextFieldWidget(
                         textEditingController: accountNumber,
@@ -401,12 +427,12 @@ class _sendOtpScreenState extends State<sendOtpScreen>
                         isRequired: true,
                       ),
                       SizedBox(height: 2.h),
-                      TextFieldWidget(
-                        textEditingController: holderName,
-                        title: "Account Holder Name",
-                        titleColor: textWhiteColor,
-                        isRequired: true,
-                      ),
+                      // TextFieldWidget(
+                      //   textEditingController: holderName,
+                      //   title: "Account Holder Name",
+                      //   titleColor: textWhiteColor,
+                      //   isRequired: true,
+                      // ),
                       SizedBox(height: 2.h),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.35,
@@ -419,12 +445,12 @@ class _sendOtpScreenState extends State<sendOtpScreen>
                               Helpers.loader();
                               final isSuccess =
                                   await profileController.addBankDetails(
-                                bankName: bankName.text,
-                                branchName: branchName.text,
+                                // bankName: bankName.text,
+                                // branchName: branchName.text,
                                 accountNumber: accountNumber.text,
                                 confirmAccountNumber: confirmAccountNumber.text,
                                 ifscCode: ifscCode.text,
-                                holderName: holderName.text,
+                                // holderName: holderName.text,
                                 type: "bank_account",
                               );
                               if (isSuccess) {
@@ -499,12 +525,12 @@ class _sendOtpScreenState extends State<sendOtpScreen>
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    TextFieldWidget(
-                      textEditingController: holderName,
-                      title: "Name",
-                      titleColor: textWhiteColor,
-                      isRequired: true,
-                    ),
+                    // TextFieldWidget(
+                    //   textEditingController: holderName,
+                    //   title: "Name",
+                    //   titleColor: textWhiteColor,
+                    //   isRequired: true,
+                    // ),
                     SizedBox(height: 2.h),
                     TextFieldWidget(
                       textEditingController: upiId,
@@ -524,7 +550,7 @@ class _sendOtpScreenState extends State<sendOtpScreen>
                             Helpers.loader();
                             final isSuccess =
                                 await profileController.addBankDetails(
-                              holderName: holderName.text,
+                              // holderName: holderName.text,
                               upiId: upiId.text,
                               type: "vpa",
                             );

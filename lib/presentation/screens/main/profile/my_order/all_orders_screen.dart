@@ -7,10 +7,11 @@ import 'package:loby/presentation/widgets/custom_loader.dart';
 
 class AllOrdersTabScreen extends StatefulWidget {
   final String status;
-  const AllOrdersTabScreen({Key? key, required this.status}) : super(key: key);
+  final String tab;
+  const AllOrdersTabScreen({Key? key, required this.status, required this.tab}) : super(key: key);
 
   @override
-  State<AllOrdersTabScreen> createState() => _AllOrdersTabScreenState();
+  State<AllOrdersTabScreen> createState() => _AllOrdersTabScreenState() ;
 }
 
 class _AllOrdersTabScreenState extends State<AllOrdersTabScreen> {
@@ -56,7 +57,7 @@ class _AllOrdersTabScreenState extends State<AllOrdersTabScreen> {
                 controller: controller,
                 itemBuilder: (context, index) {
                   if (index < orderController.orders.length) {
-                    return OrderItem(order: orderController.orders[index]);
+                    return OrderItem(order: orderController.orders[index], tabitem: widget.tab);
                   }else {
                     return Obx(() {
                       if (orderController.areMoreOrdersAvailable.value) {

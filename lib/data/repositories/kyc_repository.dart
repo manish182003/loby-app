@@ -29,9 +29,9 @@ class KycRepositoryImpl extends KycRepository {
   }
   
   @override
-  Future<Either<Failure, Map<String, dynamic>>> verifyKycOtp({String? kycToken, String? otp, String? refId}) async {
+  Future<Either<Failure, Map<String, dynamic>>> verifyKycOtp({String? kycToken, String? otp, String? refId, String? aadharNum}) async {
     try {
-      return Right(await _kycRemoteDatasource.verifyKycOtp(kycToken, otp,refId));
+      return Right(await _kycRemoteDatasource.verifyKycOtp(kycToken, otp, refId, aadharNum));
     } on ServerException catch (e) {
       // Loggers can be added here for analyzation.
       return Left(ServerFailure(message: e.message.toString()));

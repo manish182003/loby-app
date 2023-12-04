@@ -1,5 +1,5 @@
 // ignore_for_file: overridden_fields, annotate_overrides
-import 'package:equatable/equatable.dart';
+// import 'package:equatable/equatable.dart';
 
 import '../../../domain/entities/profile/settlement_request.dart';
 

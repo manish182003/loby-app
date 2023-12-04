@@ -37,6 +37,7 @@ class CustomButton extends StatelessWidget {
       width: double.infinity,
       child: GestureDetector(
         onTap: onTap,
+        
         child: Container(
           height: height ?? 5.5.h,
           margin: EdgeInsets.only(
@@ -64,8 +65,9 @@ class CustomButton extends StatelessWidget {
                   ) : Container()),
               Text(name ?? 'Next',
                   textAlign: TextAlign.center,
+                
                   // ignore: deprecated_member_use
-                  style: textTheme.button?.copyWith(color: textColor ?? textCharcoalBlueColor , fontSize: fontSize)),
+                  style: textTheme.button?.copyWith( color: textColor ?? textCharcoalBlueColor , fontSize: fontSize)),
             ],
           ),
         ),

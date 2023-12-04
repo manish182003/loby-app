@@ -3,6 +3,7 @@ import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/order/order.dart';
 import 'package:loby/presentation/getx/controllers/order_controller.dart';
@@ -17,6 +18,7 @@ import '../../../../../../core/utils/constants.dart';
 import '../../../../../../data/models/ItemModel.dart';
 import '../../../../../../services/routing_service/routes_name.dart';
 import '../../../../../getx/controllers/listing_controller.dart';
+import '../../../../../getx/controllers/profile_controller.dart';
 import '../../../../../widgets/ConfirmationRiseDisputeBottomDialog.dart';
 import '../../../../../widgets/UpdateStatusDialog.dart';
 import '../../../../../widgets/buttons/custom_button.dart';
@@ -24,23 +26,41 @@ import 'order_status_constants.dart';
 
 class OrderItem extends StatelessWidget {
   final Order order;
-  OrderItem({super.key, required this.order});
+  final String tabitem;
+  OrderItem({super.key, required this.order, required this.tabitem});
 
   final CustomPopupMenuController _controller = CustomPopupMenuController();
   final OrderController orderController = Get.find<OrderController>();
   final ListingController listingController = Get.find<ListingController>();
+  // String fromtimeIn24HourFormat = "${order.bookfromtime}";
+    // DateTime fromtime24Hour = DateFormat('HH:mm').parse(fromtimeIn24HourFormat);
+    // String fromtimeIn12HourFormat = DateFormat('h:mm a').format(fromtime24Hour);
+
+
+    // String totimeIn24HourFormat = "${order.booktotime}";
+    // DateTime totime24Hour = DateFormat('HH:mm').parse(totimeIn24HourFormat);
+    // String totimeIn12HourFormat = DateFormat('h:mm a').format(totime24Hour);
+    
 
   @override
   Widget build(BuildContext context) {
     print("myyyorderssssssssssss   ${orderController.orders}");
-    print("orderrdata $order");
+    print("orderstatussss $order");
     print("order.slotId ${order.slotId}");
     print("createee ${order.createdAt}");
     print("quant >>>> ${order.quantity}");
-    print("frommmm ${orderController.orders[1].bookfromTime}");
-    print("tooooooooo ${order.booktoTime}");
+    print("frommmm ${order.bookfromtime}");
+    print("tooooooooo ${order.booktotime}");
     print("dateeee ${order.bookDate}");
     print("useriddddd ${order.userGameService?.userId}");
+    // String fromtimeIn24HourFormat = "${order.bookfromtime}";
+    // DateTime fromtime24Hour = DateFormat('HH:mm').parse(fromtimeIn24HourFormat);
+    // String fromtimeIn12HourFormat = DateFormat('h:mm a').format(fromtime24Hour);
+
+
+    // String totimeIn24HourFormat = "${order.booktotime}";
+    // DateTime totime24Hour = DateFormat('HH:mm').parse(totimeIn24HourFormat);
+    // String totimeIn12HourFormat = DateFormat('h:mm a').format(totime24Hour);
     final textTheme = Theme.of(context).textTheme;
     return Card(
       color: backgroundBalticSeaColor,
@@ -207,38 +227,88 @@ class OrderItem extends StatelessWidget {
                   // order.slotId == null
                   //     ?
                   //  orderController.orders.first.orderStatuses!.first.status == "BOUGHT" ?
-                  
-                  CustomButton(
-                      color: backgroundBalticSeaColor,
-                      borderColor: butterflyBlueColor,
-                      name: order.bookDate == null ? "Book Available Slots" : "${order.bookDate}",
-                      top: 2.h,
-                      bottom: 2.h,
-                      textColor: whiteColor,
-                      onTap: () {
+                  tabitem == 'Bought' && order.orderStatuses!.last.status! == "ORDER_PLACED" ?
+                  GestureDetector(
+                    onTap: () {
                         orderController.selectedOrder.value = order;
                         orderController.selectedOrder.refresh();
                         context.pushNamed(buyerTimeSlotScreen,
                             params: {"id": "${order.userGameService?.userId}"}
                             // queryParams: {"isEditing": "false"}
                             );
-                      })
-                  // : CustomButton(
+                      },
+                    child: Container(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: butterflyBlueColor),
+                        borderRadius: BorderRadius.circular(15)
+                      ),
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                          Text(order.bookDate == null ? "Book Available Slots" : "${order.bookfromtime} - ${order.booktotime}", style: textTheme.headline3?.copyWith(
+                                      color: whiteColor, fontWeight: FontWeight.w600),),
+                                      SizedBox(width: 1.w,),
+                          Icon(Icons.mode_edit_outlined, color: whiteColor)
+                        ]),
+                      ),
+                    ),
+                  )
+
+                  // CustomButton(
                   //     color: backgroundBalticSeaColor,
                   //     borderColor: butterflyBlueColor,
-                  //     name: "${order.bookDate}",
+                  //     name: order.bookDate == null ? "Book Available Slots" : "${order.bookDate}",
                   //     top: 2.h,
+                      
                   //     bottom: 2.h,
                   //     textColor: whiteColor,
+                      
                   //     onTap: () {
                   //       orderController.selectedOrder.value = order;
                   //       orderController.selectedOrder.refresh();
-                  //       context.pushNamed(buyerTimeSlotScreen, params: {
-                  //         "id": "${order.userGameService?.userId}"
-                  //       }, queryParams: {
-                  //         "isEditing" : "true"
-                  //       });
-                  //     }),
+                  //       context.pushNamed(buyerTimeSlotScreen,
+                  //           params: {"id": "${order.userGameService?.userId}"}
+                  //           // queryParams: {"isEditing": "false"}
+                  //           );
+                  //     }) 
+                  : tabitem == 'Bought'?
+                  GestureDetector(
+                    onTap: () {
+                        Helpers.toast("cannot edit slot after seller accepted order");
+                      },
+                    child: Container(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: butterflyBlueColor.withOpacity(0.5)),
+                        borderRadius: BorderRadius.circular(15)
+                      ),
+                      child: Center(
+                        child: Row(mainAxisAlignment: MainAxisAlignment.center,children: [
+                          Text(order.bookDate == null ? "Book Available Slots" : "${order.bookfromtime} - ${order.booktotime}", style: textTheme.headline3?.copyWith(
+                                      color: whiteColor.withOpacity(0.5), fontWeight: FontWeight.w600),),
+                                      SizedBox(width: 1.w,),
+                          Icon(Icons.mode_edit_outlined, color: whiteColor.withOpacity(0.5),)
+                        ]),
+                      ),
+                    ),
+                  )
+                      // CustomButton(
+                      // color: backgroundBalticSeaColor,
+                      // borderColor: butterflyBlueColor.withOpacity(0.5),
+                      // name: order.bookDate == null ? "Book Available Slots" : "${order.bookDate}",
+                      // top: 2.h,
+                      
+                      // bottom: 2.h,
+                      // textColor: whiteColor.withOpacity(0.5),
+                      
+                      // onTap: () {
+                      //   Helpers.toast("cannot edit slot after seller accepted order");
+                      // }) 
+                      : SizedBox()
                 ],
               ),
               order.orderStatuses!.last.status! == orderCompleted

@@ -81,7 +81,7 @@ class _UpiScreenState extends State<UpiScreen>
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       backgroundColor: backgroundDarkJungleGreenColor,
-      appBar: appBar(context: context, appBarName: "My Orders"),
+      appBar: appBar(context: context, appBarName: "KYC Verification", isBackIcon: true),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -136,12 +136,12 @@ class _UpiScreenState extends State<UpiScreen>
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    TextFieldWidget(
-                      textEditingController: holderName,
-                      title: "Name",
-                      titleColor: textWhiteColor,
-                      isRequired: true,
-                    ),
+                    // TextFieldWidget(
+                    //   textEditingController: holderName,
+                    //   title: "Name",
+                    //   titleColor: textWhiteColor,
+                    //   isRequired: true,
+                    // ),
                     SizedBox(height: 2.h),
                     TextFieldWidget(
                       textEditingController: upiId,
@@ -161,7 +161,7 @@ class _UpiScreenState extends State<UpiScreen>
                             Helpers.loader();
                             final isSuccess =
                                 await profileController.addBankDetails(
-                              holderName: holderName.text,
+                              // holderName: holderName.text,
                               upiId: upiId.text,
                               type: "vpa",
                             );

@@ -1,7 +1,9 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -157,6 +159,47 @@ class AuthController extends GetxController {
     // await prefs.remove('kycToken');
   }
 
+  Future<void> handleGetData() async {
+  try {
+    // Configure Dio with OAuth2 authentication headers
+    Dio dio = Dio();
+    dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) {
+        // Add your OAuth2 authentication token to the request headers
+        options.headers["Authorization"] = "Bearer YOUR_ACCESS_TOKEN_HERE";
+        return handler.next(options);
+      },
+    ));
+
+    final response = await dio.get(
+        'https://people.googleapis.com/v1/people/me?personFields=phoneNumbers,emailAddresses,names,addresses');
+
+    print('People API ${response.statusCode} response: ${response.data}');
+
+    final Map<String, dynamic> data =
+        json.decode(response.data) as Map<String, dynamic>;
+
+    // Handle the received data as needed
+    // Your logic here
+  } catch (e) {
+    print('Error: $e');
+    // Handle the error
+  }
+}
+
+// Future<void> handleGetData() async {
+//     final response = await Dio().get(
+//       'https://people.googleapis.com/v1/people/me?personFields=phoneNumbers,emailAddresses,names,addresses');
+
+
+ 
+//     print('People API ${response.statusCode} response: $response');
+    
+//     final Map<String, dynamic> data =
+//         json.decode(response.data) as Map<String, dynamic>;
+    
+//   }
+
   Future<bool> googleSignInMethod(BuildContext context) async {
     await Helpers.loader();
 
@@ -166,6 +209,7 @@ class AuthController extends GetxController {
       debugPrint("id : ${googleUser?.id}");
       debugPrint("name : ${googleUser?.displayName}");
       debugPrint("email : ${googleUser?.email}");
+      debugPrint("image : ${googleUser?.photoUrl}");
       debugPrint("image : ${googleUser?.photoUrl}");
       GoogleSignInAuthentication? googleSignInAuthentication =
           await googleUser?.authentication;
@@ -497,7 +541,9 @@ class AuthController extends GetxController {
         Helpers.toast(errorMessage.value);
       },
       (success) {
-        // Helpers.toast('Profile Changed');
+        //  ProfileController profileController = Get.find<ProfileController>();
+        // // Helpers.toast('Profile Changed');
+        // profileController.getProfile();
       },
     );
     return failureOrSuccess.isRight() ? true : false;

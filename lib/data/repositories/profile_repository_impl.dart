@@ -100,9 +100,26 @@ class ProfileRepositoryImpl extends ProfileRepository{
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> addBankDetails({String? bankName, String? branchName, String? accountNumber, String? confirmAccountNumber, String? ifscCode, String? holderName, String? upiId, String? type}) async{
+  Future<Either<Failure, Map<String, dynamic>>> addBankDetails({
+    // String? bankName, 
+    // String? branchName, 
+    String? accountNumber, 
+    String? confirmAccountNumber, 
+    String? ifscCode, 
+    // String? holderName, 
+    String? upiId, 
+    String? type}) async{
     try {
-      return Right(await _profileRemoteDatasource.addBankDetails(bankName, branchName, accountNumber, confirmAccountNumber, ifscCode, holderName, upiId, type));
+
+      return Right(await _profileRemoteDatasource.addBankDetails(
+        // bankName, 
+        // branchName, 
+        accountNumber, 
+        confirmAccountNumber, 
+        ifscCode, 
+        // holderName, 
+        upiId, 
+        type));
     } on ServerException catch (e) {
     // Loggers can be added here for analyzation.
     return Left(ServerFailure(message: e.message.toString()));

@@ -1,4 +1,4 @@
-import 'package:loby/domain/entities/response_entities/slots/get_slots_for_seller_response.dart';
+// import 'package:loby/domain/entities/response_entities/slots/get_slots_for_seller_response.dart';
 import 'package:loby/domain/entities/slots/get_slots_for_seller.dart';
 
 class GetSlotsModel extends GetSlotsForSeller {

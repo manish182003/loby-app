@@ -10,7 +10,7 @@ import 'package:loby/core/usecases/profile_params.dart';
 import 'package:loby/core/usecases/send_kyc_otp_params.dart';
 import 'package:loby/core/usecases/slots_params.dart';
 import 'package:loby/core/usecases/delete_slot_params.dart';
-import 'package:loby/core/usecases/buyer_slots_params.dart' as buyer;
+// import 'package:loby/core/usecases/buyer_slots_params.dart' as buyer;
 import 'package:loby/core/usecases/verify_kyc_otp.dart';
 import '../utils/failure.dart';
 import 'chat_params.dart';

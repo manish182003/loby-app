@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -131,63 +132,360 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    return Scaffold(
-      appBar: appBar(context: context, appBarName: ""),
-      body: Obx(() {
-        if (listingController.isBuyerListingsFetching.value || loading) {
-          return const CustomLoader();
-        } else {
-          final listing = listingController.buyerSingleListing.value;
-          List<UserGameServiceImage> userGameServiceImages = listing
-              .userGameServiceImages!
-              .where((element) => element.type != 3)
-              .toList();
-
-          return SingleChildScrollView(
-            child: BodyPaddingWidget(
-              child: Column(
-                children: [
-                  userGameServiceImages.isEmpty
-                      ? Carousel(
-                          images: [CarouselList(type: 5, path: '')],
-                        )
-                      : Carousel(
-                          images: [
-                            for (final i in listing.userGameServiceImages!)
-                              CarouselList(type: i.type!, path: i.path!)
-                          ],
-                        ),
-                  userGameServiceImages.isEmpty
-                      ? const SizedBox()
-                      : SizedBox(
-                          height: 2.h,
-                        ),
-                  Text(listing.title!,
-                      style:
-                          textTheme.headline5?.copyWith(color: textWhiteColor)),
-                  SizedBox(height: 2.h),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+    return SafeArea(
+      child: Scaffold(
+        appBar: appBar(context: context, appBarName: ""),
+        body: Obx(() {
+          if (listingController.isBuyerListingsFetching.value || loading) {
+            return const CustomLoader();
+          } else {
+            final listing = listingController.buyerSingleListing.value;
+            List<UserGameServiceImage> userGameServiceImages = listing
+                .userGameServiceImages!
+                .where((element) => element.type != 3)
+                .toList();
+      
+            return SingleChildScrollView(
+              child: BodyPaddingWidget(
+                child: Column(
+                  children: [
+                    Align(
+                alignment: Alignment.topCenter,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                  child: Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        _circularInfoBox(textTheme,
-                            color: orangeColor, info: listing.game!.name!),
-                        SizedBox(width: 1.w),
-                        _circularInfoBox(textTheme,
-                            color: purpleLightIndigoColor,
-                            info: listing.category!.name!),
-                      ],
+                        SizedBox(
+                    width: 42,
+                    height: 42,
+                    child: MaterialButton(
+                      shape: const CircleBorder(),
+                      color: textCharcoalBlueColor,
+                      onPressed: () {
+                          Navigator.pop(context);
+                        
+                      },
+                      child: const Icon(
+                        Icons.arrow_back_ios,
+                        size: 18,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                  SizedBox(height: 2.h),
-                  Card(
-                    color: backgroundBalticSeaColor,
-                    elevation: 0.0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+                  // Text("${widget.gameName}", style: textTheme.headline2?.copyWith(color: aquaGreenColor),),
+                        GestureDetector(
+                      onTap: () {
+                        context.pushNamed(searchScreenPage);
+                      },
+                      child: Container(
+                        height: 40,
+                        width: 40,
+                        decoration: BoxDecoration(
+                          color: textCharcoalBlueColor,
+                          borderRadius: BorderRadius.circular(10)
+                        ),
+                        child: const Icon(CupertinoIcons.search, size: 23, color: Colors.white,),
+                      ),
                     ),
-                    child: Container(
+                      ],
+                    ),
+                  
+                  ),
+                )),
+                    userGameServiceImages.isEmpty
+                        ? Carousel(
+                            images: [CarouselList(type: 5, path: '')],
+                          )
+                        : Carousel(
+                            images: [
+                              for (final i in listing.userGameServiceImages!)
+                                CarouselList(type: i.type!, path: i.path!)
+                            ],
+                          ),
+                    userGameServiceImages.isEmpty
+                        ? const SizedBox()
+                        : SizedBox(
+                            height: 2.h,
+                          ),
+                    Text(listing.title!,
+                        style:
+                            textTheme.headline5?.copyWith(color: textWhiteColor)),
+                    SizedBox(height: 2.h),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          _circularInfoBox(textTheme,
+                              color: orangeColor, info: listing.game!.name!),
+                          SizedBox(width: 1.w),
+                          _circularInfoBox(textTheme,
+                              color: purpleLightIndigoColor,
+                              info: listing.category!.name!),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 2.h),
+                    Card(
+                      color: backgroundBalticSeaColor,
+                      elevation: 0.0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              _rowWidget(
+                                  text1: "Unit Token / Per ${listing.unit!.name}",
+                                  text2: "${listing.price}",
+                                  isNormal: true),
+                              SizedBox(height: 1.h),
+                              _rowWidget(
+                                  text1: "Stock", text2: "${listing.stockAvl}"),
+                              SizedBox(height: 1.h),
+                              listing.user?.id == profileController.profile.id
+                                  ? const SizedBox()
+                                  : Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            if (listing.quantity > 1) {
+                                              setState(() {
+                                                listing.quantity--;
+                                              });
+                                              // listingController.totalPrice.value = (listing.price! * listingController.quantityCount.value).toString();
+                                            }
+                                          },
+                                          child: SvgPicture.asset(
+                                            'assets/icons/minus_circle_icon.svg',
+                                            color: whiteColor,
+                                            width: 5.h,
+                                            height: 5.h,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8.0),
+                                        Container(
+                                          padding: const EdgeInsets.all(8),
+                                          constraints: const BoxConstraints(
+                                              minHeight: 46, minWidth: 46),
+                                          decoration: BoxDecoration(
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  spreadRadius: 1,
+                                                  blurRadius: 5,
+                                                  color:
+                                                      Colors.black.withAlpha(50))
+                                            ],
+                                            borderRadius:
+                                                BorderRadius.circular(32),
+                                            color: iconWhiteColor,
+                                          ),
+                                          child: Center(
+                                            child: Text("${listing.quantity}",
+                                                style: textTheme.headline3
+                                                    ?.copyWith(
+                                                        color: bodyTextColor)),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8.0),
+                                        GestureDetector(
+                                          onTap: () {
+                                            if (listing.quantity <
+                                                listing.stockAvl!) {
+                                              setState(() {
+                                                listing.quantity++;
+                                              });
+                                              // listingController.totalPrice.value = (listing.price! * listingController.quantityCount.value).toString();
+                                            }
+                                          },
+                                          child: SvgPicture.asset(
+                                            'assets/icons/plus_circle_icon.svg',
+                                            color: whiteColor,
+                                            width: 5.h,
+                                            height: 5.h,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                              SizedBox(height: 1.h),
+                              _rowWidget(
+                                  text1: "Total Token",
+                                  text2: (listing.quantity * listing.price!)
+                                      .toString(),
+                                  isNormal: true),
+                              SizedBox(height: 1.h),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 1.h,
+                    ),
+                    listing.user?.id == profileController.profile.id
+                        ? const SizedBox()
+                        : widget.from == ListingPageRedirection.profile
+                            ? const SizedBox()
+                            : GestureDetector(
+                                onTap: () {
+                                  listingController.buyerListingsProfile.clear();
+                                  context.pushNamed(userProfilePage,
+                                      queryParams: {
+                                        'userId': "${listing.user?.id}",
+                                        'from': 'other'
+                                      });
+                                },
+                                child: Card(
+                                  color: backgroundBalticSeaColor,
+                                  elevation: 0.0,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16.0),
+                                    side: const BorderSide(
+                                        color: textLightColor, width: 0.5),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(14.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8.0),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          ProfilePicture(profile: listing.user!),
+                                          Expanded(
+                                            child: Container(
+                                              margin: const EdgeInsets.fromLTRB(
+                                                  18, 0, 0, 0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      SizedBox(
+                                                        width: 36.w,
+                                                        child: InlineText(
+                                                          listing
+                                                              .user!.displayName!,
+                                                          // overflow: TextOverflow.ellipsis,
+                                                          // maxLines: 1,
+                                                          // softWrap: true,
+                                                          style: textTheme
+                                                              .headline2
+                                                              ?.copyWith(
+                                                                  color:
+                                                                      profileNameYellowColor),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(width: 8.0),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 12.0,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          SvgPicture.asset(
+                                                            'assets/icons/user_rating_icon.svg',
+                                                            color: iconWhiteColor,
+                                                            height: 16.0,
+                                                            width: 16.0,
+                                                          ),
+                                                          const SizedBox(
+                                                              width: 4.0),
+                                                          Text(
+                                                            "${listing.user?.avgRatingCount ?? 0.0}",
+                                                            overflow: TextOverflow
+                                                                .ellipsis,
+                                                            maxLines: 1,
+                                                            style: textTheme
+                                                                .headline4
+                                                                ?.copyWith(
+                                                                    color:
+                                                                        textWhiteColor),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(width: 16.0),
+                                                      Row(
+                                                        children: [
+                                                          SvgPicture.asset(
+                                                            'assets/icons/user_chat_icon.svg',
+                                                            color: iconWhiteColor,
+                                                            height: 16.0,
+                                                            width: 16.0,
+                                                          ),
+                                                          const SizedBox(
+                                                              width: 8.0),
+                                                          Text(
+                                                            "${listing.user?.commentCount}",
+                                                            overflow: TextOverflow
+                                                                .ellipsis,
+                                                            maxLines: 1,
+                                                            style: textTheme
+                                                                .headline4
+                                                                ?.copyWith(
+                                                                    color:
+                                                                        textWhiteColor),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 4.0),
+                                          GestureDetector(
+                                            onTap: () {
+                                              profileController.followUnfollow(
+                                                  userId: listing.user?.id);
+                                              setState(() {
+                                                listing.user
+                                                    ?.userFollowStatus = listing
+                                                            .user
+                                                            ?.userFollowStatus ==
+                                                        'N'
+                                                    ? 'Y'
+                                                    : 'N';
+                                              });
+                                            },
+                                            child: SvgPicture.asset(
+                                              listing.user?.userFollowStatus ==
+                                                      'N'
+                                                  ? 'assets/icons/follow.svg'
+                                                  : 'assets/icons/unfollow.svg',
+                                              color: iconWhiteColor,
+                                              width: 48,
+                                              height: 48,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                    SizedBox(
+                      height: 2.h,
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 1,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8.0),
                       ),
@@ -196,455 +494,205 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                         child: Column(
                           children: [
                             _rowWidget(
-                                text1: "Unit Token / Per ${listing.unit!.name}",
-                                text2: "${listing.price}",
-                                isNormal: true),
+                                text1: "listing ID",
+                                text2: "#${listing.listingNumber}"),
                             SizedBox(height: 1.h),
                             _rowWidget(
-                                text1: "Stock", text2: "${listing.stockAvl}"),
+                              text1: "Game",
+                              text2: listing.game!.name!,
+                            ),
                             SizedBox(height: 1.h),
-                            listing.user?.id == profileController.profile.id
-                                ? const SizedBox()
-                                : Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                            _rowWidget(
+                              text1: "Category",
+                              text2: listing.category!.name!,
+                            ),
+                            SizedBox(height: 1.h),
+                            serviceOptions(),
+                            // _rowWidget(textTheme, text1: "Service Type", text2: listing.userGameServiceOptions!.map((e) => e.serviceOptions?.first.serviceOptionName).toList().join(", ")),
+                            _rowWidget(
+                              text1: "Game Platform",
+                              text2: listing.game!.platform!,
+                            ),
+                            SizedBox(height: 1.h),
+                            _rowWidget(
+                                text1: "Link",
+                                text2: getFileLink(listing),
+                                isLink: true),
+                            SizedBox(height: 3.h),
+      
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          if (listing.quantity > 1) {
-                                            setState(() {
-                                              listing.quantity--;
-                                            });
-                                            // listingController.totalPrice.value = (listing.price! * listingController.quantityCount.value).toString();
-                                          }
-                                        },
-                                        child: SvgPicture.asset(
-                                          'assets/icons/minus_circle_icon.svg',
-                                          color: whiteColor,
-                                          width: 5.h,
-                                          height: 5.h,
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                          textAlign: TextAlign.start,
+                                          "Description: ",
+                                          style: textTheme.headline5
+                                              ?.copyWith(color: textLightColor),
                                         ),
                                       ),
-                                      const SizedBox(width: 8.0),
-                                      Container(
-                                        padding: const EdgeInsets.all(8),
-                                        constraints: const BoxConstraints(
-                                            minHeight: 46, minWidth: 46),
-                                        decoration: BoxDecoration(
-                                          boxShadow: [
-                                            BoxShadow(
-                                                spreadRadius: 1,
-                                                blurRadius: 5,
-                                                color:
-                                                    Colors.black.withAlpha(50))
-                                          ],
-                                          borderRadius:
-                                              BorderRadius.circular(32),
-                                          color: iconWhiteColor,
-                                        ),
-                                        child: Center(
-                                          child: Text("${listing.quantity}",
-                                              style: textTheme.headline3
-                                                  ?.copyWith(
-                                                      color: bodyTextColor)),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 8.0),
-                                      GestureDetector(
-                                        onTap: () {
-                                          if (listing.quantity <
-                                              listing.stockAvl!) {
-                                            setState(() {
-                                              listing.quantity++;
-                                            });
-                                            // listingController.totalPrice.value = (listing.price! * listingController.quantityCount.value).toString();
-                                          }
-                                        },
-                                        child: SvgPicture.asset(
-                                          'assets/icons/plus_circle_icon.svg',
-                                          color: whiteColor,
-                                          width: 5.h,
-                                          height: 5.h,
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8.0),
+                                        child: Text(
+                                          textAlign: TextAlign.start,
+                                          listing.description!,
+                                          style: textTheme.headline6
+                                              ?.copyWith(color: textWhiteColor),
                                         ),
                                       ),
                                     ],
                                   ),
-                            SizedBox(height: 1.h),
-                            _rowWidget(
-                                text1: "Total Token",
-                                text2: (listing.quantity * listing.price!)
-                                    .toString(),
-                                isNormal: true),
-                            SizedBox(height: 1.h),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8.0),
                           ],
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 1.h,
-                  ),
-                  listing.user?.id == profileController.profile.id
-                      ? const SizedBox()
-                      : widget.from == ListingPageRedirection.profile
-                          ? const SizedBox()
-                          : GestureDetector(
-                              onTap: () {
-                                listingController.buyerListingsProfile.clear();
-                                context.pushNamed(userProfilePage,
-                                    queryParams: {
-                                      'userId': "${listing.user?.id}",
-                                      'from': 'other'
-                                    });
-                              },
-                              child: Card(
-                                color: backgroundBalticSeaColor,
-                                elevation: 0.0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16.0),
-                                  side: const BorderSide(
-                                      color: textLightColor, width: 0.5),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(14.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8.0),
+                    listing.user?.id == profileController.profile.id
+                        ? const SizedBox()
+                        : Padding(
+                            padding: const EdgeInsets.only(
+                                top: 0.0, left: 7.0, bottom: 24.0, right: 7.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width * 0.15,
+                                  height: 48,
+                                  child: MaterialButton(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12.0),
                                     ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        ProfilePicture(profile: listing.user!),
-                                        Expanded(
-                                          child: Container(
-                                            margin: const EdgeInsets.fromLTRB(
-                                                18, 0, 0, 0),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    SizedBox(
-                                                      width: 36.w,
-                                                      child: InlineText(
-                                                        listing
-                                                            .user!.displayName!,
-                                                        // overflow: TextOverflow.ellipsis,
-                                                        // maxLines: 1,
-                                                        // softWrap: true,
-                                                        style: textTheme
-                                                            .headline2
-                                                            ?.copyWith(
-                                                                color:
-                                                                    profileNameYellowColor),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(width: 8.0),
-                                                  ],
-                                                ),
-                                                const SizedBox(
-                                                  height: 12.0,
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Row(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: [
-                                                        SvgPicture.asset(
-                                                          'assets/icons/user_rating_icon.svg',
-                                                          color: iconWhiteColor,
-                                                          height: 16.0,
-                                                          width: 16.0,
-                                                        ),
-                                                        const SizedBox(
-                                                            width: 4.0),
-                                                        Text(
-                                                          "${listing.user?.avgRatingCount ?? 0.0}",
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          maxLines: 1,
-                                                          style: textTheme
-                                                              .headline4
-                                                              ?.copyWith(
-                                                                  color:
-                                                                      textWhiteColor),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    const SizedBox(width: 16.0),
-                                                    Row(
-                                                      children: [
-                                                        SvgPicture.asset(
-                                                          'assets/icons/user_chat_icon.svg',
-                                                          color: iconWhiteColor,
-                                                          height: 16.0,
-                                                          width: 16.0,
-                                                        ),
-                                                        const SizedBox(
-                                                            width: 8.0),
-                                                        Text(
-                                                          "${listing.user?.commentCount}",
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          maxLines: 1,
-                                                          style: textTheme
-                                                              .headline4
-                                                              ?.copyWith(
-                                                                  color:
-                                                                      textWhiteColor),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(width: 4.0),
-                                        GestureDetector(
-                                          onTap: () {
-                                            profileController.followUnfollow(
-                                                userId: listing.user?.id);
-                                            setState(() {
-                                              listing.user
-                                                  ?.userFollowStatus = listing
-                                                          .user
-                                                          ?.userFollowStatus ==
-                                                      'N'
-                                                  ? 'Y'
-                                                  : 'N';
-                                            });
-                                          },
-                                          child: SvgPicture.asset(
-                                            listing.user?.userFollowStatus ==
-                                                    'N'
-                                                ? 'assets/icons/follow.svg'
-                                                : 'assets/icons/unfollow.svg',
-                                            color: iconWhiteColor,
-                                            width: 48,
-                                            height: 48,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                  SizedBox(
-                    height: 2.h,
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 1,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          _rowWidget(
-                              text1: "listing ID",
-                              text2: "#${listing.listingNumber}"),
-                          SizedBox(height: 1.h),
-                          _rowWidget(
-                            text1: "Game",
-                            text2: listing.game!.name!,
-                          ),
-                          SizedBox(height: 1.h),
-                          _rowWidget(
-                            text1: "Category",
-                            text2: listing.category!.name!,
-                          ),
-                          SizedBox(height: 1.h),
-                          serviceOptions(),
-                          // _rowWidget(textTheme, text1: "Service Type", text2: listing.userGameServiceOptions!.map((e) => e.serviceOptions?.first.serviceOptionName).toList().join(", ")),
-                          _rowWidget(
-                            text1: "Game Platform",
-                            text2: listing.game!.platform!,
-                          ),
-                          SizedBox(height: 1.h),
-                          _rowWidget(
-                              text1: "Link",
-                              text2: getFileLink(listing),
-                              isLink: true),
-                          SizedBox(height: 3.h),
-
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        textAlign: TextAlign.start,
-                                        "Description: ",
-                                        style: textTheme.headline5
-                                            ?.copyWith(color: textLightColor),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8.0),
-                                      child: Text(
-                                        textAlign: TextAlign.start,
-                                        listing.description!,
-                                        style: textTheme.headline6
-                                            ?.copyWith(color: textWhiteColor),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8.0),
-                        ],
-                      ),
-                    ),
-                  ),
-                  listing.user?.id == profileController.profile.id
-                      ? const SizedBox()
-                      : Padding(
-                          padding: const EdgeInsets.only(
-                              top: 0.0, left: 7.0, bottom: 24.0, right: 7.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.15,
-                                height: 48,
-                                child: MaterialButton(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12.0),
-                                  ),
-                                  color: purpleLightIndigoColor,
-                                  onPressed: () async {
-                                    Helpers.loader();
-                                    final isSuccess =
-                                        await chatController.checkEligibility(
-                                            receiverId: listing.user!.id!);
-                                    await chatController.getChats();
-                                    final chat = chatController
-                                        .checkEligibilityResponse.value;
-                                    Helpers.hideLoader();
-                                    if (isSuccess) {
-                                      context
-                                          .pushNamed(messagePage, queryParams: {
-                                        'chatId': "${chat.id}",
-                                        'senderId': "${chat.senderId}",
-                                        'receiverId': "${chat.receiverId}"
-                                      });
-                                    } else {
-                                      BottomDialog(
-                                              textTheme: textTheme,
-                                              tileName: "Buy a Service First",
-                                              titleColor: aquaGreenColor,
-                                              contentName:
-                                                  "Sorry you can not chat with a verified profile without buying a service",
-                                              contentLinkName: '')
-                                          .showBottomDialog(context);
-                                    }
-                                  },
-                                  child: SvgPicture.asset(
-                                    'assets/icons/chat_icon.svg',
-                                    color: iconWhiteColor,
-                                    width: 24,
-                                    height: 24,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 12.0),
-                              Expanded(
-                                child: CustomButton(
-                                  color: orangeColor,
-                                  name: "Buy Now",
-                                  textColor: textWhiteColor,
-                                  onTap: () async {
-                                    ConfirmationBottomDialog(
-                                        textTheme: textTheme,
-                                        contentName:
-                                            "Are you sure you want to Buy this Service ?",
-                                        yesBtnClick: () async {
-                                          Helpers.loader();
-                                          final response =
-                                              await orderController.createOrder(
-                                            isUpdatingTime: false,   
-                                            listingId: listing.id!,
-                                            quantity: listing.quantity,
-                                            price: (listing.quantity *
-                                                    listing.price!)
-                                                .toString(),
-                                          );
-                                          Helpers.hideLoader();
-                                          if (response['success']) {
-                                            listing.stockAvl =
-                                                (listing.stockAvl! -
-                                                    listing.quantity);
-                                            print(profileController
-                                                .profile.walletMoney);
-                                            profileController
-                                                    .profile.walletMoney =
-                                                (profileController
-                                                        .profile.walletMoney! -
-                                                    (listing.quantity *
-                                                        listing.price!));
-                                            print(profileController
-                                                .profile.walletMoney);
-                                            Navigator.pop(context);
-                                            BottomDialog(
+                                    color: purpleLightIndigoColor,
+                                    onPressed: () async {
+                                      Helpers.loader();
+                                      final isSuccess =
+                                          await chatController.checkEligibility(
+                                              receiverId: listing.user!.id!);
+                                      await chatController.getChats();
+                                      final chat = chatController
+                                          .checkEligibilityResponse.value;
+                                      Helpers.hideLoader();
+                                      if (isSuccess) {
+                                        context
+                                            .pushNamed(messagePage, queryParams: {
+                                          'chatId': "${chat.id}",
+                                          'senderId': "${chat.senderId}",
+                                          'receiverId': "${chat.receiverId}"
+                                        });
+                                      } else {
+                                        BottomDialog(
                                                 textTheme: textTheme,
-                                                tileName: "Congratulations",
+                                                tileName: "Buy a Service First",
                                                 titleColor: aquaGreenColor,
                                                 contentName:
-                                                    "Payment Successful. You can check your order status from ",
-                                                contentLinkName: 'My Orders',
-                                                onOk: () {
-                                                  homeController.getUnreadCount(
-                                                      type: 'chat');
-                                                  homeController.getUnreadCount(
-                                                      type: 'notification');
-                                                  Navigator.pop(context);
-                                                  context
-                                                      .pushNamed(myOrderPage);
-                                                }).showBottomDialog(context);
-                                          } else if (response['reason'] ==
-                                              'insufficient balance') {
-                                            Navigator.pop(context);
-                                            ConfirmationBottomDialog(
-                                                textTheme:
-                                                    Theme.of(context).textTheme,
-                                                contentName:
-                                                    "You have insifficient tokens to buy this service. Would you like to Add Tokens to your Wallet ?",
-                                                yesBtnClick: () async {
-                                                  Navigator.pop(context);
-                                                  context.pushNamed(
-                                                      addFundScreenPage);
-                                                }).showBottomDialog(context);
-                                          } else {
-                                            Helpers.hideLoader();
-                                          }
-                                        }).showBottomDialog(context);
-                                  },
+                                                    "Sorry you can not chat with a verified profile without buying a service",
+                                                contentLinkName: '')
+                                            .showBottomDialog(context);
+                                      }
+                                    },
+                                    child: SvgPicture.asset(
+                                      'assets/icons/chat_icon.svg',
+                                      color: iconWhiteColor,
+                                      width: 24,
+                                      height: 24,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ],
+                                const SizedBox(width: 12.0),
+                                Expanded(
+                                  child: CustomButton(
+                                    color: orangeColor,
+                                    name: "Buy Now",
+                                    textColor: textWhiteColor,
+                                    onTap: () async {
+                                      ConfirmationBottomDialog(
+                                          textTheme: textTheme,
+                                          contentName:
+                                              "Are you sure you want to Buy this Service ?",
+                                          yesBtnClick: () async {
+                                            Helpers.loader();
+                                            final response =
+                                                await orderController.createOrder(
+                                              isUpdatingTime: false,   
+                                              listingId: listing.id!,
+                                              quantity: listing.quantity,
+                                              price: (listing.quantity *
+                                                      listing.price!)
+                                                  .toString(),
+                                            );
+                                            Helpers.hideLoader();
+                                            if (response['success']) {
+                                              listing.stockAvl =
+                                                  (listing.stockAvl! -
+                                                      listing.quantity);
+                                              print(profileController
+                                                  .profile.walletMoney);
+                                              profileController
+                                                      .profile.walletMoney =
+                                                  (profileController
+                                                          .profile.walletMoney! -
+                                                      (listing.quantity *
+                                                          listing.price!));
+                                              print(profileController
+                                                  .profile.walletMoney);
+                                              Navigator.pop(context);
+                                              BottomDialog(
+                                                  textTheme: textTheme,
+                                                  tileName: "Congratulations",
+                                                  titleColor: aquaGreenColor,
+                                                  contentName:
+                                                      "Payment Successful. You can check your order status from ",
+                                                  contentLinkName: 'My Orders',
+                                                  onOk: () {
+                                                    homeController.getUnreadCount(
+                                                        type: 'chat');
+                                                    homeController.getUnreadCount(
+                                                        type: 'notification');
+                                                    Navigator.pop(context);
+                                                    context
+                                                        .pushNamed(myOrderPage);
+                                                  }).showBottomDialog(context);
+                                            } else if (response['reason'] ==
+                                                'insufficient balance') {
+                                              Navigator.pop(context);
+                                              ConfirmationBottomDialog(
+                                                  textTheme:
+                                                      Theme.of(context).textTheme,
+                                                  contentName:
+                                                      "You have insifficient tokens to buy this service. Would you like to Add Tokens to your Wallet ?",
+                                                  yesBtnClick: () async {
+                                                    Navigator.pop(context);
+                                                    context.pushNamed(
+                                                        addFundScreenPage);
+                                                  }).showBottomDialog(context);
+                                            } else {
+                                              Helpers.hideLoader();
+                                            }
+                                          }).showBottomDialog(context);
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                  const SizedBox(height: 16.0),
-                ],
+                    const SizedBox(height: 16.0),
+                  ],
+                ),
               ),
-            ),
-          );
-        }
-      }),
+            );
+          }
+        }),
+      ),
     );
   }
 

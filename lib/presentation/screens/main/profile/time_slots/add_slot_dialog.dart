@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:loby/core/theme/colors.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
@@ -26,44 +27,139 @@ class _AddSlotDialogState extends State<AddSlotDialog> {
 
   // TimeOfDay _selectedTime = TimeOfDay.now();
 
-  TimeOfDay? _selectedFromTime;
-  TimeOfDay? _selectedToTime;
+  // TimeOfDay? _selectedFromTime;
+  // TimeOfDay? _selectedToTime;
+  // TimeOfDay _selectedFromTime = TimeOfDay.now();
+  // Future<void> _selectFromTime(BuildContext context) async {
+  //   final TimeOfDay? picked = await showTimePicker(
+  //     context: context,
+  //     initialTime: _selectedFromTime,
+  //     // use24HourFormat: false,
+  //   );
+  //   if (picked != null && picked != _selectedFromTime) {
+  //     setState(() {
+  //       _selectedFromTime = picked;
+  //     });
+  //   }
+  // }
 
-  Future<void> _selectFromTimePick(BuildContext context) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: _selectedFromTime ?? TimeOfDay.now(),
+  Future<void> _selectFromTime(BuildContext context) async {
+  final TimeOfDay? pickedTime = await showTimePicker(
+    context: context,
+    initialTime: TimeOfDay.now(),
+    builder: (BuildContext context, Widget? child) {
+      return MediaQuery(
+        data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+        child: child!,
+      );
+    },
+  );
+  if (pickedTime != null) {
+    DateTime selectedTime = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+      pickedTime.hour,
+      pickedTime.minute,
     );
-
-    if (picked != null && picked != _selectedFromTime) {
-      setState(() {
-        _selectedFromTime = picked;
-        slotController.fromTime.value.text = _selectedFromTime!.format(context);
-
-        if (_selectedToTime != null &&
-                _selectedFromTime!.hour > _selectedToTime!.hour ||
-            (_selectedFromTime!.hour == _selectedToTime!.hour &&
-                _selectedFromTime!.minute > _selectedToTime!.minute)) {
-          _selectedToTime = null;
-          slotController.toTime.value.text = "";
-        }
-      });
-    }
+    String formattedTime = DateFormat.jm().format(selectedTime);
+    setState(() {
+      slotController.fromTime.value.text = formattedTime;
+    });
   }
+}
 
-  Future<void> _selectToTimePick(BuildContext context) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: _selectedToTime ?? TimeOfDay.now(),
+// String _convertTo24HourFormat(String time) {
+//     DateTime dateTime = DateFormat.jm().parse(time);
+//     return DateFormat.Hm().format(dateTime);
+//   }
+
+//   void _sendFromDataToAPI() {
+//     // Get the time from the text field in 12-hour format
+//     String timeIn12HourFormat = slotController.fromTime.value.text;
+
+//     // Convert the time to 24-hour format for sending to the API
+//     String timeIn24HourFormat = _convertTo24HourFormat(timeIn12HourFormat);
+
+//     // Send data to API with time in 24-hour format
+//     print("Sending time to API: $timeIn24HourFormat");
+//     // Your API call logic goes here
+//   }
+
+//   void _sendToDataToAPI() {
+//     // Get the time from the text field in 12-hour format
+//     String timeIn12HourFormat = slotController.toTime.value.text;
+
+//     // Convert the time to 24-hour format for sending to the API
+//     String timeIn24HourFormat = _convertTo24HourFormat(timeIn12HourFormat);
+
+//     // Send data to API with time in 24-hour format
+//     print("Sending time to API: $timeIn24HourFormat");
+//     // Your API call logic goes here
+//   }
+  
+
+  Future<void> _selectToTime(BuildContext context) async {
+  final TimeOfDay? pickedTime = await showTimePicker(
+    context: context,
+    initialTime: TimeOfDay.now(),
+    builder: (BuildContext context, Widget? child) {
+      return MediaQuery(
+        data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+        child: child!,
+      );
+    },
+  );
+  if (pickedTime != null) {
+    DateTime selectedTime = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+      pickedTime.hour,
+      pickedTime.minute,
     );
-
-    if (picked != null && picked != _selectedToTime) {
-      setState(() {
-        _selectedToTime = picked;
-        slotController.toTime.value.text = _selectedToTime!.format(context);
-      });
-    }
+    String formattedTime = DateFormat.jm().format(selectedTime);
+    setState(() {
+      slotController.toTime.value.text = formattedTime;
+    });
   }
+}
+
+  // Future<void> _selectFromTimePick(BuildContext context) async {
+  //   final TimeOfDay? picked = await showTimePicker(
+  //     context: context,
+  //     initialTime: _selectedFromTime ?? TimeOfDay.now(),
+  //   );
+
+  //   if (picked != null && picked != _selectedFromTime) {
+  //     setState(() {
+  //       _selectedFromTime = picked;
+  //       slotController.fromTime.value.text = _selectedFromTime!.format(context);
+
+  //       if (_selectedToTime != null &&
+  //               _selectedFromTime!.hour > _selectedToTime!.hour ||
+  //           (_selectedFromTime!.hour == _selectedToTime!.hour &&
+  //               _selectedFromTime!.minute > _selectedToTime!.minute)) {
+  //         _selectedToTime = null;
+  //         slotController.toTime.value.text = "";
+  //       }
+  //     });
+  //   }
+  // }
+
+  // Future<void> _selectToTimePick(BuildContext context) async {
+  //   final TimeOfDay? picked = await showTimePicker(
+  //     context: context,
+  //     initialTime: _selectedToTime ?? TimeOfDay.now(),
+  //   );
+
+  //   if (picked != null && picked != _selectedToTime) {
+  //     setState(() {
+  //       _selectedToTime = picked;
+  //       slotController.toTime.value.text = _selectedToTime!.format(context);
+  //     });
+  //   }
+  // }
 
   final _formKey = GlobalKey<FormState>();
   @override
@@ -97,8 +193,8 @@ class _AddSlotDialogState extends State<AddSlotDialog> {
                         if (_formKey.currentState!.validate()) {
                           slotController
                               .addSlots(
-                                  from: slotController.fromTime.value.text,
-                                  to: slotController.toTime.value.text,
+                                  from: slotController.sendFromDataToAPI(),
+                                  to: slotController.sendToDataToAPI(),
                                   // sellerId: 104,
                                   day: slotController.days
                                       .indexOf(slotController.selectedDay[0]))
@@ -136,7 +232,7 @@ class _AddSlotDialogState extends State<AddSlotDialog> {
                             return null;
                           },
                           onTap: () {
-                            _selectFromTimePick(context);
+                            _selectFromTime(context);
                           },
                           readOnly: true,
                           textAlign: TextAlign.center,
@@ -152,10 +248,6 @@ class _AddSlotDialogState extends State<AddSlotDialog> {
                             errorBorder: OutlineInputBorder(
                               borderSide: BorderSide.none
                             )
-                            // suffixIcon: IconButton(
-                            //   icon: Icon(Icons.access_time),
-                            //   onPressed: () => _selectFromTimePick(context),
-                            // ),
                           ),
                         ),
                       ),
@@ -177,7 +269,7 @@ class _AddSlotDialogState extends State<AddSlotDialog> {
                           controller: slotController.toTime.value,
                           // readOnly: true,
                           onTap: () {
-                            _selectToTimePick(context);
+                            _selectToTime(context);
                           },
                           validator: (value) {
                             if (value == null || value.isEmpty) {

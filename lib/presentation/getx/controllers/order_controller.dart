@@ -62,6 +62,8 @@ class OrderController extends GetxController {
   final isDisputesFetching = false.obs;
   final areMoreDisputesAvailable = true.obs;
   final disputesPageNumber = 1.obs;
+  final ratingDone = false.obs;
+
 
   final files = <PlatformFile>[].obs;
   final fileTypes = <int>[].obs;
@@ -71,6 +73,7 @@ class OrderController extends GetxController {
   final selectedDuelProofs = <SelectedFile>[].obs;
   final duelWinner = ''.obs;
   final fileLink = TextEditingController().obs;
+  
 
   final selectedOrder = Order().obs;
 
@@ -150,11 +153,15 @@ class OrderController extends GetxController {
             orders.addAll(success.orders);
           } else {
             orders.value = success.orders;
+            
           }
+          // orders.refresh();
           ordersPageNumber.value++;
 
           isOrdersFetching.value = false;
-
+          print(" date controller  ${orders.map((element) => element.bookDate).toList()}");
+          print(" frommtime controller  ${orders.map((element) => element.bookfromtime).toList()}");
+          print(" tootime controller  ${orders.map((element) => element.booktotime).toList()}");
           // Helpers.toast('Profile Changed');
         },
       );
@@ -244,7 +251,7 @@ class OrderController extends GetxController {
       (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
-        Helpers.toast(errorMessage.value);
+        // Helpers.toast(errorMessage.value);
       },
       (success) {
         // Helpers.toast('Profile Changed');

@@ -26,7 +26,7 @@ class OrderModel extends Order {
       this.slotId,
       this.bookfromtime,
       this.booktotime,
-      this.bookDate
+      this.bookDate,
       });
 
   final int? id;
@@ -49,15 +49,17 @@ class OrderModel extends Order {
   final DisputeModel? dispute;
   final List<OrderStatusModel>? orderStatuses;
 
-  factory OrderModel.fromJson(Map<String, dynamic> json) => OrderModel(
+  factory OrderModel.fromJson(Map<String, dynamic> json) {
+    print('fromtime model >>> $json["booked_from_time"]');
+    return OrderModel(
         id: json["id"],
         userGameServiceId: json["user_game_service_id"],
         userId: json["user_id"],
         disputeId: json["dispute_id"],
         quantity: json["quantity"],
         price: json["price"],
-        bookfromtime: json["booked_from_time"],
-        booktotime: json["booked_to_time"],
+        bookfromtime: json["booked_from_time"].toString(),
+        booktotime: json["booked_to_time"].toString(),
         bookDate: json["booked_date"],
         cronUpdatedTime: json["cron_updated_time"] == null
             ? null
@@ -79,6 +81,7 @@ class OrderModel extends Order {
             : List<OrderStatusModel>.from(
                 json["orderStatuses"].map((x) => OrderStatusModel.fromJson(x))),
       );
+  }
 
   Map<String, dynamic> toJson() => {
         "id": id,

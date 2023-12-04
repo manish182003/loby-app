@@ -2,7 +2,7 @@
 import 'package:loby/data/models/listing/service_listing_model.dart';
 import 'package:loby/data/models/order/order_model.dart';
 import 'package:loby/data/models/profile/user_model.dart';
-import 'package:loby/domain/entities/listing/service_listing.dart';
+// import 'package:loby/domain/entities/listing/service_listing.dart';
 import 'package:loby/domain/entities/profile/duel_details.dart';
 
 

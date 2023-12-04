@@ -63,7 +63,7 @@ class KycRemoteDatasourceImpl extends KycRemoteDatasource {
   }
 
   @override
-  Future<Map<String, dynamic>> verifyKycOtp(String? kycToken, String? otp, String? refId) async{
+  Future<Map<String, dynamic>> verifyKycOtp(String? kycToken, String? otp, String? refId, String? aadharNum) async{
     try {
       final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(
@@ -74,7 +74,8 @@ class KycRemoteDatasourceImpl extends KycRemoteDatasource {
           'token' : kycToken,
           // 'mobile': mobile,
           'otp' : otp,
-          'ref_id' : "111111"
+          'ref_id' : "111111",
+          'aadhar_number' : aadharNum
         },
         headers: headers,
         encoded: true

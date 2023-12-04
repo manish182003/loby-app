@@ -68,6 +68,7 @@ class CustomTabbedAppBarState extends State<CustomTabbedAppBar>
             borderRadius: BorderRadius.circular(16.0),
           ),
           child: TabBar(
+            dividerColor: aquaGreenColor,
             controller: _tabController,
             onTap: (value) => setState(() => _currentTabIndex = value),
             labelColor: aquaGreenColor,

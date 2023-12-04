@@ -93,22 +93,22 @@ PreferredSizeWidget appBar({required BuildContext context, String? appBarName,
         margin: const EdgeInsets.all(15),
         child: Stack(
           children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: GestureDetector(
-                onTap: () {
-                  context.pushNamed(searchScreenPage);
-                },
-                child: Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                    color: textCharcoalBlueColor,
-                    borderRadius: BorderRadius.circular(10)
-                  ),
-                  child: const Icon(CupertinoIcons.search, size: 23, color: Colors.white,),
-                ),
-              ),
+            // Align(
+            //   alignment: Alignment.centerRight,
+            //   child: GestureDetector(
+            //     onTap: () {
+            //       context.pushNamed(searchScreenPage);
+            //     },
+            //     child: Container(
+            //       height: 40,
+            //       width: 40,
+            //       decoration: BoxDecoration(
+            //         color: textCharcoalBlueColor,
+            //         borderRadius: BorderRadius.circular(10)
+            //       ),
+            //       child: const Icon(CupertinoIcons.search, size: 23, color: Colors.white,),
+            //     ),
+            //   ),
             //   child: SizedBox(
             //   // width: 40,
             //   // height: 42,
@@ -133,7 +133,7 @@ PreferredSizeWidget appBar({required BuildContext context, String? appBarName,
             //     ),
             //   ),
             // )
-            ),
+            // ),
             Align(
               alignment: Alignment.center,
               child: Text(

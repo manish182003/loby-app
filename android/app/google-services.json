@@ -7,6 +7,42 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:259408443986:android:fe3272e445f9028cc07d8b",
+        "android_client_info": {
+          "package_name": "com.app.mocktest_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "259408443986-lktb56g5uoc4d134r40bksg2bs2oihe6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOcp0Pd63bI8q5lD_Pxdr2UpRQQUFbrRc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "259408443986-lktb56g5uoc4d134r40bksg2bs2oihe6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "259408443986-9512m0pm2th1tb6etg2r58bod9mr2i5p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.loby.app"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:259408443986:android:102ffa3ebb57f77ac07d8b",
         "android_client_info": {
           "package_name": "com.loby.app"
@@ -43,6 +79,14 @@
           "android_info": {
             "package_name": "com.loby.app",
             "certificate_hash": "5edef5fdde756fb10f6ae7db96a2c938679b7dd1"
+          }
+        },
+        {
+          "client_id": "259408443986-ved1p5eh2tbg1tpogt6fokt066rrnpak.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.loby.app",
+            "certificate_hash": "82325e2d86f07ea6bdfebbc530b332c1ffefd64a"
           }
         },
         {

@@ -11,12 +11,12 @@ class AddBankDetails extends UseCase<Map<String, dynamic>, Params> {
   @override
   Future<Either<Failure, Map<String, dynamic>>> call(Params params) {
     return _repository.addBankDetails(
-      bankName: params.profileParams?.bankName,
-      branchName: params.profileParams?.branchName,
+      // bankName: params.profileParams?.bankName,
+      // branchName: params.profileParams?.branchName,
       accountNumber: params.profileParams?.accountNumber,
       confirmAccountNumber: params.profileParams?.confirmAccountNumber,
       ifscCode: params.profileParams?.ifscCode,
-      holderName: params.profileParams?.holderName,
+      // holderName: params.profileParams?.holderName,
       upiId: params.profileParams?.upiID,
       type: params.profileParams?.type,
     );

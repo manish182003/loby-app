@@ -56,7 +56,7 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
         .textTheme;
 
     return Scaffold(
-        appBar: appBar(context: context, appBarName: "Add Funds"),
+        appBar: appBar(context: context, appBarName: "Add Token", isBackIcon: true),
         body: BodyPaddingWidget(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,

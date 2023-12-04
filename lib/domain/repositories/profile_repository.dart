@@ -30,7 +30,15 @@ abstract class ProfileRepository{
 
   Future<Either<Failure, Map<String, dynamic>>> profileVerification({String? displayName, String? name, String? message, String? youtube, String? twitch, String? instagram, File? idCard, File? selfie});
 
-  Future<Either<Failure, Map<String, dynamic>>> addBankDetails({String? bankName, String? branchName, String? accountNumber, String? confirmAccountNumber, String? ifscCode, String? holderName, String? upiId, String? type});
+  Future<Either<Failure, Map<String, dynamic>>> addBankDetails({
+    // String? bankName, 
+    // String? branchName, 
+    String? accountNumber, 
+    String? confirmAccountNumber, 
+    String? ifscCode, 
+    // String? holderName, 
+    String? upiId, 
+    String? type});
 
   Future<Either<Failure, BankDetailResponse>> getBankDetails();
 

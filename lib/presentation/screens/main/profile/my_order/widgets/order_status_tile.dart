@@ -36,10 +36,10 @@ class OrderStatusTile extends StatelessWidget {
   final bool isDisputeRaised;
   final String lastStatus;
 
-  const OrderStatusTile(
+  OrderStatusTile(
       {Key? key, required this.orderId, required this.isDone, required this.title, required this.date, this.isSeller = false, this.isDuel = false, required this.isLast, this.isDisputeRaised = false, required this.lastStatus, required this.sellerId, required this.buyerId, required this.order,})
       : super(key: key);
-
+final OrderController orderController = Get.find<OrderController>();
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +78,7 @@ class OrderStatusTile extends StatelessWidget {
           const SizedBox() :
 
           /// else normal seller ///
-          _seller(context, textTheme) :
+          _seller(context, textTheme,rating,review) :
 
           /// if Duel (Buyer) ///
           isDuel ?
@@ -230,7 +230,8 @@ class OrderStatusTile extends StatelessWidget {
     );
   }
 
-  Widget _seller(BuildContext context, TextTheme textTheme) {
+  Widget _seller(BuildContext context, TextTheme textTheme,double rating,
+      TextEditingController review) {
     return Column(
       children: [
         lastStatus == 'ORDER_PLACED' ? Padding(
@@ -258,11 +259,33 @@ class OrderStatusTile extends StatelessWidget {
                   name: "Accept Order",
                   textColor: textWhiteColor,
                   radius: 50,
+                //   onTap: () async {
+                //   showDialog(
+                //       context: context,
+                //       builder: (BuildContext context) {
+                //         return RatingDialog(
+                //           title: "Review & Rating",
+                //           descriptions: "Congratulations on successfully getting your service delivered. Kindly rate thus seller & its service to help us serve you better",
+                //           text: "OK",
+                //           review: review,
+                //           onChanged: (star) {
+                //             rating = star;
+                //           },
+                //           onSubmit: () async {
+                //             confirmSellerDelivery(
+                //                 context, status: 'SELLER_ACCEPTED',
+                //                 rating: rating,
+                //                 review: review.text);
+                //           },
+                //         );
+                //       });
+                // },
                   onTap: () async {
                     changeOrderStatus(context, status: 'SELLER_ACCEPTED');
                   },
                 ),
               ),
+              
             ],
           ),
         ) : lastStatus == "ORDER_IN_PROGRESS" ? Padding(
@@ -296,6 +319,36 @@ class OrderStatusTile extends StatelessWidget {
                     style: textTheme.subtitle1?.copyWith(
                         color: textLightColor)),
               ])),
+        ) : lastStatus == "LOBY_PROTECTION_PERIOD" && orderController.ratingDone.value == false ? Padding(
+          padding: EdgeInsets.only(bottom: 2.h),
+          child: CustomButton(
+            color: purpleLightIndigoColor,
+            name: "Review & Rating",
+            textColor: textWhiteColor,
+            radius: 50,
+            onTap: () async {
+              showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return RatingDialog(
+                          title: "Review & Rating",
+                          descriptions: "Congratulations on successfully getting your service delivered. Kindly rate thus seller & its service to help us serve you better",
+                          text: "OK",
+                          review: review,
+                          onChanged: (star) {
+                            rating = star;
+                          },
+                          onSubmit: () async {
+                            confirmSellerDelivery(
+                                context ,
+                                status: '',
+                                rating: rating,
+                                review: review.text);
+                          },
+                        );
+                      });
+            },
+          ),
         ) : const SizedBox(),
       ],
     );
@@ -362,7 +415,7 @@ class OrderStatusTile extends StatelessWidget {
                             rating = star;
                           },
                           onSubmit: () async {
-                            confirmDelivery(
+                            confirmBuyerDelivery(
                                 context, status: 'BUYER_DELIVERY_CONFIRMED',
                                 rating: rating,
                                 review: review.text);
@@ -413,7 +466,34 @@ class OrderStatusTile extends StatelessWidget {
     }
   }
 
-  void confirmDelivery(BuildContext context, {required String status, required double rating, String? review}) async {
+  void confirmSellerDelivery(BuildContext context,  {required String status, bool? ratingDone, required double rating, String? review}) async {
+    OrderController orderController = Get.find<OrderController>();
+    CoreController coreController = Get.find<CoreController>();
+    await Helpers.loader();
+    final isSuccess = await orderController.submitRating(
+        orderId: orderId, stars: rating, review: review);
+    if (isSuccess) {
+      await orderController.changeOrderStatus(orderId: orderId, status: status);
+      await getOrders();
+
+      coreController.socket.emit("loby", {
+        'type': 'order',
+        'receiverId': buyerId,
+        'order': (orderController.orders
+            .where((e) => e.id == orderId)
+            .toList()
+            .first as OrderModel).toJson(),
+      });
+      ratingDone = true;
+      await Helpers.hideLoader();
+      Navigator.pop(context);
+      Navigator.pop(context);
+    } else {
+      await Helpers.hideLoader();
+    }
+  }
+
+  void confirmBuyerDelivery(BuildContext context, {required String status, required double rating, String? review}) async {
     OrderController orderController = Get.find<OrderController>();
     CoreController coreController = Get.find<CoreController>();
     await Helpers.loader();

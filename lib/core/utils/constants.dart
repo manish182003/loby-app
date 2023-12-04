@@ -8,7 +8,7 @@ class ApiEndpoints {
   static const String login = "/loginV2";
   static const String socialLogin = "/social-login";
   static const String getCountries = "/get-country-list";
-  static const String getStates = "/get-state-list";
+  static const String getStates = "/get-state-list"; 
   static const String getCities = "/get-city-list";
   static const String getProfileTags = "/get-profile-tags";
   static const String updateProfile = "/edit-user-profile";

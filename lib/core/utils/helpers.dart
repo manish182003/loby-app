@@ -217,7 +217,7 @@ class Helpers {
           methodCount: 2, // number of method calls to be displayed
           errorMethodCount:
               8, // number of method calls if stacktrace is provided
-          lineLength: 200, // width of the output
+          lineLength: 10000, // width of the output
           colors: true, // Colorful log messages
           printEmojis: true, // Print an emoji for each log message
           printTime: false // Should each log print contain a timestamp
@@ -273,7 +273,7 @@ class Helpers {
           "$path response ${response.statusCode} with ${response.statusMessage}");
 
       if (response.statusCode == 200 || response.statusCode == 202) {
-        logger.i(jsonEncode(response.data as Map<String, dynamic>));
+        logger.d(jsonEncode(response.data as Map<String, dynamic>));
         return response.data as Map<String, dynamic>;
       } else if (response.statusCode == 400 || response.statusCode == 401) {
         logger.i(
@@ -304,7 +304,7 @@ class Helpers {
   }
 
   static Future getApiHeaders() async {
-    dynamic? token = await getApiToken();
+    dynamic token = await getApiToken();
     final Map<String, dynamic> headers = {
       'Authorization': 'Bearer $token',
     };

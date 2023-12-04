@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'dart:developer';
+// import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:loby/core/utils/constants.dart';
@@ -219,7 +219,15 @@ class ProfileRemoteDatasourceImpl extends ProfileRemoteDatasource{
   }
 
   @override
-  Future<Map<String, dynamic>> addBankDetails(String? bankName, String? branchName, String? accountNumber, String? confirmAccountNumber, String? ifscCode, String? holderName, String? upiId, String? type) async{
+  Future<Map<String, dynamic>> addBankDetails(
+    // String? bankName, 
+    // String? branchName, 
+    String? accountNumber, 
+    String? confirmAccountNumber, 
+    String? ifscCode, 
+    // String? holderName, 
+    String? upiId, 
+    String? type) async{
     try {
       final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(
@@ -227,15 +235,15 @@ class ProfileRemoteDatasourceImpl extends ProfileRemoteDatasource{
         RequestType.post,
         ApiEndpoints.addBankDetails,
         queryParams: type == "bank_account" ? {
-          'bank_name': bankName ?? "",
-          'branch_name' : branchName ?? "",
+          // 'bank_name': bankName ?? "",
+          // 'branch_name' : branchName ?? "",
           'bank_account_number' : accountNumber ?? "",
           'confirm_bank_account_number' : confirmAccountNumber ?? "",
           'ifsc_code' : ifscCode ?? "",
-          'full_registered_name' : holderName ?? "",
+          // 'full_registered_name' : holderName ?? "",
           'bank_account_type' : type ?? "",
         } : {
-          'full_registered_name' : holderName ?? "",
+          // 'full_registered_name' : holderName ?? "",
           'upi_id' : upiId ?? "",
           'bank_account_type' : type ?? "",
         },

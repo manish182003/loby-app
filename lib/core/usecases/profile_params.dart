@@ -21,12 +21,12 @@ class ProfileParams extends Equatable{
   final String? message;
   final File? idCard;
   final File? selfie;
-  final String? bankName;
-  final String? branchName;
+  // final String? bankName;
+  // final String? branchName;
   final String? accountNumber;
   final String? confirmAccountNumber;
   final String? ifscCode;
-  final String? holderName;
+  // final String? holderName;
   final String? upiID;
   final String? type;
   final int? bankDetailId;
@@ -38,7 +38,10 @@ class ProfileParams extends Equatable{
     this.feedback,
     this.userId, this.page, this.amount, this.signature, this.paymentId, this.paymentStatus, this.orderId, this.userGameServiceId, this.insta, this.youtube, this.twitch, this.discord,
     this.displayName, this.name, this.message, this.idCard, this.selfie,
-    this.bankName, this.branchName, this.accountNumber, this.confirmAccountNumber, this.ifscCode, this.holderName, this.upiID, this.type,
+    // this.bankName, this.branchName, 
+    this.accountNumber, this.confirmAccountNumber, this.ifscCode, 
+    // this.holderName, 
+    this.upiID, this.type,
     this.bankDetailId
   });
 

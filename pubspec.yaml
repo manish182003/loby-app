@@ -122,7 +122,7 @@ dev_dependencies:
 
 flutter_native_splash:
   color: "#1F2128"
-  image: assets/images/splash_logo.png
+  image: assets/images/loby_logo.png
   android: true
   ios: true
   web: true

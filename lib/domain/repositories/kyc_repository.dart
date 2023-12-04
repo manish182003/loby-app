@@ -9,6 +9,6 @@ abstract class KycRepository {
 
   Future<Either<Failure, bool>> sendKycOtp({String? kycToken, String? aadharNumber, String? type});
 
-  Future<Either<Failure, Map<String, dynamic>>> verifyKycOtp({String? kycToken, String? otp, String? refId});
+  Future<Either<Failure, Map<String, dynamic>>> verifyKycOtp({String? kycToken, String? otp, String? refId, String? aadharNum});
 
 }

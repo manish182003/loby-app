@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter/src/widgets/editable_text.dart';
+// import 'package:flutter/src/widgets/editable_text.dart';
 import 'package:loby/core/utils/exceptions.dart';
 import 'package:loby/core/utils/failure.dart';
 import 'package:loby/data/datasources/slots_remote_datasource.dart';
-import 'package:loby/data/models/response_models/slots/get_buyer_slots_response.dart';
-import 'package:loby/domain/entities/response_entities/slots/delete_slot.dart';
+// import 'package:loby/data/models/response_models/slots/get_buyer_slots_response.dart';
+// import 'package:loby/domain/entities/response_entities/slots/delete_slot.dart';
 import 'package:loby/domain/entities/response_entities/slots/get_slots_for_buyer.dart';
 import 'package:loby/domain/entities/response_entities/slots/get_slots_for_seller_response.dart';
 import 'package:loby/domain/repositories/slots_repository.dart';
@@ -27,7 +27,7 @@ class SlotsRepositoryImpl extends SlotsRepository {
 
   @override
   Future<Either<Failure, Map<String,dynamic>>> deleteSlot({int? slotId}) async {
-    print("deleteSlot in repo_impl => ${slotId}");
+    // print("deleteSlot in repo_impl => ${slotId}");
     try {
       return Right(await _slotsRemoteDatasource.deleteSlots(slotId));
     } on ServerException catch (e) {

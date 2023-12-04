@@ -5,8 +5,8 @@
 import 'package:loby/data/models/profile/settlement_request_model.dart';
 import 'package:loby/domain/entities/response_entities/profile/settlement_request_response.dart';
 
-import '../../../../domain/entities/response_entities/profile/wallet_transaction_response.dart';
-import '../../profile/wallet_transaction_model.dart';
+// import '../../../../domain/entities/response_entities/profile/wallet_transaction_response.dart';
+// import '../../profile/wallet_transaction_model.dart';
 
 
 class SettlementRequestResponseModel extends SettlementRequestResponse {

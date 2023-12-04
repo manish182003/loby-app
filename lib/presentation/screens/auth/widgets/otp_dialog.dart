@@ -30,7 +30,7 @@ class _OTPDialogState extends State<OTPDialog> {
   @override
   void dispose() {
     // TODO: implement dispose
-    
+    widget.otp.dispose();
     super.dispose();
   }
 

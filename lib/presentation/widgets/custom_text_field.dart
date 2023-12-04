@@ -124,7 +124,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           hintText: widget.hintText,
           errorText: widget.errorText,
           hintStyle: textTheme.headline3?.copyWith(
-            color: textTunaBlueColor,
+            color: textLightColor,
           ),
           labelText: widget.labelText,
           helperText: widget.helperText),

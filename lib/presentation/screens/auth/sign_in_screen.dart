@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:country_pickers/country.dart';
 import 'package:country_pickers/country_pickers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -38,10 +40,11 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   void initState() {
     // TODO: implement initState
+
     super.initState();
   }
 
-String formatText(String text) {
+  String formatText(String text) {
     // Remove any non-numeric characters from the input
     String formattedText = text.replaceAll(RegExp(r'[^0-9]'), '');
 
@@ -59,8 +62,6 @@ String formatText(String text) {
 
     return formattedText;
   }
-
-
 
   @override
   void dispose() {
@@ -86,237 +87,281 @@ String formatText(String text) {
         Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-          Container(
-            height: 64.h,
-            width: MediaQuery.of(context).size.width,
-            // child: Text("hellooo", style: TextStyle(color: Colors.amber , fontSize: 60),),
-            decoration: const BoxDecoration(
-                color: backgroundColor,
-                // border: Border(top: BorderSide(color: Colors.white)),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
-                )),
-            // child: Text("Login", style: textTheme.headline2?.copyWith(color: textWhiteColor)),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 28, right: 28, top: 40),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text("Login",
-                      style:
-                          textTheme.headline1?.copyWith(color: textWhiteColor)),
-                  SizedBox(
-                    height: 3.h,
-                  ),
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      // mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text("Enter Mobile Number",
-                            style: textTheme.headline2
-                                ?.copyWith(color: whiteColor, fontSize: 18.sp)),
-                        SizedBox(
-                          height: 1.h,
-                        ),
-                        Text(
-                            "Please Confirm Your Country and Enter Your Mobile Number",
-                            style: textTheme.headline5?.copyWith(
-                                color: whiteColor,
-                                fontWeight: FontWeight.w100)),
-                        SizedBox(
-                          height: 4.h,
-                        ),
-                        Form(
-                          key: _formKey,
-                          child: Column(
-                            children: [
-                              
-                              Row(
-                                children: [
-                                   Container(
+            Container(
+              height: 64.h,
+              width: MediaQuery.of(context).size.width,
+              // child: Text("hellooo", style: TextStyle(color: Colors.amber , fontSize: 60),),
+              decoration: const BoxDecoration(
+                  color: backgroundColor,
+                  // border: Border(top: BorderSide(color: Colors.white)),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                  )),
+              // child: Text("Login", style: textTheme.headline2?.copyWith(color: textWhiteColor)),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 28, right: 28, top: 40),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text("Login",
+                        style: textTheme.headline1
+                            ?.copyWith(color: textWhiteColor)),
+                    SizedBox(
+                      height: 3.h,
+                    ),
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        // mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text("Enter Mobile Number",
+                              style: textTheme.headline2?.copyWith(
+                                  color: whiteColor, fontSize: 18.sp)),
+                          SizedBox(
+                            height: 1.h,
+                          ),
+                          Text(
+                              "Please Confirm Your Country and Enter Your Mobile Number",
+                              style: textTheme.headline5?.copyWith(
+                                  color: whiteColor,
+                                  fontWeight: FontWeight.w100)),
+                          SizedBox(
+                            height: 4.h,
+                          ),
+                          Form(
+                            key: _formKey,
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
                                       decoration: BoxDecoration(
-                                        color: textFieldColor,
-                                        borderRadius: BorderRadius.circular(10)
-                                      ),
+                                          color: textFieldColor,
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
                                       child: Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-                                        child: Text("+91", style:
-                                                              textTheme.headline1?.copyWith(color: textWhiteColor)),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15, vertical: 20),
+                                        child: Text("+91",
+                                            style: textTheme.headline1
+                                                ?.copyWith(
+                                                    color: textWhiteColor)),
                                       ),
                                     ),
-                                  
-                                  SizedBox(width: 3.w,),
-                                  Expanded(
-                                    child: TextFormField(
-                                      style: textTheme.headline1?.copyWith(color: textWhiteColor),
+                                    SizedBox(
+                                      width: 3.w,
+                                    ),
+                                    Expanded(
+                                        child: TextFormField(
+                                      style: textTheme.headline1
+                                          ?.copyWith(color: textWhiteColor),
                                       maxLength: 10,
-                                      controller: authController.mobilecontroller,
+                                      controller:
+                                          authController.mobilecontroller,
                                       textAlign: TextAlign.center,
-                                      scrollPadding: EdgeInsets.symmetric(horizontal: 20),
+                                      scrollPadding:
+                                          EdgeInsets.symmetric(horizontal: 20),
                                       keyboardType: TextInputType.phone,
                                       onChanged: (value) {
-              // Update the text in the TextField with the formatted text
-              setState(() {
-                authController.mobilecontroller.text = formatText(value);
-                // Move the cursor to the end of the text
-                authController.mobilecontroller.selection = TextSelection.fromPosition(
-                  TextPosition(offset: authController.mobilecontroller.text.length),
-                );
-              });
-            },
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                        // Update the text in the TextField with the formatted text
+                                        setState(() {
+                                          authController.mobilecontroller.text =
+                                              formatText(value);
+                                          // Move the cursor to the end of the text
+                                          authController
+                                                  .mobilecontroller.selection =
+                                              TextSelection.fromPosition(
+                                            TextPosition(
+                                                offset: authController
+                                                    .mobilecontroller
+                                                    .text
+                                                    .length),
+                                          );
+                                        });
+                                      },
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.digitsOnly
+                                      ],
                                       decoration: InputDecoration(
-                                      
-                                        focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: aquaGreenColor, width: 0.5),
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          border: OutlineInputBorder(
-            borderSide: const BorderSide(color: textFieldColor, width: 0),
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: textFieldColor, width: 0),
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: textErrorColor, width: 0.5),
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: textErrorColor, width: 0.5),
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-                                        hintText: "0000 000 000" ,
-                                        filled: true,
-                                        hintStyle: textTheme.headline1?.copyWith(color: textWhiteColor),
-                                        fillColor: textFieldColor,
-                                        counterText: ""
-                                      ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                color: aquaGreenColor,
+                                                width: 0.5),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                color: textFieldColor,
+                                                width: 0),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                color: textFieldColor,
+                                                width: 0),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                          errorBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                color: textErrorColor,
+                                                width: 0.5),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                          focusedErrorBorder:
+                                              OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                color: textErrorColor,
+                                                width: 0.5),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                          hintText: "0000 000 000",
+                                          filled: true,
+                                          hintStyle: textTheme.headline1
+                                              ?.copyWith(
+                                                  color: textWhiteColor
+                                                      .withOpacity(0.5)),
+                                          fillColor: textFieldColor,
+                                          counterText: ""),
                                     )
-                                    // TextFieldWidget(
-                                    //   length: 10,
-                                    //   textEditingController: mobile,
-                                    //   type: "phone",
-                                    //   isNumber: true,
-                                    //   // title: "0000 000 000",
-                                    //   isRequired: true,
-                                    //   scrollBottomPadding: 20,
-                                    //   hint: "0000 000 000",
-                                      
-                                    //   // prefix: CountryPickerDropdown(
-                                    //   //   initialValue: 'in',
-                                    //   //   itemBuilder: _buildDropdownItem,
-                                    //   //   onValuePicked: (Country country) {
-                                    //   //     print("${country.name}");
-                                    //   //   },
-                                    //   // ).toString(),
-                                    // ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 2.h,
-                              ),
-                              CustomButton(
-                                  height: 8.h,
-                                  fontSize: 15.sp,
-                                  name: "Continue",
-                                  color: aquaGreenColor,
+                                        // TextFieldWidget(
+                                        //   length: 10,
+                                        //   textEditingController: mobile,
+                                        //   type: "phone",
+                                        //   isNumber: true,
+                                        //   // title: "0000 000 000",
+                                        //   isRequired: true,
+                                        //   scrollBottomPadding: 20,
+                                        //   hint: "0000 000 000",
 
-                                  // left: 0.w,
-                                  // right: 0.w,
-                                  bottom: 3.h,
-                                  top: 2.h,
-                                  onTap: () async {
-                                    // _createAccountDialog(context);
-                                    if (_formKey.currentState!.validate() &&
-                                        authController.mobilecontroller.text.replaceAll(' ', '').length == 10) {
-                                          await Helpers.loader();
-                                          final isSuccess = await authController.login(mobile: authController.mobilecontroller.text.replaceAll(' ', ''));
-                                          await Helpers.hideLoader();
+                                        //   // prefix: CountryPickerDropdown(
+                                        //   //   initialValue: 'in',
+                                        //   //   itemBuilder: _buildDropdownItem,
+                                        //   //   onValuePicked: (Country country) {
+                                        //   //     print("${country.name}");
+                                        //   //   },
+                                        //   // ).toString(),
+                                        // ),
+                                        ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 2.h,
+                                ),
+                                CustomButton(
+                                    height: 8.h,
+                                    fontSize: 15.sp,
+                                    name: "Continue",
+                                    color: aquaGreenColor,
+
+                                    // left: 0.w,
+                                    // right: 0.w,
+                                    bottom: 3.h,
+                                    top: 2.h,
+                                    onTap: () async {
+                                      // _createAccountDialog(context);
+                                      if (_formKey.currentState!.validate() &&
+                                          authController.mobilecontroller.text
+                                                  .replaceAll(' ', '')
+                                                  .length ==
+                                              10) {
+                                        await Helpers.loader();
+                                        final isSuccess =
+                                            await authController.login(
+                                                mobile: authController
+                                                    .mobilecontroller.text
+                                                    .replaceAll(' ', ''));
+                                        await Helpers.hideLoader();
                                         if (isSuccess) {
                                           _otpDialog(context);
                                         }
-                                    } else if (!_formKey.currentState!
-                                        .validate()) {
-                                      // Helpers.toast("")
-                                    } else if (authController.mobilecontroller.text.trim().length < 10) {
-                                      Helpers.toast(
-                                          "Number should be must 10 digits");
-                                    }
-                                  }),
-                            ],
+                                      } else if (!_formKey.currentState!
+                                          .validate()) {
+                                        // Helpers.toast("")
+                                      } else if (authController
+                                              .mobilecontroller.text
+                                              .trim()
+                                              .length <
+                                          10) {
+                                        Helpers.toast(
+                                            "Number should be must 10 digits");
+                                      }
+                                    }),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  Text("Sign In using Google or Apple",
-                      style: textTheme.headline5?.copyWith(
-                          color: whiteColor, fontWeight: FontWeight.w100)),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 80, vertical: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        InkWell(
-                          onTap: _checkProfileStatus,
-                          child: Container(
-                            height: 60,
-                            width: 60,
+                    Text("Sign In using Google or Apple",
+                        style: textTheme.headline5?.copyWith(
+                            color: whiteColor, fontWeight: FontWeight.w100)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 80, vertical: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          InkWell(
+                            onTap: _checkProfileStatus,
+                            child: Container(
+                              height: 60,
+                              width: 60,
+                              decoration: BoxDecoration(
+                                  color: whiteColor,
+                                  borderRadius: BorderRadius.circular(30)),
+                              child: Center(
+                                child: Image(
+                                    image: AssetImage(
+                                        "assets/images/google_icon.png")),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: 62,
+                            width: 62,
                             decoration: BoxDecoration(
                                 color: whiteColor,
-                                borderRadius: BorderRadius.circular(30)),
+                                borderRadius: BorderRadius.circular(31)),
                             child: Center(
                               child: Image(
                                   image: AssetImage(
-                                      "assets/images/google_icon.png")),
+                                      "assets/images/apple_icon.png")),
                             ),
-                          ),
-                        ),
-                        Container(
-                          height: 60,
-                          width: 60,
-                          decoration: BoxDecoration(
-                              color: whiteColor,
-                              borderRadius: BorderRadius.circular(30)),
-                          child: Center(
-                            child: Image(
-                                image:
-                                    AssetImage("assets/images/apple_icon.png")),
-                          ),
-                        )
-                      ],
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  // CustomButton(
-                  //     name: "Create Account",
-                  //     color: aquaGreenColor,
-                  //     left: 14.w,
-                  //     right: 14.w,
-                  //     bottom: 5.h,
-                  //     top: 2.h,
-                  //     onTap: () async {
-                  //       _createAccountDialog(context);
-                  //     }),
-                  // CustomButton(
-                  //     name: "Login",
-                  //     color: butterflyBlueColor,
-                  //     left: 14.w,
-                  //     right: 14.w,
-                  //     bottom: 5.h,
-                  //     onTap: () async {
-                  //       _loginDialog(context);
-                  //     }),
-                ],
+                    // CustomButton(
+                    //     name: "Create Account",
+                    //     color: aquaGreenColor,
+                    //     left: 14.w,
+                    //     right: 14.w,
+                    //     bottom: 5.h,
+                    //     top: 2.h,
+                    //     onTap: () async {
+                    //       _createAccountDialog(context);
+                    //     }),
+                    // CustomButton(
+                    //     name: "Login",
+                    //     color: butterflyBlueColor,
+                    //     left: 14.w,
+                    //     right: 14.w,
+                    //     bottom: 5.h,
+                    //     onTap: () async {
+                    //       _loginDialog(context);
+                    //     }),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],)
+          ],
+        )
         // Positioned(
         //   bottom: 0,
         //   child: Container(
@@ -550,16 +595,47 @@ String formatText(String text) {
             onVerify: () async {
               Helpers.loader();
               final isSuccess = await authController.sendAndVerifyOTP(
-                  mobile: authController.mobilecontroller.text.replaceAll(' ', ''), otp: otp.text);
+                  mobile:
+                      authController.mobilecontroller.text.replaceAll(' ', ''),
+                  otp: otp.text);
               Helpers.hideLoader();
               if (!mounted) return;
               if (isSuccess) {
-                if (profileController.profile.displayName == null) {
-                  _showCreateProfileBottomSheet(context);
-                } else {
-                  await authController.loggedUserIn();
-                  context.goNamed(mainPage);
-                }
+                profileController.getProfile().then((value) async {
+                  if (value) {
+                     print("profileeee ${profileController.profile}");
+                print("name >>> ${profileController.profile.name}");
+                print(
+                    "Displayname >>> ${profileController.profile.displayName}");
+                print("dob >>> ${profileController.profile.dob}");
+                if (profileController.profile.name != null ||
+                    profileController.profile.displayName != null ||
+                    profileController.profile.dob != null) {
+                       await authController.loggedUserIn();
+                    context.goNamed(mainPage);
+                    }else {
+                    _showCreateProfileBottomSheet(context);
+                  }
+                   
+                  } else {
+                    _showCreateProfileBottomSheet(context);
+                  }
+                });
+                // print("profileeee ${profileController.profile}");
+                // print("name >>> ${profileController.profile.name}");
+                // print(
+                //     "Displayname >>> ${profileController.profile.displayName}");
+                // print("dob >>> ${profileController.profile.dob}");
+                // if (profileController.profile.name != null ||
+                //     profileController.profile.displayName != null ||
+                //     profileController.profile.dob != null) {
+                //   await authController.loggedUserIn();
+                //   context.goNamed(mainPage);
+                // } else {
+                //   _showCreateProfileBottomSheet(context);
+                // }
+              } else {
+                _showCreateProfileBottomSheet(context);
               }
             });
       },
@@ -569,7 +645,19 @@ String formatText(String text) {
   Future<void> _checkProfileStatus() async {
     Helpers.loader();
     final auth = FirebaseAuth.instance;
-    final GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']);
+
+    final GoogleSignIn googleSignIn = GoogleSignIn(scopes: [
+      'email',
+      // 'https://www.googleapis.com/auth/user.phonenumbers.read',
+    ]);
+    // if (googleSignIn.) {
+
+    // }
+    // googleSignIn.onCurrentUserChanged
+    //     .listen((GoogleSignInAccount? account) async {
+    //   unawaited(authController.handleGetData(account!));
+    // });
+    // authController.handleGetData();
     if (await googleSignIn.isSignedIn()) {
       await auth.signOut();
       await googleSignIn.signOut();
@@ -578,9 +666,10 @@ String formatText(String text) {
     if (isSuccess) {
       await profileController.getProfile();
       if (!mounted) return;
-      if(profileController.profile.displayName == null){
+      if (profileController.profile.displayName == null) {
         Helpers.hideLoader();
-        _showCreateProfileBottomSheet(context);
+        context.goNamed(loginPage);
+        // _showCreateProfileBottomSheet(context);
       } else {
         await authController.loggedUserIn();
         Helpers.hideLoader();
@@ -648,8 +737,8 @@ String formatText(String text) {
               maxChildSize: 0.97,
               minChildSize: 0.5,
               child: CreateProfileCard(
-                // from: 'signIn',
-              )),
+                  // from: 'signIn',
+                  )),
         );
       },
     );
@@ -667,3 +756,27 @@ Widget _buildDropdownItem(Country country) => Container(
         ],
       ),
     );
+
+
+
+// profileeee UserModel(104, akshay, null, null, null, null)
+// I/flutter (22361): name >>> akshay
+// I/flutter (22361): Displayname >>> akki
+// I/flutter (22361): dob >>> 2023-11-23 00:00:00.000
+// I/flutter (22361): Api Url => '********************************************* Payload {user_id: null}
+// I/flutter (22361): Api Token eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDIyNzcxMjYsImlkIjoxMDQsImVtYWlsIjoiIiwiaWF0IjoxNzAxNjcyMzI2fQ.wLV3czdJuPpdac7MdyZx_HGS2HxNP-SkHNoLidjlojt8KE19E6dryAaIC7zqyeUwvaEbfhTQdTPGErFf5cUYAg
+// I/flutter (22361): ban till null
+// I/flutter (22361): Api Url => '*************************************************** Payload null
+// I/flutter (22361): Api Url => '********************************************************* Payload null
+// I/flutter (22361): Api Url => '************************************************************** Payload null
+// I/flutter (22361): Api Url => '*************************************************** Payload {name: null, page: , catgeory_id: }       
+// I/flutter (22361): Api Url => '********************************************** Payload {name: null, page: }
+// I/flutter (22361): /user-profile response 200 with OK
+
+
+//  profileeee User(null, null, null, null, null, null)
+// I/flutter (23036): name >>> null
+// I/flutter (23036): Displayname >>> null
+// I/flutter (23036): dob >>> null
+// I/flutter (23036): Api Url => '********************************************* Payload {user_id: null}
+// I/flutter (23036): /user-profile response 200 with OK

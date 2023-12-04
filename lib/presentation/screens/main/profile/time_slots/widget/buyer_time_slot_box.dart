@@ -72,8 +72,15 @@ class _BuyerTimeSlotBoxState extends State<BuyerTimeSlotBox> {
 
   @override
   Widget build(BuildContext context) {
-    print('frommmm >>> ${widget.getBuyerSlots.from}');
     final textTheme = Theme.of(context).textTheme;
+    String fromtimeIn24HourFormat = "${widget.getBuyerSlots.from}";
+    DateTime fromtime24Hour = DateFormat('HH:mm').parse(fromtimeIn24HourFormat);
+    String fromtimeIn12HourFormat = DateFormat('h:mm a').format(fromtime24Hour);
+
+
+    String totimeIn24HourFormat = "${widget.getBuyerSlots.to}";
+    DateTime totime24Hour = DateFormat('HH:mm').parse(totimeIn24HourFormat);
+    String totimeIn12HourFormat = DateFormat('h:mm a').format(totime24Hour);
     final me = Get.find<ProfileController>();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 1),
@@ -103,7 +110,7 @@ class _BuyerTimeSlotBoxState extends State<BuyerTimeSlotBox> {
                           strokeAlign: 1)),
                   child: Center(
                     child: Text(
-                      "${widget.getBuyerSlots.from} - ${widget.getBuyerSlots.to}",
+                      "$fromtimeIn12HourFormat - $totimeIn12HourFormat",
                       style:
                           textTheme.headline4?.copyWith(color: textWhiteColor),
                     ),

@@ -163,7 +163,7 @@ class ProfileController extends GetxController{
          userId: userId
       ),),
     );
-
+    print("useriddddd >>>> $userId");
     failureOrSuccess.fold(
           (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
@@ -174,6 +174,7 @@ class ProfileController extends GetxController{
       },
           (success) {
             if(userId != null){
+
               otherUserProfile = success.user;
             }else{
               profile = success.user;
@@ -375,16 +376,24 @@ class ProfileController extends GetxController{
     return failureOrSuccess.isRight() ? true : false;
   }
 
-  Future<bool> addBankDetails({String? bankName, String? branchName, String? accountNumber, String? confirmAccountNumber, String? ifscCode, String? holderName, String? upiId, String? type}) async {
+  Future<bool> addBankDetails({
+    // String? bankName, 
+    // String? branchName, 
+    String? accountNumber, 
+    String? confirmAccountNumber, 
+    String? ifscCode, 
+    // String? holderName, 
+    String? upiId, 
+    String? type}) async {
 
     final failureOrSuccess = await _addBankDetails(
       Params(profileParams: ProfileParams(
-        bankName: bankName,
-        branchName: branchName,
+        // bankName: bankName,
+        // branchName: branchName,
         accountNumber: accountNumber,
         confirmAccountNumber: confirmAccountNumber,
         ifscCode: ifscCode,
-        holderName: holderName,
+        // holderName: holderName,
         upiID: upiId,
         type: type,
       ),),

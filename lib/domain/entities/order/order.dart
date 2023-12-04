@@ -12,7 +12,7 @@ class Order extends Equatable {
     this.disputeId,
     this.quantity,
     this.price,
-    this.slotId,
+    this.slotId,  
     this.cronUpdatedTime,
     this.paymentSettlement,
     this.transactionFreeze,
@@ -22,8 +22,8 @@ class Order extends Equatable {
     this.userGameService,
     this.dispute,
     this.orderStatuses,
-    this.bookfromTime,
-    this.booktoTime,
+    this.bookfromtime,
+    this.booktotime,
     this.bookDate
   });
 
@@ -34,8 +34,8 @@ class Order extends Equatable {
   final int? quantity;
   final int? price;
   final int? slotId;
-  final String? bookfromTime;
-  final String? booktoTime;
+  final String? bookfromtime;
+  final String? booktotime;
   final String? bookDate;
   final DateTime? cronUpdatedTime;
   final String? paymentSettlement;
@@ -48,7 +48,7 @@ class Order extends Equatable {
   final List<OrderStatus>? orderStatuses;
 
   @override
-  // TODO: implement props
+  // TODO: implement props  
   List<Object?> get props => [
         id,
         userGameServiceId,
@@ -57,8 +57,8 @@ class Order extends Equatable {
         disputeId,
         slotId,
         quantity,
-        bookfromTime,
-        booktoTime,
+        bookfromtime,
+        booktotime,
         bookDate
       ];
 }

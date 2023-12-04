@@ -23,7 +23,7 @@ class OrderRepositoryImpl extends OrderRepository{
   Future<Either<Failure, Map<String, dynamic>>> createOrder({int? listingId, int? quantity, String? price, String? bookFromTime, String? bookToTime, String? bookDate, bool? isUpdatingTime}) async{
     try {
       return Right(await _orderRemoteDatasource.createOrder(listingId, quantity, price, bookDate, bookFromTime, bookToTime , isUpdatingTime));
-      print("orderrepo >>> ${bookDate}");
+      // print("orderrepo >>> ${bookDate}");
     } on ServerException catch (e) {
       // Loggers can be added here for analyzation.
       return Left(ServerFailure(message: e.message.toString()));

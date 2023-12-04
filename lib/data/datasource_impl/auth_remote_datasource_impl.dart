@@ -239,6 +239,8 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource {
     }
   }
 
+
+
   @override
   Future<bool> login(String? mobile, String? email, String? password,
       String? socialLoginId, int? socialLoginType, String? name) async {
@@ -253,7 +255,7 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource {
                 'social_login_id': socialLoginId,
                 'social_login_type': '${socialLoginType ?? ''}',
                 'name': name,
-                'email': email
+                'email': email,
               },
       );
 

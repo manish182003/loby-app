@@ -68,7 +68,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      appBar: appBar(context: context, appBarName: "Withdraw Token"),
+      appBar: appBar(context: context, appBarName: "Withdraw Token",isBackIcon: true),
       body: Obx(() {
         if (profileController.isBankDetailsFetching.value) {
           return const CustomLoader();
@@ -93,6 +93,34 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                 SizedBox(
                   height: 3.h,
                 ),
+                profileController.profile.kycverify == "Y" ?
+                Container(
+                  height: 30.h,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: concordColor.withOpacity(0.2)
+                  ),
+                  child: Center(
+                    child: Column(
+                      // mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(height: 3.h,),
+                        Text(
+                            "KYC Verification Complete",
+                            style: textTheme.headline3?.copyWith(
+                                color: whiteColor,
+                                fontWeight: FontWeight.w500)),
+                               
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        Image(image: AssetImage("assets/images/success_logo.png")),
+                      ],
+                    ),
+                  ),
+                ) : 
                 Container(
                   height: 30.h,
                   width: MediaQuery.of(context).size.width,
@@ -138,18 +166,30 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                 SizedBox(
                   height: 5.h,
                 ),
+                profileController.profile.kycverify == "Y" ?
                 CustomButton(
                   color: purpleLightIndigoColor,
                   textColor: textWhiteColor,
-                  left: 20.w,
+                  left: 10.w,
                   
-                  right: 20.w,
+                  right: 10.w,
                   height: 7.5.h,
-                  name: "Add Withdraw Method",
+                  name: "Add New Withdraw Method",
                   onTap: () {
                     _addNewWithdrawMethodDialog(context, textTheme);
                   },
-                ),
+                ): CustomButton(
+                  color: disablepurpleLightIndigoColor,
+                  textColor: textWhiteColor.withOpacity(0.5),
+                  left: 10.w,
+                  
+                  right: 10.w,
+                  height: 7.5.h,
+                  name: "Add New Withdraw Method",
+                  onTap: () {
+                    // Helpers.toast("Please Complete Your Kyc");
+                  },
+                )
               ],
             ),
           );
@@ -517,19 +557,19 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      TextFieldWidget(
-                        textEditingController: bankName,
-                        title: "Bank Name",
-                        titleColor: textWhiteColor,
-                        isRequired: true,
-                      ),
-                      SizedBox(height: 2.h),
-                      TextFieldWidget(
-                        textEditingController: branchName,
-                        title: "Branch Name",
-                        titleColor: textWhiteColor,
-                        isRequired: true,
-                      ),
+                      // TextFieldWidget(
+                      //   textEditingController: bankName,
+                      //   title: "Bank Name",
+                      //   titleColor: textWhiteColor,
+                      //   isRequired: true,
+                      // ),
+                      // SizedBox(height: 2.h),
+                      // TextFieldWidget(
+                      //   textEditingController: branchName,
+                      //   title: "Branch Name",
+                      //   titleColor: textWhiteColor,
+                      //   isRequired: true,
+                      // ),
                       SizedBox(height: 2.h),
                       TextFieldWidget(
                         textEditingController: accountNumber,
@@ -554,12 +594,12 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                         isRequired: true,
                       ),
                       SizedBox(height: 2.h),
-                      TextFieldWidget(
-                        textEditingController: holderName,
-                        title: "Account Holder Name",
-                        titleColor: textWhiteColor,
-                        isRequired: true,
-                      ),
+                      // TextFieldWidget(
+                      //   textEditingController: holderName,
+                      //   title: "Account Holder Name",
+                      //   titleColor: textWhiteColor,
+                      //   isRequired: true,
+                      // ),
                       SizedBox(height: 2.h),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.35,
@@ -572,12 +612,12 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                               Helpers.loader();
                               final isSuccess =
                                   await profileController.addBankDetails(
-                                bankName: bankName.text,
-                                branchName: branchName.text,
+                                // bankName: bankName.text,
+                                // branchName: branchName.text,
                                 accountNumber: accountNumber.text,
                                 confirmAccountNumber: confirmAccountNumber.text,
                                 ifscCode: ifscCode.text,
-                                holderName: holderName.text,
+                                // holderName: holderName.text,
                                 type: "bank_account",
                               );
                               if (isSuccess) {
@@ -622,12 +662,12 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    TextFieldWidget(
-                      textEditingController: holderName,
-                      title: "Name",
-                      titleColor: textWhiteColor,
-                      isRequired: true,
-                    ),
+                    // TextFieldWidget(
+                    //   textEditingController: holderName,
+                    //   title: "Name",
+                    //   titleColor: textWhiteColor,
+                    //   isRequired: true,
+                    // ),
                     SizedBox(height: 2.h),
                     TextFieldWidget(
                       textEditingController: upiId,
@@ -647,7 +687,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                             Helpers.loader();
                             final isSuccess =
                                 await profileController.addBankDetails(
-                              holderName: holderName.text,
+                              // holderName: holderName.text,
                               upiId: upiId.text,
                               type: "vpa",
                             );

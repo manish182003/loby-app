@@ -54,6 +54,41 @@ class SlotsController extends GetxController {
   final slots = <GetSlotsForSeller>[].obs;
   final buyerSlots = <GetSlotsForBuyer>[].obs;
 
+
+String _convertTo24HourFormat(String time) {
+    DateTime dateTime = DateFormat.jm().parse(time);
+    return DateFormat.Hm().format(dateTime);
+  }
+
+  String sendFromDataToAPI() {
+    // Get the time from the text field in 12-hour format
+    String timeIn12HourFormat = fromTime.value.text;
+
+    // Convert the time to 24-hour format for sending to the API
+    String timeIn24HourFormat = _convertTo24HourFormat(timeIn12HourFormat);
+
+    // Send data to API with time in 24-hour format
+    print("Sending time to API: $timeIn24HourFormat");
+    // Your API call logic goes here
+
+    return timeIn24HourFormat;
+  }
+
+  String sendToDataToAPI() {
+    // Get the time from the text field in 12-hour format
+    String timeIn12HourFormat = toTime.value.text;
+    
+    // Convert the time to 24-hour format for sending to the API
+    String timeIn24HourFormat = _convertTo24HourFormat(timeIn12HourFormat);
+    
+    // Send data to API with time in 24-hour format
+    print("Sending time to API: $timeIn24HourFormat");
+    // Your API call logic goes here
+
+    return timeIn24HourFormat;
+  }
+
+  
   final fromTime = TextEditingController().obs;
   final toTime = TextEditingController().obs;
   // final day = TextEditingController().obs;
@@ -84,8 +119,8 @@ class SlotsController extends GetxController {
       Params(
         slotsParams: SlotsParams(
           day: day,
-          from: fromTime.value.text,
-          to: toTime.value.text,
+          from: sendFromDataToAPI(),
+          to: sendToDataToAPI(),
           // sellerId: sellerId,
         ),
       ),

@@ -53,7 +53,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: appBar(context: context, appBarName: "Chat", isBackIcon: false),
+        appBar: appBar(context: context, appBarName: "Chat", isBackIcon: true),
         body: Obx(() {
           if(chatController.isChatsFetching.value){
             return const CustomLoader();

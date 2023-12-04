@@ -67,6 +67,16 @@ class _SellerTimeSlotBoxState extends State<SellerTimeSlotBox> {
   @override
   Widget build(BuildContext context) {
     print('frommmm >>> ${widget.getSlots.from}');
+
+    String fromtimeIn24HourFormat = "${widget.getSlots.from}";
+    DateTime fromtime24Hour = DateFormat('HH:mm').parse(fromtimeIn24HourFormat);
+    String fromtimeIn12HourFormat = DateFormat('h:mm a').format(fromtime24Hour);
+
+
+    String totimeIn24HourFormat = "${widget.getSlots.to}";
+    DateTime totime24Hour = DateFormat('HH:mm').parse(totimeIn24HourFormat);
+    String totimeIn12HourFormat = DateFormat('h:mm a').format(totime24Hour);
+
     final textTheme = Theme.of(context).textTheme;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 1),
@@ -86,7 +96,7 @@ class _SellerTimeSlotBoxState extends State<SellerTimeSlotBox> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "${widget.getSlots.from} - ${widget.getSlots.to}",
+                      "$fromtimeIn12HourFormat - $totimeIn12HourFormat",
                       style:
                           textTheme.headline2?.copyWith(color: textWhiteColor),
                     ),
@@ -141,13 +151,15 @@ class _SellerTimeSlotBoxState extends State<SellerTimeSlotBox> {
           ),
           actions: <Widget>[
             
-            TextButton(
-              child: Text('Cancel', style: TextStyle(color: Colors.red),),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            SizedBox(width: 28.w,),
+            Row(
+              children: [
+                TextButton(
+                  child: Text('Cancel', style: TextStyle(color: Colors.red),),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                SizedBox(width: 26.w,),
             TextButton(
               child: Text('Delete', style: TextStyle(color: aquaGreenColor),),
               onPressed: () {
@@ -158,6 +170,9 @@ class _SellerTimeSlotBoxState extends State<SellerTimeSlotBox> {
                 });
               },
             ),
+              ],
+            ),
+            
           ],
         );
       },

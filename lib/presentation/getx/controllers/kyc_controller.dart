@@ -86,14 +86,16 @@ class KycController extends GetxController {
   }
 
   Future<bool> verifyKycOtp(
-      {String? kycToken, String? otp, String? refId}) async {
+      {String? kycToken, String? otp, String? refId, String? aadharNum}) async {
     final failureOrSuccess = await _verifyKycOtp(
       Params(
         verifyKycOtpParams: VerifyKycOtpParams(
             // mobile: mobile,
             kycToken: kycToken,
             otp: otp,
-            refId: refId),
+            refId: refId,
+            aadharNum: aadharNumbercontroller.text.replaceAll(' ', ''),
+            ),
       ),
     );
 

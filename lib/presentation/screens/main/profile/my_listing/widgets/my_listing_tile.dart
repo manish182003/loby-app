@@ -439,7 +439,7 @@ class _MyListingTileState extends State<MyListingTile> {
           ))),
       onPressed: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Text(title,
             style: textTheme.headline6?.copyWith(color: textWhiteColor)),
       ),

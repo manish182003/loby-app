@@ -28,7 +28,15 @@ abstract class ProfileRemoteDatasource{
 
   Future<Map<String, dynamic>> profileVerification(String? displayName, String? name, String? message, String? youtube, String? twitch, String? instagram, File? idCard, File? selfie);
 
-  Future<Map<String, dynamic>> addBankDetails(String? bankName, String? branchName, String? accountNumber, String? confirmAccountNumber, String? ifscCode, String? holderName, String? upiId, String? type);
+  Future<Map<String, dynamic>> addBankDetails(
+    // String? bankName, 
+    // String? branchName,
+    String? accountNumber, 
+    String? confirmAccountNumber, 
+    String? ifscCode, 
+    // String? holderName, 
+    String? upiId, 
+    String? type);
 
   Future<BankDetailResponseModel> getBankDetails();
 

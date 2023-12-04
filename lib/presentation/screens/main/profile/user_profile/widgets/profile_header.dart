@@ -219,7 +219,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                                       )),
                                                   TextSpan(
                                                     text:
-                                                        "${widget.user.uid}",
+                                                        widget.user.uid == null ? "000000000" : "${widget.user.uid}",
                                                     style: textTheme.headline5
                                                         ?.copyWith(
                                                       color:

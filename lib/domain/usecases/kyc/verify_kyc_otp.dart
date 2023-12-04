@@ -15,7 +15,8 @@ class VerifyKycOtp extends UseCase<Map<String, dynamic>, Params> {
     return _repository.verifyKycOtp(
       kycToken: params.verifyKycOtpParams?.kycToken,
       otp: params.verifyKycOtpParams?.otp,
-      refId: params.verifyKycOtpParams?.refId
+      refId: params.verifyKycOtpParams?.refId,
+      aadharNum: params.verifyKycOtpParams?.aadharNum
       // aadharNumber: params.sendKycOtpParams?.aadharNumber,
       // type: params.sendKycOtpParams?.type
     );

@@ -62,7 +62,7 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
         .textTheme;
 
     return Scaffold(
-      appBar: appBar(context: context, appBarName: "My Disputes"),
+      appBar: appBar(context: context, appBarName: "My Disputes", isBackIcon: true),
       body: Obx(() {
         if(orderController.isDisputesFetching.value || fetching){
           return const CustomLoader();
