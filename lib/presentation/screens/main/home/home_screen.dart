@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/core/theme/colors.dart';
@@ -12,14 +11,13 @@ import '../../../../services/routing_service/routes_name.dart';
 import '../../../widgets/GlobleSearchFieldWidget.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   HomeController homeController = Get.find<HomeController>();
 
   @override
@@ -46,62 +44,81 @@ class _HomeScreenState extends State<HomeScreen> {
               width: double.infinity,
               child: Column(
                 children: [
-                  SizedBox(height: 4.h,),
-                  Image.asset("assets/icons/app_icon.png", height: 80, width: 80,),
-                  SizedBox(height: 1.h,),
+                  SizedBox(
+                    height: 4.h,
+                  ),
+                  Image.asset(
+                    "assets/icons/app_icon.png",
+                    height: 80,
+                    width: 80,
+                  ),
+                  SizedBox(
+                    height: 1.h,
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: GlobalSearchFieldWidget(onTap: () {
                       context.pushNamed(searchScreenPage);
                     }),
                   ),
-                  SizedBox(height: 3.h,),
+                  SizedBox(
+                    height: 3.h,
+                  ),
                 ],
               ),
             ),
-            SizedBox(height: 3.h,),
+            SizedBox(
+              height: 3.h,
+            ),
             Column(
-                children: [
-                  // GlobalSearchFieldWidget(onTap: () {
-                  //   context.pushNamed(searchScreenPage);
-                  // }),
-                  // SizedBox(height: 3.h,),
-                  Text('Categories', style: textTheme.headline3?.copyWith(color: textWhiteColor)),
-                  SizedBox(height: 3.h,),
-                  BodyPaddingWidget(child: _buildCategories(textTheme))
-                  ,
-                  SizedBox(height: 3.h,),
-                  Padding(
-                              padding: EdgeInsets.all(2.h),
-                              child: Text('Top Games', style: textTheme.headline3?.copyWith(color: textWhiteColor))),
-                  Container(
-                      decoration: const BoxDecoration(
-                        color: textFieldColor,
-                        // borderRadius: BorderRadius.circular(16.0),
-                      ),
-                      child: Column(
-                        children: [
-                          // Padding(
-                          //     padding: EdgeInsets.all(2.h),
-                          //     child: Text('Top Games', style: textTheme.headline3?.copyWith(color: textWhiteColor))),
-                          _buildTopGames(textTheme),
-                        ],
-                      )),
-                ],
-              ),
+              children: [
+                // GlobalSearchFieldWidget(onTap: () {
+                //   context.pushNamed(searchScreenPage);
+                // }),
+                // SizedBox(height: 3.h,),
+                Text('Categories',
+                    style: textTheme.displaySmall
+                        ?.copyWith(color: textWhiteColor)),
+                SizedBox(
+                  height: 3.h,
+                ),
+                BodyPaddingWidget(child: _buildCategories(textTheme)),
+                SizedBox(
+                  height: 3.h,
+                ),
+                Padding(
+                    padding: EdgeInsets.all(2.h),
+                    child: Text('Top Games',
+                        style: textTheme.displaySmall
+                            ?.copyWith(color: textWhiteColor))),
+                Container(
+                    decoration: const BoxDecoration(
+                      color: textFieldColor,
+                      // borderRadius: BorderRadius.circular(16.0),
+                    ),
+                    child: Column(
+                      children: [
+                        // Padding(
+                        //     padding: EdgeInsets.all(2.h),
+                        //     child: Text('Top Games', style: textTheme.headline3?.copyWith(color: textWhiteColor))),
+                        _buildTopGames(textTheme),
+                      ],
+                    )),
+              ],
+            ),
             // ),
-
           ],
         ),
       ),
     );
   }
 
-
   _buildCategories(TextTheme textTheme) {
     return Obx(() {
       if (homeController.isCategoryFetching.value) {
-        return const Center(child: CircularProgressIndicator(),);
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
       } else {
         return GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -118,12 +135,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 onTap: () {
                   debugPrint('Buddy $index');
                   FocusManager.instance.primaryFocus?.unfocus();
-                  context.pushNamed(gameCategoriesPage, queryParams: {'categoryId' : homeController.categories[index].id.toString(), 'catName' : homeController.categories[index].name});
+                  context.pushNamed(gameCategoriesPage, extra: {
+                    'categoryId':
+                        homeController.categories[index].id.toString(),
+                    'catName': homeController.categories[index].name
+                  });
                 },
                 child: Container(
                   height: 2.h,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0, vertical: 0),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: textFieldColor,
@@ -132,7 +153,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   child: Text(
                     homeController.categories[index].name!,
-                    style: textTheme.headline4?.copyWith(color: aquaGreenColor),
+                    style: textTheme.headlineMedium?.copyWith(
+                      color: aquaGreenColor,
+                      // fontSize: 11.spa,
+                    ),
                   ),
                 ));
           },
@@ -147,20 +171,23 @@ class _HomeScreenState extends State<HomeScreen> {
       child: SizedBox(
         height: 17.h,
         child: Obx(() {
-          if(homeController.isGamesFetching.value){
-            return const Center(child: CircularProgressIndicator(),);
-          }else {
+          if (homeController.isGamesFetching.value) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
             return ListView.builder(
               itemCount: homeController.games.take(10).length,
               scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) =>
-                  SizedBox(
-                    height: 166,
-                    width: 120,
-                    child: Center(
-                      child: GameCard(game: homeController.games[index],),
-                    ),
+              itemBuilder: (context, index) => SizedBox(
+                height: 166,
+                width: 120,
+                child: Center(
+                  child: GameCard(
+                    game: homeController.games[index],
                   ),
+                ),
+              ),
             );
           }
         }),

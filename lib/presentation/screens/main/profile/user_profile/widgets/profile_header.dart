@@ -1,10 +1,5 @@
-import 'dart:io';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -19,13 +14,10 @@ import 'package:loby/presentation/widgets/custom_cached_network_image.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../../core/theme/colors.dart';
-import '../../../../../../data/models/ItemModel.dart';
 import '../../../../../../services/routing_service/routes_name.dart';
 import '../../../../../getx/controllers/listing_controller.dart';
-import '../../../../../getx/controllers/order_controller.dart';
 import '../../../../../widgets/ConfirmationRiseDisputeBottomDialog.dart';
 import '../../../../../widgets/bottom_dialog.dart';
-import '../../../../../widgets/custom_app_bar.dart';
 import '../../../../../widgets/buttons/custom_button.dart';
 import '../../../../../widgets/profile_picture.dart';
 
@@ -63,7 +55,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
     final textTheme = Theme.of(context).textTheme;
     print("uid  >>> ${widget.user.uid}");
     print("userrrrrr ${widget.user}");
-    print( "kyc   ${widget.user.kycverify}");
+    print("kyc   ${widget.user.kycverify}");
     return Stack(
       children: <Widget>[
         Stack(
@@ -178,19 +170,19 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                           children: [
                                             Text(widget.user.displayName ?? '',
                                                 overflow: TextOverflow.ellipsis,
-                                                style: textTheme.headline3
+                                                style: textTheme.displaySmall
                                                     ?.copyWith(
                                                         color: textWhiteColor)),
                                             SizedBox(
                                               width: 2.w,
                                             ),
                                             widget.user.kycverify == "Y"
-                                                ? Image(
+                                                ? const Image(
                                                     image: AssetImage(
                                                         "assets/images/sheild.png"),
                                                     height: 20,
                                                   )
-                                                : SizedBox()
+                                                : const SizedBox()
                                           ],
                                         ),
                                       ),
@@ -201,37 +193,32 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                     height: 4,
                                   ),
                                   Row(
-                                    mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                          RichText(
-                                              textAlign: TextAlign.start,
-                                              text: TextSpan(
-                                                children: [
-                                                  TextSpan(
-                                                      text: 'User ID : ',
-                                                      style: textTheme.headline5
-                                                          ?.copyWith(
-                                                        color:
-                                                            selectiveYellowColor,
-                                                        fontWeight:
-                                                            FontWeight.w200,
-                                                      )),
-                                                  TextSpan(
-                                                    text:
-                                                        widget.user.uid == null ? "000000000" : "${widget.user.uid}",
-                                                    style: textTheme.headline5
-                                                        ?.copyWith(
-                                                      color:
-                                                          selectiveYellowColor,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                    ),
-                                                  ),
-                                                  
-                                                ],
+                                      RichText(
+                                        textAlign: TextAlign.start,
+                                        text: TextSpan(
+                                          children: [
+                                            TextSpan(
+                                                text: 'User ID : ',
+                                                style: textTheme.headlineSmall
+                                                    ?.copyWith(
+                                                  color: selectiveYellowColor,
+                                                  fontWeight: FontWeight.w200,
+                                                )),
+                                            TextSpan(
+                                              text: widget.user.uid == null
+                                                  ? "000000000"
+                                                  : "${widget.user.uid}",
+                                              style: textTheme.headlineSmall
+                                                  ?.copyWith(
+                                                color: selectiveYellowColor,
+                                                fontWeight: FontWeight.w700,
                                               ),
                                             ),
+                                          ],
+                                        ),
+                                      ),
                                     ],
                                   ),
                                   const SizedBox(
@@ -256,7 +243,8 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                                   TextSpan(
                                                     text:
                                                         "${widget.user.followersCount}  ",
-                                                    style: textTheme.headline5
+                                                    style: textTheme
+                                                        .headlineSmall
                                                         ?.copyWith(
                                                       color:
                                                           selectiveYellowColor,
@@ -266,7 +254,8 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                                   ),
                                                   TextSpan(
                                                       text: 'Followers',
-                                                      style: textTheme.headline5
+                                                      style: textTheme
+                                                          .headlineSmall
                                                           ?.copyWith(
                                                         color:
                                                             selectiveYellowColor,
@@ -292,7 +281,8 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                                   TextSpan(
                                                     text:
                                                         "${widget.user.listingsCount}  ",
-                                                    style: textTheme.headline5
+                                                    style: textTheme
+                                                        .headlineSmall
                                                         ?.copyWith(
                                                       color:
                                                           selectiveYellowColor,
@@ -302,7 +292,8 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                                   ),
                                                   TextSpan(
                                                       text: 'Listing',
-                                                      style: textTheme.headline5
+                                                      style: textTheme
+                                                          .headlineSmall
                                                           ?.copyWith(
                                                         color:
                                                             selectiveYellowColor,
@@ -351,14 +342,12 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                               .checkEligibilityResponse.value;
                                           Helpers.hideLoader();
                                           if (isSuccess) {
-                                            context.pushNamed(messagePage,
-                                                queryParams: {
-                                                  'chatId': "${chat.id}",
-                                                  'senderId':
-                                                      "${chat.senderId}",
-                                                  'receiverId':
-                                                      "${chat.receiverId}"
-                                                });
+                                            context
+                                                .pushNamed(messagePage, extra: {
+                                              'chatId': "${chat.id}",
+                                              'senderId': "${chat.senderId}",
+                                              'receiverId': "${chat.receiverId}"
+                                            });
                                           } else {
                                             BottomDialog(
                                                     textTheme: textTheme,
@@ -443,7 +432,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                   const SizedBox(width: 4.0),
                                   Text("${widget.user.avgRatingCount ?? 0}",
                                       overflow: TextOverflow.ellipsis,
-                                      style: textTheme.headline4?.copyWith(
+                                      style: textTheme.headlineMedium?.copyWith(
                                         color: textWhiteColor,
                                         fontWeight: FontWeight.w300,
                                       )),
@@ -463,7 +452,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                   const SizedBox(width: 4.0),
                                   Text("${widget.user.orderCount} Orders",
                                       overflow: TextOverflow.ellipsis,
-                                      style: textTheme.headline4?.copyWith(
+                                      style: textTheme.headlineMedium?.copyWith(
                                         color: textWhiteColor,
                                         fontWeight: FontWeight.w300,
                                       )),
@@ -555,7 +544,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                         vertical: 10),
                                     child: Text(
                                       item,
-                                      style: textTheme.headline6
+                                      style: textTheme.titleLarge
                                           ?.copyWith(color: textWhiteColor),
                                     ),
                                   ),

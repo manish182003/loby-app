@@ -2,14 +2,14 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loby/presentation/getx/controllers/listing_controller.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../core/theme/colors.dart';
 
 class DropDownDivider extends StatefulWidget {
   final int categoryId;
   final int gameId;
-  const DropDownDivider({Key? key, required this.categoryId, required this.gameId}) : super(key: key);
+  const DropDownDivider(
+      {super.key, required this.categoryId, required this.gameId});
 
   @override
   State<DropDownDivider> createState() => _DropDownDividerState();
@@ -27,9 +27,9 @@ class _DropDownDividerState extends State<DropDownDivider> {
 
   List<DropdownMenuItem<String>> _addDividersAfterItems(
       List<String> items, TextTheme textTheme) {
-    List<DropdownMenuItem<String>> _menuItems = [];
+    List<DropdownMenuItem<String>> menuItems = [];
     for (var item in items) {
-      _menuItems.addAll(
+      menuItems.addAll(
         [
           DropdownMenuItem<String>(
             value: item,
@@ -40,7 +40,8 @@ class _DropDownDividerState extends State<DropDownDivider> {
                 children: [
                   Text(
                     item,
-                    style: textTheme.headline6?.copyWith(color: textWhiteColor),
+                    style:
+                        textTheme.titleLarge?.copyWith(color: textWhiteColor),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -61,18 +62,18 @@ class _DropDownDividerState extends State<DropDownDivider> {
         ],
       );
     }
-    return _menuItems;
+    return menuItems;
   }
 
   List<int> _getDividersIndexes() {
-    List<int> _dividersIndexes = [];
+    List<int> dividersIndexes = [];
     for (var i = 0; i < (items.length * 2) - 1; i++) {
       //Dividers indexes will be the odd indexes
       if (i.isOdd) {
-        _dividersIndexes.add(i);
+        dividersIndexes.add(i);
       }
     }
-    return _dividersIndexes;
+    return dividersIndexes;
   }
 
   @override
@@ -82,9 +83,12 @@ class _DropDownDividerState extends State<DropDownDivider> {
       child: DropdownButton2(
         isExpanded: true,
         // Reduces the dropdowns height by +/- 50%
-        icon: const Icon(
-          Icons.keyboard_arrow_down,
-          color: iconWhiteColor,
+
+        iconStyleData: IconStyleData(
+          icon: const Icon(
+            Icons.keyboard_arrow_down,
+            color: iconWhiteColor,
+          ),
         ),
         items: _addDividersAfterItems(items, textTheme),
         // customItemsIndexes: _getDividersIndexes(),
@@ -97,12 +101,12 @@ class _DropDownDividerState extends State<DropDownDivider> {
           listingController.buyerListingPageNumber.value = 1;
           listingController.areMoreListingAvailable.value = true;
 
-          switch(value){
+          switch (value) {
             case 'Top Rated':
               listingController.getBuyerListings(
-                  categoryId: widget.categoryId,
-                  gameId: widget.gameId,
-                  sortByRating: 'desc',
+                categoryId: widget.categoryId,
+                gameId: widget.gameId,
+                sortByRating: 'desc',
               );
               break;
             case 'Most Recent':
@@ -113,17 +117,15 @@ class _DropDownDividerState extends State<DropDownDivider> {
               break;
             case 'Low to High Price':
               listingController.getBuyerListings(
-                categoryId: widget.categoryId,
-                gameId: widget.gameId,
-                sortByPrice: 'asc'
-              );
+                  categoryId: widget.categoryId,
+                  gameId: widget.gameId,
+                  sortByPrice: 'asc');
               break;
             case 'High to Low Price':
               listingController.getBuyerListings(
                   categoryId: widget.categoryId,
                   gameId: widget.gameId,
-                  sortByPrice: 'desc'
-              );
+                  sortByPrice: 'desc');
               break;
             default:
               listingController.getBuyerListings(
@@ -132,14 +134,23 @@ class _DropDownDividerState extends State<DropDownDivider> {
               );
           }
         },
-        dropdownDecoration: BoxDecoration(
+        dropdownStyleData: DropdownStyleData(
+            decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
           color: shipGreyColor,
-        ),
-        buttonHeight: 40,
-        buttonWidth: 150,
-        itemHeight: 40,
-        itemPadding: const EdgeInsets.symmetric(horizontal: 8.0),
+        )),
+        // dropdownDecoration: BoxDecoration(
+        //   borderRadius: BorderRadius.circular(14),
+        //   color: shipGreyColor,
+        // ),
+        buttonStyleData: ButtonStyleData(
+            height: 40,
+            width: 150,
+            padding: const EdgeInsets.symmetric(horizontal: 8.0)),
+        // buttonHeight: 40,
+        // buttonWidth: 150,
+        // itemHeight: 40,
+        // itemPadding: const EdgeInsets.symmetric(horizontal: 8.0),
       ),
     );
   }

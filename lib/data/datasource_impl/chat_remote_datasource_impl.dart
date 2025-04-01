@@ -8,20 +8,19 @@ import 'package:loby/data/models/response_models/chat/message_response_model.dar
 import '../../core/utils/exceptions.dart';
 import '../datasources/chat_remote_datasource.dart';
 
-class ChatRemoteDatasourceImpl extends ChatRemoteDatasource{
-
+class ChatRemoteDatasourceImpl extends ChatRemoteDatasource {
   final Dio _dio;
   ChatRemoteDatasourceImpl(this._dio);
 
   @override
-  Future<ChatResponseModel> getChats(String? name, int? page)async {
+  Future<ChatResponseModel> getChats(String? name, int? page) async {
     try {
       final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(
         _dio,
         RequestType.get,
         ApiEndpoints.getChats,
-        queryParams: {'name': name, 'page' : '${page ?? ''}'},
+        extra: {'name': name, 'page': '${page ?? ''}'},
         headers: headers,
       );
 
@@ -32,14 +31,14 @@ class ChatRemoteDatasourceImpl extends ChatRemoteDatasource{
   }
 
   @override
-  Future<MessageResponseModel> getMessages(int? chatId) async{
+  Future<MessageResponseModel> getMessages(int? chatId) async {
     try {
       final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(
         _dio,
         RequestType.get,
         ApiEndpoints.getMessages,
-        queryParams: {'chat_channel_id': chatId, 'sortBy' : 'DESC'},
+        extra: {'chat_channel_id': chatId, 'sortBy': 'DESC'},
         headers: headers,
       );
 
@@ -50,14 +49,13 @@ class ChatRemoteDatasourceImpl extends ChatRemoteDatasource{
   }
 
   @override
-  Future<Map<String, dynamic>> sendMessage(int? receiverId, String? message, int? fileType, File? file) async{
+  Future<Map<String, dynamic>> sendMessage(
+      int? receiverId, String? message, int? fileType, File? file) async {
     try {
-
       // print(receiverId);
       // print(message);
       // print(file);
       // print(fileType);
-
 
       final headers = await Helpers.getApiHeaders();
 
@@ -66,15 +64,15 @@ class ChatRemoteDatasourceImpl extends ChatRemoteDatasource{
           MapEntry('receiver_id', "$receiverId"),
         );
 
-        if(message != null){
-          formData.fields.add(
-            MapEntry('message', message),
-          );
-        }
+      if (message != null) {
+        formData.fields.add(
+          MapEntry('message', message),
+        );
+      }
 
-      if(file != null && file.path.isNotEmpty) {
-        formData.files.add(MapEntry('file_path',
-            MultipartFile.fromFileSync(file.path)));
+      if (file != null && file.path.isNotEmpty) {
+        formData.files
+            .add(MapEntry('file_path', MultipartFile.fromFileSync(file.path)));
 
         formData.fields.add(
           MapEntry('file_type', "${fileType ?? ""}"),
@@ -96,18 +94,14 @@ class ChatRemoteDatasourceImpl extends ChatRemoteDatasource{
   }
 
   @override
-  Future<Map<String, dynamic>> checkEligibility(int? receiverId)async {
+  Future<Map<String, dynamic>> checkEligibility(int? receiverId) async {
     try {
-
-      
-
       final headers = await Helpers.getApiHeaders();
 
       FormData formData = FormData()
         ..fields.add(
           MapEntry('receiver_id', "$receiverId"),
         );
-
 
       final response = await Helpers.sendRequest(
         _dio,
@@ -122,10 +116,4 @@ class ChatRemoteDatasourceImpl extends ChatRemoteDatasource{
       throw ServerException(message: e.message);
     }
   }
-
-
-
-
-
-
 }

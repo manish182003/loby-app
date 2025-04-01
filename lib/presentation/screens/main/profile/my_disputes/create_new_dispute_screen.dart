@@ -16,7 +16,6 @@ import '../../../../widgets/body_padding_widget.dart';
 import '../../../../widgets/buttons/custom_button.dart';
 import '../../../../widgets/custom_app_bar.dart';
 import '../../../../widgets/custom_loader.dart';
-import '../../../../widgets/input_text_widget.dart';
 import '../../../../widgets/text_fields/text_field_widget.dart';
 import 'dispute_widget.dart';
 
@@ -30,7 +29,6 @@ class CreateNewDispute extends StatefulWidget {
 }
 
 class _CreateNewDisputeState extends State<CreateNewDispute> {
-
   OrderController orderController = Get.find<OrderController>();
 
   List<PlatformFile> _paths = [];
@@ -40,12 +38,11 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
   final _formKey = GlobalKey<FormState>();
   bool fetching = true;
 
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_)async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       orderController.areMoreDisputesAvailable.value = true;
       await orderController.getDisputes(id: widget.disputeId);
       setState(() {
@@ -54,19 +51,17 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme
-        .of(context)
-        .textTheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      appBar: appBar(context: context, appBarName: "My Disputes", isBackIcon: true),
+      appBar:
+          appBar(context: context, appBarName: "My Disputes", isBackIcon: true),
       body: Obx(() {
-        if(orderController.isDisputesFetching.value || fetching){
+        if (orderController.isDisputesFetching.value || fetching) {
           return const CustomLoader();
-        }else{
+        } else {
           final dispute = orderController.disputes
               .where((e) => e.id == widget.disputeId)
               .toList()
@@ -77,52 +72,67 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    dispute.disputeProofs!.isEmpty ? const SizedBox() : Carousel(
-                      images: [
-                        for(final i in dispute.disputeProofs!) CarouselList(
-                            type: i.fileType!, path: i.filePath!)
-                      ],
-                    ),
-                    dispute.disputeProofs!.isEmpty ? const SizedBox() : SizedBox(
-                      height: 2.h,),
+                    dispute.disputeProofs!.isEmpty
+                        ? const SizedBox()
+                        : Carousel(
+                            images: [
+                              for (final i in dispute.disputeProofs!)
+                                CarouselList(
+                                    type: i.fileType!, path: i.filePath!)
+                            ],
+                          ),
+                    dispute.disputeProofs!.isEmpty
+                        ? const SizedBox()
+                        : SizedBox(
+                            height: 2.h,
+                          ),
                     DisputeWidget(
                       disputeType: "Open",
                       currentStatus: '',
                       dispute: dispute,
                     ),
                     const SizedBox(height: 16.0),
-                    dispute.result == 'RESOLVED' ? const SizedBox() : _buildUploadField(textTheme),
-                    dispute.result == 'RESOLVED' ? const SizedBox() : const SizedBox(height: 16.0),
-                    dispute.result == 'RESOLVED' ? const SizedBox() : TextFieldWidget(
-                      textEditingController: comments,
-                      hint: "Write your comments",
-                      maxLines: 5,
-                      isRequired: true,
-                    ),
-                    dispute.result == 'RESOLVED' ? const SizedBox() : Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: 16.0, horizontal: 10.h),
-                      child: CustomButton(
-                        color: aquaGreenColor,
-                        name: "Submit",
-                        textColor: textCharcoalBlueColor,
-                        onTap: () async {
-                          if (_formKey.currentState!.validate()) {
-                            Helpers.loader();
-                            final isSuccess = await orderController.submitDisputeProof(disputeId: widget.disputeId,
-                                description: comments.text,
-
-                                link: fileLink.text);
-                            Helpers.hideLoader();
-                            if (isSuccess) {
-                              Helpers.toast(
-                                  "Dispute Proof Successfully Submitted");
-                              Navigator.pop(context);
-                            }
-                          }
-                        },
-                      ),
-                    ),
+                    dispute.result == 'RESOLVED'
+                        ? const SizedBox()
+                        : _buildUploadField(textTheme),
+                    dispute.result == 'RESOLVED'
+                        ? const SizedBox()
+                        : const SizedBox(height: 16.0),
+                    dispute.result == 'RESOLVED'
+                        ? const SizedBox()
+                        : TextFieldWidget(
+                            textEditingController: comments,
+                            hint: "Write your comments",
+                            maxLines: 5,
+                            isRequired: true,
+                          ),
+                    dispute.result == 'RESOLVED'
+                        ? const SizedBox()
+                        : Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 16.0, horizontal: 10.h),
+                            child: CustomButton(
+                              color: aquaGreenColor,
+                              name: "Submit",
+                              textColor: textCharcoalBlueColor,
+                              onTap: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  Helpers.loader();
+                                  final isSuccess =
+                                      await orderController.submitDisputeProof(
+                                          disputeId: widget.disputeId,
+                                          description: comments.text,
+                                          link: fileLink.text);
+                                  Helpers.hideLoader();
+                                  if (isSuccess) {
+                                    Helpers.toast(
+                                        "Dispute Proof Successfully Submitted");
+                                    Navigator.pop(context);
+                                  }
+                                }
+                              },
+                            ),
+                          ),
                     const SizedBox(height: 16.0),
                   ],
                 ),
@@ -133,7 +143,6 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
       }),
     );
   }
-
 
   _buildUploadField(TextTheme textTheme) {
     return DottedBorder(
@@ -153,14 +162,16 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
               Text(
                   textAlign: TextAlign.center,
                   "Upload Images or Videos",
-                  style: textTheme.headline4?.copyWith(color: textWhiteColor)),
+                  style: textTheme.headlineMedium
+                      ?.copyWith(color: textWhiteColor)),
               SizedBox(height: 3.h),
               Obx(() {
                 if (orderController.files.isEmpty) {
                   return const SizedBox();
                 } else {
                   return GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       childAspectRatio: 2.5,
                       mainAxisSpacing: 15.0,
@@ -173,8 +184,7 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
                     itemBuilder: (context, index) {
                       return selectedFileTile(
                           image: File(orderController.files[index].path!),
-                          index: index
-                      );
+                          index: index);
                     },
                   );
                 }
@@ -194,7 +204,8 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
               ),
               SizedBox(height: 2.h),
               Text("or",
-                  style: textTheme.headline4?.copyWith(color: textWhiteColor)),
+                  style: textTheme.headlineMedium
+                      ?.copyWith(color: textWhiteColor)),
               SizedBox(height: 1.h),
               TextFieldWidget(
                 textEditingController: fileLink,
@@ -208,25 +219,16 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
     );
   }
 
-
   Widget selectedFileTile({required File image, required int index}) {
     return Container(
       padding: const EdgeInsets.all(8),
       constraints: BoxConstraints(
-          minHeight: MediaQuery
-              .of(context)
-              .size
-              .height * 0.08,
-          minWidth: MediaQuery
-              .of(context)
-              .size
-              .width * 0.4),
+          minHeight: MediaQuery.of(context).size.height * 0.08,
+          minWidth: MediaQuery.of(context).size.width * 0.4),
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-              spreadRadius: 1,
-              blurRadius: 5,
-              color: Colors.black.withAlpha(50))
+              spreadRadius: 1, blurRadius: 5, color: Colors.black.withAlpha(50))
         ],
         borderRadius: BorderRadius.circular(12),
         color: iconWhiteColor,
@@ -250,7 +252,6 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
     );
   }
 
-
   void _openFileExplorer() async {
     // if (_paths.isNotEmpty) _paths.clear();
     try {
@@ -259,7 +260,8 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
         onFileLoading: (FilePickerStatus status) => print(status),
         type: FileType.custom,
         allowedExtensions: ['jpg', 'png', 'mp4'],
-      ))!.files;
+      ))!
+          .files;
 
       orderController.files.addAll(_paths);
       selectedFilesExtensions = _paths.map((e) => e.extension).toList();
@@ -274,5 +276,4 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
     }
     if (!mounted) return;
   }
-
 }

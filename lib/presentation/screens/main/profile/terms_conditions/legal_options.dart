@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/core/theme/colors.dart';
-import 'package:loby/domain/entities/home/static_data.dart';
 import 'package:loby/presentation/widgets/body_padding_widget.dart';
 import 'package:loby/presentation/widgets/custom_app_bar.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
 
 class LegalOptions extends StatelessWidget {
-  const LegalOptions({Key? key}) : super(key: key);
+  const LegalOptions({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +20,13 @@ class LegalOptions extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _termTile(context, termName: 'Terms of Use'),
-            SizedBox(height: 2.h,),
+            SizedBox(
+              height: 2.h,
+            ),
             _termTile(context, termName: 'Privacy Policy'),
-            SizedBox(height: 2.h,),
+            SizedBox(
+              height: 2.h,
+            ),
             _termTile(context, termName: 'EULA'),
           ],
         ),
@@ -31,12 +34,15 @@ class LegalOptions extends StatelessWidget {
     );
   }
 
-  Widget _termTile(BuildContext context, {required String termName}){
+  Widget _termTile(BuildContext context, {required String termName}) {
     final textTheme = Theme.of(context).textTheme;
     return GestureDetector(
-        onTap: (){
-          context.pushNamed(staticContentPage, queryParams: {'termName' : termName});
+        onTap: () {
+          context.pushNamed(staticContentPage, extra: {'termName': termName});
         },
-        child: Text(termName, style: textTheme.headline2?.copyWith(color: whiteColor),));
+        child: Text(
+          termName,
+          style: textTheme.displayMedium?.copyWith(color: whiteColor),
+        ));
   }
 }

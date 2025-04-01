@@ -6,6 +6,8 @@ import '../../core/theme/colors.dart';
 import 'follow_btn.dart';
 
 class CustomDialog extends StatelessWidget {
+  const CustomDialog({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -50,7 +52,7 @@ class CustomDialog extends StatelessWidget {
                           width: MediaQuery.of(context).size.width * 0.08.h,
                           child: Text('Update Status',
                               textAlign: TextAlign.center,
-                              style: textTheme.headline2
+                              style: textTheme.displayMedium
                                   ?.copyWith(color: textWhiteColor)),
                         ),
                         SizedBox(
@@ -110,14 +112,14 @@ class CustomDialog extends StatelessWidget {
                                   const SizedBox(width: 4.0),
                                   Text("Order Placed",
                                       overflow: TextOverflow.ellipsis,
-                                      style: textTheme.headline6
+                                      style: textTheme.titleLarge
                                           ?.copyWith(color: textWhiteColor)),
                                   const SizedBox(width: 8.0),
                                   Expanded(
                                     child: Text("May 26, 2022 18:23:43",
                                         overflow: TextOverflow.ellipsis,
-                                        style: textTheme.headline6?.copyWith(
-                                            color: textLightColor)),
+                                        style: textTheme.titleLarge
+                                            ?.copyWith(color: textLightColor)),
                                   ),
                                 ],
                               ),
@@ -170,18 +172,18 @@ class CustomDialog extends StatelessWidget {
                                         TextSpan(
                                           text:
                                               'Sellers are requsted to discuss & freeze all delivery details with buyer on ',
-                                          style: textTheme.subtitle1
+                                          style: textTheme.titleMedium
                                               ?.copyWith(color: textLightColor),
                                         ),
                                         TextSpan(
                                             text: 'Loby Chat ',
-                                            style: textTheme.subtitle1
+                                            style: textTheme.titleMedium
                                                 ?.copyWith(
                                                     color: aquaGreenColor)),
                                         TextSpan(
                                             text:
                                                 'before accpecting or declining the Order. Any conversation outside Loby Chat will not be insured/covered by Loby Protection',
-                                            style: textTheme.subtitle1
+                                            style: textTheme.titleMedium
                                                 ?.copyWith(
                                                     color: textLightColor)),
                                       ]))),
@@ -197,14 +199,14 @@ class CustomDialog extends StatelessWidget {
                                   const SizedBox(width: 4.0),
                                   Text("Seller Accepted",
                                       overflow: TextOverflow.ellipsis,
-                                      style: textTheme.headline6
+                                      style: textTheme.titleLarge
                                           ?.copyWith(color: textWhiteColor)),
                                   const SizedBox(width: 8.0),
                                   Expanded(
                                     child: Text("May 26, 2022 18:23:43",
                                         overflow: TextOverflow.ellipsis,
-                                        style: textTheme.headline6?.copyWith(
-                                            color: textLightColor)),
+                                        style: textTheme.titleLarge
+                                            ?.copyWith(color: textLightColor)),
                                   ),
                                 ],
                               ),
@@ -220,14 +222,14 @@ class CustomDialog extends StatelessWidget {
                                   const SizedBox(width: 4.0),
                                   Text("Order in Progress",
                                       overflow: TextOverflow.ellipsis,
-                                      style: textTheme.headline6
+                                      style: textTheme.titleLarge
                                           ?.copyWith(color: textWhiteColor)),
                                   const SizedBox(width: 8.0),
                                   Expanded(
                                     child: Text("May 26, 2022 18:23:43",
                                         overflow: TextOverflow.ellipsis,
-                                        style: textTheme.headline6?.copyWith(
-                                            color: textLightColor)),
+                                        style: textTheme.titleLarge
+                                            ?.copyWith(color: textLightColor)),
                                   ),
                                 ],
                               ),
@@ -255,7 +257,7 @@ class CustomDialog extends StatelessWidget {
                                   const SizedBox(width: 4.0),
                                   Text("Seller Delivery Confirmed ",
                                       overflow: TextOverflow.ellipsis,
-                                      style: textTheme.headline6
+                                      style: textTheme.titleLarge
                                           ?.copyWith(color: textWhiteColor)),
                                 ],
                               ),
@@ -276,7 +278,7 @@ class CustomDialog extends StatelessWidget {
                                                 30.w),
                                     child: Text(
                                         "Buyer Declined Delivery. Kindly resolve & ask buyer to re-confirm.",
-                                        style: textTheme.headline6
+                                        style: textTheme.titleLarge
                                             ?.copyWith(color: textWhiteColor)),
                                   ),
                                 ],
@@ -293,7 +295,7 @@ class CustomDialog extends StatelessWidget {
                                   const SizedBox(width: 4.0),
                                   Text("Buyer Delivery Confirmed",
                                       overflow: TextOverflow.ellipsis,
-                                      style: textTheme.headline6
+                                      style: textTheme.titleLarge
                                           ?.copyWith(color: textWhiteColor)),
                                 ],
                               ),
@@ -310,7 +312,7 @@ class CustomDialog extends StatelessWidget {
                                   const SizedBox(width: 4.0),
                                   Text("Transaction Complete",
                                       overflow: TextOverflow.ellipsis,
-                                      style: textTheme.headline6
+                                      style: textTheme.titleLarge
                                           ?.copyWith(color: textWhiteColor)),
                                 ],
                               ),
@@ -327,13 +329,13 @@ class CustomDialog extends StatelessWidget {
                                   const SizedBox(width: 4.0),
                                   Text("Loby Protection Period - ",
                                       overflow: TextOverflow.ellipsis,
-                                      style: textTheme.headline6
+                                      style: textTheme.titleLarge
                                           ?.copyWith(color: textWhiteColor)),
                                   Expanded(
                                     child: Text("6 Days Remaining",
                                         overflow: TextOverflow.ellipsis,
-                                        style: textTheme.headline6?.copyWith(
-                                            color: textLightColor)),
+                                        style: textTheme.titleLarge
+                                            ?.copyWith(color: textLightColor)),
                                   ),
                                 ],
                               ),
@@ -350,7 +352,7 @@ class CustomDialog extends StatelessWidget {
                                   const SizedBox(width: 4.0),
                                   Text("Order Completed",
                                       overflow: TextOverflow.ellipsis,
-                                      style: textTheme.headline6
+                                      style: textTheme.titleLarge
                                           ?.copyWith(color: textWhiteColor)),
                                 ],
                               ),

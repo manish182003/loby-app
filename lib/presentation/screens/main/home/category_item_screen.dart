@@ -9,14 +9,15 @@ import 'package:loby/presentation/widgets/body_padding_widget.dart';
 import 'package:loby/presentation/widgets/custom_loader.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
-import '../../../widgets/custom_app_bar.dart';
+
 import '../../../widgets/text_fields/text_field_widget.dart';
 
 class CategoryItemScreen extends StatefulWidget {
   final int? categoryId;
   final String? catName;
 
-  const CategoryItemScreen({Key? key, required this.categoryId, required this.catName})
+  const CategoryItemScreen(
+      {Key? key, required this.categoryId, required this.catName})
       : super(key: key);
 
   @override
@@ -45,12 +46,12 @@ class _CategoryItemScreenState extends State<CategoryItemScreen> {
         //   child: Padding(
         //     padding: const EdgeInsets.symmetric(horizontal: 18),
         //     child: AppBar(
-              
+
         //       backgroundColor: Colors.transparent,
         //       elevation: 0,
-        //       leading: 
+        //       leading:
         //           GestureDetector(
-                    
+
         //               onTap: () {
         //                 Navigator.pop(context);
         //               },
@@ -66,10 +67,10 @@ class _CategoryItemScreenState extends State<CategoryItemScreen> {
         //             ),
         //           title: Text("${widget.catName}", style: textTheme.headline1?.copyWith(color: aquaGreenColor),),
         //           centerTitle: true,
-                  
+
         //           actions: [
         //             GestureDetector(
-                    
+
         //               onTap: () {
         //                 context.pushNamed(searchScreenPage);
         //               },
@@ -92,60 +93,69 @@ class _CategoryItemScreenState extends State<CategoryItemScreen> {
         // appBar: AppBar(),
         body: Column(
           children: [
-             Align(
-              alignment: Alignment.topCenter,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                child: Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                  width: 42,
-                  height: 42,
-                  child: MaterialButton(
-                    shape: const CircleBorder(),
-                    color: textCharcoalBlueColor,
-                    onPressed: () {
-                        Navigator.pop(context);
-                      
-                    },
-                    child: const Icon(
-                      Icons.arrow_back_ios,
-                      size: 18,
-                      color: Colors.white,
+            Align(
+                alignment: Alignment.topCenter,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                  child: Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: 42,
+                          height: 42,
+                          child: MaterialButton(
+                            shape: const CircleBorder(),
+                            color: textCharcoalBlueColor,
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Icon(
+                              Icons.arrow_back_ios,
+                              size: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          "${widget.catName}",
+                          style: textTheme.displayMedium
+                              ?.copyWith(color: aquaGreenColor),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            context.pushNamed(searchScreenPage);
+                          },
+                          child: Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                                color: textCharcoalBlueColor,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: const Icon(
+                              CupertinoIcons.search,
+                              size: 23,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                Text("${widget.catName}", style: textTheme.headline2?.copyWith(color: aquaGreenColor),),
-                      GestureDetector(
-                    onTap: () {
-                      context.pushNamed(searchScreenPage);
-                    },
-                    child: Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        color: textCharcoalBlueColor,
-                        borderRadius: BorderRadius.circular(10)
-                      ),
-                      child: const Icon(CupertinoIcons.search, size: 23, color: Colors.white,),
-                    ),
-                  ),
-                    ],
-                  ),
-                
-                ),
-              )),
-              SizedBox(height: 2.h,),
+                )),
+            SizedBox(
+              height: 2.h,
+            ),
             BodyPaddingWidget(
               child: TextFieldWidget(
                 textEditingController: search,
                 hint: "Select Game (Dropdown + searchfree)",
-                
                 onChanged: (value) {
                   homeController.getCategoryGames(
-                      categoryId: widget.categoryId, search: value,);
+                    categoryId: widget.categoryId,
+                    search: value,
+                  );
                 },
               ),
             ),

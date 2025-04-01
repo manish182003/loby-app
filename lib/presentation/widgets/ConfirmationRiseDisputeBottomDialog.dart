@@ -80,53 +80,56 @@ class ConfirmationRiseDisputeBottomDialog {
                     height: 45,
                     child: ElevatedButton(
                         style: ButtonStyle(
-                          side: MaterialStateProperty.all(
+                          side: WidgetStateProperty.all(
                             const BorderSide(
                               style: BorderStyle.solid,
                               color: orangeColor,
                               width: 1.0,
                             ),
                           ),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          shape:
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16.0),
                           )),
-                          backgroundColor: MaterialStateProperty.all<Color>(
+                          backgroundColor: WidgetStateProperty.all<Color>(
                               backgroundDarkJungleGreenColor),
                         ),
-                        onPressed: cancelBtnClick ?? () {
-                          Navigator.of(context).pop();
-                        },
+                        onPressed: cancelBtnClick ??
+                            () {
+                              Navigator.of(context).pop();
+                            },
                         child: Padding(
                           padding:
                               const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
                           child: Text("Cancel",
-                              style: textTheme?.button
+                              style: textTheme?.labelLarge
                                   ?.copyWith(color: orangeColor)),
                         )),
                   ),
-                  Container(
+                  SizedBox(
                     width: MediaQuery.of(context).size.width * 0.35,
                     height: 45,
                     child: ElevatedButton(
                         style: ButtonStyle(
                           shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16.0),
                           )),
                           backgroundColor:
-                              MaterialStateProperty.all<Color>(aquaGreenColor),
+                              WidgetStateProperty.all<Color>(aquaGreenColor),
                         ),
-                        onPressed: yesBtnClick ?? () {
-                          debugPrint("change");
-                          Navigator.of(context).pop();
-                          context.pushNamed(createNewDisputePage);
-                        },
+                        onPressed: yesBtnClick ??
+                            () {
+                              debugPrint("change");
+                              Navigator.of(context).pop();
+                              context.pushNamed(createNewDisputePage);
+                            },
                         child: Padding(
                           padding:
                               const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
-                          child: Text("Yes", style: textTheme?.button),
+                          child: Text("Yes", style: textTheme?.labelLarge),
                         )),
                   ),
                 ],
@@ -144,7 +147,7 @@ class ConfirmationRiseDisputeBottomDialog {
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: Text(
               tileName ?? 'Loby',
-              style: textTheme?.headline2
+              style: textTheme?.displayMedium
                   ?.copyWith(color: titleColor, fontWeight: FontWeight.w400),
             ),
           )
@@ -159,14 +162,15 @@ class ConfirmationRiseDisputeBottomDialog {
           children: [
             TextSpan(
               text: contentName ?? '',
-              style: textTheme?.headline3?.copyWith(color: textLightColor),
+              style: textTheme?.displaySmall?.copyWith(color: textLightColor),
             ),
             TextSpan(
                 text: contentLinkName ?? '',
-                style: textTheme?.headline3?.copyWith(color: aquaGreenColor)),
+                style:
+                    textTheme?.displaySmall?.copyWith(color: aquaGreenColor)),
             TextSpan(
               text: contentNameLast ?? '',
-              style: textTheme?.headline3?.copyWith(color: textLightColor),
+              style: textTheme?.displaySmall?.copyWith(color: textLightColor),
             ),
           ],
         ),

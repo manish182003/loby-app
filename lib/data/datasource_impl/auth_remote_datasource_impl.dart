@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:loby/core/utils/constants.dart';
@@ -11,6 +12,7 @@ import 'package:loby/data/models/response_models/auth/city_response_model.dart';
 import 'package:loby/data/models/response_models/auth/profile_tag_response_model.dart';
 import 'package:loby/data/models/response_models/auth/state_response_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../models/response_models/auth/country_response_model.dart';
 
 class AuthRemoteDatasourceImpl extends AuthRemoteDatasource {
@@ -25,7 +27,7 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource {
         _dio,
         RequestType.post,
         ApiEndpoints.signup,
-        queryParams: {
+        extra: {
           'name': name,
           'email': email,
           'password': password,
@@ -58,7 +60,7 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource {
         _dio,
         RequestType.get,
         ApiEndpoints.getCountries,
-        queryParams: {'name': name, 'page': '${page ?? ""}'},
+        extra: {'name': name, 'page': '${page ?? ""}'},
         headers: headers,
       );
 
@@ -81,7 +83,7 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource {
         _dio,
         RequestType.get,
         ApiEndpoints.getStates,
-        queryParams: {
+        extra: {
           'name': search,
           'state_id': '${stateId ?? ''}',
           'country_id': '${countryId ?? ''}',
@@ -109,7 +111,7 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource {
         _dio,
         RequestType.get,
         ApiEndpoints.getCities,
-        queryParams: {
+        extra: {
           'name': search,
           'state_id': '${stateId ?? ''}',
           'city_id': '${cityId ?? ''}',
@@ -137,7 +139,7 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource {
         _dio,
         RequestType.get,
         ApiEndpoints.getProfileTags,
-        queryParams: {'name': search, 'page': '${page ?? ''}'},
+        extra: {'name': search, 'page': '${page ?? ''}'},
         headers: headers,
       );
 
@@ -239,8 +241,6 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource {
     }
   }
 
-
-
   @override
   Future<bool> login(String? mobile, String? email, String? password,
       String? socialLoginId, int? socialLoginType, String? name) async {
@@ -249,7 +249,7 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource {
         _dio,
         RequestType.post,
         socialLoginId == null ? ApiEndpoints.login : ApiEndpoints.socialLogin,
-        queryParams: socialLoginId == null
+        extra: socialLoginId == null
             ? {'mobile': mobile}
             : {
                 'social_login_id': socialLoginId,
@@ -280,7 +280,7 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource {
         _dio,
         RequestType.post,
         ApiEndpoints.checkUsername,
-        queryParams: {'display_name': "$username"},
+        extra: {'display_name': "$username"},
         headers: headers,
       );
 
@@ -298,7 +298,7 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource {
         _dio,
         RequestType.post,
         ApiEndpoints.addFCMToken,
-        queryParams: {'fcm_token': fcmToken},
+        extra: {'fcm_token': fcmToken},
         headers: headers,
       );
 
@@ -315,7 +315,7 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource {
       final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(
           _dio, RequestType.post, ApiEndpoints.verifyOTP,
-          queryParams: {
+          extra: {
             'mobile': mobile,
             'otp': otp,
           },
@@ -343,7 +343,7 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource {
         _dio,
         RequestType.post,
         otp == null ? ApiEndpoints.forgotPassword : ApiEndpoints.resetPassword,
-        queryParams: otp == null
+        extra: otp == null
             ? {
                 'email': email,
               }

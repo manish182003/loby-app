@@ -13,6 +13,7 @@ import 'package:loby/presentation/screens/main/profile/wallet/widgets/token_widg
 import 'package:loby/presentation/widgets/custom_cached_network_image.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../../../../core/theme/colors.dart';
 import '../../../../widgets/profile_picture.dart';
 
@@ -21,26 +22,33 @@ class ItemList extends StatefulWidget {
   final bool menuIcon;
   final ServiceListing listing;
 
-  const ItemList({Key? key, required this.from, this.menuIcon = false, required this.listing}) : super(key: key);
+  const ItemList(
+      {super.key,
+      required this.from,
+      this.menuIcon = false,
+      required this.listing});
 
   @override
   State<ItemList> createState() => _ItemListState();
 }
 
 class _ItemListState extends State<ItemList> {
-
   ListingController listingController = Get.find<ListingController>();
   ProfileController profileController = Get.find<ProfileController>();
   final CustomPopupMenuController _controller = CustomPopupMenuController();
-
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return GestureDetector(
       onTap: () {
-        listingController.totalPrice.value = (listingController.quantityCount.value * widget.listing.price!).toString();
-            context.pushNamed(gameDetailPage, queryParams: {'serviceListingId' : "${widget.listing.id}", 'from' : widget.from});
+        listingController.totalPrice.value =
+            (listingController.quantityCount.value * widget.listing.price!)
+                .toString();
+        context.pushNamed(gameDetailPage, extra: {
+          'serviceListingId': "${widget.listing.id}",
+          'from': widget.from
+        });
       },
       child: Card(
         color: backgroundBalticSeaColor,
@@ -64,7 +72,10 @@ class _ItemListState extends State<ItemList> {
                     borderRadius: BorderRadius.circular(10),
                     child: CustomCachedNetworkImage(
                       imageUrl: Helpers.getListingImage(widget.listing),
-                      placeHolder: Image.asset("assets/images/listing_placeholder.jpg", fit: BoxFit.cover,),
+                      placeHolder: Image.asset(
+                        "assets/images/listing_placeholder.jpg",
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
@@ -78,13 +89,15 @@ class _ItemListState extends State<ItemList> {
                   Text(widget.listing.title!,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
-                      style: textTheme.headline5?.copyWith(color: textWhiteColor)),
+                      style: textTheme.headlineSmall
+                          ?.copyWith(color: textWhiteColor)),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Text(widget.listing.game?.name! ?? '',
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: textTheme.headline6?.copyWith(color: textInputTitleColor)),
+                        style: textTheme.titleLarge
+                            ?.copyWith(color: textInputTitleColor)),
                   ),
                   const SizedBox(height: 2.0),
                   Row(
@@ -102,11 +115,11 @@ class _ItemListState extends State<ItemList> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 4.0, horizontal: 6.0),
-                            child: Text(
-                                widget.listing.category?.name! ?? '',
+                            child: Text(widget.listing.category?.name! ?? '',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: textTheme.headline6?.copyWith(color: textWhiteColor)),
+                                style: textTheme.titleLarge
+                                    ?.copyWith(color: textWhiteColor)),
                           ),
                         ),
                       ),
@@ -117,7 +130,8 @@ class _ItemListState extends State<ItemList> {
                             TokenWidget(
                               text: Text(
                                 "${widget.listing.price!}",
-                                style: textTheme.headline2?.copyWith(color: aquaGreenColor),
+                                style: textTheme.displayMedium
+                                    ?.copyWith(color: aquaGreenColor),
                               ),
                               size: 20,
                             ),
@@ -137,7 +151,11 @@ class _ItemListState extends State<ItemList> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ProfilePicture(profile: widget.listing.user!, radius: 15, iconSize: 14,),
+                      ProfilePicture(
+                        profile: widget.listing.user!,
+                        radius: 15,
+                        iconSize: 14,
+                      ),
                       const SizedBox(width: 8.0),
                       Expanded(
                         child: Column(
@@ -151,10 +169,13 @@ class _ItemListState extends State<ItemList> {
                                     widget.listing.user!.displayName!,
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
-                                    style: textTheme.headline4?.copyWith(fontSize: 11.0, color: textWhiteColor),
+                                    style: textTheme.headlineMedium?.copyWith(
+                                        fontSize: 11.0, color: textWhiteColor),
                                   ),
                                 ),
-                                const SizedBox(width: 4,),
+                                const SizedBox(
+                                  width: 4,
+                                ),
                               ],
                             ),
                             Row(
@@ -171,7 +192,7 @@ class _ItemListState extends State<ItemList> {
                                       "${widget.listing.user?.avgRatingCount ?? 0.0}",
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
-                                      style: textTheme.headline4?.copyWith(
+                                      style: textTheme.headlineMedium?.copyWith(
                                           fontSize: 11.0,
                                           color: textWhiteColor),
                                     ),
@@ -190,7 +211,7 @@ class _ItemListState extends State<ItemList> {
                                       "${widget.listing.user?.commentCount ?? 0}",
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
-                                      style: textTheme.headline4?.copyWith(
+                                      style: textTheme.headlineMedium?.copyWith(
                                           fontSize: 11.0,
                                           color: textWhiteColor),
                                     ),
@@ -201,72 +222,93 @@ class _ItemListState extends State<ItemList> {
                           ],
                         ),
                       ),
-                      widget.listing.user?.id == profileController.profile.id ? const SizedBox() : Container(
-                        child: widget.menuIcon ? CustomPopupMenu(
-                          arrowColor: lavaRedColor,
-                          menuBuilder: () => ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: Container(
-                              color: lavaRedColor,
-                              child: IntrinsicWidth(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: ['Report Listing']
-                                      .map(
-                                        (item) => GestureDetector(
-                                      behavior: HitTestBehavior.translucent,
-                                      onTap: ()async {
-                                        await Helpers.loader();
-                                        await listingController.reportListing(userGameServiceId: widget.listing.id);
-                                        await Helpers.hideLoader();
-                                        _controller.hideMenu();
-                                        /* ConfirmationRiseDisputeBottomDialog(
+                      widget.listing.user?.id == profileController.profile.id
+                          ? const SizedBox()
+                          : Container(
+                              child: widget.menuIcon
+                                  ? CustomPopupMenu(
+                                      arrowColor: lavaRedColor,
+                                      menuBuilder: () => ClipRRect(
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: Container(
+                                          color: lavaRedColor,
+                                          child: IntrinsicWidth(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.stretch,
+                                              children: ['Report Listing']
+                                                  .map(
+                                                    (item) => GestureDetector(
+                                                      behavior: HitTestBehavior
+                                                          .translucent,
+                                                      onTap: () async {
+                                                        await Helpers.loader();
+                                                        await listingController
+                                                            .reportListing(
+                                                                userGameServiceId:
+                                                                    widget
+                                                                        .listing
+                                                                        .id);
+                                                        await Helpers
+                                                            .hideLoader();
+                                                        _controller.hideMenu();
+                                                        /* ConfirmationRiseDisputeBottomDialog(
                           textTheme: textTheme,
                           contentName:
                           "Are you sure you want raise a dispute against this order ?",
                         ).showBottomDialog(context);*/
-                                      },
-                                      child: Container(
-                                        height: 40,
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 20),
-                                        child: Row(
-                                          children: <Widget>[
-                                            Expanded(
-                                              child: Container(
-                                                margin: const EdgeInsets.only(
-                                                    left: 10),
-                                                padding:
-                                                const EdgeInsets.symmetric(
-                                                    vertical: 10),
-                                                child: Text(
-                                                  item,
-                                                  style: textTheme.headline6
-                                                      ?.copyWith(
-                                                      color: textWhiteColor),
-                                                ),
-                                              ),
+                                                      },
+                                                      child: Container(
+                                                        height: 40,
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 20),
+                                                        child: Row(
+                                                          children: <Widget>[
+                                                            Expanded(
+                                                              child: Container(
+                                                                margin:
+                                                                    const EdgeInsets
+                                                                        .only(
+                                                                        left:
+                                                                            10),
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .symmetric(
+                                                                        vertical:
+                                                                            10),
+                                                                child: Text(
+                                                                  item,
+                                                                  style: textTheme
+                                                                      .titleLarge
+                                                                      ?.copyWith(
+                                                                          color:
+                                                                              textWhiteColor),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
+                                                  .toList(),
                                             ),
-                                          ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  )
-                                      .toList(),
-                                ),
-                              ),
-                            ),
-                          ),
-                          pressType: PressType.singleClick,
-                          verticalMargin: 2,
-                          controller: _controller,
-                          child: Container(
-                            padding: const EdgeInsets.all(0),
-                            child: const Icon(Icons.more_vert,
-                                size: 20.0, color: iconWhiteColor),
-                          ),
-                        ) : Container(),
-                      )
+                                      pressType: PressType.singleClick,
+                                      verticalMargin: 2,
+                                      controller: _controller,
+                                      child: Container(
+                                        padding: const EdgeInsets.all(0),
+                                        child: const Icon(Icons.more_vert,
+                                            size: 20.0, color: iconWhiteColor),
+                                      ),
+                                    )
+                                  : Container(),
+                            )
                       /*SizedBox(
                           height: 4.h,
                           width: 5.w,

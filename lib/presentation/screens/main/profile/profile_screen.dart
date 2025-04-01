@@ -1,29 +1,25 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/widgets/custom_loader.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../../../core/theme/colors.dart';
-import '../../../widgets/custom_cached_network_image.dart';
 import '../../../widgets/profile_picture.dart';
 import '../profile/widgets/profile_options.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
   ProfileController profileController = Get.find<ProfileController>();
   AuthController authController = Get.find<AuthController>();
   double rating = 0.0;
@@ -43,9 +39,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return SafeArea(
       child: Scaffold(
         body: Obx(() {
-          if(profileController.isProfileFetching.value){
+          if (profileController.isProfileFetching.value) {
             return const CustomLoader();
-          }else{
+          } else {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -54,7 +50,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
                   child: GestureDetector(
                     onTap: () {
-                      context.pushNamed(userProfilePage, queryParams: {'userId': "${profileController.profile.id}", 'from': 'myProfile'});
+                      context.pushNamed(userProfilePage, extra: {
+                        'userId': "${profileController.profile.id}",
+                        'from': 'myProfile'
+                      });
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -67,27 +66,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Container(
                                       constraints: BoxConstraints(
-                                          maxWidth: MediaQuery.of(context).size.width * 0.55),
+                                          maxWidth: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.55),
                                       child: Row(
                                         children: [
-                                          Text(profileController.profile.displayName ?? "",
+                                          Text(
+                                              profileController
+                                                      .profile.displayName ??
+                                                  "",
                                               overflow: TextOverflow.ellipsis,
-                                              style: textTheme.headline3
+                                              style: textTheme.displaySmall
                                                   ?.copyWith(
-                                                  color: textWhiteColor)),
-                                          SizedBox(width: 2.w,),
-                                          profileController.profile.kycverify == "Y"
-                                                ? Image(
-                                                    image: AssetImage(
-                                                        "assets/images/sheild.png"),
-                                                    height: 20,
-                                                  )
-                                                : SizedBox()
+                                                      color: textWhiteColor)),
+                                          SizedBox(
+                                            width: 2.w,
+                                          ),
+                                          profileController.profile.kycverify ==
+                                                  "Y"
+                                              ? const Image(
+                                                  image: AssetImage(
+                                                      "assets/images/sheild.png"),
+                                                  height: 20,
+                                                )
+                                              : const SizedBox()
                                         ],
                                       ),
                                     ),
@@ -99,7 +106,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                                 Text(
                                   "View Profile",
-                                  style: textTheme.subtitle2?.copyWith(
+                                  style: textTheme.titleSmall?.copyWith(
                                       fontSize: 10.sp, color: textWhiteColor),
                                 ),
                               ],
@@ -164,11 +171,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               onTap: () {
                                 context.pushNamed(sellerTimeSlotScreen);
                               }),
-                              // ProfileOptionsWidget(
-                              // name: "buyer Time slots",
-                              // onTap: () {
-                              //   context.pushNamed(buyerTimeSlotScreen);
-                              // }),
+                          // ProfileOptionsWidget(
+                          // name: "buyer Time slots",
+                          // onTap: () {
+                          //   context.pushNamed(buyerTimeSlotScreen);
+                          // }),
                           // ProfileOptionsWidget(
                           //     name: "App Setting",
                           //     onTap: () {
@@ -194,33 +201,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               onTap: () {
                                 context.pushNamed(legalTermsPage);
                               }),
-                          ProfileOptionsWidget(
-                              name: "Logout",
-                              onTap: _logout
-                          ),
+                          ProfileOptionsWidget(name: "Logout", onTap: _logout),
                         ],
                       )
                     ],
                   ),
                 ),
                 SizedBox(
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height * 0.01.h,
+                  height: MediaQuery.of(context).size.height * 0.01.h,
                   child: Align(
                     alignment: Alignment.bottomCenter,
                     child: Text(
                       'Version Beta 1.0',
                       textAlign: TextAlign.center,
-                      style: textTheme.subtitle2?.copyWith(color: textWhiteColor),
+                      style:
+                          textTheme.titleSmall?.copyWith(color: textWhiteColor),
                     ),
                   ),
                 )
               ],
             );
           }
-
         }),
       ),
     );

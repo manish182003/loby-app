@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:loby/core/theme/colors.dart';
-import 'package:sizer/sizer.dart';
 
 class Button extends StatelessWidget {
   final VoidCallback onPress;
@@ -12,7 +11,17 @@ class Button extends StatelessWidget {
   double? txtPadding;
   double? borderRadius;
 
-  Button({Key? key, required this.onPress, required this.width, this.height, this.txtColor, this.btnBgColor, required this.btnName, this.txtPadding, this.borderRadius}) : super(key: key);
+  Button(
+      {Key? key,
+      required this.onPress,
+      required this.width,
+      this.height,
+      this.txtColor,
+      this.btnBgColor,
+      required this.btnName,
+      this.txtPadding,
+      this.borderRadius})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +33,13 @@ class Button extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             color: btnBgColor,
-            borderRadius: BorderRadius.circular(borderRadius??16.0),
+            borderRadius: BorderRadius.circular(borderRadius ?? 16.0),
           ),
           child: Padding(
-            padding: EdgeInsets.all(txtPadding?? 8.0),
+            padding: EdgeInsets.all(txtPadding ?? 8.0),
             child: Text(btnName,
                 textAlign: TextAlign.center,
-                style: textTheme.button
+                style: textTheme.labelLarge
                     ?.copyWith(color: txtColor ?? primaryTextColor)),
           ),
         ),

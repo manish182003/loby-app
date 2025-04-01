@@ -30,7 +30,6 @@ class _MyOrderScreenState extends State<MyOrderScreen>
         TabController(length: 3, vsync: this, initialIndex: _currentTabIndex);
     _tabController.addListener(() {
       if (_tabController.animation?.value == _tabController.index) {
-        
         setState(() {
           _currentTabIndex = _tabController.index;
         });
@@ -45,7 +44,6 @@ class _MyOrderScreenState extends State<MyOrderScreen>
     orderController.ordersPageNumber.value = 1;
     orderController.areMoreOrdersAvailable.value = true;
     orderController.getOrders(
-      
         status: _currentTabIndex == 0
             ? 'ALL'
             : _currentTabIndex == 1
@@ -55,13 +53,14 @@ class _MyOrderScreenState extends State<MyOrderScreen>
 
   @override
   Widget build(BuildContext context) {
-    print("tab  ${_tabController}");
+    print("tab  $_tabController");
     final textTheme = Theme.of(context).textTheme;
     return DefaultTabController(
       length: 3,
       child: Scaffold(
         backgroundColor: backgroundDarkJungleGreenColor,
-        appBar: appBar(context: context, appBarName: "My Orders", isBackIcon: true),
+        appBar:
+            appBar(context: context, appBarName: "My Orders", isBackIcon: true),
         body: Column(
           children: [
             TabBar(
@@ -70,12 +69,14 @@ class _MyOrderScreenState extends State<MyOrderScreen>
               indicatorColor: butterflyBlueColor,
               indicatorWeight: 4.0,
               labelColor: textWhiteColor,
-              labelStyle: textTheme.headline5,
+              labelStyle: textTheme.headlineSmall,
               onTap: (value) {
                 setState(() => _currentTabIndex = value);
               },
               tabs: const [
-                Tab(text: 'All Orders',),
+                Tab(
+                  text: 'All Orders',
+                ),
                 Tab(text: 'Bought'),
                 Tab(text: 'Sold'),
               ],

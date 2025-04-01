@@ -7,8 +7,7 @@ class MyDropDownWidget extends StatefulWidget {
   final String? hintTxt;
   final Color? hintColor;
 
-  const MyDropDownWidget({Key? key, this.hintTxt, this.hintColor})
-      : super(key: key);
+  const MyDropDownWidget({super.key, this.hintTxt, this.hintColor});
 
   @override
   State<MyDropDownWidget> createState() => _MyDropDownWidgetState();
@@ -49,10 +48,13 @@ class _MyDropDownWidgetState extends State<MyDropDownWidget> {
               children: [
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0,),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                    ),
                     child: Text(
                       widget.hintTxt ?? 'Select',
-                      style: textTheme.headline4?.copyWith(color: textLightColor),
+                      style: textTheme.headlineMedium
+                          ?.copyWith(color: textLightColor),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -60,14 +62,16 @@ class _MyDropDownWidgetState extends State<MyDropDownWidget> {
               ],
             ),
           ),
-
-          icon: Padding(
-            padding: const EdgeInsets.only(right:8.0),
-            child: const Icon(
-              Icons.keyboard_arrow_down,
-              color: iconWhiteColor,
+          iconStyleData: IconStyleData(
+            icon: const Padding(
+              padding: EdgeInsets.only(right: 8.0),
+              child: Icon(
+                Icons.keyboard_arrow_down,
+                color: iconWhiteColor,
+              ),
             ),
           ),
+
           items: _addDividersAfterItems(items, textTheme),
           // customItemsIndexes: _getDividersIndexes(),
           // customItemsHeight: 4,
@@ -77,14 +81,19 @@ class _MyDropDownWidgetState extends State<MyDropDownWidget> {
               selectedValue = value as String;
             });
           },
-          dropdownDecoration: BoxDecoration(
+          dropdownStyleData: DropdownStyleData(
+              decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
             color: shipGreyColor,
-          ),
-          buttonHeight: 40,
-          buttonWidth: 140,
-          itemHeight: 40,
-          itemPadding: const EdgeInsets.symmetric(horizontal: 8.0),
+          )),
+          buttonStyleData: ButtonStyleData(
+              height: 40,
+              width: 140,
+              padding: const EdgeInsets.symmetric(horizontal: 8.0)),
+          // buttonHeight: 40,
+          // buttonWidth: 140,
+          // itemHeight: 40,
+          // itemPadding: const EdgeInsets.symmetric(horizontal: 8.0),
         ),
       ),
     );
@@ -92,9 +101,9 @@ class _MyDropDownWidgetState extends State<MyDropDownWidget> {
 
   List<DropdownMenuItem<String>> _addDividersAfterItems(
       List<String> items, TextTheme textTheme) {
-    List<DropdownMenuItem<String>> _menuItems = [];
+    List<DropdownMenuItem<String>> menuItems = [];
     for (var item in items) {
-      _menuItems.addAll(
+      menuItems.addAll(
         [
           DropdownMenuItem<String>(
             value: item,
@@ -102,7 +111,8 @@ class _MyDropDownWidgetState extends State<MyDropDownWidget> {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
                 item,
-                style: textTheme.headline4?.copyWith(color: textWhiteColor),
+                style:
+                    textTheme.headlineMedium?.copyWith(color: textWhiteColor),
               ),
             ),
           ),
@@ -117,18 +127,18 @@ class _MyDropDownWidgetState extends State<MyDropDownWidget> {
         ],
       );
     }
-    return _menuItems;
+    return menuItems;
   }
 
   List<int> _getDividersIndexes() {
-    List<int> _dividersIndexes = [];
+    List<int> dividersIndexes = [];
     for (var i = 0; i < (items.length * 2) - 1; i++) {
       //Dividers indexes will be the odd indexes
       if (i.isOdd) {
-        _dividersIndexes.add(i);
+        dividersIndexes.add(i);
       }
     }
-    return _dividersIndexes;
+    return dividersIndexes;
   }
 }
 

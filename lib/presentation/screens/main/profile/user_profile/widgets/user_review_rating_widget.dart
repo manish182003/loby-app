@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:loby/domain/entities/profile/rating.dart';
 import 'package:loby/domain/entities/profile/user.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
-import 'package:loby/presentation/widgets/body_padding_widget.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../../core/theme/colors.dart';
@@ -20,7 +19,6 @@ class UserReviewRatingWidget extends StatefulWidget {
 }
 
 class _UserReviewRatingWidgetState extends State<UserReviewRatingWidget> {
-
   ProfileController profileController = Get.find<ProfileController>();
 
   @override
@@ -33,16 +31,21 @@ class _UserReviewRatingWidgetState extends State<UserReviewRatingWidget> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if(profileController.isRatingsFetching.value){
-        return const Center(child: CircularProgressIndicator(),);
-      }else{
+      if (profileController.isRatingsFetching.value) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      } else {
         return ListView.builder(
           itemCount: profileController.ratings.length,
           shrinkWrap: true,
           padding: const EdgeInsets.only(top: 8),
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
-            return RatingTile(user: widget.user, rating: profileController.ratings[index],);
+            return RatingTile(
+              user: widget.user,
+              rating: profileController.ratings[index],
+            );
           },
         );
       }
@@ -59,9 +62,7 @@ class RatingTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme
-        .of(context)
-        .textTheme;
+    final textTheme = Theme.of(context).textTheme;
     return Card(
       color: textFieldColor,
       elevation: 0.0,
@@ -78,8 +79,8 @@ class RatingTile extends StatelessWidget {
               children: [
                 Text(rating.user!.displayName!,
                     overflow: TextOverflow.ellipsis,
-                    style: textTheme.headline5?.copyWith(
-                        color: textWhiteColor)),
+                    style: textTheme.headlineSmall
+                        ?.copyWith(color: textWhiteColor)),
                 SizedBox(
                   width: 2.h,
                 ),
@@ -96,7 +97,7 @@ class RatingTile extends StatelessWidget {
               softWrap: true,
               maxLines: 5,
               overflow: TextOverflow.ellipsis,
-              style: textTheme.headline6?.copyWith(color: textLightColor),
+              style: textTheme.titleLarge?.copyWith(color: textLightColor),
             ),
           ],
         ),
@@ -104,4 +105,3 @@ class RatingTile extends StatelessWidget {
     );
   }
 }
-

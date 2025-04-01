@@ -2,20 +2,17 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:loby/core/theme/colors.dart';
-import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 import 'package:loby/presentation/getx/controllers/slots_controller.dart';
-import 'package:loby/presentation/widgets/buttons/custom_button.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
 
 class AddSlotDialog extends StatefulWidget {
   final int selectedDayIndex;
-  AddSlotDialog({super.key, required this.selectedDayIndex});
+  const AddSlotDialog({super.key, required this.selectedDayIndex});
 
   @override
   State<AddSlotDialog> createState() => _AddSlotDialogState();
@@ -44,30 +41,30 @@ class _AddSlotDialogState extends State<AddSlotDialog> {
   // }
 
   Future<void> _selectFromTime(BuildContext context) async {
-  final TimeOfDay? pickedTime = await showTimePicker(
-    context: context,
-    initialTime: TimeOfDay.now(),
-    builder: (BuildContext context, Widget? child) {
-      return MediaQuery(
-        data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
-        child: child!,
-      );
-    },
-  );
-  if (pickedTime != null) {
-    DateTime selectedTime = DateTime(
-      DateTime.now().year,
-      DateTime.now().month,
-      DateTime.now().day,
-      pickedTime.hour,
-      pickedTime.minute,
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      builder: (BuildContext context, Widget? child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+          child: child!,
+        );
+      },
     );
-    String formattedTime = DateFormat.jm().format(selectedTime);
-    setState(() {
-      slotController.fromTime.value.text = formattedTime;
-    });
+    if (pickedTime != null) {
+      DateTime selectedTime = DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day,
+        pickedTime.hour,
+        pickedTime.minute,
+      );
+      String formattedTime = DateFormat.jm().format(selectedTime);
+      setState(() {
+        slotController.fromTime.value.text = formattedTime;
+      });
+    }
   }
-}
 
 // String _convertTo24HourFormat(String time) {
 //     DateTime dateTime = DateFormat.jm().parse(time);
@@ -97,33 +94,32 @@ class _AddSlotDialogState extends State<AddSlotDialog> {
 //     print("Sending time to API: $timeIn24HourFormat");
 //     // Your API call logic goes here
 //   }
-  
 
   Future<void> _selectToTime(BuildContext context) async {
-  final TimeOfDay? pickedTime = await showTimePicker(
-    context: context,
-    initialTime: TimeOfDay.now(),
-    builder: (BuildContext context, Widget? child) {
-      return MediaQuery(
-        data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
-        child: child!,
-      );
-    },
-  );
-  if (pickedTime != null) {
-    DateTime selectedTime = DateTime(
-      DateTime.now().year,
-      DateTime.now().month,
-      DateTime.now().day,
-      pickedTime.hour,
-      pickedTime.minute,
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      builder: (BuildContext context, Widget? child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+          child: child!,
+        );
+      },
     );
-    String formattedTime = DateFormat.jm().format(selectedTime);
-    setState(() {
-      slotController.toTime.value.text = formattedTime;
-    });
+    if (pickedTime != null) {
+      DateTime selectedTime = DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day,
+        pickedTime.hour,
+        pickedTime.minute,
+      );
+      String formattedTime = DateFormat.jm().format(selectedTime);
+      setState(() {
+        slotController.toTime.value.text = formattedTime;
+      });
+    }
   }
-}
 
   // Future<void> _selectFromTimePick(BuildContext context) async {
   //   final TimeOfDay? picked = await showTimePicker(
@@ -185,7 +181,7 @@ class _AddSlotDialogState extends State<AddSlotDialog> {
                         context.pushNamed(sellerTimeSlotScreen);
                       },
                       child: Text("Cancel",
-                          style: textTheme.headline3
+                          style: textTheme.displaySmall
                               ?.copyWith(color: textErrorColor)),
                     ),
                     InkWell(
@@ -207,7 +203,7 @@ class _AddSlotDialogState extends State<AddSlotDialog> {
                         }
                       },
                       child: Text("Save",
-                          style: textTheme.headline3
+                          style: textTheme.displaySmall
                               ?.copyWith(color: aquaGreenColor)),
                     ),
                   ],
@@ -219,7 +215,7 @@ class _AddSlotDialogState extends State<AddSlotDialog> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text("Start Time",
-                          style: textTheme.headline4?.copyWith(
+                          style: textTheme.headlineMedium?.copyWith(
                               color: whiteColor, fontWeight: FontWeight.w300)),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -236,19 +232,20 @@ class _AddSlotDialogState extends State<AddSlotDialog> {
                           },
                           readOnly: true,
                           textAlign: TextAlign.center,
-                          style: textTheme.headline2
+                          style: textTheme.displayMedium
                               ?.copyWith(color: textWhiteColor),
-                          decoration: InputDecoration(
-                            hintText: "00:00 AM",
-                            hintStyle: TextStyle(color: textCharcoalBlueColor),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: aquaGreenColor)),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: aquaGreenColor)),
-                            errorBorder: OutlineInputBorder(
-                              borderSide: BorderSide.none
-                            )
-                          ),
+                          decoration: const InputDecoration(
+                              hintText: "00:00 AM",
+                              hintStyle:
+                                  TextStyle(color: textCharcoalBlueColor),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: aquaGreenColor)),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: aquaGreenColor)),
+                              errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide.none)),
                         ),
                       ),
                     ],
@@ -261,7 +258,7 @@ class _AddSlotDialogState extends State<AddSlotDialog> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text("End Time",
-                          style: textTheme.headline4?.copyWith(
+                          style: textTheme.headlineMedium?.copyWith(
                               color: whiteColor, fontWeight: FontWeight.w300)),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -278,25 +275,27 @@ class _AddSlotDialogState extends State<AddSlotDialog> {
                             return null;
                           },
                           textAlign: TextAlign.center,
-                          style: textTheme.headline2
+                          style: textTheme.displayMedium
                               ?.copyWith(color: textWhiteColor),
 
-                          decoration: InputDecoration(
-                            // suffixIcon: IconButton(
-                            //   icon: Icon(Icons.access_time),
-                            //   onPressed: () => _selectToTimePick(context),
-                            // ),
-                            hintText: "00:00 AM",
-                            hintStyle: TextStyle(color: textCharcoalBlueColor),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: aquaGreenColor)),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: aquaGreenColor)),
-                            errorBorder: OutlineInputBorder(
-                              borderSide: BorderSide.none
-                            )
-                            // ),
-                          ),
+                          decoration: const InputDecoration(
+                              // suffixIcon: IconButton(
+                              //   icon: Icon(Icons.access_time),
+                              //   onPressed: () => _selectToTimePick(context),
+                              // ),
+                              hintText: "00:00 AM",
+                              hintStyle:
+                                  TextStyle(color: textCharcoalBlueColor),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: aquaGreenColor)),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: aquaGreenColor)),
+                              errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide.none)
+                              // ),
+                              ),
                         ),
                       ),
                     ],

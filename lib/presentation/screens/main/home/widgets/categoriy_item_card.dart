@@ -1,14 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/domain/entities/home/game.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../../../../core/theme/colors.dart';
-import '../../../../../services/routing_service/routes.dart';
 import '../../../../widgets/custom_cached_network_image.dart';
-import '../game_itm_screen.dart';
 
 class CategoryItemCard extends StatelessWidget {
   final int index;
@@ -19,21 +15,20 @@ class CategoryItemCard extends StatelessWidget {
   final Game game;
 
   const CategoryItemCard(
-      {Key? key,
+      {super.key,
       required this.index,
       this.images,
       required this.categoryId,
       required this.gameId,
       required this.gameName,
-      required this.game})
-      : super(key: key);
+      required this.game});
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return InkWell(
       onTap: () {
-        context.pushNamed(gamePage, queryParams: {
+        context.pushNamed(gamePage, extra: {
           'categoryId': '$categoryId',
           'gameId': '$gameId',
           'gameName': gameName
@@ -68,14 +63,14 @@ class CategoryItemCard extends StatelessWidget {
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
-                  style: textTheme.headline6?.copyWith(color: textWhiteColor)),
+                  style: textTheme.titleLarge?.copyWith(color: textWhiteColor)),
             ),
             // SizedBox(height: 0.5.h,),
             Text("${game.listingCount} Listings",
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
-                style: textTheme.headline6?.copyWith(color: lavaRedColor)),
+                style: textTheme.titleLarge?.copyWith(color: lavaRedColor)),
           ],
         ),
       ),

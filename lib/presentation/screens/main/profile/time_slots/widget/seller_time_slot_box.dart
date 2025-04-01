@@ -1,21 +1,11 @@
-import 'package:drop_shadow_image/drop_shadow_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:intl/intl.dart';
 import 'package:loby/core/theme/colors.dart';
-import 'package:loby/data/models/slots/get_slots_model.dart';
 import 'package:loby/domain/entities/slots/get_slots_for_seller.dart';
-import 'package:loby/domain/usecases/slots/get_slots.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 import 'package:loby/presentation/getx/controllers/slots_controller.dart';
-import 'package:loby/presentation/screens/main/profile/time_slots/add_slot_dialog.dart';
-import 'package:loby/presentation/widgets/buttons/custom_button.dart';
-import 'package:loby/presentation/widgets/custom_app_bar.dart';
 import 'package:sizer/sizer.dart';
-import 'package:custom_clippers/custom_clippers.dart';
-import 'package:drop_shadow/drop_shadow.dart';
-import 'package:loby/presentation/screens/main/profile/time_slots/seller_time_slot.dart';
 
 class SellerTimeSlotBox extends StatefulWidget {
   final GetSlotsForSeller getSlots;
@@ -72,7 +62,6 @@ class _SellerTimeSlotBoxState extends State<SellerTimeSlotBox> {
     DateTime fromtime24Hour = DateFormat('HH:mm').parse(fromtimeIn24HourFormat);
     String fromtimeIn12HourFormat = DateFormat('h:mm a').format(fromtime24Hour);
 
-
     String totimeIn24HourFormat = "${widget.getSlots.to}";
     DateTime totime24Hour = DateFormat('HH:mm').parse(totimeIn24HourFormat);
     String totimeIn12HourFormat = DateFormat('h:mm a').format(totime24Hour);
@@ -97,14 +86,14 @@ class _SellerTimeSlotBoxState extends State<SellerTimeSlotBox> {
                   children: [
                     Text(
                       "$fromtimeIn12HourFormat - $totimeIn12HourFormat",
-                      style:
-                          textTheme.headline2?.copyWith(color: textWhiteColor),
+                      style: textTheme.displayMedium
+                          ?.copyWith(color: textWhiteColor),
                     ),
                     InkWell(
                       onTap: () {
                         _deleteDialog(context);
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.delete,
                         color: lightGreyColor,
                       ),
@@ -138,41 +127,49 @@ class _SellerTimeSlotBoxState extends State<SellerTimeSlotBox> {
           backgroundColor: backgroundDarkJungleGreenColor,
 
           // title: Text('Delete Slot'),
-        
+
           content: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                Text('Are you sure?', style:
-                          textTheme.headline5?.copyWith(color: textWhiteColor)),
-                Text('You want to delete this slot' , style:
-                          textTheme.headline5?.copyWith(color: textWhiteColor)),
+                Text('Are you sure?',
+                    style: textTheme.headlineSmall
+                        ?.copyWith(color: textWhiteColor)),
+                Text('You want to delete this slot',
+                    style: textTheme.headlineSmall
+                        ?.copyWith(color: textWhiteColor)),
               ],
             ),
           ),
           actions: <Widget>[
-            
             Row(
               children: [
                 TextButton(
-                  child: Text('Cancel', style: TextStyle(color: Colors.red),),
+                  child: const Text(
+                    'Cancel',
+                    style: TextStyle(color: Colors.red),
+                  ),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                 ),
-                SizedBox(width: 26.w,),
-            TextButton(
-              child: Text('Delete', style: TextStyle(color: aquaGreenColor),),
-              onPressed: () {
-                slotsController
-                    .deleteSlots(slotId: widget.getSlots.slotId)
-                    .then((value) {
-                  Navigator.of(context).pop();
-                });
-              },
-            ),
+                SizedBox(
+                  width: 26.w,
+                ),
+                TextButton(
+                  child: const Text(
+                    'Delete',
+                    style: TextStyle(color: aquaGreenColor),
+                  ),
+                  onPressed: () {
+                    slotsController
+                        .deleteSlots(slotId: widget.getSlots.slotId)
+                        .then((value) {
+                      Navigator.of(context).pop();
+                    });
+                  },
+                ),
               ],
             ),
-            
           ],
         );
       },

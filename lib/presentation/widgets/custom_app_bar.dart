@@ -1,11 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:sizer/sizer.dart';
-import 'package:cupertino_icons/cupertino_icons.dart';
 
 import '../../core/theme/colors.dart';
-import '../../services/routing_service/routes_name.dart';
 
 class CustomAppBar extends StatelessWidget {
   final String? appBarName;
@@ -13,7 +8,9 @@ class CustomAppBar extends StatelessWidget {
   final Color? txtColor;
   final Function()? onBack;
 
-  const CustomAppBar({Key? key, this.appBarName, this.otherIcon, this.txtColor, this.onBack}) : super(key: key);
+  const CustomAppBar(
+      {Key? key, this.appBarName, this.otherIcon, this.txtColor, this.onBack})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -56,17 +53,18 @@ class CustomAppBar extends StatelessWidget {
                     appBarName!,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: textTheme.headline2?.copyWith(color: txtColor ?? textWhiteColor),
+                    style: textTheme.displayMedium
+                        ?.copyWith(color: txtColor ?? textWhiteColor),
                   ),
                 ),
               ),
               // `InkWell(
               //   onTap: () {
-                  
+
               //   },
               //   child: Padding(
               //     padding: const EdgeInsets.all(8.0),
-              //     child: Container( 
+              //     child: Container(
               //       color: textCharcoalBlueColor,
               //       child: Icon(Icons.search)),
               //   ),
@@ -79,12 +77,14 @@ class CustomAppBar extends StatelessWidget {
   }
 }
 
-PreferredSizeWidget appBar({required BuildContext context, String? appBarName,
+PreferredSizeWidget appBar({
+  required BuildContext context,
+  String? appBarName,
   IconData? otherIcon,
   Color? txtColor,
   Function()? onBack,
   bool isBackIcon = true,
-}){
+}) {
   final textTheme = Theme.of(context).textTheme;
   return PreferredSize(
     preferredSize: const Size(double.infinity, 70),
@@ -126,7 +126,7 @@ PreferredSizeWidget appBar({required BuildContext context, String? appBarName,
             //         }
             //       },
             //       child: const Icon(
-            //           CupertinoIcons.search,                    
+            //           CupertinoIcons.search,
             //           size: 25,
             //           color: Colors.white,
             //         ),
@@ -141,31 +141,33 @@ PreferredSizeWidget appBar({required BuildContext context, String? appBarName,
                 appBarName ?? '',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: textTheme.headline2?.copyWith(color: txtColor ?? aquaGreenColor),
+                style: textTheme.displayMedium
+                    ?.copyWith(color: txtColor ?? aquaGreenColor),
               ),
             ),
-            isBackIcon ? SizedBox(
-              width: 42,
-              height: 42,
-              child: MaterialButton(
-                shape: const CircleBorder(),
-                color: textCharcoalBlueColor,
-                onPressed: () {
-                  if(onBack == null){
-                    Navigator.pop(context);
-                  }else{
-                    onBack();
-                    Navigator.pop(context);
-                  }
-                },
-                child: const Icon(
-                  Icons.arrow_back_ios,
-                  size: 18,
-                  color: Colors.white,
-                ),
-              ),
-            ) : const SizedBox() ,
-            
+            isBackIcon
+                ? SizedBox(
+                    width: 42,
+                    height: 42,
+                    child: MaterialButton(
+                      shape: const CircleBorder(),
+                      color: textCharcoalBlueColor,
+                      onPressed: () {
+                        if (onBack == null) {
+                          Navigator.pop(context);
+                        } else {
+                          onBack();
+                          Navigator.pop(context);
+                        }
+                      },
+                      child: const Icon(
+                        Icons.arrow_back_ios,
+                        size: 18,
+                        color: Colors.white,
+                      ),
+                    ),
+                  )
+                : const SizedBox(),
           ],
         ),
       ),

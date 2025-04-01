@@ -1,7 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:loby/core/theme/colors.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:loby/core/theme/colors.dart';
 import 'package:loby/presentation/screens/main/profile/wallet/widgets/token_widget.dart';
 import 'package:loby/presentation/widgets/custom_cached_network_image.dart';
 import 'package:sizer/sizer.dart';
@@ -30,12 +29,17 @@ class CustomMessage extends StatelessWidget {
                 height: 12.h,
                 child: CustomCachedNetworkImage(
                   imageUrl: message.metadata!['image'],
-                  placeHolder: Image.asset("assets/images/listing_placeholder.jpg", fit: BoxFit.cover,),
+                  placeHolder: Image.asset(
+                    "assets/images/listing_placeholder.jpg",
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
           ),
-          SizedBox(width: 2.w,),
+          SizedBox(
+            width: 2.w,
+          ),
           Expanded(
             flex: 7,
             child: Column(
@@ -46,14 +50,15 @@ class CustomMessage extends StatelessWidget {
                   child: Text(message.metadata!['name'] ?? "",
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
-                      style: textTheme.headline5?.copyWith(color: textWhiteColor)),
+                      style: textTheme.headlineSmall
+                          ?.copyWith(color: textWhiteColor)),
                 ),
                 SizedBox(height: 0.5.h),
                 SizedBox(
                   child: Text(message.metadata!['desc'] ?? "",
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
-                      style: textTheme.headline6
+                      style: textTheme.titleLarge
                           ?.copyWith(color: textInputTitleColor)),
                 ),
                 SizedBox(height: 2.h),
@@ -67,8 +72,15 @@ class CustomMessage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-                        child: Text(message.metadata!['category'] ?? "", style: textTheme.headline6?.copyWith(color: textWhiteColor), maxLines: 1, overflow: TextOverflow.ellipsis,),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 4.0, horizontal: 8.0),
+                        child: Text(
+                          message.metadata!['category'] ?? "",
+                          style: textTheme.titleLarge
+                              ?.copyWith(color: textWhiteColor),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 8.0),
@@ -76,7 +88,8 @@ class CustomMessage extends StatelessWidget {
                       size: 20,
                       text: Text(
                         "${message.metadata!['price'] ?? ""}",
-                        style: textTheme.headline2?.copyWith(color: aquaGreenColor),
+                        style: textTheme.displayMedium
+                            ?.copyWith(color: aquaGreenColor),
                       ),
                     ),
                   ],

@@ -22,8 +22,8 @@ class ProfileOptionsWidget extends StatelessWidget {
           children: [
             Text(
               name,
-              style: textTheme.headline2
-                  ?.copyWith(fontSize:20, color: textWhiteColor),
+              style: textTheme.displayMedium
+                  ?.copyWith(fontSize: 20, color: textWhiteColor),
             )
           ],
         ),

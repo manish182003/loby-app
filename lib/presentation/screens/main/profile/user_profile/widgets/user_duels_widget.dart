@@ -13,7 +13,7 @@ import '../../../../../widgets/custom_loader.dart';
 class UserDuelsWidget extends StatefulWidget {
   final User user;
 
-  const UserDuelsWidget({Key? key, required this.user}) : super(key: key);
+  const UserDuelsWidget({super.key, required this.user});
 
   @override
   State<UserDuelsWidget> createState() => _UserDuelsWidgetState();
@@ -22,8 +22,6 @@ class UserDuelsWidget extends StatefulWidget {
 class _UserDuelsWidgetState extends State<UserDuelsWidget> {
   ProfileController profileController = Get.find<ProfileController>();
   final controller = ScrollController();
-
-
 
   @override
   void initState() {
@@ -52,11 +50,14 @@ class _UserDuelsWidgetState extends State<UserDuelsWidget> {
     final textTheme = Theme.of(context).textTheme;
 
     return Obx(() {
-      if(profileController.isDuelDetailsFetching.value){
-        return const Center(child: CircularProgressIndicator(),);
-      }if(profileController.duelDetailsList.isEmpty){
+      if (profileController.isDuelDetailsFetching.value) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+      if (profileController.duelDetailsList.isEmpty) {
         return const NoDataFoundWidget();
-      } else{
+      } else {
         final duelDetailsCount = profileController.duelDetailsCount;
         return Column(
           children: <Widget>[
@@ -77,10 +78,8 @@ class _UserDuelsWidgetState extends State<UserDuelsWidget> {
                   return Obx(() {
                     if (profileController.areMoreDuelDetailsAvailable.value) {
                       return const Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 32.0),
-                        child: Center(
-                            child: CircularProgressIndicator()),
+                        padding: EdgeInsets.symmetric(vertical: 32.0),
+                        child: Center(child: CircularProgressIndicator()),
                       );
                     } else {
                       return const SizedBox();
@@ -92,12 +91,10 @@ class _UserDuelsWidgetState extends State<UserDuelsWidget> {
           ],
         );
       }
-
     });
   }
 
-
-  Widget winLossTile(TextTheme textTheme, DuelDetailsCount duelDetailsCount){
+  Widget winLossTile(TextTheme textTheme, DuelDetailsCount duelDetailsCount) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Card(
@@ -107,7 +104,6 @@ class _UserDuelsWidgetState extends State<UserDuelsWidget> {
           borderRadius: BorderRadius.circular(16.0),
         ),
         child: Container(
-
             decoration: BoxDecoration(
               color: aquaGreenColor,
               borderRadius: BorderRadius.circular(16.0),
@@ -123,13 +119,13 @@ class _UserDuelsWidgetState extends State<UserDuelsWidget> {
                     children: [
                       Text('Total WINS',
                           textAlign: TextAlign.center,
-                          style: textTheme.headline4?.copyWith(
+                          style: textTheme.headlineMedium?.copyWith(
                               color: textTunaBlueColor,
                               fontWeight: FontWeight.w500)),
                       Text("${duelDetailsCount.winCount}",
                           textAlign: TextAlign.center,
-                          style: textTheme.headlineLarge
-                              ?.copyWith(color: textTunaBlueColor,
+                          style: textTheme.headlineLarge?.copyWith(
+                              color: textTunaBlueColor,
                               fontWeight: FontWeight.w500)),
                     ],
                   ),
@@ -138,13 +134,13 @@ class _UserDuelsWidgetState extends State<UserDuelsWidget> {
                     children: [
                       Text('Total LOSSES',
                           textAlign: TextAlign.center,
-                          style: textTheme.headline4
-                              ?.copyWith(color: textTunaBlueColor,
+                          style: textTheme.headlineMedium?.copyWith(
+                              color: textTunaBlueColor,
                               fontWeight: FontWeight.w500)),
                       Text("${duelDetailsCount.loseCount}",
                           textAlign: TextAlign.center,
-                          style: textTheme.headlineLarge
-                              ?.copyWith(color: textTunaBlueColor,
+                          style: textTheme.headlineLarge?.copyWith(
+                              color: textTunaBlueColor,
                               fontWeight: FontWeight.w500)),
                     ],
                   ),
@@ -155,7 +151,6 @@ class _UserDuelsWidgetState extends State<UserDuelsWidget> {
     );
   }
 
-
   _buildUser(TextTheme textTheme, String name, Color borderColor,
       BuildContext context) {
     return Column(
@@ -164,7 +159,7 @@ class _UserDuelsWidgetState extends State<UserDuelsWidget> {
         _buildTitleField(textTheme, name, borderColor, context),
         _buildUserAvtar(lavaRedColor),
         _buildNameField(textTheme, 'Mukesh',
-            textTheme.headline6?.copyWith(color: textLightColor)),
+            textTheme.titleLarge?.copyWith(color: textLightColor)),
       ],
     );
   }
@@ -180,11 +175,8 @@ class _UserDuelsWidgetState extends State<UserDuelsWidget> {
       BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 8.0),
-      child: Container(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width * 0.25,
+      child: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.25,
           /*decoration: BoxDecoration(
             color: textFieldColor,
             border: Border.all(color: borderColor),
@@ -195,7 +187,7 @@ class _UserDuelsWidgetState extends State<UserDuelsWidget> {
               child: Text(
                 textAlign: TextAlign.center,
                 name,
-                style: textTheme.headline5?.copyWith(color: whiteColor),
+                style: textTheme.headlineSmall?.copyWith(color: whiteColor),
               ))),
     );
   }
@@ -226,19 +218,17 @@ class _UserDuelsWidgetState extends State<UserDuelsWidget> {
   }
 }
 
-
-
 class DuelWidget extends StatelessWidget {
   final DuelDetails duelDetails;
 
-  const DuelWidget({Key? key, required this.duelDetails}) : super(key: key);
+  const DuelWidget({super.key, required this.duelDetails});
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return GestureDetector(
-      onTap: (){
-        // context.pushNamed(createNewDisputePage, queryParams: {'disputeId' : "${dispute.id}"});
+      onTap: () {
+        // context.pushNamed(createNewDisputePage, extra: {'disputeId' : "${dispute.id}"});
       },
       child: Column(
         children: <Widget>[
@@ -250,20 +240,29 @@ class DuelWidget extends StatelessWidget {
             ),
             child: Padding(
               padding:
-              const EdgeInsets.symmetric(vertical: 16.0, horizontal: 0.0),
+                  const EdgeInsets.symmetric(vertical: 16.0, horizontal: 0.0),
               child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      buildUser(textTheme, context,title:  'Winner', imageUrl: duelDetails.winner?.image, name: duelDetails.winner?.displayName),
-                      const SizedBox(width: 8,),
-                      buildUser(textTheme, context,title:  'Loser', imageUrl: duelDetails.loser?.image, name: duelDetails.loser?.displayName),
+                      buildUser(textTheme, context,
+                          title: 'Winner',
+                          imageUrl: duelDetails.winner?.image,
+                          name: duelDetails.winner?.displayName),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      buildUser(textTheme, context,
+                          title: 'Loser',
+                          imageUrl: duelDetails.loser?.image,
+                          name: duelDetails.loser?.displayName),
                     ],
                   ),
                   const SizedBox(height: 8),
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 0.0, horizontal: 16.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -276,11 +275,13 @@ class DuelWidget extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 4.0, horizontal: 8.0),
-                              child: Text(duelDetails.userGameService!.game!.name!,
+                              child: Text(
+                                  duelDetails.userGameService!.game!.name!,
                                   maxLines: 1,
                                   textAlign: TextAlign.center,
                                   overflow: TextOverflow.ellipsis,
-                                  style: textTheme.headline6?.copyWith(color: textWhiteColor)),
+                                  style: textTheme.titleLarge
+                                      ?.copyWith(color: textWhiteColor)),
                             ),
                           ),
                         ),
@@ -298,7 +299,7 @@ class DuelWidget extends StatelessWidget {
                                   maxLines: 1,
                                   textAlign: TextAlign.center,
                                   overflow: TextOverflow.ellipsis,
-                                  style: textTheme.headline6
+                                  style: textTheme.titleLarge
                                       ?.copyWith(color: textWhiteColor)),
                             ),
                           ),
@@ -316,7 +317,8 @@ class DuelWidget extends StatelessWidget {
     );
   }
 
-  buildUser(TextTheme textTheme, BuildContext context, {required String title, required String? imageUrl,required name}) {
+  buildUser(TextTheme textTheme, BuildContext context,
+      {required String title, required String? imageUrl, required name}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -327,10 +329,10 @@ class DuelWidget extends StatelessWidget {
                 child: Text(
                   textAlign: TextAlign.center,
                   title,
-                  style: textTheme.headline5?.copyWith(color: whiteColor),
+                  style: textTheme.headlineSmall?.copyWith(color: whiteColor),
                 ))),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical:8.0, horizontal: 0.0),
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0.0),
           child: CircleAvatar(
             radius: 36,
             backgroundColor: butterflyBlueColor,
@@ -355,15 +357,9 @@ class DuelWidget extends StatelessWidget {
         ),
         Text(
           name,
-          style: textTheme.headline5?.copyWith(color: textLightColor),
+          style: textTheme.headlineSmall?.copyWith(color: textLightColor),
         )
       ],
     );
   }
-
-
-
 }
-
-
-

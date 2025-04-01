@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -13,9 +12,6 @@ import 'package:sizer/sizer.dart';
 
 import '../../../../../../core/theme/colors.dart';
 import '../../../../../widgets/CustomSwitch.dart';
-import '../../../../../widgets/SuccessfullyDeleteListingBottomDialog.dart';
-import '../../../../../widgets/bottom_dialog.dart';
-import '../../../../../widgets/confirmation_dialog.dart';
 import 'edit_listing.dart';
 
 class MyListingTile extends StatefulWidget {
@@ -38,7 +34,7 @@ class _MyListingTileState extends State<MyListingTile> {
         listingController.totalPrice.value =
             (listingController.quantityCount.value * widget.listing.price!)
                 .toString();
-        context.pushNamed(gameDetailPage, queryParams: {
+        context.pushNamed(gameDetailPage, extra: {
           'serviceListingId': "${widget.listing.id}",
           'from': 'myListing'
         });
@@ -87,7 +83,7 @@ class _MyListingTileState extends State<MyListingTile> {
                     Text("Inactive",
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: textTheme.headline5
+                        style: textTheme.headlineSmall
                             ?.copyWith(color: textWhiteColor)),
                     SizedBox(
                       width: 2.w,
@@ -112,7 +108,7 @@ class _MyListingTileState extends State<MyListingTile> {
                     Text("Active",
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: textTheme.headline5
+                        style: textTheme.headlineSmall
                             ?.copyWith(color: textWhiteColor)),
                   ],
                 ),
@@ -135,7 +131,7 @@ class _MyListingTileState extends State<MyListingTile> {
                             Text(widget.listing.title!,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 2,
-                                style: textTheme.headline5
+                                style: textTheme.headlineMedium
                                     ?.copyWith(color: textWhiteColor)),
                             // SizedBox(height: 1.h,),
                             Padding(
@@ -143,7 +139,7 @@ class _MyListingTileState extends State<MyListingTile> {
                               child: Text(widget.listing.game?.name! ?? '',
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
-                                  style: textTheme.headline6
+                                  style: textTheme.titleLarge
                                       ?.copyWith(color: textInputTitleColor)),
                             )
                           ])),
@@ -168,7 +164,7 @@ class _MyListingTileState extends State<MyListingTile> {
                                 vertical: 4.0, horizontal: 6.0),
                             child: Text(
                               widget.listing.category?.name! ?? '',
-                              style: textTheme.headline6
+                              style: textTheme.titleLarge
                                   ?.copyWith(color: textWhiteColor),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -180,7 +176,7 @@ class _MyListingTileState extends State<MyListingTile> {
                         size: 20,
                         text: Text("${widget.listing.price!}",
                             overflow: TextOverflow.ellipsis,
-                            style: textTheme.headline2
+                            style: textTheme.displayMedium
                                 ?.copyWith(color: aquaGreenColor)),
                       )
                     ],
@@ -382,17 +378,17 @@ class _MyListingTileState extends State<MyListingTile> {
             child: Column(
               children: <Widget>[
                 Text('Are you sure?',
-                    style:
-                        textTheme.headline5?.copyWith(color: textWhiteColor)),
+                    style: textTheme.headlineSmall
+                        ?.copyWith(color: textWhiteColor)),
                 Text('You want to delete this Listing',
-                    style:
-                        textTheme.headline5?.copyWith(color: textWhiteColor)),
+                    style: textTheme.headlineSmall
+                        ?.copyWith(color: textWhiteColor)),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text(
+              child: const Text(
                 'Cancel',
                 style: TextStyle(color: Colors.red),
               ),
@@ -404,7 +400,7 @@ class _MyListingTileState extends State<MyListingTile> {
               width: 28.w,
             ),
             TextButton(
-              child: Text(
+              child: const Text(
                 'Delete',
                 style: TextStyle(color: aquaGreenColor),
               ),
@@ -432,8 +428,8 @@ class _MyListingTileState extends State<MyListingTile> {
       required Color color}) {
     return TextButton(
       style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(color),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          backgroundColor: WidgetStateProperty.all<Color>(color),
+          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.0),
           ))),
@@ -441,7 +437,7 @@ class _MyListingTileState extends State<MyListingTile> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Text(title,
-            style: textTheme.headline6?.copyWith(color: textWhiteColor)),
+            style: textTheme.titleLarge?.copyWith(color: textWhiteColor)),
       ),
     );
   }

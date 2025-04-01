@@ -25,8 +25,7 @@ class UserAboutWidget extends StatelessWidget {
           width: double.infinity,
           child: Text(
             "Name",
-            style: textTheme.headline5
-                ?.copyWith(color: textLightColor),
+            style: textTheme.headlineSmall?.copyWith(color: textLightColor),
           ),
         ),
         const SizedBox(height: 16),
@@ -43,8 +42,7 @@ class UserAboutWidget extends StatelessWidget {
           width: double.infinity,
           child: Text(
             "IGN/Display Name",
-            style: textTheme.headline5
-                ?.copyWith(color: textLightColor),
+            style: textTheme.headlineSmall?.copyWith(color: textLightColor),
           ),
         ),
         const SizedBox(height: 16),
@@ -61,8 +59,7 @@ class UserAboutWidget extends StatelessWidget {
           width: double.infinity,
           child: Text(
             "Country",
-            style: textTheme.headline5
-                ?.copyWith(color: textLightColor),
+            style: textTheme.headlineSmall?.copyWith(color: textLightColor),
           ),
         ),
         const SizedBox(height: 16),
@@ -79,8 +76,7 @@ class UserAboutWidget extends StatelessWidget {
           width: double.infinity,
           child: Text(
             "City",
-            style: textTheme.headline5
-                ?.copyWith(color: textLightColor),
+            style: textTheme.headlineSmall?.copyWith(color: textLightColor),
           ),
         ),
         const SizedBox(height: 16),
@@ -97,8 +93,7 @@ class UserAboutWidget extends StatelessWidget {
           width: double.infinity,
           child: Text(
             "Profile Tag",
-            style: textTheme.headline5
-                ?.copyWith(color: textLightColor),
+            style: textTheme.headlineSmall?.copyWith(color: textLightColor),
           ),
         ),
         const SizedBox(height: 16),
@@ -115,7 +110,7 @@ class UserAboutWidget extends StatelessWidget {
           width: double.infinity,
           child: Text(
             "Bio",
-            style: textTheme.headline5?.copyWith(color: textLightColor),
+            style: textTheme.headlineSmall?.copyWith(color: textLightColor),
           ),
         ),
         const SizedBox(height: 16),
@@ -132,14 +127,13 @@ class UserAboutWidget extends StatelessWidget {
           width: double.infinity,
           child: Text(
             "Member Since",
-            style: textTheme.headline5
-                ?.copyWith(color: textLightColor),
+            style: textTheme.headlineSmall?.copyWith(color: textLightColor),
           ),
         ),
         const SizedBox(height: 16),
         Text(
           Helpers.formatDateTime(dateTime: user.createdAt ?? DateTime.now()),
-          style: textTheme.headline5?.copyWith(color: whiteColor),
+          style: textTheme.headlineSmall?.copyWith(color: whiteColor),
           textAlign: TextAlign.left,
         ),
         const SizedBox(height: 16),

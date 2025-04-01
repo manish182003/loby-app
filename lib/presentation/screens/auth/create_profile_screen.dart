@@ -5,16 +5,16 @@ import 'package:intl/intl.dart';
 import 'package:loby/core/theme/colors.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../widgets/text_fields/auto_complete_field.dart';
 import '../../widgets/buttons/custom_button.dart';
 import '../../widgets/custom_chips.dart';
 import '../../widgets/drop_down.dart';
 import '../../widgets/input_text_title_widget.dart';
 import '../../widgets/input_text_widget.dart';
+import '../../widgets/text_fields/auto_complete_field.dart';
 import '../main/main_screen.dart';
 
 class CreateProfileScreen extends StatefulWidget {
-  const CreateProfileScreen({Key? key}) : super(key: key);
+  const CreateProfileScreen({super.key});
   @override
   State<CreateProfileScreen> createState() => _CreateProfileScreenState();
 }
@@ -33,7 +33,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   List<String> selectedProducts = [];
   TextEditingController selectedProfileTag = TextEditingController();
 
-  Future<Null> showPicker(BuildContext context) async {
+  Future<void> showPicker(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -61,7 +61,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
       child: Container(
         color: limedAshColor,
         child: Container(
-          margin: EdgeInsets.only(top: 44.0),
+          margin: const EdgeInsets.only(top: 44.0),
           decoration: const BoxDecoration(
               color: backgroundBalticSeaColor,
               borderRadius: BorderRadius.only(
@@ -80,7 +80,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text('Your Basic Details',
-                            style: textTheme.headline2
+                            style: textTheme.displayMedium
                                 ?.copyWith(color: textWhiteColor)),
                       ],
                     ),
@@ -193,7 +193,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                                   chipName: products,
                                   removeItem: () {
                                     setState(() {
-                                      final index = selectedProducts.indexWhere((element) => element == products);
+                                      final index = selectedProducts.indexWhere(
+                                          (element) => element == products);
                                       selectedProducts.removeAt(index);
                                     });
                                   });
@@ -227,6 +228,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                         textColor: textWhiteColor,
                         name: "Update Profile",
                         onTap: () {
+                          print('line no->231');
                           if (_formKey.currentState!.validate()) {
                             Navigator.pop(context);
                             Navigator.of(context).push(MaterialPageRoute(
@@ -264,7 +266,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width * 0.13,
               child: SvgPicture.asset(
                 'assets/icons/search_icon.svg',
@@ -273,7 +275,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 height: 18,
               ),
             ),
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width * 0.6,
               child: AutoCompleteField(
                 height: 45,
@@ -333,13 +335,12 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 children: <Widget>[
                   ElevatedButton(
                       style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
+                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16.0),
                         )),
                         backgroundColor:
-                            MaterialStateProperty.all<Color>(aquaGreenColor),
+                            WidgetStateProperty.all<Color>(aquaGreenColor),
                       ),
                       onPressed: () {
                         debugPrint("change");
@@ -347,24 +348,24 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                       child: Padding(
                         padding:
                             const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
-                        child: Text("Change Avatar", style: textTheme.button),
+                        child:
+                            Text("Change Avatar", style: textTheme.labelLarge),
                       )),
                   ElevatedButton(
                       style: ButtonStyle(
-                        side: MaterialStateProperty.all(
+                        side: WidgetStateProperty.all(
                           const BorderSide(
                             style: BorderStyle.solid,
                             color: carminePinkColor,
                             width: 1.0,
                           ),
                         ),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
+                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16.0),
                         )),
                         backgroundColor:
-                            MaterialStateProperty.all<Color>(textFieldColor),
+                            WidgetStateProperty.all<Color>(textFieldColor),
                       ),
                       onPressed: () {
                         debugPrint('clicked');
@@ -373,8 +374,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                         padding:
                             const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
                         child: Text("Remove Avatar",
-                            style:
-                                textTheme.button?.copyWith(color: whiteColor)),
+                            style: textTheme.labelLarge
+                                ?.copyWith(color: whiteColor)),
                       )),
                 ],
               ),
@@ -394,12 +395,12 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
       child: Padding(
         padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
         child: TextFormField(
-          style: textTheme.headline4?.copyWith(color: whiteColor),
+          style: textTheme.headlineMedium?.copyWith(color: whiteColor),
           maxLines: 4,
           decoration: InputDecoration(
             border: InputBorder.none,
             hintStyle:
-                textTheme.headline4?.copyWith(color: textInputTitleColor),
+                textTheme.headlineMedium?.copyWith(color: textInputTitleColor),
             hintText: 'Ex: Jhon Singh',
           ),
         ),
@@ -435,8 +436,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 selectedDate == null
                     ? 'Select DOB'
                     : customFormat.format(selectedDate!),
-                style:
-                    textTheme.headline4?.copyWith(color: textInputTitleColor),
+                style: textTheme.headlineMedium
+                    ?.copyWith(color: textInputTitleColor),
               ),
             )
           ],

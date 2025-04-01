@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:loby/core/theme/colors.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/widgets/custom_text_field.dart';
 import 'package:sizer/sizer.dart';
-import 'package:intl/intl.dart';
 
 class TextFieldWidget extends StatefulWidget {
   final TextEditingController textEditingController;
@@ -27,7 +27,7 @@ class TextFieldWidget extends StatefulWidget {
   final Color? titleColor;
   final String? prefix;
   const TextFieldWidget(
-      {Key? key,
+      {super.key,
       required this.textEditingController,
       this.type = 'normal',
       this.hint,
@@ -43,8 +43,7 @@ class TextFieldWidget extends StatefulWidget {
       this.isReadableOnly = false,
       this.scrollBottomPadding,
       this.prefix,
-      this.titleColor})
-      : super(key: key);
+      this.titleColor});
 
   @override
   State<TextFieldWidget> createState() => _TextFieldWidgetState();
@@ -80,7 +79,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
             ? const SizedBox()
             : Text(
                 widget.title ?? "",
-                style: textTheme.headline5
+                style: textTheme.headlineSmall
                     ?.copyWith(color: widget.titleColor ?? textInputTitleColor),
               ),
         SizedBox(

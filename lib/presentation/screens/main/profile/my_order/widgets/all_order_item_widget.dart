@@ -1,26 +1,20 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/order/order.dart';
 import 'package:loby/presentation/getx/controllers/order_controller.dart';
 import 'package:loby/presentation/screens/main/profile/my_order/widgets/status_bottom_sheet.dart';
 import 'package:loby/presentation/widgets/custom_bottom_sheet.dart';
 import 'package:loby/presentation/widgets/custom_cached_network_image.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../../core/theme/colors.dart';
 import '../../../../../../core/utils/constants.dart';
-import '../../../../../../data/models/ItemModel.dart';
 import '../../../../../../services/routing_service/routes_name.dart';
 import '../../../../../getx/controllers/listing_controller.dart';
-import '../../../../../getx/controllers/profile_controller.dart';
 import '../../../../../widgets/ConfirmationRiseDisputeBottomDialog.dart';
-import '../../../../../widgets/UpdateStatusDialog.dart';
 import '../../../../../widgets/buttons/custom_button.dart';
 import 'order_status_constants.dart';
 
@@ -33,14 +27,12 @@ class OrderItem extends StatelessWidget {
   final OrderController orderController = Get.find<OrderController>();
   final ListingController listingController = Get.find<ListingController>();
   // String fromtimeIn24HourFormat = "${order.bookfromtime}";
-    // DateTime fromtime24Hour = DateFormat('HH:mm').parse(fromtimeIn24HourFormat);
-    // String fromtimeIn12HourFormat = DateFormat('h:mm a').format(fromtime24Hour);
+  // DateTime fromtime24Hour = DateFormat('HH:mm').parse(fromtimeIn24HourFormat);
+  // String fromtimeIn12HourFormat = DateFormat('h:mm a').format(fromtime24Hour);
 
-
-    // String totimeIn24HourFormat = "${order.booktotime}";
-    // DateTime totime24Hour = DateFormat('HH:mm').parse(totimeIn24HourFormat);
-    // String totimeIn12HourFormat = DateFormat('h:mm a').format(totime24Hour);
-    
+  // String totimeIn24HourFormat = "${order.booktotime}";
+  // DateTime totime24Hour = DateFormat('HH:mm').parse(totimeIn24HourFormat);
+  // String totimeIn12HourFormat = DateFormat('h:mm a').format(totime24Hour);
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +48,6 @@ class OrderItem extends StatelessWidget {
     // String fromtimeIn24HourFormat = "${order.bookfromtime}";
     // DateTime fromtime24Hour = DateFormat('HH:mm').parse(fromtimeIn24HourFormat);
     // String fromtimeIn12HourFormat = DateFormat('h:mm a').format(fromtime24Hour);
-
 
     // String totimeIn24HourFormat = "${order.booktotime}";
     // DateTime totime24Hour = DateFormat('HH:mm').parse(totimeIn24HourFormat);
@@ -86,7 +77,7 @@ class OrderItem extends StatelessWidget {
                               (listingController.quantityCount.value *
                                       order.userGameService!.price!)
                                   .toString();
-                          context.pushNamed(gameDetailPage, queryParams: {
+                          context.pushNamed(gameDetailPage, extra: {
                             'serviceListingId': "${order.userGameService!.id}",
                             'from': ListingPageRedirection.order
                           });
@@ -119,20 +110,20 @@ class OrderItem extends StatelessWidget {
                               child: Text(order.userGameService!.title!,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
-                                  style: textTheme.headline5
+                                  style: textTheme.headlineSmall
                                       ?.copyWith(color: textWhiteColor)),
                             ),
                             SizedBox(height: 1.5.h),
                             Text(order.userGameService!.game?.name! ?? "",
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
-                                style: textTheme.headline6
+                                style: textTheme.titleLarge
                                     ?.copyWith(color: textInputTitleColor)),
                             SizedBox(height: 1.0.h),
                             Text(order.userGameService!.category?.name! ?? "",
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
-                                style: textTheme.headline6
+                                style: textTheme.titleLarge
                                     ?.copyWith(color: textInputTitleColor)),
                             SizedBox(height: 1.0.h),
                             // Text(
@@ -152,7 +143,7 @@ class OrderItem extends StatelessWidget {
                                   "Current Status :",
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
-                                  style: textTheme.headline4?.copyWith(
+                                  style: textTheme.headlineMedium?.copyWith(
                                       fontSize: 11.0, color: textLightColor),
                                 ),
                                 SizedBox(
@@ -169,7 +160,7 @@ class OrderItem extends StatelessWidget {
                                               .orderStatuses!.last.status!],
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
-                                  style: textTheme.headline4?.copyWith(
+                                  style: textTheme.headlineMedium?.copyWith(
                                       fontSize: 11.0,
                                       color: order.disputeId != null
                                           ? carminePinkColor
@@ -221,94 +212,122 @@ class OrderItem extends StatelessWidget {
                         } else {
                           orderController.disputes.clear();
                           context.pushNamed(createNewDisputePage,
-                              queryParams: {'disputeId': "${order.disputeId}"});
+                              extra: {'disputeId': "${order.disputeId}"});
                         }
                       }),
                   // order.slotId == null
                   //     ?
                   //  orderController.orders.first.orderStatuses!.first.status == "BOUGHT" ?
-                  tabitem == 'Bought' && order.orderStatuses!.last.status! == "ORDER_PLACED" ?
-                  GestureDetector(
-                    onTap: () {
-                        orderController.selectedOrder.value = order;
-                        orderController.selectedOrder.refresh();
-                        context.pushNamed(buyerTimeSlotScreen,
-                            params: {"id": "${order.userGameService?.userId}"}
-                            // queryParams: {"isEditing": "false"}
-                            );
-                      },
-                    child: Container(
-                      height: 50,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: butterflyBlueColor),
-                        borderRadius: BorderRadius.circular(15)
-                      ),
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                          Text(order.bookDate == null ? "Book Available Slots" : "${order.bookfromtime} - ${order.booktotime}", style: textTheme.headline3?.copyWith(
-                                      color: whiteColor, fontWeight: FontWeight.w600),),
-                                      SizedBox(width: 1.w,),
-                          Icon(Icons.mode_edit_outlined, color: whiteColor)
-                        ]),
-                      ),
-                    ),
-                  )
+                  tabitem == 'Bought' &&
+                          order.orderStatuses!.last.status! == "ORDER_PLACED"
+                      ? GestureDetector(
+                          onTap: () {
+                            orderController.selectedOrder.value = order;
+                            orderController.selectedOrder.refresh();
+                            context.pushNamed(buyerTimeSlotScreen, extra: {
+                              "id": "${order.userGameService?.userId}"
+                            }
+                                // extra: {"isEditing": "false"}
+                                );
+                          },
+                          child: Container(
+                            height: 50,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: butterflyBlueColor),
+                                borderRadius: BorderRadius.circular(15)),
+                            child: Center(
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      order.bookDate == null
+                                          ? "Book Available Slots"
+                                          : "${order.bookfromtime} - ${order.booktotime}",
+                                      style: textTheme.displaySmall?.copyWith(
+                                          color: whiteColor,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    SizedBox(
+                                      width: 1.w,
+                                    ),
+                                    const Icon(Icons.mode_edit_outlined,
+                                        color: whiteColor)
+                                  ]),
+                            ),
+                          ),
+                        )
 
-                  // CustomButton(
-                  //     color: backgroundBalticSeaColor,
-                  //     borderColor: butterflyBlueColor,
-                  //     name: order.bookDate == null ? "Book Available Slots" : "${order.bookDate}",
-                  //     top: 2.h,
-                      
-                  //     bottom: 2.h,
-                  //     textColor: whiteColor,
-                      
-                  //     onTap: () {
-                  //       orderController.selectedOrder.value = order;
-                  //       orderController.selectedOrder.refresh();
-                  //       context.pushNamed(buyerTimeSlotScreen,
-                  //           params: {"id": "${order.userGameService?.userId}"}
-                  //           // queryParams: {"isEditing": "false"}
-                  //           );
-                  //     }) 
-                  : tabitem == 'Bought'?
-                  GestureDetector(
-                    onTap: () {
-                        Helpers.toast("cannot edit slot after seller accepted order");
-                      },
-                    child: Container(
-                      height: 50,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: butterflyBlueColor.withOpacity(0.5)),
-                        borderRadius: BorderRadius.circular(15)
-                      ),
-                      child: Center(
-                        child: Row(mainAxisAlignment: MainAxisAlignment.center,children: [
-                          Text(order.bookDate == null ? "Book Available Slots" : "${order.bookfromtime} - ${order.booktotime}", style: textTheme.headline3?.copyWith(
-                                      color: whiteColor.withOpacity(0.5), fontWeight: FontWeight.w600),),
-                                      SizedBox(width: 1.w,),
-                          Icon(Icons.mode_edit_outlined, color: whiteColor.withOpacity(0.5),)
-                        ]),
-                      ),
-                    ),
-                  )
                       // CustomButton(
-                      // color: backgroundBalticSeaColor,
-                      // borderColor: butterflyBlueColor.withOpacity(0.5),
-                      // name: order.bookDate == null ? "Book Available Slots" : "${order.bookDate}",
-                      // top: 2.h,
-                      
-                      // bottom: 2.h,
-                      // textColor: whiteColor.withOpacity(0.5),
-                      
-                      // onTap: () {
-                      //   Helpers.toast("cannot edit slot after seller accepted order");
-                      // }) 
-                      : SizedBox()
+                      //     color: backgroundBalticSeaColor,
+                      //     borderColor: butterflyBlueColor,
+                      //     name: order.bookDate == null ? "Book Available Slots" : "${order.bookDate}",
+                      //     top: 2.h,
+
+                      //     bottom: 2.h,
+                      //     textColor: whiteColor,
+
+                      //     onTap: () {
+                      //       orderController.selectedOrder.value = order;
+                      //       orderController.selectedOrder.refresh();
+                      //       context.pushNamed(buyerTimeSlotScreen,
+                      //           params: {"id": "${order.userGameService?.userId}"}
+                      //           // extra: {"isEditing": "false"}
+                      //           );
+                      //     })
+                      : tabitem == 'Bought'
+                          ? GestureDetector(
+                              onTap: () {
+                                Helpers.toast(
+                                    "cannot edit slot after seller accepted order");
+                              },
+                              child: Container(
+                                height: 50,
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: butterflyBlueColor
+                                            .withOpacity(0.5)),
+                                    borderRadius: BorderRadius.circular(15)),
+                                child: Center(
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          order.bookDate == null
+                                              ? "Book Available Slots"
+                                              : "${order.bookfromtime} - ${order.booktotime}",
+                                          style: textTheme.displaySmall
+                                              ?.copyWith(
+                                                  color: whiteColor
+                                                      .withOpacity(0.5),
+                                                  fontWeight: FontWeight.w600),
+                                        ),
+                                        SizedBox(
+                                          width: 1.w,
+                                        ),
+                                        Icon(
+                                          Icons.mode_edit_outlined,
+                                          color: whiteColor.withOpacity(0.5),
+                                        )
+                                      ]),
+                                ),
+                              ),
+                            )
+                          // CustomButton(
+                          // color: backgroundBalticSeaColor,
+                          // borderColor: butterflyBlueColor.withOpacity(0.5),
+                          // name: order.bookDate == null ? "Book Available Slots" : "${order.bookDate}",
+                          // top: 2.h,
+
+                          // bottom: 2.h,
+                          // textColor: whiteColor.withOpacity(0.5),
+
+                          // onTap: () {
+                          //   Helpers.toast("cannot edit slot after seller accepted order");
+                          // })
+                          : const SizedBox()
                 ],
               ),
               order.orderStatuses!.last.status! == orderCompleted
@@ -367,7 +386,7 @@ class OrderItem extends StatelessWidget {
                                                     child: Container(
                                                       height: 40,
                                                       padding: const EdgeInsets
-                                                              .symmetric(
+                                                          .symmetric(
                                                           horizontal: 20),
                                                       child: Row(
                                                         children: <Widget>[
@@ -375,17 +394,17 @@ class OrderItem extends StatelessWidget {
                                                             child: Container(
                                                               margin:
                                                                   const EdgeInsets
-                                                                          .only(
+                                                                      .only(
                                                                       left: 10),
                                                               padding:
                                                                   const EdgeInsets
-                                                                          .symmetric(
+                                                                      .symmetric(
                                                                       vertical:
                                                                           10),
                                                               child: Text(
                                                                 item,
                                                                 style: textTheme
-                                                                    .headline6
+                                                                    .titleLarge
                                                                     ?.copyWith(
                                                                         color:
                                                                             textWhiteColor),

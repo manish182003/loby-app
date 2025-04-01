@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:dotted_border/dotted_border.dart';
@@ -11,7 +10,6 @@ import 'package:loby/core/theme/colors.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/auth/selected_file.dart';
 import 'package:loby/presentation/getx/controllers/order_controller.dart';
-import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/widgets/buttons/custom_button.dart';
 import 'package:sizer/sizer.dart';
 
@@ -24,8 +22,14 @@ class SelectDuelWinnerDialog extends StatelessWidget {
   final Function() onSubmit;
   final List<String>? options;
   final bool? isNormalOrder;
-  SelectDuelWinnerDialog({Key? key, this.onSelectWinner, required this.onSubmit, this.options, this.isNormalOrder = false}) : super(key: key);
-  
+  SelectDuelWinnerDialog(
+      {Key? key,
+      this.onSelectWinner,
+      required this.onSubmit,
+      this.options,
+      this.isNormalOrder = false})
+      : super(key: key);
+
   OrderController orderController = Get.find<OrderController>();
 
   @override
@@ -43,51 +47,62 @@ class SelectDuelWinnerDialog extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(isNormalOrder ?? false ? "Upload Proofs" : "Select Winner", style: textTheme.headline2?.copyWith(fontWeight: FontWeight.w500, color: whiteColor)),
-                GestureDetector(onTap: (){
-                  orderController.fileLink.value.clear();
-                  orderController.selectedDuelProofs.clear();
-                  Navigator.pop(context);
-                },
-                child: const Icon(Icons.close, color: whiteColor,)),
+                Text(isNormalOrder ?? false ? "Upload Proofs" : "Select Winner",
+                    style: textTheme.displayMedium?.copyWith(
+                        fontWeight: FontWeight.w500, color: whiteColor)),
+                GestureDetector(
+                    onTap: () {
+                      orderController.fileLink.value.clear();
+                      orderController.selectedDuelProofs.clear();
+                      Navigator.pop(context);
+                    },
+                    child: const Icon(
+                      Icons.close,
+                      color: whiteColor,
+                    )),
               ],
             ),
-            SizedBox(height: 2.h,),
-            isNormalOrder ?? false ? const SizedBox() : Obx(() {
-              final selectedUser = orderController.selectedUser.value;
-              return
-                SingleSelectableCard(
-                options: options!,
-                onSelected: onSelectWinner!,
-              );
+            SizedBox(
+              height: 2.h,
+            ),
+            isNormalOrder ?? false
+                ? const SizedBox()
+                : Obx(() {
+                    final selectedUser = orderController.selectedUser.value;
+                    return SingleSelectableCard(
+                      options: options!,
+                      onSelected: onSelectWinner!,
+                    );
 
-
-
-              //   Wrap(
-              //   children: List.from(
-              //     options!.map((winner) {
-              //       final selectedUser = orderController.selectedUser.value;
-              //       return SizedBox(
-              //         child: RadioListTile(
-              //             selected: selectedUser == winner,
-              //             groupValue: selectedUser,
-              //             dense: true,
-              //             contentPadding: const EdgeInsets.all(0),
-              //             controlAffinity: ListTileControlAffinity.leading,
-              //             title: Text(winner, style: textTheme.headline3?.copyWith(fontWeight: FontWeight.w500, color: whiteColor)),
-              //             value: winner,
-              //             activeColor: aquaGreenColor,
-              //             onChanged: onSelectWinner
-              //         ),
-              //       );
-              //     }).toList(),
-              //   )
-              //   ,
-              // );
-            }),
-            SizedBox(height: 3.h,),
+                    //   Wrap(
+                    //   children: List.from(
+                    //     options!.map((winner) {
+                    //       final selectedUser = orderController.selectedUser.value;
+                    //       return SizedBox(
+                    //         child: RadioListTile(
+                    //             selected: selectedUser == winner,
+                    //             groupValue: selectedUser,
+                    //             dense: true,
+                    //             contentPadding: const EdgeInsets.all(0),
+                    //             controlAffinity: ListTileControlAffinity.leading,
+                    //             title: Text(winner, style: textTheme.headline3?.copyWith(fontWeight: FontWeight.w500, color: whiteColor)),
+                    //             value: winner,
+                    //             activeColor: aquaGreenColor,
+                    //             onChanged: onSelectWinner
+                    //         ),
+                    //       );
+                    //     }).toList(),
+                    //   )
+                    //   ,
+                    // );
+                  }),
+            SizedBox(
+              height: 3.h,
+            ),
             _buildUploadField(textTheme),
-            SizedBox(height: 5.h,),
+            SizedBox(
+              height: 5.h,
+            ),
             CustomButton(
                 top: 0.h,
                 left: 5.w,
@@ -96,14 +111,12 @@ class SelectDuelWinnerDialog extends StatelessWidget {
                 color: createProfileButtonColor,
                 name: "Submit",
                 textColor: textWhiteColor,
-                onTap: onSubmit
-            ),
+                onTap: onSubmit),
           ],
         ),
       ),
     );
   }
-
 
   Widget _buildUploadField(TextTheme textTheme) {
     return DottedBorder(
@@ -122,14 +135,16 @@ class SelectDuelWinnerDialog extends StatelessWidget {
               Text(
                   textAlign: TextAlign.center,
                   "Upload Images or Videos",
-                  style: textTheme.headline4?.copyWith(color: textWhiteColor)),
+                  style: textTheme.headlineMedium
+                      ?.copyWith(color: textWhiteColor)),
               SizedBox(height: 3.h),
               Obx(() {
-                if(orderController.selectedDuelProofs.isEmpty){
+                if (orderController.selectedDuelProofs.isEmpty) {
                   return const SizedBox();
-                }else{
+                } else {
                   return GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       childAspectRatio: 2.5,
                       mainAxisSpacing: 15.0,
@@ -140,11 +155,9 @@ class SelectDuelWinnerDialog extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 20),
                     itemCount: orderController.selectedDuelProofs.length,
                     itemBuilder: (context, index) {
-                      return selectedFileTile(
-                          context,
+                      return selectedFileTile(context,
                           image: orderController.selectedDuelProofs[index],
-                          index: index
-                      );
+                          index: index);
                     },
                   );
                 }
@@ -158,11 +171,11 @@ class SelectDuelWinnerDialog extends StatelessWidget {
                   name: "Choose file",
                   textColor: textWhiteColor,
                   iconWidget: 'assets/icons/upload_img_icon.svg',
-                  onTap: _openFileExplorer
-              ),
+                  onTap: _openFileExplorer),
               SizedBox(height: 2.h),
               Text("or",
-                  style: textTheme.headline4?.copyWith(color: textWhiteColor)),
+                  style: textTheme.headlineMedium
+                      ?.copyWith(color: textWhiteColor)),
               SizedBox(height: 1.h),
               TextFieldWidget(
                 textEditingController: orderController.fileLink.value,
@@ -175,19 +188,17 @@ class SelectDuelWinnerDialog extends StatelessWidget {
     );
   }
 
-  Widget selectedFileTile(BuildContext context, {required SelectedFile image, required int index}) {
+  Widget selectedFileTile(BuildContext context,
+      {required SelectedFile image, required int index}) {
     return Container(
       padding: const EdgeInsets.all(8),
       constraints: BoxConstraints(
           minHeight: MediaQuery.of(context).size.height * 0.08,
-          minWidth: MediaQuery.of(context).size.width * 0.4
-      ),
+          minWidth: MediaQuery.of(context).size.width * 0.4),
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-              spreadRadius: 1,
-              blurRadius: 5,
-              color: Colors.black.withAlpha(50))
+              spreadRadius: 1, blurRadius: 5, color: Colors.black.withAlpha(50))
         ],
         borderRadius: BorderRadius.circular(12),
         color: iconWhiteColor,
@@ -218,9 +229,11 @@ class SelectDuelWinnerDialog extends StatelessWidget {
         onFileLoading: (FilePickerStatus status) => print(status),
         type: FileType.custom,
         allowedExtensions: ['jpg', 'png', 'mp4'],
-      ))!.files;
+      ))!
+          .files;
       for (final i in paths) {
-        orderController.selectedDuelProofs.add(SelectedFile(file: File(i.path!), fileType: Helpers.getFileType(i.extension!)));
+        orderController.selectedDuelProofs.add(SelectedFile(
+            file: File(i.path!), fileType: Helpers.getFileType(i.extension!)));
       }
     } on PlatformException catch (e) {
       Helpers.toast('Unsupported operation$e');

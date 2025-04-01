@@ -13,7 +13,6 @@ class FAQs extends StatefulWidget {
 }
 
 class _FAQsState extends State<FAQs> {
-
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -24,13 +23,23 @@ class _FAQsState extends State<FAQs> {
           children: [
             GFAccordion(
               title: "1. What is Loby?",
-              contentChild: Text("Loby is a great gaming application.", style: textTheme.headline5?.copyWith(color: textWhiteColor),),
-              collapsedIcon: const Icon(Icons.add, color: whiteColor,),
-              expandedIcon: const Icon(Icons.minimize, color: whiteColor,),
+              contentChild: Text(
+                "Loby is a great gaming application.",
+                style: textTheme.headlineSmall?.copyWith(color: textWhiteColor),
+              ),
+              collapsedIcon: const Icon(
+                Icons.add,
+                color: whiteColor,
+              ),
+              expandedIcon: const Icon(
+                Icons.minimize,
+                color: whiteColor,
+              ),
               collapsedTitleBackgroundColor: backgroundColor,
               expandedTitleBackgroundColor: backgroundColor,
-              contentBackgroundColor : backgroundColor,
-              textStyle: textTheme.headline3!.copyWith(color: textWhiteColor),
+              contentBackgroundColor: backgroundColor,
+              textStyle:
+                  textTheme.displaySmall!.copyWith(color: textWhiteColor),
             ),
           ],
         ),

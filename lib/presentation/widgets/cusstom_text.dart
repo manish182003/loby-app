@@ -22,11 +22,10 @@ class MyText extends StatelessWidget {
           borderRadius: BorderRadius.circular(10.0),
         ),
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 2.h, horizontal:4.w),
+          padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 4.w),
           child: Text(
             name,
-            style: textTheme.headline5
-                ?.copyWith(color: textColor),
+            style: textTheme.headlineSmall?.copyWith(color: textColor),
           ),
         ));
   }

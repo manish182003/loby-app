@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -6,9 +5,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/core/utils/constants.dart';
 import 'package:loby/core/utils/helpers.dart';
-import 'package:loby/domain/entities/chat/chat.dart';
 import 'package:loby/domain/entities/listing/service_listing.dart';
-import 'package:loby/domain/entities/listing/user_game_service_option.dart';
 import 'package:loby/presentation/getx/controllers/chat_controller.dart';
 import 'package:loby/presentation/getx/controllers/home_controller.dart';
 import 'package:loby/presentation/getx/controllers/listing_controller.dart';
@@ -17,25 +14,25 @@ import 'package:loby/presentation/screens/main/profile/wallet/widgets/token_widg
 import 'package:loby/presentation/widgets/body_padding_widget.dart';
 import 'package:loby/presentation/widgets/carousel.dart';
 import 'package:loby/presentation/widgets/confirmation_dialog.dart';
-import 'package:loby/presentation/widgets/custom_cached_network_image.dart';
 import 'package:loby/presentation/widgets/custom_loader.dart';
 import 'package:sizer/sizer.dart';
+import 'package:text_helpers/text_helpers.dart';
+
 import '../../../../core/theme/colors.dart';
 import '../../../../domain/entities/listing/user_game_service_image.dart';
 import '../../../../services/routing_service/routes_name.dart';
 import '../../../getx/controllers/profile_controller.dart';
 import '../../../widgets/bottom_dialog.dart';
-import '../../../widgets/custom_app_bar.dart';
 import '../../../widgets/buttons/custom_button.dart';
+import '../../../widgets/custom_app_bar.dart';
 import '../../../widgets/profile_picture.dart';
-import 'package:text_helpers/text_helpers.dart';
 
 class GameDetailScreen extends StatefulWidget {
   final int serviceListingId;
   final String? from;
 
-  const GameDetailScreen({Key? key, required this.serviceListingId, this.from})
-      : super(key: key);
+  const GameDetailScreen(
+      {super.key, required this.serviceListingId, this.from});
 
   @override
   State<GameDetailScreen> createState() => _GameDetailScreenState();
@@ -144,56 +141,59 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                 .userGameServiceImages!
                 .where((element) => element.type != 3)
                 .toList();
-      
+
             return SingleChildScrollView(
               child: BodyPaddingWidget(
                 child: Column(
                   children: [
                     Align(
-                alignment: Alignment.topCenter,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                  child: Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                    width: 42,
-                    height: 42,
-                    child: MaterialButton(
-                      shape: const CircleBorder(),
-                      color: textCharcoalBlueColor,
-                      onPressed: () {
-                          Navigator.pop(context);
-                        
-                      },
-                      child: const Icon(
-                        Icons.arrow_back_ios,
-                        size: 18,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  // Text("${widget.gameName}", style: textTheme.headline2?.copyWith(color: aquaGreenColor),),
-                        GestureDetector(
-                      onTap: () {
-                        context.pushNamed(searchScreenPage);
-                      },
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          color: textCharcoalBlueColor,
-                          borderRadius: BorderRadius.circular(10)
-                        ),
-                        child: const Icon(CupertinoIcons.search, size: 23, color: Colors.white,),
-                      ),
-                    ),
-                      ],
-                    ),
-                  
-                  ),
-                )),
+                        alignment: Alignment.topCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 5),
+                          child: Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  width: 42,
+                                  height: 42,
+                                  child: MaterialButton(
+                                    shape: const CircleBorder(),
+                                    color: textCharcoalBlueColor,
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Icon(
+                                      Icons.arrow_back_ios,
+                                      size: 18,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                // Text("${widget.gameName}", style: textTheme.headline2?.copyWith(color: aquaGreenColor),),
+                                GestureDetector(
+                                  onTap: () {
+                                    context.pushNamed(searchScreenPage);
+                                  },
+                                  child: Container(
+                                    height: 40,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                        color: textCharcoalBlueColor,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: const Icon(
+                                      CupertinoIcons.search,
+                                      size: 23,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )),
                     userGameServiceImages.isEmpty
                         ? Carousel(
                             images: [CarouselList(type: 5, path: '')],
@@ -210,8 +210,8 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                             height: 2.h,
                           ),
                     Text(listing.title!,
-                        style:
-                            textTheme.headline5?.copyWith(color: textWhiteColor)),
+                        style: textTheme.headlineSmall
+                            ?.copyWith(color: textWhiteColor)),
                     SizedBox(height: 2.h),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -243,7 +243,8 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                           child: Column(
                             children: [
                               _rowWidget(
-                                  text1: "Unit Token / Per ${listing.unit!.name}",
+                                  text1:
+                                      "Unit Token / Per ${listing.unit!.name}",
                                   text2: "${listing.price}",
                                   isNormal: true),
                               SizedBox(height: 1.h),
@@ -253,7 +254,8 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                               listing.user?.id == profileController.profile.id
                                   ? const SizedBox()
                                   : Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         GestureDetector(
                                           onTap: () {
@@ -281,8 +283,8 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                               BoxShadow(
                                                   spreadRadius: 1,
                                                   blurRadius: 5,
-                                                  color:
-                                                      Colors.black.withAlpha(50))
+                                                  color: Colors.black
+                                                      .withAlpha(50))
                                             ],
                                             borderRadius:
                                                 BorderRadius.circular(32),
@@ -290,7 +292,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                           ),
                                           child: Center(
                                             child: Text("${listing.quantity}",
-                                                style: textTheme.headline3
+                                                style: textTheme.displaySmall
                                                     ?.copyWith(
                                                         color: bodyTextColor)),
                                           ),
@@ -336,12 +338,12 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                             ? const SizedBox()
                             : GestureDetector(
                                 onTap: () {
-                                  listingController.buyerListingsProfile.clear();
-                                  context.pushNamed(userProfilePage,
-                                      queryParams: {
-                                        'userId': "${listing.user?.id}",
-                                        'from': 'other'
-                                      });
+                                  listingController.buyerListingsProfile
+                                      .clear();
+                                  context.pushNamed(userProfilePage, extra: {
+                                    'userId': "${listing.user?.id}",
+                                    'from': 'other'
+                                  });
                                 },
                                 child: Card(
                                   color: backgroundBalticSeaColor,
@@ -355,13 +357,15 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                     padding: const EdgeInsets.all(14.0),
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8.0),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
                                       ),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
-                                          ProfilePicture(profile: listing.user!),
+                                          ProfilePicture(
+                                              profile: listing.user!),
                                           Expanded(
                                             child: Container(
                                               margin: const EdgeInsets.fromLTRB(
@@ -375,19 +379,20 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                                       SizedBox(
                                                         width: 36.w,
                                                         child: InlineText(
-                                                          listing
-                                                              .user!.displayName!,
+                                                          listing.user!
+                                                              .displayName!,
                                                           // overflow: TextOverflow.ellipsis,
                                                           // maxLines: 1,
                                                           // softWrap: true,
                                                           style: textTheme
-                                                              .headline2
+                                                              .displayMedium
                                                               ?.copyWith(
                                                                   color:
                                                                       profileNameYellowColor),
                                                         ),
                                                       ),
-                                                      const SizedBox(width: 8.0),
+                                                      const SizedBox(
+                                                          width: 8.0),
                                                     ],
                                                   ),
                                                   const SizedBox(
@@ -401,7 +406,8 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                                         children: [
                                                           SvgPicture.asset(
                                                             'assets/icons/user_rating_icon.svg',
-                                                            color: iconWhiteColor,
+                                                            color:
+                                                                iconWhiteColor,
                                                             height: 16.0,
                                                             width: 16.0,
                                                           ),
@@ -409,23 +415,26 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                                               width: 4.0),
                                                           Text(
                                                             "${listing.user?.avgRatingCount ?? 0.0}",
-                                                            overflow: TextOverflow
-                                                                .ellipsis,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
                                                             maxLines: 1,
                                                             style: textTheme
-                                                                .headline4
+                                                                .headlineMedium
                                                                 ?.copyWith(
                                                                     color:
                                                                         textWhiteColor),
                                                           ),
                                                         ],
                                                       ),
-                                                      const SizedBox(width: 16.0),
+                                                      const SizedBox(
+                                                          width: 16.0),
                                                       Row(
                                                         children: [
                                                           SvgPicture.asset(
                                                             'assets/icons/user_chat_icon.svg',
-                                                            color: iconWhiteColor,
+                                                            color:
+                                                                iconWhiteColor,
                                                             height: 16.0,
                                                             width: 16.0,
                                                           ),
@@ -433,11 +442,12 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                                               width: 8.0),
                                                           Text(
                                                             "${listing.user?.commentCount}",
-                                                            overflow: TextOverflow
-                                                                .ellipsis,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
                                                             maxLines: 1,
                                                             style: textTheme
-                                                                .headline4
+                                                                .headlineMedium
                                                                 ?.copyWith(
                                                                     color:
                                                                         textWhiteColor),
@@ -519,21 +529,22 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                 text2: getFileLink(listing),
                                 isLink: true),
                             SizedBox(height: 3.h),
-      
+
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Expanded(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Align(
                                         alignment: Alignment.topLeft,
                                         child: Text(
                                           textAlign: TextAlign.start,
                                           "Description: ",
-                                          style: textTheme.headline5
+                                          style: textTheme.headlineSmall
                                               ?.copyWith(color: textLightColor),
                                         ),
                                       ),
@@ -543,7 +554,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                         child: Text(
                                           textAlign: TextAlign.start,
                                           listing.description!,
-                                          style: textTheme.headline6
+                                          style: textTheme.titleLarge
                                               ?.copyWith(color: textWhiteColor),
                                         ),
                                       ),
@@ -566,7 +577,8 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SizedBox(
-                                  width: MediaQuery.of(context).size.width * 0.15,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.15,
                                   height: 48,
                                   child: MaterialButton(
                                     shape: RoundedRectangleBorder(
@@ -583,8 +595,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                           .checkEligibilityResponse.value;
                                       Helpers.hideLoader();
                                       if (isSuccess) {
-                                        context
-                                            .pushNamed(messagePage, queryParams: {
+                                        context.pushNamed(messagePage, extra: {
                                           'chatId': "${chat.id}",
                                           'senderId': "${chat.senderId}",
                                           'receiverId': "${chat.receiverId}"
@@ -622,8 +633,9 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                           yesBtnClick: () async {
                                             Helpers.loader();
                                             final response =
-                                                await orderController.createOrder(
-                                              isUpdatingTime: false,   
+                                                await orderController
+                                                    .createOrder(
+                                              isUpdatingTime: false,
                                               listingId: listing.id!,
                                               quantity: listing.quantity,
                                               price: (listing.quantity *
@@ -639,8 +651,8 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                                   .profile.walletMoney);
                                               profileController
                                                       .profile.walletMoney =
-                                                  (profileController
-                                                          .profile.walletMoney! -
+                                                  (profileController.profile
+                                                          .walletMoney! -
                                                       (listing.quantity *
                                                           listing.price!));
                                               print(profileController
@@ -654,10 +666,13 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                                       "Payment Successful. You can check your order status from ",
                                                   contentLinkName: 'My Orders',
                                                   onOk: () {
-                                                    homeController.getUnreadCount(
-                                                        type: 'chat');
-                                                    homeController.getUnreadCount(
-                                                        type: 'notification');
+                                                    homeController
+                                                        .getUnreadCount(
+                                                            type: 'chat');
+                                                    homeController
+                                                        .getUnreadCount(
+                                                            type:
+                                                                'notification');
                                                     Navigator.pop(context);
                                                     context
                                                         .pushNamed(myOrderPage);
@@ -666,8 +681,8 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                                 'insufficient balance') {
                                               Navigator.pop(context);
                                               ConfirmationBottomDialog(
-                                                  textTheme:
-                                                      Theme.of(context).textTheme,
+                                                  textTheme: Theme.of(context)
+                                                      .textTheme,
                                                   contentName:
                                                       "You have insifficient tokens to buy this service. Would you like to Add Tokens to your Wallet ?",
                                                   yesBtnClick: () async {
@@ -722,7 +737,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
             maxLines: 1,
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
-            style: textTheme.headline5?.copyWith(color: textWhiteColor)),
+            style: textTheme.headlineSmall?.copyWith(color: textWhiteColor)),
       ),
     );
   }
@@ -739,7 +754,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
       children: [
         Text(
           text1,
-          style: textTheme.headline5?.copyWith(color: textLightColor),
+          style: textTheme.headlineSmall?.copyWith(color: textLightColor),
         ),
         SizedBox(
           width: 10.w,
@@ -750,7 +765,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                 text: Text(text2,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
-                    style: textTheme.headline1
+                    style: textTheme.displayLarge
                         ?.copyWith(color: aquaGreenColor)))
             : Flexible(
                 child: GestureDetector(
@@ -764,7 +779,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                     maxLines: 3,
                     textAlign: TextAlign.end,
                     overflow: TextOverflow.ellipsis,
-                    style: textTheme.headline5?.copyWith(color: whiteColor),
+                    style: textTheme.headlineSmall?.copyWith(color: whiteColor),
                   ),
                 ),
               ),

@@ -1,11 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/domain/entities/home/game.dart';
 import 'package:loby/presentation/getx/controllers/home_controller.dart';
-import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:sizer/sizer.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../../../../core/theme/colors.dart';
 import '../../../../../services/routing_service/routes_name.dart';
@@ -13,15 +12,19 @@ import '../../../../../services/routing_service/routes_name.dart';
 class GameCard extends StatelessWidget {
   final Game game;
 
-  const GameCard({Key? key, required this.game}) : super(key: key);
+  const GameCard({super.key, required this.game});
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     HomeController homeController = Get.find<HomeController>();
     return GestureDetector(
-      onTap: (){
-        context.pushNamed(gamePage, queryParams: {'categoryId' : '${homeController.categories.first.id}', 'gameId' : '${game.id}', 'gameName' : game.name!});
+      onTap: () {
+        context.pushNamed(gamePage, extra: {
+          'categoryId': '${homeController.categories.first.id}',
+          'gameId': '${game.id}',
+          'gameName': game.name!
+        });
       },
       child: Card(
         elevation: 0,
@@ -47,7 +50,8 @@ class GameCard extends StatelessWidget {
                         height: 110,
                         width: 110,
                         // placeholder: (context, url) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
-                        errorWidget: (context, url, error) => const Icon(Icons.error),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
                       ),
                     ),
                   ),
@@ -59,7 +63,7 @@ class GameCard extends StatelessWidget {
                   game.name!,
                   maxLines: 2,
                   textAlign: TextAlign.center,
-                  style: textTheme.headline6
+                  style: textTheme.titleLarge
                       ?.copyWith(color: textWhiteColor), //Textstyle
                 ), //Text
                 SizedBox(

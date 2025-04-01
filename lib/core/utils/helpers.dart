@@ -3,21 +3,22 @@
 import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:loby/core/theme/colors.dart';
 import 'package:loby/core/utils/environment.dart';
 import 'package:loby/domain/entities/listing/service_listing.dart';
 import 'package:logger/logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:math';
+
 import 'exceptions.dart';
 import 'failure.dart';
 
@@ -207,7 +208,7 @@ class Helpers {
     Dio dio,
     RequestType type,
     String path, {
-    Map<String, dynamic>? queryParams,
+    Map<String, dynamic>? extra,
     Map<String, dynamic>? headers,
     bool encoded = false,
     dynamic data,
@@ -224,7 +225,8 @@ class Helpers {
           ),
     );
 
-    debugPrint("Api Url => '${dio.options.baseUrl}$path' Payload ${queryParams ?? data}");
+    debugPrint(
+        "Api Url => '${dio.options.baseUrl}$path' Payload ${extra ?? data}");
 
     // bool isDeviceConnected = await InternetConnectionChecker().hasConnection;
     // if (!isDeviceConnected) {
@@ -240,7 +242,7 @@ class Helpers {
         case RequestType.get:
           response = await dio.get(
             path,
-            queryParameters: queryParams,
+            queryParameters: extra,
             options: Options(headers: headers),
           );
           break;
@@ -253,14 +255,14 @@ class Helpers {
                 contentType:
                     encoded == true ? Headers.formUrlEncodedContentType : null,
                 validateStatus: (code) => true),
-            data: queryParams ?? data,
+            data: extra ?? data,
           );
           break;
 
         case RequestType.delete:
           response = await dio.delete(
             path,
-            queryParameters: queryParams,
+            queryParameters: extra,
             options: Options(headers: headers),
           );
           break;
@@ -290,7 +292,7 @@ class Helpers {
       }
     } on ServerException catch (e) {
       throw ServerException(message: e.message, code: e.code);
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       throw ServerException(
           message: e.error is SocketException
               ? 'No Internet Connection'
@@ -374,7 +376,7 @@ class Helpers {
                         alignment: AlignmentDirectional.centerStart,
                         child: Text(
                           'Camera',
-                          style: textTheme.headline3
+                          style: textTheme.displaySmall
                               ?.copyWith(color: aquaGreenColor),
                         ),
                       ),
@@ -388,7 +390,7 @@ class Helpers {
                         alignment: AlignmentDirectional.centerStart,
                         child: Text(
                           'Gallery',
-                          style: textTheme.headline3
+                          style: textTheme.displaySmall
                               ?.copyWith(color: aquaGreenColor),
                         ),
                       ),
@@ -399,7 +401,7 @@ class Helpers {
                         alignment: AlignmentDirectional.centerStart,
                         child: Text(
                           'Cancel',
-                          style: textTheme.headline3
+                          style: textTheme.displaySmall
                               ?.copyWith(color: aquaGreenColor),
                         ),
                       ),
@@ -491,7 +493,7 @@ class Helpers {
     final dateSplit = format.split(" ")[0].split("/");
     final timeSplit = format.split(" ")[1].split(":");
     final result =
-        "${formatDigits(dateSplit[1])}/${formatDigits(dateSplit[0])}/${dateSplit[2]} ${formatDigits(timeSplit[0])}:${timeSplit[1]} ${format.split(" ")[2]}";
+        "${formatDigits(dateSplit[1])}/${formatDigits(dateSplit[0])}/${dateSplit[2]} ${formatDigits(timeSplit[0])}:${timeSplit[1]} ${format.split(" ").length >= 3 ? format.split(" ")[2] : ''}";
     return result;
 
     // dateTime.toMoment().toLocal().format("DD/MM/YYYY hh:mm A").toString();

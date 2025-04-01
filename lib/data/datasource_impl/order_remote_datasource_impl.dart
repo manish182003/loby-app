@@ -17,9 +17,14 @@ class OrderRemoteDatasourceImpl extends OrderRemoteDatasource {
   OrderRemoteDatasourceImpl(this._dio);
 
   @override
-  Future<Map<String, dynamic>> createOrder(int? listingId, int? quantity,
-      String? price, String? bookFromTime, String? bookToTime, String? bookDate,
-       bool? isUpdatingTime) async {
+  Future<Map<String, dynamic>> createOrder(
+      int? listingId,
+      int? quantity,
+      String? price,
+      String? bookFromTime,
+      String? bookToTime,
+      String? bookDate,
+      bool? isUpdatingTime) async {
     String token = await Helpers.getApiToken();
     final Map<String, dynamic> headers = {
       'Authorization': 'Bearer $token',
@@ -43,7 +48,7 @@ class OrderRemoteDatasourceImpl extends OrderRemoteDatasource {
         _dio,
         RequestType.post,
         ApiEndpoints.createOrder,
-        // queryParams: {
+        // extra: {
         //   'user_game_service_id': "${listingId ?? ''}",
         //   'quantity': "${quantity ?? ''}",
         //   'price': price ?? '',
@@ -51,7 +56,7 @@ class OrderRemoteDatasourceImpl extends OrderRemoteDatasource {
         //   'booked_to_time': bookDate ?? '',
         //   'booked_date': bookFromTime ?? ''
         // },
-        queryParams: data,
+        extra: data,
         headers: headers,
       );
       print("orderremoteimpl >> $bookDate");
@@ -70,7 +75,7 @@ class OrderRemoteDatasourceImpl extends OrderRemoteDatasource {
         _dio,
         RequestType.get,
         ApiEndpoints.getOrders,
-        queryParams: {
+        extra: {
           'user_order_id': "${orderId ?? ""}",
           'status': status,
           'page': '${page ?? ''}'
@@ -93,7 +98,7 @@ class OrderRemoteDatasourceImpl extends OrderRemoteDatasource {
         _dio,
         RequestType.post,
         ApiEndpoints.changeOrderStatus,
-        queryParams: {'user_order_id': "${orderId ?? ""}", 'status': status},
+        extra: {'user_order_id': "${orderId ?? ""}", 'status': status},
         headers: headers,
       );
 
@@ -157,7 +162,7 @@ class OrderRemoteDatasourceImpl extends OrderRemoteDatasource {
         _dio,
         RequestType.post,
         ApiEndpoints.submitRating,
-        queryParams: {
+        extra: {
           'user_order_id': "${orderId ?? ""}",
           'star': '${stars ?? ''}',
           'comments': review
@@ -182,7 +187,7 @@ class OrderRemoteDatasourceImpl extends OrderRemoteDatasource {
         _dio,
         RequestType.post,
         ApiEndpoints.selectDuelWinner,
-        queryParams: {
+        extra: {
           'winner_id': "${winnerId ?? ""}",
           'user_order_id': "${orderId ?? ""}",
         },
@@ -204,7 +209,7 @@ class OrderRemoteDatasourceImpl extends OrderRemoteDatasource {
         _dio,
         RequestType.post,
         ApiEndpoints.raiseDispute,
-        queryParams: {'user_order_id': "${orderId ?? ""}"},
+        extra: {'user_order_id': "${orderId ?? ""}"},
         headers: headers,
       );
 
@@ -223,7 +228,7 @@ class OrderRemoteDatasourceImpl extends OrderRemoteDatasource {
         _dio,
         RequestType.get,
         ApiEndpoints.getDisputes,
-        queryParams: {
+        extra: {
           'page': "${id != null ? '' : page ?? ""}",
           'status': status ?? "",
           "id": "$id"

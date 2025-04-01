@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:loby/services/routing_service/routes_name.dart';
 
 import '../../../../../core/theme/colors.dart';
-
 
 class ChatMediaDialog {
   final Function() imageSelection;
@@ -65,7 +62,11 @@ class ChatMediaDialog {
                 },
                 child: Align(
                   alignment: AlignmentDirectional.centerStart,
-                  child: Text('Photo', style: textTheme.headline3?.copyWith(color: aquaGreenColor),),
+                  child: Text(
+                    'Photo',
+                    style:
+                        textTheme.displaySmall?.copyWith(color: aquaGreenColor),
+                  ),
                 ),
               ),
               TextButton(
@@ -75,14 +76,22 @@ class ChatMediaDialog {
                 },
                 child: Align(
                   alignment: AlignmentDirectional.centerStart,
-                  child: Text('File/Video', style: textTheme.headline3?.copyWith(color: aquaGreenColor),),
+                  child: Text(
+                    'File/Video',
+                    style:
+                        textTheme.displaySmall?.copyWith(color: aquaGreenColor),
+                  ),
                 ),
               ),
               TextButton(
                 onPressed: () => Navigator.pop(context),
                 child: Align(
                   alignment: AlignmentDirectional.centerStart,
-                  child: Text('Cancel', style: textTheme.headline3?.copyWith(color: aquaGreenColor),),
+                  child: Text(
+                    'Cancel',
+                    style:
+                        textTheme.displaySmall?.copyWith(color: aquaGreenColor),
+                  ),
                 ),
               ),
             ],
@@ -91,5 +100,4 @@ class ChatMediaDialog {
       ),
     );
   }
-
 }

@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
@@ -11,7 +10,8 @@ import '../../../../../widgets/follow_btn.dart';
 class FollowerItemWidget extends StatelessWidget {
   final User user;
   final String type;
-  const FollowerItemWidget({Key? key, required this.user, required this.type}) : super(key: key);
+  const FollowerItemWidget({Key? key, required this.user, required this.type})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,8 @@ class FollowerItemWidget extends StatelessWidget {
                 child: Text(
                   user.displayName ?? '',
                   overflow: TextOverflow.ellipsis,
-                  style: textTheme.headline5?.copyWith(color: textWhiteColor),
+                  style:
+                      textTheme.headlineSmall?.copyWith(color: textWhiteColor),
                   maxLines: 1,
                 ),
               ),
@@ -46,17 +47,28 @@ class FollowerItemWidget extends StatelessWidget {
                   width: MediaQuery.of(context).size.width * 0.31,
                   height: 36,
                   onPress: () {
-                    ProfileController profileController = Get.find<ProfileController>();
+                    ProfileController profileController =
+                        Get.find<ProfileController>();
                     profileController.followUnfollow(userId: user.id);
-                    int index = type == 'following' ? profileController.following.indexWhere((e) => e.id == user.id) : profileController.followers.indexWhere((e) => e.id == user.id);
+                    int index = type == 'following'
+                        ? profileController.following
+                            .indexWhere((e) => e.id == user.id)
+                        : profileController.followers
+                            .indexWhere((e) => e.id == user.id);
 
-                    if(type == "following"){
+                    if (type == "following") {
                       print(profileController.following[index]);
-                      profileController.following[index].followStatus = profileController.following[index].followStatus == 'Y' ? 'N' : 'Y';
+                      profileController.following[index].followStatus =
+                          profileController.following[index].followStatus == 'Y'
+                              ? 'N'
+                              : 'Y';
                       print(profileController.following[index]);
-                    }else{
+                    } else {
                       print(profileController.followers[index]);
-                      profileController.followers[index].followStatus = profileController.followers[index].followStatus == 'Y' ? 'N' : 'Y';
+                      profileController.followers[index].followStatus =
+                          profileController.followers[index].followStatus == 'Y'
+                              ? 'N'
+                              : 'Y';
                       print(profileController.followers[index]);
                     }
                     profileController.followers.refresh();

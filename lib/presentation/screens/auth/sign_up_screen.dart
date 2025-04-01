@@ -36,7 +36,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       child: Stack(
         children: [
           Container(
-            margin: EdgeInsets.only(top: 44.0),
+            margin: const EdgeInsets.only(top: 44.0),
             decoration: const BoxDecoration(
                 color: backgroundBalticSeaColor,
                 borderRadius: BorderRadius.only(
@@ -44,9 +44,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   topRight: Radius.circular(40.0),
                 )),
             child: Padding(
-              padding: EdgeInsets.fromLTRB(31.5, 16.00, 31.5, 16.00),
+              padding: const EdgeInsets.fromLTRB(31.5, 16.00, 31.5, 16.00),
               child: SingleChildScrollView(
-                child: Container(
+                child: SizedBox(
                   width: double.infinity,
                   child: Form(
                     key: _formKey,
@@ -57,7 +57,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           height: 1.h,
                         ),
                         Text('Create New Account',
-                            style: textTheme.headline2
+                            style: textTheme.displayMedium
                                 ?.copyWith(color: textWhiteColor)),
                         SizedBox(
                           width: double.infinity,
@@ -70,7 +70,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           width: double.infinity,
                           height: 2.h,
                         ),
-                        InputTextWidget(
+                        const InputTextWidget(
                           hintName: 'Ex: Jhon Singh',
                         ),
                         SizedBox(
@@ -142,7 +142,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           height: 2.h,
                         ),
                         Text('Sign up using Google or Apple',
-                            style: textTheme.headline5
+                            style: textTheme.headlineSmall
                                 ?.copyWith(color: textInputTitleColor)),
                         Center(
                           child: Padding(
@@ -210,7 +210,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             child: TextFormField(
               obscureText: !visible,
               cursorColor: aquaGreenColor,
-              style: textTheme.headline4?.copyWith(color: textWhiteColor),
+              style: textTheme.headlineMedium?.copyWith(color: textWhiteColor),
               maxLines: 1,
               keyboardType: TextInputType.visiblePassword,
               decoration: InputDecoration(
@@ -229,7 +229,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 contentPadding:
-                    EdgeInsets.symmetric(horizontal: 23.0, vertical: 0.0),
+                    const EdgeInsets.symmetric(horizontal: 23.0, vertical: 0.0),
                 focusedBorder: OutlineInputBorder(
                   borderSide:
                       const BorderSide(color: aquaGreenColor, width: 0.5),
@@ -241,8 +241,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   borderRadius: BorderRadius.circular(16.0),
                 ),
                 border: InputBorder.none,
-                hintStyle:
-                    textTheme.headline4?.copyWith(color: textInputTitleColor),
+                hintStyle: textTheme.headlineMedium
+                    ?.copyWith(color: textInputTitleColor),
                 hintText: password,
               ),
             ),
@@ -269,7 +269,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             child: TextFormField(
               obscureText: !visibleRe,
               cursorColor: aquaGreenColor,
-              style: textTheme.headline4?.copyWith(color: textWhiteColor),
+              style: textTheme.headlineMedium?.copyWith(color: textWhiteColor),
               maxLines: 1,
               keyboardType: TextInputType.visiblePassword,
               decoration: InputDecoration(
@@ -288,7 +288,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 contentPadding:
-                    EdgeInsets.symmetric(horizontal: 23.0, vertical: 0.0),
+                    const EdgeInsets.symmetric(horizontal: 23.0, vertical: 0.0),
                 focusedBorder: OutlineInputBorder(
                   borderSide:
                       const BorderSide(color: aquaGreenColor, width: 0.5),
@@ -300,8 +300,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   borderRadius: BorderRadius.circular(16.0),
                 ),
                 border: InputBorder.none,
-                hintStyle:
-                    textTheme.headline4?.copyWith(color: textInputTitleColor),
+                hintStyle: textTheme.headlineMedium
+                    ?.copyWith(color: textInputTitleColor),
                 hintText: password,
               ),
             ),

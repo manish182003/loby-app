@@ -7,16 +7,15 @@ import 'package:loby/presentation/screens/main/profile/user_profile/widgets/user
 import 'package:loby/presentation/screens/main/profile/user_profile/widgets/user_listing_widget.dart';
 import 'package:loby/presentation/screens/main/profile/user_profile/widgets/user_review_rating_widget.dart';
 import 'package:loby/presentation/screens/main/profile/user_profile/widgets/user_social_widgets.dart';
-import 'package:loby/presentation/screens/main/profile/user_profile/widgets/my_social_widgets.dart';
 import 'package:loby/presentation/widgets/body_padding_widget.dart';
-import 'package:sizer/sizer.dart';
+
 import '../../../../../widgets/custom_chip.dart';
 
 class UserInfo extends StatelessWidget {
   final User user;
   final String from;
 
-  UserInfo({Key? key, required this.user, required this.from}) : super(key: key);
+  UserInfo({super.key, required this.user, required this.from});
 
   final List<String> bubbles = [
     'Listing',
@@ -44,18 +43,21 @@ class UserInfo extends StatelessWidget {
           ),
           Obx(() {
             final index = homeController.profileSelectedOptionIndex.value;
-            switch(index){
+            switch (index) {
               case 0:
                 return UserListingWidget(user: user, from: from);
               case 1:
                 return UserAboutWidget(user: user);
               case 2:
-                return UserSocialWidget(user: user, from: from,);
-                // if(from == "other"){
-                //   return UserSocialWidget(user: user);
-                // }else{
-                //   return MySocialWidget(user: user);
-                // }
+                return UserSocialWidget(
+                  user: user,
+                  from: from,
+                );
+              // if(from == "other"){
+              //   return UserSocialWidget(user: user);
+              // }else{
+              //   return MySocialWidget(user: user);
+              // }
               case 3:
                 return UserDuelsWidget(user: user);
               case 4:

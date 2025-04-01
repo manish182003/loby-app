@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/profile/user.dart';
-import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/widgets/buttons/custom_button.dart';
 import 'package:loby/presentation/widgets/custom_loader.dart';
@@ -11,8 +9,6 @@ import 'package:loby/presentation/widgets/text_fields/text_field_widget.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../../core/theme/colors.dart';
-import '../../../../../widgets/cusstom_text.dart';
-import '../../../../../widgets/input_text_widget.dart';
 
 class MySocialWidget extends StatefulWidget {
   final User user;
@@ -24,14 +20,16 @@ class MySocialWidget extends StatefulWidget {
 }
 
 class _MySocialWidgetState extends State<MySocialWidget> {
-
   ProfileController profileController = Get.find<ProfileController>();
 
-  TextEditingController instagram = TextEditingController(text: "https://www.instagram.com/");
-  TextEditingController youtube = TextEditingController(text: "https://www.youtube.com/c/");
-  TextEditingController discord = TextEditingController(text: "https://discord.com/channels/");
-  TextEditingController twitch = TextEditingController(text: "https://www.twitch.tv/shroud");
-
+  TextEditingController instagram =
+      TextEditingController(text: "https://www.instagram.com/");
+  TextEditingController youtube =
+      TextEditingController(text: "https://www.youtube.com/c/");
+  TextEditingController discord =
+      TextEditingController(text: "https://discord.com/channels/");
+  TextEditingController twitch =
+      TextEditingController(text: "https://www.twitch.tv/shroud");
 
   @override
   void initState() {
@@ -40,31 +38,32 @@ class _MySocialWidgetState extends State<MySocialWidget> {
     profileController.getProfile(from: "social");
   }
 
-
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-
     return Obx(() {
-      if(profileController.isSocialLinksFetching.value){
+      if (profileController.isSocialLinksFetching.value) {
         return const CustomLoader();
-      }else{
-
-        instagram.text = profileController.profile.instagramId ?? "https://www.instagram.com/";
-        youtube.text = profileController.profile.youtubeId ?? "https://www.youtube.com/c/";
-        discord.text = profileController.profile.discordId ?? "https://discord.com/channels/";
-        twitch.text = profileController.profile.twitchId ?? "https://www.twitch.tv/shroud";
+      } else {
+        instagram.text = profileController.profile.instagramId ??
+            "https://www.instagram.com/";
+        youtube.text =
+            profileController.profile.youtubeId ?? "https://www.youtube.com/c/";
+        discord.text = profileController.profile.discordId ??
+            "https://discord.com/channels/";
+        twitch.text = profileController.profile.twitchId ??
+            "https://www.twitch.tv/shroud";
 
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             SizedBox(height: 2.h),
-            buildItem(textTheme, 'Instagram',  instagram),
+            buildItem(textTheme, 'Instagram', instagram),
             SizedBox(height: 2.h),
             buildItem(textTheme, 'YouTube', youtube),
             SizedBox(height: 2.h),
-            buildItem(textTheme, 'Discord',  discord),
+            buildItem(textTheme, 'Discord', discord),
             SizedBox(height: 2.h),
             buildItem(textTheme, 'Twitch', twitch),
             SizedBox(height: 6.h),
@@ -78,10 +77,10 @@ class _MySocialWidgetState extends State<MySocialWidget> {
                 FocusManager.instance.primaryFocus?.unfocus();
                 await Helpers.loader();
                 await profileController.updateSocialLinks(
-                    insta: instagram.text,
-                    youtube: youtube.text,
-                    discord: discord.text,
-                    twitch: twitch.text,
+                  insta: instagram.text,
+                  youtube: youtube.text,
+                  discord: discord.text,
+                  twitch: twitch.text,
                 );
                 profileController.isSocialsEditable.value = false;
                 await Helpers.hideLoader();
@@ -90,10 +89,8 @@ class _MySocialWidgetState extends State<MySocialWidget> {
           ],
         );
       }
-
     });
   }
-
 
   Widget buildItem(TextTheme textTheme, String socialTitle,
       TextEditingController controller) {
@@ -102,9 +99,10 @@ class _MySocialWidgetState extends State<MySocialWidget> {
       children: [
         Text(socialTitle,
             overflow: TextOverflow.ellipsis,
-            style: textTheme.headline4
-                ?.copyWith(color: textLightColor)),
-        SizedBox(height: 1.h,),
+            style: textTheme.headlineMedium?.copyWith(color: textLightColor)),
+        SizedBox(
+          height: 1.h,
+        ),
         TextFieldWidget(
           textEditingController: controller,
         ),

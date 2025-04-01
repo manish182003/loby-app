@@ -8,7 +8,6 @@ import 'package:loby/domain/entities/response_entities/kyc/get_kyc_token.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class KycRemoteDatasourceImpl extends KycRemoteDatasource {
-
   final Dio _dio;
 
   KycRemoteDatasourceImpl(this._dio);
@@ -20,13 +19,13 @@ class KycRemoteDatasourceImpl extends KycRemoteDatasource {
         _dio,
         RequestType.get,
         ApiEndpoints.getKycToken,
-        // queryParams: {'day':},
+        // extra: {'day':},
         headers: headers,
       );
-      if(response != null){
+      if (response != null) {
         print("kyctoken >^&* ${response['token']}");
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('kycToken', response['token']??"");
+        prefs.setString('kycToken', response['token'] ?? "");
       }
 
       return response!;
@@ -34,26 +33,31 @@ class KycRemoteDatasourceImpl extends KycRemoteDatasource {
       throw ServerException(message: e.message);
     }
   }
-  
+
   @override
-  Future<bool> sendKycOtp(String? kycToken, String? aadharNumber, String? type) async {
+  Future<bool> sendKycOtp(
+      String? kycToken, String? aadharNumber, String? type) async {
     try {
       final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(
         _dio,
         RequestType.post,
         ApiEndpoints.sendKycOtp,
-        queryParams: {'token' : kycToken , 'kyc_number' : aadharNumber, "type" : "AADHAR"},
+        extra: {
+          'token': kycToken,
+          'kyc_number': aadharNumber,
+          "type": "AADHAR"
+        },
         headers: headers,
       );
 
       // if(response != null){
       //   print("token >^&* ${response['data']['reset_token']}");
       // }
-      if(response != null){
+      if (response != null) {
         print("refIddd >^&* ${response['ref_id']}");
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('refId', response['ref_id']??"");
+        prefs.setString('refId', response['ref_id'] ?? "");
       }
 
       return true;
@@ -63,32 +67,27 @@ class KycRemoteDatasourceImpl extends KycRemoteDatasource {
   }
 
   @override
-  Future<Map<String, dynamic>> verifyKycOtp(String? kycToken, String? otp, String? refId, String? aadharNum) async{
+  Future<Map<String, dynamic>> verifyKycOtp(
+      String? kycToken, String? otp, String? refId, String? aadharNum) async {
     try {
       final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(
-        _dio,
-        RequestType.post,
-        ApiEndpoints.verifyKycOtp,
-        queryParams: {
-          'token' : kycToken,
-          // 'mobile': mobile,
-          'otp' : otp,
-          'ref_id' : "111111",
-          'aadhar_number' : aadharNum
-        },
-        headers: headers,
-        encoded: true
-      );
-      
-      
+          _dio, RequestType.post, ApiEndpoints.verifyKycOtp,
+          extra: {
+            'token': kycToken,
+            // 'mobile': mobile,
+            'otp': otp,
+            'ref_id': "111111",
+            'aadhar_number': aadharNum
+          },
+          headers: headers,
+          encoded: true);
 
       return response!;
     } on ServerException catch (e) {
       throw ServerException(message: e.message);
     }
   }
-
 }
 
 

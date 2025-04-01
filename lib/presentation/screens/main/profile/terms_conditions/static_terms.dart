@@ -17,7 +17,6 @@ class StaticTerms extends StatefulWidget {
 }
 
 class _StaticTermsState extends State<StaticTerms> {
-
   HomeController homeController = Get.find<HomeController>();
 
   @override
@@ -34,17 +33,22 @@ class _StaticTermsState extends State<StaticTerms> {
       appBar: appBar(context: context, appBarName: widget.termName),
       body: BodyPaddingWidget(
         child: Obx(() {
-          if(homeController.isStaticDataFetching.value){
+          if (homeController.isStaticDataFetching.value) {
             return const CustomLoader();
-          }else{
-            final staticData = homeController.staticData.where((e) => e.label == widget.termName).toList();
+          } else {
+            final staticData = homeController.staticData
+                .where((e) => e.label == widget.termName)
+                .toList();
             return SingleChildScrollView(
               child: Column(
                 children: [
                   Text(
-                      staticData.isEmpty ? "No Data Found" : staticData.first.realValue!,
-                      style: textTheme.headline5?.copyWith(color: textWhiteColor, height: 0.2.h),
-                      textAlign: TextAlign.start,
+                    staticData.isEmpty
+                        ? "No Data Found"
+                        : staticData.first.realValue!,
+                    style: textTheme.headlineSmall
+                        ?.copyWith(color: textWhiteColor, height: 0.2.h),
+                    textAlign: TextAlign.start,
                   ),
                   SizedBox(height: 2.h),
                 ],

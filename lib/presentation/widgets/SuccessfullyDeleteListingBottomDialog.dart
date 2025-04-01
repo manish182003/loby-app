@@ -5,8 +5,6 @@ import 'package:loby/services/routing_service/routes_name.dart';
 import '../../core/theme/colors.dart';
 import 'buttons/custom_button.dart';
 
-
-
 class SuccessfullyDeleteListingDialog {
   final TextTheme? textTheme;
   String? tileName;
@@ -15,7 +13,13 @@ class SuccessfullyDeleteListingDialog {
   String? contentLinkName;
   String? contentNameLast;
 
-  SuccessfullyDeleteListingDialog({this.textTheme, this.tileName, this.titleColor, this.contentName, this.contentLinkName, this.contentNameLast});
+  SuccessfullyDeleteListingDialog(
+      {this.textTheme,
+      this.tileName,
+      this.titleColor,
+      this.contentName,
+      this.contentLinkName,
+      this.contentNameLast});
 
   void showBottomDialog(BuildContext context) {
     showGeneralDialog(
@@ -41,6 +45,7 @@ class SuccessfullyDeleteListingDialog {
       },
     );
   }
+
   Widget _buildDialogContent(BuildContext context) {
     return IntrinsicHeight(
       child: Container(
@@ -85,13 +90,16 @@ class SuccessfullyDeleteListingDialog {
   }
 
   Widget _buildCongratulationsText() {
-    return tileName != null? Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
-      child: Text(
-        tileName?? 'Loby',
-        style: textTheme?.headline2?.copyWith(color: titleColor, fontWeight: FontWeight.w400),
-      ),
-    ) :  Container();
+    return tileName != null
+        ? Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Text(
+              tileName ?? 'Loby',
+              style: textTheme?.displayMedium
+                  ?.copyWith(color: titleColor, fontWeight: FontWeight.w400),
+            ),
+          )
+        : Container();
   }
 
   Widget _buildContentText() {
@@ -101,15 +109,16 @@ class SuccessfullyDeleteListingDialog {
         text: TextSpan(
           children: [
             TextSpan(
-              text: contentName??'',
-              style: textTheme?.headline5?.copyWith(color: textLightColor),
+              text: contentName ?? '',
+              style: textTheme?.headlineSmall?.copyWith(color: textLightColor),
             ),
             TextSpan(
-                text: contentLinkName?? '',
-                style: textTheme?.headline5?.copyWith(color: aquaGreenColor)),
+                text: contentLinkName ?? '',
+                style:
+                    textTheme?.headlineSmall?.copyWith(color: aquaGreenColor)),
             TextSpan(
-              text: contentNameLast??'',
-              style: textTheme?.headline5?.copyWith(color: textLightColor),
+              text: contentNameLast ?? '',
+              style: textTheme?.headlineSmall?.copyWith(color: textLightColor),
             ),
           ],
         ),

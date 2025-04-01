@@ -4,15 +4,14 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:loby/core/usecases/auth_params.dart';
 import 'package:loby/core/usecases/usecase.dart';
 import 'package:loby/core/utils/helpers.dart';
-import 'package:loby/data/models/profile/user_model.dart';
 import 'package:loby/domain/entities/auth/city.dart';
 import 'package:loby/domain/entities/auth/country.dart';
 import 'package:loby/domain/entities/auth/profile_tag.dart';
@@ -28,14 +27,12 @@ import 'package:loby/domain/usecases/auth/send_and_verify_otp.dart';
 import 'package:loby/domain/usecases/auth/signup.dart';
 import 'package:loby/domain/usecases/auth/update_profile.dart';
 import 'package:loby/presentation/getx/controllers/core_controller.dart';
+import 'package:rename/platform_file_editors/abs_platform_file_editor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../data/models/profile/user_model.dart';
 import '../../../domain/entities/auth/state.dart' as state;
 import '../../../domain/usecases/auth/add_fcm_token.dart';
-import '../../../services/routing_service/routes_name.dart';
 import 'profile_controller.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 
 class AuthController extends GetxController {
   final Signup _signup;
@@ -130,20 +127,21 @@ class AuthController extends GetxController {
     //    profileController.getProfile();
     //  }
 
-     if(userId != null && apiToken.runtimeType == String && apiToken.length != 0){
+    if (userId != null &&
+        apiToken.runtimeType == String &&
+        apiToken.length != 0) {
+      print("user id token");
+      profileController.getProfile();
+      addFCMToken(fcmToken: fcmToken);
+      analytics.setUserId(id: '$userId');
+      analytics.logEvent(
+          name: 'loggedInUser', parameters: ({'userId': '$userId'}));
+      coreController.connect(userId);
+    } else if (apiToken.runtimeType == String && apiToken.length != 0) {
+      print("api token");
 
-       print("user id token");
-       profileController.getProfile();
-       addFCMToken(fcmToken: fcmToken);
-       analytics.setUserId(id: '$userId');
-       analytics.logEvent(name: 'loggedInUser', parameters: ({'userId' : '$userId'}));
-       coreController.connect(userId);
-     }else if(apiToken.runtimeType == String && apiToken.length != 0){
-
-       print("api token");
-
-       profileController.getProfile();
-     }
+      profileController.getProfile();
+    }
   }
 
   Future<void> loggedUserIn() async {
@@ -160,44 +158,42 @@ class AuthController extends GetxController {
   }
 
   Future<void> handleGetData() async {
-  try {
-    // Configure Dio with OAuth2 authentication headers
-    Dio dio = Dio();
-    dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) {
-        // Add your OAuth2 authentication token to the request headers
-        options.headers["Authorization"] = "Bearer YOUR_ACCESS_TOKEN_HERE";
-        return handler.next(options);
-      },
-    ));
+    try {
+      // Configure Dio with OAuth2 authentication headers
+      Dio dio = Dio();
+      dio.interceptors.add(InterceptorsWrapper(
+        onRequest: (options, handler) {
+          // Add your OAuth2 authentication token to the request headers
+          options.headers["Authorization"] = "Bearer YOUR_ACCESS_TOKEN_HERE";
+          return handler.next(options);
+        },
+      ));
 
-    final response = await dio.get(
-        'https://people.googleapis.com/v1/people/me?personFields=phoneNumbers,emailAddresses,names,addresses');
+      final response = await dio.get(
+          'https://people.googleapis.com/v1/people/me?personFields=phoneNumbers,emailAddresses,names,addresses');
 
-    print('People API ${response.statusCode} response: ${response.data}');
+      print('People API ${response.statusCode} response: ${response.data}');
 
-    final Map<String, dynamic> data =
-        json.decode(response.data) as Map<String, dynamic>;
+      final Map<String, dynamic> data =
+          json.decode(response.data) as Map<String, dynamic>;
 
-    // Handle the received data as needed
-    // Your logic here
-  } catch (e) {
-    print('Error: $e');
-    // Handle the error
+      // Handle the received data as needed
+      // Your logic here
+    } catch (e) {
+      print('Error: $e');
+      // Handle the error
+    }
   }
-}
 
 // Future<void> handleGetData() async {
 //     final response = await Dio().get(
 //       'https://people.googleapis.com/v1/people/me?personFields=phoneNumbers,emailAddresses,names,addresses');
 
-
- 
 //     print('People API ${response.statusCode} response: $response');
-    
+
 //     final Map<String, dynamic> data =
 //         json.decode(response.data) as Map<String, dynamic>;
-    
+
 //   }
 
   Future<bool> googleSignInMethod(BuildContext context) async {
@@ -324,6 +320,7 @@ class AuthController extends GetxController {
         isCountriesFetching.value = false;
       },
       (success) {
+        debugPrint(success.countries.toString());
         countries.value = success.countries;
         isCountriesFetching.value = false;
       },
@@ -408,6 +405,27 @@ class AuthController extends GetxController {
   }
 
   Future<bool> updateProfile({String? from}) async {
+    logger.i("cover:"
+        "${coverImageFile.value}"
+        "avatar:"
+        "${profileImageFile.value}"
+        "fullName:"
+        "${fullName.value.text}"
+        "displayName:"
+        "${displayName.value.text}"
+        "countryId:"
+        "${selectedCountry.value.id}"
+        "stateId:"
+        "${selectedState.value.id}"
+        "cityId:"
+        "${selectedCity.value.id}"
+        "DOB:"
+        "${Helpers.getDateFormat(DOB.value.text)}"
+        "profileTags:"
+        "$selectedProfileTags"
+        "bio:"
+        "${bio.value.text}");
+
     final failureOrSuccess = await _updateProfile(
       Params(
         authParams: AuthParams(

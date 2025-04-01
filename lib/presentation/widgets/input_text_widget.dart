@@ -26,7 +26,9 @@ class InputTextWidget extends StatelessWidget {
       this.verticalHeight,
       this.controller,
       this.onChanged,
-      this.textAlign, this.minimumHeight, this.onEditingComplete})
+      this.textAlign,
+      this.minimumHeight,
+      this.onEditingComplete})
       : super(key: key);
 
   @override
@@ -47,14 +49,14 @@ class InputTextWidget extends StatelessWidget {
         TextFormField(
           textAlign: textAlign ?? TextAlign.start,
           validator: validator,
-          style: textTheme.headline4?.copyWith(color: textWhiteColor),
+          style: textTheme.headlineMedium?.copyWith(color: textWhiteColor),
           maxLines: maxLines ?? 1,
           cursorColor: whiteColor,
           cursorHeight: 20.0,
           controller: controller,
           keyboardType: keyboardType ?? TextInputType.name,
           onChanged: onChanged,
-          onFieldSubmitted : onEditingComplete,
+          onFieldSubmitted: onEditingComplete,
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(
                 horizontal: 23.0, vertical: verticalHeight ?? 0.0),
@@ -63,7 +65,8 @@ class InputTextWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(8.0),
             ),
             border: InputBorder.none,
-            hintStyle: textTheme.headline4?.copyWith(color: txtHintColor ?? textInputTitleColor),
+            hintStyle: textTheme.headlineMedium
+                ?.copyWith(color: txtHintColor ?? textInputTitleColor),
             hintText: hintName,
           ),
         ),

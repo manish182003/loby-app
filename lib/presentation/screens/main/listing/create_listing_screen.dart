@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/gestures.dart';
@@ -20,19 +21,19 @@ import 'package:loby/presentation/widgets/custom_chips.dart';
 import 'package:loby/presentation/widgets/text_fields/auto_complete_field.dart';
 import 'package:loby/presentation/widgets/text_fields/custom_drop_down.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
+import 'package:rename/platform_file_editors/abs_platform_file_editor.dart';
 import 'package:sizer/sizer.dart';
 import 'package:styled_text/styled_text.dart';
+
 import '../../../../core/theme/colors.dart';
 import '../../../widgets/bottom_dialog.dart';
 import '../../../widgets/buttons/custom_button.dart';
 import '../../../widgets/custom_checkbox.dart';
-import '../../../widgets/input_text_widget.dart';
 import '../../../widgets/text_fields/text_field_widget.dart';
 import '../profile/wallet/widgets/token_widget.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class CreateListingScreen extends StatefulWidget {
-  const CreateListingScreen({Key? key}) : super(key: key);
+  const CreateListingScreen({super.key});
 
   @override
   State<CreateListingScreen> createState() => _CreateListingScreenState();
@@ -85,6 +86,8 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    logger.i(
+        'time->${listingController.configuration.maximumEstimatedDeliveryTimeDays}');
     final textTheme = Theme.of(context).textTheme;
 
     return SingleChildScrollView(
@@ -103,7 +106,8 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                 child: Text(
                   'Create New Listing',
                   overflow: TextOverflow.ellipsis,
-                  style: textTheme.headline2?.copyWith(color: aquaGreenColor),
+                  style:
+                      textTheme.displayMedium?.copyWith(color: aquaGreenColor),
                 ),
               ),
               SizedBox(
@@ -118,7 +122,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                       .map((item) => DropdownMenuItem<Category>(
                             value: item,
                             child: Text(item.name!,
-                                style: textTheme.headline3
+                                style: textTheme.displaySmall
                                     ?.copyWith(color: whiteColor)),
                           ))
                       .toList(),
@@ -152,18 +156,18 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                         Text(
                             textAlign: TextAlign.start,
                             "Disclaimer",
-                            style: textTheme.headline4
+                            style: textTheme.headlineMedium
                                 ?.copyWith(color: textWhiteColor)),
                         SizedBox(height: 2.h),
                         StyledText(
                           text: homeController.disclaimer.value,
-                          style: textTheme.headline6?.copyWith(
+                          style: textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.w300,
                             color: textLightColor,
                           ),
                           tags: {
                             'bold': StyledTextTag(
-                                style: textTheme.headline6!.copyWith(
+                                style: textTheme.titleLarge!.copyWith(
                                     fontWeight: FontWeight.w500,
                                     color: textLightColor)),
                             'click': StyledTextActionTag(
@@ -176,7 +180,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                                         contentLinkName: '')
                                     .showBottomDialog(context);
                               },
-                              style: textTheme.headline6!.copyWith(
+                              style: textTheme.titleLarge!.copyWith(
                                   fontWeight: FontWeight.w500,
                                   color: aquaGreenColor),
                             ),
@@ -261,14 +265,14 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                       text:
                           "For safety reasons, sellers are not allowed to leave their personal contacts. All communications with the buyers can only be made using Loby chat. Any conversation outside Loby Chat will not be insured/covered by ",
                       style:
-                          textTheme.headline6?.copyWith(color: textLightColor),
+                          textTheme.titleLarge?.copyWith(color: textLightColor),
                     ),
                     TextSpan(
                         text: "Loby Protection",
                         recognizer: TapGestureRecognizer()
                           ..onTap = () => context.pushNamed(staticContentPage,
-                              queryParams: {'termName': 'Loby Protection'}),
-                        style: textTheme.headline6
+                              extra: {'termName': 'Loby Protection'}),
+                        style: textTheme.titleLarge
                             ?.copyWith(color: aquaGreenColor)),
                   ])),
               SizedBox(height: 2.h),
@@ -284,15 +288,16 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
               _buildUploadField(textTheme),
               SizedBox(height: 2.h),
               Text('Price',
-                  style: textTheme.headline4?.copyWith(color: textLightColor)),
+                  style: textTheme.headlineMedium
+                      ?.copyWith(color: textLightColor)),
               SizedBox(height: 2.h),
               _buildPrice(textTheme),
               SizedBox(height: 2.h),
               Row(
                 children: [
                   Text('Available Stock',
-                      style:
-                          textTheme.headline4?.copyWith(color: textLightColor)),
+                      style: textTheme.headlineMedium
+                          ?.copyWith(color: textLightColor)),
                   SizedBox(
                     width: 18.w,
                   ),
@@ -322,7 +327,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
               //         text: "‘Loby Protection’",
               //         recognizer: TapGestureRecognizer()
               //           ..onTap = () => context.pushNamed(staticContentPage,
-              //               queryParams: {'termName': 'Loby Protection'}),
+              //               extra: {'termName': 'Loby Protection'}),
               //         style:
               //             textTheme.headline4?.copyWith(color: aquaGreenColor),
               //       ),
@@ -358,16 +363,14 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                                 text: "‘Loby Protection’",
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () => context.pushNamed(
-                                          staticContentPage,
-                                          queryParams: {
-                                            'termName': 'Loby Protection'
-                                          }),
-                                style: textTheme.headline4
+                                      staticContentPage,
+                                      extra: {'termName': 'Loby Protection'}),
+                                style: textTheme.headlineMedium
                                     ?.copyWith(color: aquaGreenColor),
                               ),
                               TextSpan(
                                   text: " Insurance",
-                                  style: textTheme.headline4
+                                  style: textTheme.headlineMedium
                                       ?.copyWith(color: textLightColor)),
                               // TextSpan(
                               //   text: '7 Days Insurance',
@@ -385,8 +388,8 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                       maxLines: 2,
                       textAlign: TextAlign.start,
                       'Estimated Delivery \nTime (Days)',
-                      style:
-                          textTheme.headline4?.copyWith(color: textLightColor)),
+                      style: textTheme.headlineMedium
+                          ?.copyWith(color: textLightColor)),
                   SizedBox(width: 10.w),
                   Expanded(
                     child: BuildDropdown(
@@ -410,7 +413,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                           .map((item) => DropdownMenuItem<String>(
                                 value: "$item",
                                 child: Text("$item",
-                                    style: textTheme.headline3
+                                    style: textTheme.displaySmall
                                         ?.copyWith(color: whiteColor)),
                               ))
                           .toList(),
@@ -431,7 +434,8 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
               showErrorMessage
                   ? Text(
                       'Please accept the terms of use and privacy policy to proceed...',
-                      style: textTheme.headline5?.copyWith(color: Colors.red))
+                      style:
+                          textTheme.headlineSmall?.copyWith(color: Colors.red))
                   : const SizedBox(),
               SizedBox(height: 5.h),
               CustomButton(
@@ -620,7 +624,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   ?.map((item) => DropdownMenuItem<GameCategoryServiceOption>(
                         value: item,
                         child: Text(item.serviceOption!.serviceOptionName!,
-                            style: textTheme.headline3
+                            style: textTheme.displaySmall
                                 ?.copyWith(color: whiteColor)),
                       ))
                   .toList(),
@@ -727,8 +731,8 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
               ?.map((item) => DropdownMenuItem<GameCategoryServiceOption>(
                     value: item,
                     child: Text(item.serviceOption!.serviceOptionName!,
-                        style:
-                            textTheme.headline3?.copyWith(color: whiteColor)),
+                        style: textTheme.displaySmall
+                            ?.copyWith(color: whiteColor)),
                   ))
               .toList(),
           onChanged: (value) {
@@ -843,14 +847,14 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                     TextSpan(
                       text: content,
                       style:
-                          textTheme.subtitle2?.copyWith(color: textLightColor),
+                          textTheme.titleSmall?.copyWith(color: textLightColor),
                     ),
                     TextSpan(
                         text: textSpan,
                         recognizer: TapGestureRecognizer()
                           ..onTap = () => context.pushNamed(staticContentPage,
-                              queryParams: {'termName': 'Terms of Use'}),
-                        style: textTheme.subtitle2
+                              extra: {'termName': 'Terms of Use'}),
+                        style: textTheme.titleSmall
                             ?.copyWith(color: aquaGreenColor)),
                   ]))),
         ),
@@ -902,7 +906,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
               "per",
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
-              style: textTheme.headline4
+              style: textTheme.headlineMedium
                   ?.copyWith(fontSize: 13.0, color: textLightColor),
             ),
             SizedBox(width: 2.w),
@@ -915,7 +919,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   ?.map((item) => DropdownMenuItem<Unit>(
                         value: item,
                         child: Text(item.name!,
-                            style: textTheme.headline3
+                            style: textTheme.displaySmall
                                 ?.copyWith(color: whiteColor)),
                       ))
                   .toList(),
@@ -947,7 +951,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                 ),
                 Text(
                   " = ₹ ${listingController.tokenToRupee}",
-                  style: textTheme.headline3?.copyWith(color: whiteColor),
+                  style: textTheme.displaySmall?.copyWith(color: whiteColor),
                 ),
               ],
             );
@@ -975,7 +979,8 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
               Text(
                   textAlign: TextAlign.center,
                   "Upload Images or Videos",
-                  style: textTheme.headline4?.copyWith(color: textWhiteColor)),
+                  style: textTheme.headlineMedium
+                      ?.copyWith(color: textWhiteColor)),
               SizedBox(height: 3.h),
               Obx(() {
                 if (listingController.files.isEmpty) {
@@ -1013,7 +1018,8 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   onTap: _openFileExplorer),
               SizedBox(height: 2.h),
               Text("or",
-                  style: textTheme.headline4?.copyWith(color: textWhiteColor)),
+                  style: textTheme.headlineMedium
+                      ?.copyWith(color: textWhiteColor)),
               SizedBox(height: 1.h),
               TextFieldWidget(
                 textEditingController: listingController.filePathLink.value,

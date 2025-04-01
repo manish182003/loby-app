@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 import '../../../../../core/theme/colors.dart';
 
 class HoursDropDownDivider extends StatefulWidget {
-  const HoursDropDownDivider({Key? key}) : super(key: key);
+  const HoursDropDownDivider({super.key});
 
   @override
   State<HoursDropDownDivider> createState() => _HoursDropDownDividerState();
 }
 
 class _HoursDropDownDividerState extends State<HoursDropDownDivider> {
-
   final List<String> items = [
     'Hour',
     'Quantity',
@@ -22,9 +21,9 @@ class _HoursDropDownDividerState extends State<HoursDropDownDivider> {
 
   List<DropdownMenuItem<String>> _addDividersAfterItems(
       List<String> items, TextTheme textTheme) {
-    List<DropdownMenuItem<String>> _menuItems = [];
+    List<DropdownMenuItem<String>> menuItems = [];
     for (var item in items) {
-      _menuItems.addAll(
+      menuItems.addAll(
         [
           DropdownMenuItem<String>(
             value: item,
@@ -32,7 +31,7 @@ class _HoursDropDownDividerState extends State<HoursDropDownDivider> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
                 item,
-                style: textTheme.headline6?.copyWith(color: textWhiteColor),
+                style: textTheme.titleLarge?.copyWith(color: textWhiteColor),
               ),
             ),
           ),
@@ -50,30 +49,34 @@ class _HoursDropDownDividerState extends State<HoursDropDownDivider> {
         ],
       );
     }
-    return _menuItems;
+    return menuItems;
   }
 
   List<int> _getDividersIndexes() {
-    List<int> _dividersIndexes = [];
+    List<int> dividersIndexes = [];
     for (var i = 0; i < (items.length * 2) - 1; i++) {
       //Dividers indexes will be the odd indexes
       if (i.isOdd) {
-        _dividersIndexes.add(i);
+        dividersIndexes.add(i);
       }
     }
-    return _dividersIndexes;
+    return dividersIndexes;
   }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return DropdownButtonHideUnderline(
-      child: DropdownButton2(               
+      child: DropdownButton2(
         isExpanded: true,
-        // Reduces the dropdowns height by +/- 50%
-        icon: const Icon(
-          Icons.keyboard_arrow_down,
-          color: iconWhiteColor,
+        iconStyleData: IconStyleData(
+          icon: const Icon(
+            Icons.keyboard_arrow_down,
+            color: iconWhiteColor,
+          ),
         ),
+        // Reduces the dropdowns height by +/- 50%
+
         items: _addDividersAfterItems(items, textTheme),
 
         // customItemsIndexes: _getDividersIndexes(),
@@ -84,14 +87,25 @@ class _HoursDropDownDividerState extends State<HoursDropDownDivider> {
             selectedValue = value as String;
           });
         },
-        dropdownDecoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
-          color: backgroundBalticSeaColor,
+        dropdownStyleData: DropdownStyleData(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            color: backgroundBalticSeaColor,
+          ),
         ),
-        buttonHeight: 40,
-        buttonWidth: 150,
-        itemHeight: 40,
-        itemPadding: const EdgeInsets.symmetric(horizontal: 8.0),
+        // dropdownDecoration: BoxDecoration(
+        //   borderRadius: BorderRadius.circular(14),
+        //   color: backgroundBalticSeaColor,
+        // ),
+        buttonStyleData: ButtonStyleData(
+          height: 40,
+          width: 150,
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        ),
+        // buttonHeight: 40,
+        // buttonWidth: 150,
+        // itemHeight: 40,
+        // itemPadding: const EdgeInsets.symmetric(horizontal: 8.0),
       ),
     );
   }

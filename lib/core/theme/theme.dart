@@ -12,78 +12,79 @@ class ApplicationTheme {
         scaffoldBackgroundColor: backgroundColor,
         // colorScheme:_customColorScheme,
         iconTheme: const IconThemeData(color: iconColor),
-        appBarTheme: const AppBarTheme(backgroundColor: backgroundBalticSeaColor),
+        appBarTheme:
+            const AppBarTheme(backgroundColor: backgroundBalticSeaColor),
         textSelectionTheme: const TextSelectionThemeData(
           cursorColor: primaryTextColor,
         ),
         textTheme: TextTheme(
           headlineLarge: TextStyle(
-            fontSize: SizerUtil.deviceType == DeviceType.web ? 5.0.sp : 25.sp,
+            fontSize: Device.deviceType == DeviceType.web ? 5.0.sp : 25.sp,
             fontWeight: FontWeight.w800,
             color: primaryTextColor,
             fontFamily: 'Montserrat',
           ),
-          headline1: TextStyle(
-            fontSize: SizerUtil.deviceType == DeviceType.web ? 4.5.sp : 19.sp,
+          displayLarge: TextStyle(
+            fontSize: Device.deviceType == DeviceType.web ? 4.5.sp : 19.sp,
             fontWeight: FontWeight.w500,
             color: primaryTextColor,
             fontFamily: 'Montserrat',
           ),
-          headline2: TextStyle(
-            fontSize: SizerUtil.deviceType == DeviceType.web ? 4.0.sp : 14.sp,
+          displayMedium: TextStyle(
+            fontSize: Device.deviceType == DeviceType.web ? 4.0.sp : 14.sp,
             fontWeight: FontWeight.w500,
             color: primaryTextColor,
             fontFamily: 'Montserrat',
           ),
-          headline3: TextStyle(
-            fontSize: SizerUtil.deviceType == DeviceType.web ? 3.5.sp : 12.5.sp,
+          displaySmall: TextStyle(
+            fontSize: Device.deviceType == DeviceType.web ? 3.5.sp : 12.5.spa,
             fontWeight: FontWeight.w400,
             color: primaryTextColor,
             fontFamily: 'Montserrat',
           ),
-          headline4: TextStyle(
-            fontSize: SizerUtil.deviceType == DeviceType.web ? 3.0.sp : 11.sp,
+          headlineMedium: TextStyle(
+            fontSize: Device.deviceType == DeviceType.web ? 3.0.sp : 11.spa,
             fontWeight: FontWeight.w600,
             color: primaryTextColor,
             fontFamily: 'Montserrat',
           ),
-          headline5: TextStyle(
-            fontSize: SizerUtil.deviceType == DeviceType.web ? 2.5.sp : 10.sp,
+          headlineSmall: TextStyle(
+            fontSize: Device.deviceType == DeviceType.web ? 2.5.sp : 10.spa,
             fontWeight: FontWeight.w500,
             color: primaryTextColor,
             fontFamily: 'Montserrat',
           ),
-          headline6: TextStyle(
-            fontSize: SizerUtil.deviceType == DeviceType.web ? 2.0.sp : 9.sp,
+          titleLarge: TextStyle(
+            fontSize: Device.deviceType == DeviceType.web ? 2.0.sp : 9.spa,
             fontWeight: FontWeight.w400,
             color: primaryTextColor,
             fontFamily: 'Montserrat',
           ),
-          subtitle1: const TextStyle(
+          titleMedium: const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w400,
             color: textInputTitleColor,
             fontFamily: 'Montserrat',
           ),
-          subtitle2: const TextStyle(
+          titleSmall: const TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w400,
             color: bodyTextColor,
             fontFamily: 'Montserrat',
           ),
-          bodyText1: const TextStyle(
+          bodyLarge: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
             color: bodyTextColor,
             fontFamily: 'Montserrat',
           ),
-          bodyText2: const TextStyle(
+          bodyMedium: const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w400,
             color: primaryTextColor,
             fontFamily: 'Montserrat',
           ),
-          button: TextStyle(
+          labelLarge: TextStyle(
             fontSize: 12.sp,
             fontWeight: FontWeight.w700,
             color: primaryTextColor,

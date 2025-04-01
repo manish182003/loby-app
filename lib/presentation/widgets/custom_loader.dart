@@ -12,7 +12,6 @@ class CustomLoader extends StatelessWidget {
   }
 }
 
-
 class NoDataFoundWidget extends StatelessWidget {
   final String? text;
   const NoDataFoundWidget({Key? key, this.text}) : super(key: key);
@@ -21,13 +20,11 @@ class NoDataFoundWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-
     return Center(
         child: Text(
-          text ?? 'No Data Found',
-          textAlign: TextAlign.center,
-          style: textTheme.headline3?.copyWith(color: textWhiteColor),
-        ));
+      text ?? 'No Data Found',
+      textAlign: TextAlign.center,
+      style: textTheme.displaySmall?.copyWith(color: textWhiteColor),
+    ));
   }
 }
-

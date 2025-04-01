@@ -1,15 +1,16 @@
 import 'dart:async';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
+
 import '../../../core/utils/helpers.dart';
-import 'auth_controller.dart';
 
 class NetworkController extends GetxController {
   final Connectivity _connectivity = Connectivity();
-  late ConnectivityResult _connectivityResult;
-  late StreamSubscription < ConnectivityResult> _streamSubscription;
+  late List<ConnectivityResult> _connectivityResult;
+  late StreamSubscription<List<ConnectivityResult>> _streamSubscription;
 
   ProfileController profileController = Get.find<ProfileController>();
 
@@ -17,17 +18,18 @@ class NetworkController extends GetxController {
   void onInit() async {
     super.onInit();
     _initConnectivity();
-    _streamSubscription = _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+    _streamSubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
   }
 
   Future<void> _initConnectivity() async {
     _connectivityResult = await _connectivity.checkConnectivity();
   }
 
-  void _updateConnectionStatus(ConnectivityResult connectivityResult) {
-    if(kDebugMode) print("STATUS : $connectivityResult");
+  void _updateConnectionStatus(List<ConnectivityResult> connectivityResult) {
+    if (kDebugMode) print("STATUS : $connectivityResult");
 
-    if(connectivityResult == ConnectivityResult.none){
+    if (connectivityResult.first == ConnectivityResult.none) {
       Helpers.toast("Internet Not Connected");
       // SmartDialog.show(
       //   backDismiss: false,

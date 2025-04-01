@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:loby/core/theme/colors.dart';
-import 'package:sizer/sizer.dart';
 
 class CustomTextField extends StatefulWidget {
   const CustomTextField(
@@ -87,12 +86,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
       textCapitalization: widget.textCapitalization!,
       obscureText: widget.obscureText,
       // maxLengthEnforced: true,
-      style: textTheme.headline4?.copyWith(
+      style: textTheme.headlineMedium?.copyWith(
           color: widget.isReadableOnly ? textInputTitleColor : textWhiteColor),
       scrollPadding: EdgeInsets.only(bottom: widget.scrollBottomPadding!),
 
       decoration: InputDecoration(
-      prefixText: widget.prefix,
+          prefixText: widget.prefix,
           suffixIcon: widget.iconButton,
           counterText: '',
           filled: true,
@@ -117,13 +116,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
             borderSide: const BorderSide(color: textErrorColor, width: 0.5),
             borderRadius: BorderRadius.circular(8.0),
           ),
-          labelStyle: textTheme.headline4?.copyWith(
+          labelStyle: textTheme.headlineMedium?.copyWith(
             color: Colors.black.withOpacity(0.6),
           ),
-          errorStyle: textTheme.headline5?.copyWith(color: Colors.red),
+          errorStyle: textTheme.headlineSmall?.copyWith(color: Colors.red),
           hintText: widget.hintText,
           errorText: widget.errorText,
-          hintStyle: textTheme.headline3?.copyWith(
+          hintStyle: textTheme.displaySmall?.copyWith(
             color: textLightColor,
           ),
           labelText: widget.labelText,

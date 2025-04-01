@@ -2,22 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import 'package:loby/core/theme/colors.dart';
+import 'package:loby/core/utils/helpers.dart';
+import 'package:loby/presentation/getx/controllers/home_controller.dart';
 import 'package:loby/presentation/getx/controllers/kyc_controller.dart';
-import 'package:loby/presentation/getx/controllers/order_controller.dart';
-import 'package:loby/presentation/screens/main/profile/my_order/all_orders_screen.dart';
+import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/widgets/buttons/custom_button.dart';
 import 'package:loby/presentation/widgets/custom_app_bar.dart';
 import 'package:loby/presentation/widgets/text_fields/text_field_widget.dart';
-import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:sizer/sizer.dart';
-import 'package:loby/domain/entities/kyc/get_kyc_token.dart';
-
-import 'package:loby/core/utils/helpers.dart';
-import 'package:loby/presentation/getx/controllers/home_controller.dart';
-import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 
 class AddAccount extends StatefulWidget {
   // final GetKycToken geTKyctoken;
@@ -33,7 +27,7 @@ class _AddAccountState extends State<AddAccount>
     with SingleTickerProviderStateMixin {
   KycController kycController = Get.find<KycController>();
   late TabController _tabController;
-  int _currentTabIndex = 0;
+  final int _currentTabIndex = 0;
   final _formKey = GlobalKey<FormState>();
   final _formKey2 = GlobalKey<FormState>();
   final _formKey3 = GlobalKey<FormState>();
@@ -81,7 +75,8 @@ class _AddAccountState extends State<AddAccount>
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       backgroundColor: backgroundDarkJungleGreenColor,
-      appBar: appBar(context: context, appBarName: "KYC Verification", isBackIcon: true),
+      appBar: appBar(
+          context: context, appBarName: "KYC Verification", isBackIcon: true),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -124,7 +119,8 @@ class _AddAccountState extends State<AddAccount>
                 ),
                 Text(
                   "Add Withdraw Details",
-                  style: textTheme.headline1?.copyWith(color: textWhiteColor),
+                  style:
+                      textTheme.displayLarge?.copyWith(color: textWhiteColor),
                 ),
                 SizedBox(
                   height: 2.h,

@@ -1,23 +1,17 @@
-import 'package:drop_shadow_image/drop_shadow_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:loby/core/theme/colors.dart';
-import 'package:loby/domain/entities/slots/get_slots_for_buyer.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 import 'package:loby/presentation/getx/controllers/order_controller.dart';
 import 'package:loby/presentation/getx/controllers/slots_controller.dart';
 import 'package:loby/presentation/screens/main/profile/time_slots/widget/buyer_time_slot_box.dart';
 import 'package:loby/presentation/widgets/buttons/custom_button.dart';
-import 'package:loby/presentation/widgets/custom_app_bar.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
-import 'package:custom_clippers/custom_clippers.dart';
-import 'package:drop_shadow/drop_shadow.dart';
 
 class BuyerTimeSlot extends StatefulWidget {
   bool? isEditing;
@@ -46,7 +40,7 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
     //     slotId: orderController.orders.first.slotId);
     slotsController.getBuyerSlots(
         providerId: widget.id,
-        date: "${DateFormat('yyyy-MM-dd').format(_currentDate)}");
+        date: DateFormat('yyyy-MM-dd').format(_currentDate));
   }
 
   // final selectedIndex = 0.obs;
@@ -106,7 +100,7 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
       body: SafeArea(
         child: Stack(children: [
           // appBar(context: context,isBackIcon: true),
-          
+
           Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
@@ -120,54 +114,56 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Align(
-            alignment: Alignment.topCenter,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-              child: Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                width: 42,
-                height: 42,
-                child: MaterialButton(
-                  shape: const CircleBorder(),
-                  color: textCharcoalBlueColor,
-                  onPressed: () {
-                      Navigator.pop(context);
-                    
-                  },
-                  child: const Icon(
-                    Icons.arrow_back_ios,
-                    size: 18,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-                    GestureDetector(
-                  onTap: () {
-                    context.pushNamed(searchScreenPage);
-                  },
-                  child: Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                      color: textCharcoalBlueColor,
-                      borderRadius: BorderRadius.circular(10)
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                    child: Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: 42,
+                            height: 42,
+                            child: MaterialButton(
+                              shape: const CircleBorder(),
+                              color: textCharcoalBlueColor,
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Icon(
+                                Icons.arrow_back_ios,
+                                size: 18,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              context.pushNamed(searchScreenPage);
+                            },
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                  color: textCharcoalBlueColor,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: const Icon(
+                                CupertinoIcons.search,
+                                size: 23,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    child: const Icon(CupertinoIcons.search, size: 23, color: Colors.white,),
-                  ),
-                ),
-                  ],
-                ),
-              
-              ),
-            )),
-            
+                  )),
               Stack(
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(top: 10, left: 15, right: 15),
+                    padding:
+                        const EdgeInsets.only(top: 10, left: 15, right: 15),
                     child: Align(
                       child: SizedBox(
                         width: 100.w,
@@ -183,19 +179,23 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
                     padding: EdgeInsets.only(top: 4.0.w),
                     child: Align(
                       child: SizedBox(
-                        child: 
-                        orderController.selectedOrder.value.userGameService?.user?.image != null ?
-                        CircleAvatar(
-                          radius: 32,
-                          backgroundColor: whiteColor,
-                          backgroundImage: NetworkImage("${orderController.selectedOrder.value.userGameService?.user?.image}"),
-                          // backgroundImage: AssetImage("assets/images/view.png"),
-                        ) : CircleAvatar(
-                          radius: 32,
-                          backgroundColor: whiteColor,
-                          backgroundImage: AssetImage("assets/images/user_placeholder.png"),
-                          // backgroundImage: AssetImage("assets/images/view.png"),
-                        ),
+                        child: orderController.selectedOrder.value
+                                    .userGameService?.user?.image !=
+                                null
+                            ? CircleAvatar(
+                                radius: 32,
+                                backgroundColor: whiteColor,
+                                backgroundImage: NetworkImage(
+                                    "${orderController.selectedOrder.value.userGameService?.user?.image}"),
+                                // backgroundImage: AssetImage("assets/images/view.png"),
+                              )
+                            : const CircleAvatar(
+                                radius: 32,
+                                backgroundColor: whiteColor,
+                                backgroundImage: AssetImage(
+                                    "assets/images/user_placeholder.png"),
+                                // backgroundImage: AssetImage("assets/images/view.png"),
+                              ),
                       ),
                     ),
                   ),
@@ -207,7 +207,7 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
                           children: [
                             Text(
                               "${orderController.selectedOrder.value.userGameService?.user?.name}",
-                              style: textTheme.headline4
+                              style: textTheme.headlineMedium
                                   ?.copyWith(color: textWhiteColor),
                             ),
                             SizedBox(
@@ -221,7 +221,7 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
                                     _changeMonth(-1);
                                     return;
                                   },
-                                  child: CircleAvatar(
+                                  child: const CircleAvatar(
                                     radius: 10,
                                     backgroundColor: lavaRedColor,
                                     child: Icon(
@@ -236,7 +236,7 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
                                 ),
                                 Text(
                                   format2.value.format(_currentDate),
-                                  style: textTheme.headline4
+                                  style: textTheme.headlineMedium
                                       ?.copyWith(color: textWhiteColor),
                                 ),
                                 SizedBox(
@@ -245,10 +245,10 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
                                 InkWell(
                                   onTap: () {
                                     _changeMonth(1);
-        
+
                                     return;
                                   },
-                                  child: CircleAvatar(
+                                  child: const CircleAvatar(
                                     radius: 10,
                                     backgroundColor: lavaRedColor,
                                     child: Icon(
@@ -260,7 +260,7 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
                                 ),
                               ],
                             ),
-                            Container(
+                            SizedBox(
                               width: 320,
                               child: SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
@@ -284,7 +284,7 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
                                                 _currentDate.month,
                                                 index + 1);
                                             if (_isBeforeCurrentDate(date)) {
-                                              return SizedBox();
+                                              return const SizedBox();
                                             } else {
                                               // availbale
                                               //     .availableDoctor.value.availabilities!
@@ -301,10 +301,11 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
                                                 DateFormat('yyyy-MM-dd')
                                                     .format(date);
                                             String formattedDateSort =
-                                                DateFormat('ccccc').format(date);
+                                                DateFormat('ccccc')
+                                                    .format(date);
                                             String month =
                                                 DateFormat('MMMM').format(date);
-        
+
                                             print("storeLanguagetttt");
                                             String formattedDay =
                                                 DateFormat('E').format(date);
@@ -313,9 +314,9 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
                                               pId: widget.id,
                                               index,
                                               formDay: formattedDay,
-                                              title:
-                                                  formattedDatee.toUpperCase() ??
-                                                      "",
+                                              title: formattedDatee
+                                                      .toUpperCase() ??
+                                                  "",
                                               date: formattedDate,
                                               sortName: formattedDateSort,
                                               selectDate: dateSlect,
@@ -326,7 +327,7 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
                                       ),
                                     );
                                   }
-                                  return Text("Date hi empty aai");
+                                  return const Text("Date hi empty aai");
                                 }),
                               ),
                             ),
@@ -383,7 +384,6 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
                 height: 5.h,
               ),
               Padding(
-
                 padding: const EdgeInsets.only(top: 2),
                 child: Container(
                   height: 52.h,
@@ -400,7 +400,8 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
                   child: Column(
                     children: [
                       Padding(
-                          padding: const EdgeInsets.only(left: 0, right: 0, top: 0),
+                          padding:
+                              const EdgeInsets.only(left: 0, right: 0, top: 0),
                           child: Obx(() {
                             if (slotsController.buyerSlots.isNotEmpty) {
                               return Column(
@@ -409,15 +410,16 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
                                     margin: EdgeInsets.only(top: 3.h),
                                     height: 40.h,
                                     child: ListView.builder(
-                                          scrollDirection: Axis.vertical,
-                                          shrinkWrap: true,
-                                          itemCount: slotsController.buyerSlots.length,
-                                          itemBuilder: (context, index) {
-                                            return BuyerTimeSlotBox(
-                                                getBuyerSlots:
-                                                    slotsController.buyerSlots[index]);
-                                          },
-                                        ),
+                                      scrollDirection: Axis.vertical,
+                                      shrinkWrap: true,
+                                      itemCount:
+                                          slotsController.buyerSlots.length,
+                                      itemBuilder: (context, index) {
+                                        return BuyerTimeSlotBox(
+                                            getBuyerSlots: slotsController
+                                                .buyerSlots[index]);
+                                      },
+                                    ),
                                     // ),
                                     // ),
                                   ),
@@ -432,14 +434,16 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
                                       right: 4.w,
                                       // bottom: 1.h,
                                       onTap: () async {
-                                        slotsController.editSlot(
-                                          date: slotsController
+                                        slotsController
+                                            .editSlot(
+                                              date: slotsController
                                                   .selectDateofCale.first
                                                   .toString(),
-                                          orderId: orderController
+                                              orderId: orderController
                                                   .selectedOrder.value.id,
-                                                  
-                                          slotId: slotsController.selectSlotArr.first.id,
+
+                                              slotId: slotsController
+                                                  .selectSlotArr.first.id,
                                               // isUpdatingTime: true,
                                               // listingId: orderController
                                               //     .selectedOrder
@@ -458,18 +462,18 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
                                               // bookToTime: slotsController
                                               //     .selectSlotArr.first.to,
                                             )
-                                            .then(
-                                                (value) => _successDialog(context));
+                                            .then((value) =>
+                                                _successDialog(context));
                                         print(
                                             " buyerdatepage >>>  ${slotsController.selectDateofCale.first.toString()}");
                                       }),
                                 ],
                               );
                             }
-                            return Container(
+                            return SizedBox(
                               width: MediaQuery.of(context).size.width,
                               height: 300,
-                              child: Center(
+                              child: const Center(
                                 child: Text("No slots found!"),
                               ),
                             );
@@ -483,7 +487,7 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
           // Positioned(
           //   top: 80,
           //   child: Image(image: AssetImage("assets/images/calender_container.png"))
-        
+
           // ),
           // Positioned(
           //   bottom: 0,
@@ -573,31 +577,39 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
           // title: Text('Delete Slot'),
 
           content: SingleChildScrollView(
-            child: 
-            Column(
+            child: Column(
               children: <Widget>[
-                Text("Slot Booking Done", style: textTheme.headline2?.copyWith(color: textWhiteColor, fontSize: 17.sp, fontWeight: FontWeight.w500)),
-                SizedBox(height: 2.h,),
-                Image(image: AssetImage("assets/images/success_logo.png")),
-                SizedBox(height: 2.h,),
+                Text("Slot Booking Done",
+                    style: textTheme.displayMedium?.copyWith(
+                        color: textWhiteColor,
+                        fontSize: 17.sp,
+                        fontWeight: FontWeight.w500)),
+                SizedBox(
+                  height: 2.h,
+                ),
+                const Image(
+                    image: AssetImage("assets/images/success_logo.png")),
+                SizedBox(
+                  height: 2.h,
+                ),
               ],
             ),
           ),
-          
+
           actions: <Widget>[
             CustomButton(
-                                  height: 8.h,
-                                  fontSize: 15.sp,
-                                  name: "Done",
-                                  color: aquaGreenColor,
+                height: 8.h,
+                fontSize: 15.sp,
+                name: "Done",
+                color: aquaGreenColor,
 
-                                  // left: 0.w,
-                                  // right: 0.w,
-                                  bottom: 3.h,
-                                  top: 2.h,
-                                  onTap: () async {
-                                    context.pushNamed(myOrderPage);
-                                  }),
+                // left: 0.w,
+                // right: 0.w,
+                bottom: 3.h,
+                top: 2.h,
+                onTap: () async {
+                  context.pushNamed(myOrderPage);
+                }),
           ],
           //   Column(
           //     children: <Widget>[
@@ -664,7 +676,7 @@ Widget selectDate(int i,
   );
 
   SlotsController slotsController = Get.find<SlotsController>();
-  print("slecwdjckjcbck >>>> ${chooseDate}");
+  print("slecwdjckjcbck >>>> $chooseDate");
   return GestureDetector(
     onTap: () {
       // dateStore = chooseDate;
@@ -687,7 +699,7 @@ Widget selectDate(int i,
       // afterNoonSelectIndex = -1;
       // morselectIndex = -1;
       // nightSelectIndex = -1;
-      slotsController.selectDateofCale.value = ['$chooseDate'];
+      slotsController.selectDateofCale.value = [chooseDate];
       slotsController.selectDateofCale.refresh();
       slotsController.getBuyerSlots(date: chooseDate, providerId: pId);
       print("chooosseeee >> $chooseDate");

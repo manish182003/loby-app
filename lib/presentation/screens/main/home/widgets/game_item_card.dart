@@ -27,14 +27,14 @@ class GameItemCard extends StatelessWidget {
             ),
             SizedBox(
               height: 1.h,
-            ),//CircleAvatar//SizedBox
+            ), //CircleAvatar//SizedBox
             Expanded(
               child: Text(
                 'Bettelground Mobile India',
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
-                style: textTheme.subtitle1
+                style: textTheme.titleMedium
                     ?.copyWith(fontSize: 14, color: textWhiteColor), //Textstyle
               ),
             ), //Text

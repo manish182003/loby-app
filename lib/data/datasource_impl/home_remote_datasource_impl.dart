@@ -11,13 +11,13 @@ import 'package:loby/data/models/response_models/home/notification_response_mode
 import 'package:loby/data/models/response_models/home/static_data_response_model.dart';
 import 'package:loby/data/models/response_models/order/order_response_model.dart';
 
-class HomeRemoteDatasourceImpl extends HomeRemoteDatasource{
-
+class HomeRemoteDatasourceImpl extends HomeRemoteDatasource {
   final Dio _dio;
   HomeRemoteDatasourceImpl(this._dio);
 
   @override
-  Future<CategoryResponseModel> getCategories(String? name, int? page, int? categoryId)async {
+  Future<CategoryResponseModel> getCategories(
+      String? name, int? page, int? categoryId) async {
     try {
       String token = await Helpers.getApiToken();
       final Map<String, dynamic> headers = {
@@ -28,7 +28,11 @@ class HomeRemoteDatasourceImpl extends HomeRemoteDatasource{
         _dio,
         RequestType.get,
         ApiEndpoints.getCategories,
-        queryParams: {'name': name, 'page' : '${page ?? ''}', 'catgeory_id': '${categoryId ?? ''}'},
+        extra: {
+          'name': name,
+          'page': '${page ?? ''}',
+          'catgeory_id': '${categoryId ?? ''}'
+        },
         headers: headers,
       );
 
@@ -39,20 +43,19 @@ class HomeRemoteDatasourceImpl extends HomeRemoteDatasource{
   }
 
   @override
-  Future<GameResponseModel> getGames(String? name, int? page, int? gameId) async{
+  Future<GameResponseModel> getGames(
+      String? name, int? page, int? gameId) async {
     try {
       String token = await Helpers.getApiToken();
       final Map<String, dynamic> headers = {
         'Authorization': 'Bearer $token',
       };
 
-
-
       final response = await Helpers.sendRequest(
         _dio,
         RequestType.get,
         ApiEndpoints.getGames,
-        queryParams: {'name': name, 'page' : '${page ?? ''}'},
+        extra: {'name': name, 'page': '${page ?? ''}'},
         headers: headers,
       );
 
@@ -63,21 +66,19 @@ class HomeRemoteDatasourceImpl extends HomeRemoteDatasource{
   }
 
   @override
-  Future<CategoryGamesResponseModel> getCategoryGames(int? categoryId, String? search)async {
+  Future<CategoryGamesResponseModel> getCategoryGames(
+      int? categoryId, String? search) async {
     try {
       String token = await Helpers.getApiToken();
       final Map<String, dynamic> headers = {
         'Authorization': 'Bearer $token',
       };
 
-
-    
-
       final response = await Helpers.sendRequest(
         _dio,
         RequestType.get,
         ApiEndpoints.getCategoryGames,
-        queryParams: {'catgeory_id': '$categoryId', 'name' : search},
+        extra: {'catgeory_id': '$categoryId', 'name': search},
         headers: headers,
       );
 
@@ -87,7 +88,8 @@ class HomeRemoteDatasourceImpl extends HomeRemoteDatasource{
     }
   }
 
-  Future<Map<String, dynamic>> createOrder(int? listingId, int? quantity, String? price)async {
+  Future<Map<String, dynamic>> createOrder(
+      int? listingId, int? quantity, String? price) async {
     String token = await Helpers.getApiToken();
     final Map<String, dynamic> headers = {
       'Authorization': 'Bearer $token',
@@ -98,7 +100,11 @@ class HomeRemoteDatasourceImpl extends HomeRemoteDatasource{
         _dio,
         RequestType.post,
         ApiEndpoints.createOrder,
-        queryParams: {'user_game_service_id': "${listingId ?? ''}", 'quantity' : "${quantity ?? ''}", 'price' : price ?? '',},
+        extra: {
+          'user_game_service_id': "${listingId ?? ''}",
+          'quantity': "${quantity ?? ''}",
+          'price': price ?? '',
+        },
         headers: headers,
       );
 
@@ -108,14 +114,14 @@ class HomeRemoteDatasourceImpl extends HomeRemoteDatasource{
     }
   }
 
-  Future<OrderResponseModel> getOrders(int? orderId, String? status)async {
+  Future<OrderResponseModel> getOrders(int? orderId, String? status) async {
     try {
       final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(
         _dio,
         RequestType.get,
         ApiEndpoints.getOrders,
-        queryParams: {'user_order_id': "${orderId ?? ""}", 'status': status},
+        extra: {'user_order_id': "${orderId ?? ""}", 'status': status},
         headers: headers,
       );
 
@@ -126,14 +132,18 @@ class HomeRemoteDatasourceImpl extends HomeRemoteDatasource{
   }
 
   @override
-  Future<NotificationResponseModel> getNotifications(int? notificationId, int? page)async {
+  Future<NotificationResponseModel> getNotifications(
+      int? notificationId, int? page) async {
     try {
       final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(
         _dio,
         RequestType.get,
         ApiEndpoints.getNotifications,
-        queryParams: {'notification_id': "${notificationId ?? ""}", 'page': "${page ?? ""}"},
+        extra: {
+          'notification_id': "${notificationId ?? ""}",
+          'page': "${page ?? ""}"
+        },
         headers: headers,
       );
 
@@ -144,14 +154,14 @@ class HomeRemoteDatasourceImpl extends HomeRemoteDatasource{
   }
 
   @override
-  Future<Map<String, dynamic>> deleteNotification(int? notificationId)async {
+  Future<Map<String, dynamic>> deleteNotification(int? notificationId) async {
     try {
       final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(
         _dio,
         RequestType.delete,
         ApiEndpoints.deleteNotification,
-        queryParams: {'id': "${notificationId ?? ""}"},
+        extra: {'id': "${notificationId ?? ""}"},
         headers: headers,
       );
 
@@ -162,14 +172,16 @@ class HomeRemoteDatasourceImpl extends HomeRemoteDatasource{
   }
 
   @override
-  Future<int> getUnreadCount(String? type) async{
+  Future<int> getUnreadCount(String? type) async {
     try {
       final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(
         _dio,
         RequestType.get,
-        type == 'chat' ? ApiEndpoints.getUnreadMessageCount : ApiEndpoints.getUnreadNotificationCount,
-        // queryParams: {'id': "${notificationId ?? ""}"},
+        type == 'chat'
+            ? ApiEndpoints.getUnreadMessageCount
+            : ApiEndpoints.getUnreadNotificationCount,
+        // extra: {'id': "${notificationId ?? ""}"},
         headers: headers,
       );
 
@@ -180,14 +192,14 @@ class HomeRemoteDatasourceImpl extends HomeRemoteDatasource{
   }
 
   @override
-  Future<GlobalSearchResponseModel> globalSearch(String? search)async {
+  Future<GlobalSearchResponseModel> globalSearch(String? search) async {
     try {
       final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(
         _dio,
         RequestType.get,
         ApiEndpoints.getBuyerListings,
-        queryParams: {'search_all': search ?? ''},
+        extra: {'search_all': search ?? ''},
         headers: headers,
       );
 
@@ -198,7 +210,7 @@ class HomeRemoteDatasourceImpl extends HomeRemoteDatasource{
   }
 
   @override
-  Future<StaticDataResponseModel> getStaticData()async {
+  Future<StaticDataResponseModel> getStaticData() async {
     try {
       final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(

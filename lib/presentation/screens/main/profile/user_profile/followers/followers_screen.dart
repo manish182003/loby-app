@@ -1,12 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/widgets/body_padding_widget.dart';
 import 'package:loby/presentation/widgets/custom_app_bar.dart';
-import 'package:loby/presentation/widgets/custom_cached_network_image.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../../../../../core/theme/colors.dart';
 import '../../../../../widgets/profile_picture.dart';
 import 'follower_tab.dart';
@@ -19,7 +17,6 @@ class FollowersScreen extends StatefulWidget {
 }
 
 class _FollowersScreenState extends State<FollowersScreen> {
-
   ProfileController profileController = Get.find<ProfileController>();
 
   final _tabs = [
@@ -27,14 +24,13 @@ class _FollowersScreenState extends State<FollowersScreen> {
     const Tab(text: 'Followers'),
   ];
 
-
   @override
   Widget build(BuildContext context) {
     final maxWidth = MediaQuery.of(context).size.width * 0.55;
     final textTheme = Theme.of(context).textTheme;
     return DefaultTabController(
       length: 2,
-      child:  Scaffold(
+      child: Scaffold(
         appBar: appBar(context: context),
         body: SafeArea(
           child: BodyPaddingWidget(
@@ -62,26 +58,33 @@ class _FollowersScreenState extends State<FollowersScreen> {
                                     radius: 36,
                                     child: Padding(
                                       padding: const EdgeInsets.all(1.0),
-                                      child: ProfilePicture(profile: profileController.profile, radius: 36,),
+                                      child: ProfilePicture(
+                                        profile: profileController.profile,
+                                        radius: 36,
+                                      ),
                                     ), //CircleAvatar
                                   ),
                                   GestureDetector(
-                                    onTap: (){
-
-                                    },
+                                    onTap: () {},
                                     child: Container(
-                                      margin: const EdgeInsets.fromLTRB(16, 0, 0, 0),
+                                      margin: const EdgeInsets.fromLTRB(
+                                          16, 0, 0, 0),
                                       child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
                                           Container(
-                                            constraints: BoxConstraints(maxWidth: maxWidth),
-                                            child: Text(profileController.profile.displayName ?? '',
+                                            constraints: BoxConstraints(
+                                                maxWidth: maxWidth),
+                                            child: Text(
+                                                profileController
+                                                        .profile.displayName ??
+                                                    '',
                                                 overflow: TextOverflow.ellipsis,
-                                                style: textTheme.headline3
+                                                style: textTheme.displaySmall
                                                     ?.copyWith(
-                                                    fontSize: 16.sp,
-                                                    color: textWhiteColor)),
+                                                        fontSize: 16.sp,
+                                                        color: textWhiteColor)),
                                           ),
                                           const SizedBox(width: 8.0),
                                         ],
@@ -102,15 +105,21 @@ class _FollowersScreenState extends State<FollowersScreen> {
                   indicatorColor: butterflyBlueColor,
                   indicatorWeight: 4.0,
                   labelColor: textWhiteColor,
-                  labelStyle: textTheme.headline5,
+                  labelStyle: textTheme.headlineSmall,
                   tabs: _tabs,
                 ),
-                SizedBox(height: 2.h,),
+                SizedBox(
+                  height: 2.h,
+                ),
                 const Expanded(
-                  child:  TabBarView(
+                  child: TabBarView(
                     children: <Widget>[
-                      FollowerTabScreen(type: 'following',),
-                      FollowerTabScreen(type: 'followers',),
+                      FollowerTabScreen(
+                        type: 'following',
+                      ),
+                      FollowerTabScreen(
+                        type: 'followers',
+                      ),
                     ],
                   ),
                 ),

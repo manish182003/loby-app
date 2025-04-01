@@ -35,7 +35,8 @@ class CustomChips extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3),
                   child: Text(
                     chipName!,
-                    style: textTheme.headline3!.copyWith(color: Colors.white),
+                    style:
+                        textTheme.displaySmall!.copyWith(color: Colors.white),
                   ),
                 ),
               ],

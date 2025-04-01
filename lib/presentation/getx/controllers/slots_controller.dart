@@ -6,18 +6,14 @@ import 'package:loby/core/usecases/delete_slot_params.dart';
 import 'package:loby/core/usecases/edit_slot_params.dart';
 import 'package:loby/core/usecases/usecase.dart';
 import 'package:loby/core/utils/helpers.dart';
-import 'package:loby/domain/entities/response_entities/slots/get_slots_for_seller_response.dart';
-import 'package:loby/domain/entities/response_entities/slots/get_slots_for_seller_response.dart';
 import 'package:loby/domain/entities/slots/get_slots_for_buyer.dart';
 import 'package:loby/domain/entities/slots/get_slots_for_seller.dart';
+import 'package:loby/domain/usecases/slots/delete_slot.dart';
 import 'package:loby/domain/usecases/slots/edit_slot.dart';
 import 'package:loby/domain/usecases/slots/get_buyer_slots.dart';
 import 'package:loby/domain/usecases/slots/get_slots.dart';
-import 'package:loby/domain/usecases/slots/delete_slot.dart';
-import 'package:moment_dart/moment_dart.dart';
 
 import '../../../core/usecases/slots_params.dart';
-import '../../../domain/entities/response_entities/slots/get_slots_for_seller_response.dart';
 import '../../../domain/usecases/slots/add_slots.dart';
 
 class SlotsController extends GetxController {
@@ -54,8 +50,7 @@ class SlotsController extends GetxController {
   final slots = <GetSlotsForSeller>[].obs;
   final buyerSlots = <GetSlotsForBuyer>[].obs;
 
-
-String _convertTo24HourFormat(String time) {
+  String _convertTo24HourFormat(String time) {
     DateTime dateTime = DateFormat.jm().parse(time);
     return DateFormat.Hm().format(dateTime);
   }
@@ -77,10 +72,10 @@ String _convertTo24HourFormat(String time) {
   String sendToDataToAPI() {
     // Get the time from the text field in 12-hour format
     String timeIn12HourFormat = toTime.value.text;
-    
+
     // Convert the time to 24-hour format for sending to the API
     String timeIn24HourFormat = _convertTo24HourFormat(timeIn12HourFormat);
-    
+
     // Send data to API with time in 24-hour format
     print("Sending time to API: $timeIn24HourFormat");
     // Your API call logic goes here
@@ -88,7 +83,6 @@ String _convertTo24HourFormat(String time) {
     return timeIn24HourFormat;
   }
 
-  
   final fromTime = TextEditingController().obs;
   final toTime = TextEditingController().obs;
   // final day = TextEditingController().obs;
@@ -113,8 +107,7 @@ String _convertTo24HourFormat(String time) {
 
   // }
 
-  Future<bool> addSlots(
-      {int? day, String? from, String? to}) async {
+  Future<bool> addSlots({int? day, String? from, String? to}) async {
     final failureOrSuccess = await _addSlots(
       Params(
         slotsParams: SlotsParams(
@@ -146,7 +139,7 @@ String _convertTo24HourFormat(String time) {
   }
 
   Future<bool> deleteSlots({int? slotId}) async {
-    print('Deleteslot id => ${slotId}');
+    print('Deleteslot id => $slotId');
     final failureOrSuccess = await _deleteSlots(
       Params(
         deleteSlotsParams: DeleteSlotsParams(slotId: slotId),
@@ -218,7 +211,7 @@ String _convertTo24HourFormat(String time) {
       final failureOrSuccess = await _getBuyerSlots(Params(
           buyerSlotsParams: BuyerParams(date: date, providerId: providerId)));
 
-      print("currentttt >>>> ${currentDate.format('y-MM-dd')}");
+      // print("currentttt >>>> ${currentDate.format('y-MM-dd')}");
 
       failureOrSuccess.fold(
         (failure) {
@@ -256,9 +249,10 @@ String _convertTo24HourFormat(String time) {
 
     if (areMoreSlotsAvailable.value) {
       final failureOrSuccess = await _editSlot(Params(
-          editSlotParams: EditSlotParams(date: date, orderId: orderId, slotId: slotId)));
+          editSlotParams:
+              EditSlotParams(date: date, orderId: orderId, slotId: slotId)));
 
-      print("currentttt >>>> ${currentDate.format('y-MM-dd')}");
+      // print("currentttt >>>> ${currentDate.format('y-MM-dd')}");
 
       failureOrSuccess.fold(
         (failure) {

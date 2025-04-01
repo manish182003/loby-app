@@ -7,8 +7,8 @@ import 'package:loby/presentation/getx/controllers/kyc_controller.dart';
 import 'package:loby/presentation/screens/auth/create_profile_screen.dart';
 import 'package:loby/presentation/screens/auth/sign_up_screen.dart';
 import 'package:loby/presentation/screens/main/chat/chat_page.dart';
-import 'package:loby/presentation/screens/main/profile/my_disputes/create_new_dispute_screen.dart';
 import 'package:loby/presentation/screens/main/profile/faqs.dart';
+import 'package:loby/presentation/screens/main/profile/my_disputes/create_new_dispute_screen.dart';
 import 'package:loby/presentation/screens/main/profile/terms_conditions/legal_options.dart';
 import 'package:loby/presentation/screens/main/profile/terms_conditions/static_terms.dart';
 import 'package:loby/presentation/screens/main/profile/time_slots/buyer_time_slot.dart';
@@ -23,20 +23,21 @@ import 'package:loby/services/routing_service/routes.dart';
 import 'package:loby/services/routing_service/routing_service.dart';
 import 'package:moment_dart/moment_dart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../presentation/getx/controllers/profile_controller.dart';
 import '../../presentation/screens/auth/sign_in_screen.dart';
 import '../../presentation/screens/main/home/category_item_screen.dart';
-import '../../presentation/screens/main/profile/my_disputes/disputes_screen.dart';
 import '../../presentation/screens/main/home/game_details_screen.dart';
 import '../../presentation/screens/main/home/game_itm_screen.dart';
-import '../../presentation/screens/main/profile/user_profile/followers/followers_screen.dart';
-import '../../presentation/screens/main/profile/user_profile/user_profile_screen.dart';
 import '../../presentation/screens/main/home/search_screen.dart';
 import '../../presentation/screens/main/main_screen.dart';
 import '../../presentation/screens/main/profile/feedback_screen.dart';
+import '../../presentation/screens/main/profile/my_disputes/disputes_screen.dart';
 import '../../presentation/screens/main/profile/my_listing/my_listing_screen.dart';
 import '../../presentation/screens/main/profile/my_order/my_order_screen.dart';
 import '../../presentation/screens/main/profile/profile_verification_screen.dart';
+import '../../presentation/screens/main/profile/user_profile/followers/followers_screen.dart';
+import '../../presentation/screens/main/profile/user_profile/user_profile_screen.dart';
 import '../../presentation/screens/main/profile/wallet/add_wallet_screen.dart';
 import '../../presentation/screens/main/profile/wallet/earning_transaction_history.dart';
 import '../../presentation/screens/main/profile/wallet/my_wallet_screen.dart';
@@ -46,7 +47,8 @@ import '../../presentation/screens/main/profile/wallet/withdraw_funds_screen.dar
 import 'routes_name.dart';
 
 class MyRouter {
-  Future<GoRouter> appRouter({required PendingDynamicLinkData? initialLink}) async {
+  Future<GoRouter> appRouter(
+      {required PendingDynamicLinkData? initialLink}) async {
     // final token = await Helpers.getApiToken();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     ProfileController profileController = Get.find<ProfileController>();
@@ -54,38 +56,36 @@ class MyRouter {
     AuthController authController = Get.find<AuthController>();
 
     final router = GoRouter(
-        redirect: (context, state)async{
+        redirect: (context, state) async {
           bool? isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
           bool? onBoardingDone = prefs.getBool('onBoardingDone') ?? false;
           String? token = prefs.getString('apiToken');
           debugPrint("Api Token $token");
 
-
-          final isLogging = state.location == loginRoute;
-          final onBoarding = state.location == onBoardingRoute;
-
+          final isLogging = state.uri.toString() == loginRoute;
+          final onBoarding = state.uri.toString() == onBoardingRoute;
 
           print("ban till ${profileController.profile.banTill}");
 
-          if(initialLink != null){
+          if (initialLink != null) {
             return null;
-          }else if(!onBoardingDone && !onBoarding){
+          } else if (!onBoardingDone && !onBoarding) {
             return onBoardingRoute;
-          }else if(onBoardingDone && !isLoggedIn && !isLogging){
+          } else if (onBoardingDone && !isLoggedIn && !isLogging) {
             return loginRoute;
-          }else if(profileController.profile.banTill == null){
+          } else if (profileController.profile.banTill == null) {
             return null;
-          }else if(profileController.profile.banTill! > DateTime.now() && !isLogging){
+          } else if (profileController.profile.banTill! > DateTime.now() &&
+              !isLogging) {
             await authController.logout();
             return loginRoute;
-          }else{
+          } else {
             return null;
           }
           // toMoment().toLocal()
         },
         debugLogDiagnostics: true,
         routes: [
-
           GoRoute(
             name: initialPage,
             path: initialRoute,
@@ -123,8 +123,7 @@ class MyRouter {
                   key: state.pageKey,
                   child: const SignUpScreen(),
                 );
-              }
-            ),
+              }),
           GoRoute(
               name: createProfilePage,
               path: createProfileRoute,
@@ -148,11 +147,12 @@ class MyRouter {
               name: gameCategoriesPage,
               path: gameCategoriesRoute,
               pageBuilder: (context, state) {
+                var data = state.extra as Map<String, dynamic>;
                 return CupertinoPage(
                   key: state.pageKey,
                   child: CategoryItemScreen(
-                    categoryId: int.tryParse(state.queryParams['categoryId']!),
-                    catName: state.queryParams['catName'],
+                    categoryId: int.tryParse(data['categoryId']!),
+                    catName: data['catName'],
                   ),
                 );
               }),
@@ -160,12 +160,13 @@ class MyRouter {
               name: gamePage,
               path: gameRoute,
               pageBuilder: (context, state) {
+                var data = state.extra as Map<String, dynamic>;
                 return CupertinoPage(
                   key: state.pageKey,
                   child: GameItemScreen(
-                    categoryId: int.tryParse(state.queryParams['categoryId']!)!,
-                    gameId: int.tryParse(state.queryParams['gameId']!)!,
-                    gameName: state.queryParams['gameName']!,
+                    categoryId: int.tryParse(data['categoryId']!)!,
+                    gameId: int.tryParse(data['gameId']!)!,
+                    gameName: data['gameName']!,
                   ),
                 );
               }),
@@ -173,9 +174,13 @@ class MyRouter {
               name: gameDetailPage,
               path: gameDetailRoute,
               pageBuilder: (context, state) {
+                var data = state.extra as Map<String, dynamic>;
                 return CupertinoPage(
                   key: state.pageKey,
-                  child: GameDetailScreen(serviceListingId: int.tryParse(state.queryParams['serviceListingId']!)!, from: state.queryParams['from'],),
+                  child: GameDetailScreen(
+                    serviceListingId: int.tryParse(data['serviceListingId']!)!,
+                    from: data['from'],
+                  ),
                 );
               }),
 
@@ -183,9 +188,13 @@ class MyRouter {
               name: userProfilePage,
               path: userProfileRoute,
               pageBuilder: (context, state) {
+                var data = state.extra as Map<String, dynamic>;
                 return CupertinoPage(
                   key: state.pageKey,
-                  child: UserProfileScreen(userId: int.tryParse(state.queryParams['userId']!) ?? 0, from: state.queryParams['from']!, ),
+                  child: UserProfileScreen(
+                    userId: int.tryParse(data['userId']!) ?? 0,
+                    from: data['from']!,
+                  ),
                 );
               }),
 
@@ -248,7 +257,7 @@ class MyRouter {
                   child: const sendOtpScreen(),
                 );
               }),
-            GoRoute(
+          GoRoute(
               name: addAccountpage,
               path: addAccountRoute,
               pageBuilder: (context, state) {
@@ -312,9 +321,12 @@ class MyRouter {
               name: createNewDisputePage,
               path: createNewDisputeRoute,
               pageBuilder: (context, state) {
+                var data = state.extra as Map<String, dynamic>;
                 return CupertinoPage(
                   key: state.pageKey,
-                  child: CreateNewDispute(disputeId: int.tryParse(state.queryParams['disputeId']!)!,),
+                  child: CreateNewDispute(
+                    disputeId: int.tryParse(data['disputeId']!)!,
+                  ),
                 );
               }),
 
@@ -328,7 +340,7 @@ class MyRouter {
                 );
               }),
           GoRoute(
-              name:walletTransactionPage,
+              name: walletTransactionPage,
               path: walletTransactionRoute,
               pageBuilder: (context, state) {
                 return CupertinoPage(
@@ -337,7 +349,7 @@ class MyRouter {
                 );
               }),
           GoRoute(
-              name:earningTransactionPage,
+              name: earningTransactionPage,
               path: earningTransactionRoute,
               pageBuilder: (context, state) {
                 return CupertinoPage(
@@ -346,7 +358,6 @@ class MyRouter {
                 );
               }),
 
-          
           GoRoute(
               name: searchScreenPage,
               path: searchScreenRoute,
@@ -374,16 +385,19 @@ class MyRouter {
                   child: const FAQs(),
                 );
               }),
-              GoRoute(
+          GoRoute(
               name: buyerTimeSlotScreen,
               path: buyerTimeSlotRoute,
               pageBuilder: (context, state) {
+                var data = state.extra as Map<String, dynamic>;
                 return CupertinoPage(
                   key: state.pageKey,
-                  child: BuyerTimeSlot(id: int.parse(state.params["id"]!), isEditing: state.queryParams['isEditing'] == "true" ? true : false),
+                  child: BuyerTimeSlot(
+                      id: int.parse(state.pathParameters["id"]!),
+                      isEditing: data['isEditing'] == "true" ? true : false),
                 );
               }),
-              GoRoute(
+          GoRoute(
               name: sellerTimeSlotScreen,
               path: sellerTimeSlotRoute,
               pageBuilder: (context, state) {
@@ -397,32 +411,31 @@ class MyRouter {
               path: legalTermsRoute,
               pageBuilder: (context, state) {
                 return CupertinoPage(
-                  key: state.pageKey,
-                  child: const LegalOptions()
-                );
+                    key: state.pageKey, child: const LegalOptions());
               }),
           GoRoute(
               name: staticContentPage,
               path: staticContentRoute,
               pageBuilder: (context, state) {
+                var data = state.extra as Map<String, dynamic>;
                 return CupertinoPage(
                     key: state.pageKey,
-                    child: StaticTerms(termName: state.queryParams['termName']!)
-                );
+                    child: StaticTerms(termName: data['termName']!));
               }),
           GoRoute(
               name: messagePage,
               path: messageRoute,
               pageBuilder: (context, state) {
+                var data = state.extra as Map<String, dynamic>;
                 return CupertinoPage(
-                  key: state.pageKey,
-                  child: ChatPage(
-                    chatId: int.tryParse(state.queryParams['chatId']!)!,
-                    senderId: int.tryParse(state.queryParams['senderId']!)!,
-                    receiverId: int.tryParse(state.queryParams['receiverId']!)!,
-                  )
-                  // MessagePage(chatId: int.tryParse(state.queryParams['chatId']!)!, name: state.queryParams['name']!,),
-                );
+                    key: state.pageKey,
+                    child: ChatPage(
+                      chatId: int.tryParse(data['chatId']!)!,
+                      senderId: int.tryParse(data['senderId']!)!,
+                      receiverId: int.tryParse(data['receiverId']!)!,
+                    )
+                    // MessagePage(chatId: int.tryParse(state.extra['chatId']!)!, name: state.extra['name']!,),
+                    );
               }),
           GoRoute(
               name: settlementRequestHistoryPage,
@@ -430,8 +443,7 @@ class MyRouter {
               pageBuilder: (context, state) {
                 return CupertinoPage(
                     key: state.pageKey,
-                    child: const SettlementRequestHistory()
-                );
+                    child: const SettlementRequestHistory());
               }),
         ]);
     return router;

@@ -2,16 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/core/theme/colors.dart';
+import 'package:loby/domain/entities/kyc/get_kyc_token.dart';
 import 'package:loby/presentation/getx/controllers/kyc_controller.dart';
-import 'package:loby/presentation/getx/controllers/order_controller.dart';
-import 'package:loby/presentation/screens/main/profile/my_order/all_orders_screen.dart';
 import 'package:loby/presentation/widgets/buttons/custom_button.dart';
 import 'package:loby/presentation/widgets/custom_app_bar.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
-import 'package:loby/domain/entities/kyc/get_kyc_token.dart';
-import 'package:flutter/services.dart';
 
 class MyKycScreen extends StatefulWidget {
   final GetKycToken? geTKyctoken;
@@ -25,7 +22,7 @@ class _MyKycScreenState extends State<MyKycScreen>
     with SingleTickerProviderStateMixin {
   KycController kycController = Get.find<KycController>();
   late TabController _tabController;
-  int _currentTabIndex = 0;
+  final int _currentTabIndex = 0;
   String formattedText = '';
 
   // final aadharNumberFormatter = MaskTextInputFormatter(
@@ -62,7 +59,8 @@ class _MyKycScreenState extends State<MyKycScreen>
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       backgroundColor: backgroundDarkJungleGreenColor,
-      appBar: appBar(context: context, appBarName: "KYC Verification", isBackIcon: true),
+      appBar: appBar(
+          context: context, appBarName: "KYC Verification", isBackIcon: true),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -105,14 +103,15 @@ class _MyKycScreenState extends State<MyKycScreen>
                 ),
                 Text(
                   "Identity Proof",
-                  style: textTheme.headline1?.copyWith(color: textWhiteColor),
+                  style:
+                      textTheme.displayLarge?.copyWith(color: textWhiteColor),
                 ),
                 SizedBox(
                   height: 2.h,
                 ),
                 Text(
                   "Enter Your Registered Aadhar Number",
-                  style: textTheme.headline4?.copyWith(
+                  style: textTheme.headlineMedium?.copyWith(
                       color: textWhiteColor, fontWeight: FontWeight.w300),
                 ),
                 SizedBox(
@@ -128,28 +127,30 @@ class _MyKycScreenState extends State<MyKycScreen>
                     controller: kycController.aadharNumbercontroller,
                     textAlign: TextAlign.center,
                     onChanged: (value) {
-                if (value.isNotEmpty) {
-                  String unformattedText = value.replaceAll(' ', '');
-                  String formattedText = '';
-                  for (int i = 0; i < unformattedText.length; i++) {
-                    formattedText += unformattedText[i];
-                    if ((i + 1) % 4 == 0 && i != unformattedText.length - 1) {
-                      formattedText += ' ';
-                    }
-                  }
-                  kycController.aadharNumbercontroller.value = TextEditingValue(
-                    text: formattedText,
-                    selection: TextSelection.collapsed(
-                      offset: formattedText.length,
-                    ),
-                  );
-                }
-              // },
-              },
-                    style: textTheme.headline2?.copyWith(
+                      if (value.isNotEmpty) {
+                        String unformattedText = value.replaceAll(' ', '');
+                        String formattedText = '';
+                        for (int i = 0; i < unformattedText.length; i++) {
+                          formattedText += unformattedText[i];
+                          if ((i + 1) % 4 == 0 &&
+                              i != unformattedText.length - 1) {
+                            formattedText += ' ';
+                          }
+                        }
+                        kycController.aadharNumbercontroller.value =
+                            TextEditingValue(
+                          text: formattedText,
+                          selection: TextSelection.collapsed(
+                            offset: formattedText.length,
+                          ),
+                        );
+                      }
+                      // },
+                    },
+                    style: textTheme.displayMedium?.copyWith(
                       color: textWhiteColor,
                     ),
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       fillColor: textTunaBlueColor,
                       counterText: "",
                       focusedBorder: OutlineInputBorder(
@@ -171,13 +172,16 @@ class _MyKycScreenState extends State<MyKycScreen>
                 onTap: () async {
                   SharedPreferences prefs =
                       await SharedPreferences.getInstance();
-                      print("orgtext ${kycController.aadharNumbercontroller.text}");
-                      String textToSend = kycController.aadharNumbercontroller.text.replaceAll(' ', '');
-                      print('Text to send: $textToSend');
+                  print("orgtext ${kycController.aadharNumbercontroller.text}");
+                  String textToSend = kycController.aadharNumbercontroller.text
+                      .replaceAll(' ', '');
+                  print('Text to send: $textToSend');
                   kycController
                       .sendKycOtp(
                           kycToken: prefs.getString("kycToken"),
-                          aadharNumber: kycController.aadharNumbercontroller.text.replaceAll(' ', ''))
+                          aadharNumber: kycController
+                              .aadharNumbercontroller.text
+                              .replaceAll(' ', ''))
                       .then((value) {
                     if (value) {
                       context.pushNamed(sendOtppage);

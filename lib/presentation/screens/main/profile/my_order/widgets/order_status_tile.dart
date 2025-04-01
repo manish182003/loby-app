@@ -1,6 +1,5 @@
-import 'dart:convert';
 import 'dart:io';
-import 'package:dotted_border/dotted_border.dart';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,10 +10,10 @@ import 'package:loby/data/models/order/order_model.dart';
 import 'package:loby/domain/entities/order/order.dart';
 import 'package:loby/presentation/getx/controllers/core_controller.dart';
 import 'package:loby/presentation/getx/controllers/order_controller.dart';
-import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/screens/main/profile/my_order/widgets/select_duel_winner_dialog.dart';
 import 'package:loby/presentation/widgets/rating_dialog.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../../../../../core/theme/colors.dart';
 import '../../../../../../core/utils/helpers.dart';
 import '../../../../../../services/routing_service/routes_name.dart';
@@ -36,64 +35,88 @@ class OrderStatusTile extends StatelessWidget {
   final bool isDisputeRaised;
   final String lastStatus;
 
-  OrderStatusTile(
-      {Key? key, required this.orderId, required this.isDone, required this.title, required this.date, this.isSeller = false, this.isDuel = false, required this.isLast, this.isDisputeRaised = false, required this.lastStatus, required this.sellerId, required this.buyerId, required this.order,})
-      : super(key: key);
-final OrderController orderController = Get.find<OrderController>();
+  OrderStatusTile({
+    Key? key,
+    required this.orderId,
+    required this.isDone,
+    required this.title,
+    required this.date,
+    this.isSeller = false,
+    this.isDuel = false,
+    required this.isLast,
+    this.isDisputeRaised = false,
+    required this.lastStatus,
+    required this.sellerId,
+    required this.buyerId,
+    required this.order,
+  }) : super(key: key);
+  final OrderController orderController = Get.find<OrderController>();
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme
-        .of(context)
-        .textTheme;
+    final textTheme = Theme.of(context).textTheme;
     double rating = 0.0;
     TextEditingController review = TextEditingController();
 
-    return Column(
-        children: [
-          _statusTile(textTheme, isDone: isDone, title: title, date: date),
-          SizedBox(height: 2.h),
+    return Column(children: [
+      _statusTile(textTheme, isDone: isDone, title: title, date: date),
+      SizedBox(height: 2.h),
 
-          /// if Dispute is Raised ///
-          isLast ? isDisputeRaised ?
-          Column(
-            children: [
-              _statusTile(textTheme,
-                  isDone: true,
-                  title: isDuel ? "Seller & Challenger selection doesn’t match. Dispute Raised. Transaction on hold" : "Dispute Raised. Transaction on hold",
-                  date: date,
-                  isDisputedRaised: true,
-              ),
-              SizedBox(height: 2.h),
-            ],
-          ) :
+      /// if Dispute is Raised ///
+      isLast
+          ? isDisputeRaised
+              ? Column(
+                  children: [
+                    _statusTile(
+                      textTheme,
+                      isDone: true,
+                      title: isDuel
+                          ? "Seller & Challenger selection doesn’t match. Dispute Raised. Transaction on hold"
+                          : "Dispute Raised. Transaction on hold",
+                      date: date,
+                      isDisputedRaised: true,
+                    ),
+                    SizedBox(height: 2.h),
+                  ],
+                )
+              : isSeller
+                  ? isDuel
+                      ?
 
+                      /// if Duel (Seller) ///
+                      lastStatus == 'ORDER_PLACED'
+                          ? _duelOrderPlaced(context)
+                          : lastStatus == 'ORDER_IN_PROGRESS'
+                              ? _selectDuelWinner(context)
+                              : lastStatus == 'BUYER_DELIVERY_CONFIRMED'
+                                  ? _selectDuelWinner(context)
+                                  : const SizedBox()
+                      :
 
-          isSeller ? isDuel ?
+                      /// else normal seller ///
+                      _seller(context, textTheme, rating, review)
+                  :
 
-          /// if Duel (Seller) ///
-          lastStatus == 'ORDER_PLACED' ? _duelOrderPlaced(context) :
-          lastStatus == 'ORDER_IN_PROGRESS' ? _selectDuelWinner(context) :
-          lastStatus == 'BUYER_DELIVERY_CONFIRMED' ? _selectDuelWinner(context) :
-          const SizedBox() :
+                  /// if Duel (Buyer) ///
+                  isDuel
+                      ? lastStatus == 'ORDER_IN_PROGRESS'
+                          ? _selectDuelWinner(context)
+                          : lastStatus == 'SELLER_DELIVERY_CONFIRMED'
+                              ? _selectDuelWinner(context)
+                              : const SizedBox()
+                      :
 
-          /// else normal seller ///
-          _seller(context, textTheme,rating,review) :
-
-          /// if Duel (Buyer) ///
-          isDuel ?
-          lastStatus == 'ORDER_IN_PROGRESS' ? _selectDuelWinner(context) :
-          lastStatus == 'SELLER_DELIVERY_CONFIRMED' ? _selectDuelWinner(context) :
-          const SizedBox() :
-
-          /// else normal Buyer ///
-          _buyer(context, rating, review) :
-          const SizedBox()
-        ]
-    );
+                      /// else normal Buyer ///
+                      _buyer(context, rating, review)
+          : const SizedBox()
+    ]);
   }
 
-  Widget _statusTile(TextTheme textTheme, {required bool isDone, required String title, required String date, bool isDisputedRaised = false}) {
+  Widget _statusTile(TextTheme textTheme,
+      {required bool isDone,
+      required String title,
+      required String date,
+      bool isDisputedRaised = false}) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -102,7 +125,11 @@ final OrderController orderController = Get.find<OrderController>();
           child: Row(
             children: [
               SvgPicture.asset(
-                isDisputedRaised ?  'assets/icons/cross.svg' : title == statusesName[sellerRejected] ?  'assets/icons/cross.svg' : 'assets/icons/verified_user_bedge.svg',
+                isDisputedRaised
+                    ? 'assets/icons/cross.svg'
+                    : title == statusesName[sellerRejected]
+                        ? 'assets/icons/cross.svg'
+                        : 'assets/icons/verified_user_bedge.svg',
                 height: 18,
                 width: 18,
                 color: isDone ? null : iconWhiteColor,
@@ -112,7 +139,12 @@ final OrderController orderController = Get.find<OrderController>();
                 child: Text(title,
                     // maxLines: 3,
                     // overflow: TextOverflow.ellipsis,
-                    style: textTheme.headline5?.copyWith(color: isDisputedRaised ? carminePinkColor : title == statusesName[sellerRejected] ? carminePinkColor : textWhiteColor)),
+                    style: textTheme.headlineSmall?.copyWith(
+                        color: isDisputedRaised
+                            ? carminePinkColor
+                            : title == statusesName[sellerRejected]
+                                ? carminePinkColor
+                                : textWhiteColor)),
               ),
             ],
           ),
@@ -120,7 +152,7 @@ final OrderController orderController = Get.find<OrderController>();
         Text(date,
             textAlign: TextAlign.end,
             overflow: TextOverflow.ellipsis,
-            style: textTheme.headline5?.copyWith(color: textLightColor)),
+            style: textTheme.headlineSmall?.copyWith(color: textLightColor)),
       ],
     );
   }
@@ -161,12 +193,11 @@ final OrderController orderController = Get.find<OrderController>();
         ),
         SizedBox(height: 2.h),
         Padding(
-          padding: EdgeInsets.only(bottom: 2.h),
-          child: Text('Note - When anyone wins a Duel. There will be two separate wallet transactions.\n\n1. First will be the return of his original amount with no deduction.\n2. Second will be the winning amount with the loby protection & taxes deducted as shown above',
-            style: textTheme.subtitle1!.copyWith(color: textLightColor),
-          )
-        ),
-
+            padding: EdgeInsets.only(bottom: 2.h),
+            child: Text(
+              'Note - When anyone wins a Duel. There will be two separate wallet transactions.\n\n1. First will be the return of his original amount with no deduction.\n2. Second will be the winning amount with the loby protection & taxes deducted as shown above',
+              style: textTheme.titleMedium!.copyWith(color: textLightColor),
+            )),
       ],
     );
   }
@@ -214,7 +245,12 @@ final OrderController orderController = Get.find<OrderController>();
         //   ],
         // ),
         // SizedBox(height: 2.h),
-        _statusTile(textTheme, isDone: false, title: "Select Winner", date: "",),
+        _statusTile(
+          textTheme,
+          isDone: false,
+          title: "Select Winner",
+          date: "",
+        ),
         SizedBox(height: 2.h),
         CustomButton(
           color: purpleLightIndigoColor,
@@ -230,219 +266,237 @@ final OrderController orderController = Get.find<OrderController>();
     );
   }
 
-  Widget _seller(BuildContext context, TextTheme textTheme,double rating,
+  Widget _seller(BuildContext context, TextTheme textTheme, double rating,
       TextEditingController review) {
     return Column(
       children: [
-        lastStatus == 'ORDER_PLACED' ? Padding(
-          padding: EdgeInsets.only(bottom: 2.h),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: CustomButton(
-                  color: orangeColor,
-                  name: "Reject Order",
-                  textColor: textWhiteColor,
-                  left: 0.w,
-                  right: 0.w,
-                  radius: 50,
-                  onTap: () async {
-                    changeOrderStatus(context, status: 'SELLER_REJECTED');
-                  },
+        lastStatus == 'ORDER_PLACED'
+            ? Padding(
+                padding: EdgeInsets.only(bottom: 2.h),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: CustomButton(
+                        color: orangeColor,
+                        name: "Reject Order",
+                        textColor: textWhiteColor,
+                        left: 0.w,
+                        right: 0.w,
+                        radius: 50,
+                        onTap: () async {
+                          changeOrderStatus(context, status: 'SELLER_REJECTED');
+                        },
+                      ),
+                    ),
+                    SizedBox(width: 4.w),
+                    Expanded(
+                      child: CustomButton(
+                        color: purpleLightIndigoColor,
+                        name: "Accept Order",
+                        textColor: textWhiteColor,
+                        radius: 50,
+                        //   onTap: () async {
+                        //   showDialog(
+                        //       context: context,
+                        //       builder: (BuildContext context) {
+                        //         return RatingDialog(
+                        //           title: "Review & Rating",
+                        //           descriptions: "Congratulations on successfully getting your service delivered. Kindly rate thus seller & its service to help us serve you better",
+                        //           text: "OK",
+                        //           review: review,
+                        //           onChanged: (star) {
+                        //             rating = star;
+                        //           },
+                        //           onSubmit: () async {
+                        //             confirmSellerDelivery(
+                        //                 context, status: 'SELLER_ACCEPTED',
+                        //                 rating: rating,
+                        //                 review: review.text);
+                        //           },
+                        //         );
+                        //       });
+                        // },
+                        onTap: () async {
+                          changeOrderStatus(context, status: 'SELLER_ACCEPTED');
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              SizedBox(width: 4.w),
-              Expanded(
-                child: CustomButton(
-                  color: purpleLightIndigoColor,
-                  name: "Accept Order",
-                  textColor: textWhiteColor,
-                  radius: 50,
-                //   onTap: () async {
-                //   showDialog(
-                //       context: context,
-                //       builder: (BuildContext context) {
-                //         return RatingDialog(
-                //           title: "Review & Rating",
-                //           descriptions: "Congratulations on successfully getting your service delivered. Kindly rate thus seller & its service to help us serve you better",
-                //           text: "OK",
-                //           review: review,
-                //           onChanged: (star) {
-                //             rating = star;
-                //           },
-                //           onSubmit: () async {
-                //             confirmSellerDelivery(
-                //                 context, status: 'SELLER_ACCEPTED',
-                //                 rating: rating,
-                //                 review: review.text);
-                //           },
-                //         );
-                //       });
-                // },
-                  onTap: () async {
-                    changeOrderStatus(context, status: 'SELLER_ACCEPTED');
-                  },
-                ),
-              ),
-              
-            ],
-          ),
-        ) : lastStatus == "ORDER_IN_PROGRESS" ? Padding(
-          padding: EdgeInsets.only(bottom: 2.h),
-          child: CustomButton(
-            color: purpleLightIndigoColor,
-            name: "Upload Proofs & Confirm Delivery",
-            textColor: textWhiteColor,
-            radius: 50,
-            onTap: () async {
-              _uploadProofsDialog(context);
-            },
-          ),
-        ) : const SizedBox(),
-
-        lastStatus == "ORDER_PLACED" ? Padding(
-          padding: EdgeInsets.only(bottom: 2.h),
-          child: RichText(
-              textAlign: TextAlign.start,
-              text: TextSpan(children: [
-                TextSpan(
-                  text: 'Sellers are requsted to discuss & freeze all delivery details with buyer on ',
-                  style: textTheme.subtitle1?.copyWith(color: textLightColor),
-                ),
-                TextSpan(
-                    text: 'Loby Chat ',
-                    style: textTheme.subtitle1?.copyWith(
-                        color: aquaGreenColor)),
-                TextSpan(
-                    text: 'before accpecting or declining the Order. Any conversation outside Loby Chat will not be insured/covered by Loby Protection',
-                    style: textTheme.subtitle1?.copyWith(
-                        color: textLightColor)),
-              ])),
-        ) : lastStatus == "LOBY_PROTECTION_PERIOD" && orderController.ratingDone.value == false ? Padding(
-          padding: EdgeInsets.only(bottom: 2.h),
-          child: CustomButton(
-            color: purpleLightIndigoColor,
-            name: "Review & Rating",
-            textColor: textWhiteColor,
-            radius: 50,
-            onTap: () async {
-              showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return RatingDialog(
-                          title: "Review & Rating",
-                          descriptions: "Congratulations on successfully getting your service delivered. Kindly rate thus seller & its service to help us serve you better",
-                          text: "OK",
-                          review: review,
-                          onChanged: (star) {
-                            rating = star;
-                          },
-                          onSubmit: () async {
-                            confirmSellerDelivery(
-                                context ,
-                                status: '',
-                                rating: rating,
-                                review: review.text);
-                          },
-                        );
-                      });
-            },
-          ),
-        ) : const SizedBox(),
+              )
+            : lastStatus == "ORDER_IN_PROGRESS"
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: 2.h),
+                    child: CustomButton(
+                      color: purpleLightIndigoColor,
+                      name: "Upload Proofs & Confirm Delivery",
+                      textColor: textWhiteColor,
+                      radius: 50,
+                      onTap: () async {
+                        _uploadProofsDialog(context);
+                      },
+                    ),
+                  )
+                : const SizedBox(),
+        lastStatus == "ORDER_PLACED"
+            ? Padding(
+                padding: EdgeInsets.only(bottom: 2.h),
+                child: RichText(
+                    textAlign: TextAlign.start,
+                    text: TextSpan(children: [
+                      TextSpan(
+                        text:
+                            'Sellers are requsted to discuss & freeze all delivery details with buyer on ',
+                        style: textTheme.titleMedium
+                            ?.copyWith(color: textLightColor),
+                      ),
+                      TextSpan(
+                          text: 'Loby Chat ',
+                          style: textTheme.titleMedium
+                              ?.copyWith(color: aquaGreenColor)),
+                      TextSpan(
+                          text:
+                              'before accpecting or declining the Order. Any conversation outside Loby Chat will not be insured/covered by Loby Protection',
+                          style: textTheme.titleMedium
+                              ?.copyWith(color: textLightColor)),
+                    ])),
+              )
+            : lastStatus == "LOBY_PROTECTION_PERIOD" &&
+                    orderController.ratingDone.value == false
+                ? Padding(
+                    padding: EdgeInsets.only(bottom: 2.h),
+                    child: CustomButton(
+                      color: purpleLightIndigoColor,
+                      name: "Review & Rating",
+                      textColor: textWhiteColor,
+                      radius: 50,
+                      onTap: () async {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return RatingDialog(
+                                title: "Review & Rating",
+                                descriptions:
+                                    "Congratulations on successfully getting your service delivered. Kindly rate thus seller & its service to help us serve you better",
+                                text: "OK",
+                                review: review,
+                                onChanged: (star) {
+                                  rating = star;
+                                },
+                                onSubmit: () async {
+                                  confirmSellerDelivery(context,
+                                      status: '',
+                                      rating: rating,
+                                      review: review.text);
+                                },
+                              );
+                            });
+                      },
+                    ),
+                  )
+                : const SizedBox(),
       ],
     );
   }
 
-  Widget _buyer(BuildContext context, double rating,
-      TextEditingController review) {
-    return lastStatus == "SELLER_DELIVERY_CONFIRMED" ? Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: CustomButton(
-                color: orangeColor,
-                name: "Reject Delivery",
-                textColor: textWhiteColor,
-                left: 0.w,
-                right: 0.w,
-                radius: 50,
-                onTap: () async {
+  Widget _buyer(
+      BuildContext context, double rating, TextEditingController review) {
+    return lastStatus == "SELLER_DELIVERY_CONFIRMED"
+        ? Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: CustomButton(
+                      color: orangeColor,
+                      name: "Reject Delivery",
+                      textColor: textWhiteColor,
+                      left: 0.w,
+                      right: 0.w,
+                      radius: 50,
+                      onTap: () async {
+                        changeOrderStatus(context,
+                            status: 'BUYER_DELIVERY_REJECTED');
 
-                  changeOrderStatus(context, status: 'BUYER_DELIVERY_REJECTED');
-
-                  // showDialog(
-                  //     context: context,
-                  //     builder: (BuildContext context) {
-                  //       return RatingDialog(
-                  //         title: "Review & Rating",
-                  //         descriptions: "Congratulations on successfully getting your service delivered. Kindly rate thus seller & its service to help us serve you better",
-                  //         text: "OK",
-                  //         review: review,
-                  //         onChanged: (star) {
-                  //           rating = star;
-                  //         },
-                  //         onSubmit: () async {
-                  //           confirmDelivery(
-                  //               context, status: 'BUYER_DELIVERY_REJECTED',
-                  //               rating: rating,
-                  //               review: review.text);
-                  //         },
-                  //       );
-                  //     });
-                },
+                        // showDialog(
+                        //     context: context,
+                        //     builder: (BuildContext context) {
+                        //       return RatingDialog(
+                        //         title: "Review & Rating",
+                        //         descriptions: "Congratulations on successfully getting your service delivered. Kindly rate thus seller & its service to help us serve you better",
+                        //         text: "OK",
+                        //         review: review,
+                        //         onChanged: (star) {
+                        //           rating = star;
+                        //         },
+                        //         onSubmit: () async {
+                        //           confirmDelivery(
+                        //               context, status: 'BUYER_DELIVERY_REJECTED',
+                        //               rating: rating,
+                        //               review: review.text);
+                        //         },
+                        //       );
+                        //     });
+                      },
+                    ),
+                  ),
+                  SizedBox(width: 4.w),
+                  Expanded(
+                    child: CustomButton(
+                      color: purpleLightIndigoColor,
+                      name: "Confirm Delivery",
+                      textColor: textWhiteColor,
+                      radius: 50,
+                      onTap: () async {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return RatingDialog(
+                                title: "Review & Rating",
+                                descriptions:
+                                    "Congratulations on successfully getting your service delivered. Kindly rate thus seller & its service to help us serve you better",
+                                text: "OK",
+                                review: review,
+                                onChanged: (star) {
+                                  rating = star;
+                                },
+                                onSubmit: () async {
+                                  confirmBuyerDelivery(context,
+                                      status: 'BUYER_DELIVERY_CONFIRMED',
+                                      rating: rating,
+                                      review: review.text);
+                                },
+                              );
+                            });
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ),
-            SizedBox(width: 4.w),
-            Expanded(
-              child: CustomButton(
-                color: purpleLightIndigoColor,
-                name: "Confirm Delivery",
-                textColor: textWhiteColor,
-                radius: 50,
-                onTap: () async {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return RatingDialog(
-                          title: "Review & Rating",
-                          descriptions: "Congratulations on successfully getting your service delivered. Kindly rate thus seller & its service to help us serve you better",
-                          text: "OK",
-                          review: review,
-                          onChanged: (star) {
-                            rating = star;
-                          },
-                          onSubmit: () async {
-                            confirmBuyerDelivery(
-                                context, status: 'BUYER_DELIVERY_CONFIRMED',
-                                rating: rating,
-                                review: review.text);
-                          },
-                        );
-                      });
-                },
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 2.h),
-      ],
-    ) : const SizedBox();
+              SizedBox(height: 2.h),
+            ],
+          )
+        : const SizedBox();
   }
 
-
-  void selectDuelWinner(BuildContext context, {required int winnerId, required String status}) async {
+  void selectDuelWinner(BuildContext context,
+      {required int winnerId, required String status}) async {
     OrderController orderController = Get.find<OrderController>();
     CoreController coreController = Get.find<CoreController>();
     await Helpers.loader();
-    final isSuccess = await orderController.selectDuelWinner(winnerId: winnerId, orderId: orderId);
+    final isSuccess = await orderController.selectDuelWinner(
+        winnerId: winnerId, orderId: orderId);
     if (isSuccess) {
       await orderController.uploadDeliveryProof(
         orderId: orderId,
-        fileTypes: orderController.selectedDuelProofs.map((element) => element.fileType).toList(),
-        files: orderController.selectedDuelProofs.map((element) => element.file).toList(),
+        fileTypes: orderController.selectedDuelProofs
+            .map((element) => element.fileType)
+            .toList(),
+        files: orderController.selectedDuelProofs
+            .map((element) => element.file)
+            .toList(),
       );
       await orderController.changeOrderStatus(orderId: orderId, status: status);
       await getOrders();
@@ -454,9 +508,10 @@ final OrderController orderController = Get.find<OrderController>();
         'type': 'order',
         'receiverId': isSeller ? buyerId : sellerId,
         'order': (orderController.orders
-            .where((e) => e.id == orderId)
-            .toList()
-            .first as OrderModel).toJson(),
+                .where((e) => e.id == orderId)
+                .toList()
+                .first as OrderModel)
+            .toJson(),
       });
       await Helpers.hideLoader();
       Navigator.pop(context);
@@ -466,7 +521,11 @@ final OrderController orderController = Get.find<OrderController>();
     }
   }
 
-  void confirmSellerDelivery(BuildContext context,  {required String status, bool? ratingDone, required double rating, String? review}) async {
+  void confirmSellerDelivery(BuildContext context,
+      {required String status,
+      bool? ratingDone,
+      required double rating,
+      String? review}) async {
     OrderController orderController = Get.find<OrderController>();
     CoreController coreController = Get.find<CoreController>();
     await Helpers.loader();
@@ -480,9 +539,10 @@ final OrderController orderController = Get.find<OrderController>();
         'type': 'order',
         'receiverId': buyerId,
         'order': (orderController.orders
-            .where((e) => e.id == orderId)
-            .toList()
-            .first as OrderModel).toJson(),
+                .where((e) => e.id == orderId)
+                .toList()
+                .first as OrderModel)
+            .toJson(),
       });
       ratingDone = true;
       await Helpers.hideLoader();
@@ -493,7 +553,8 @@ final OrderController orderController = Get.find<OrderController>();
     }
   }
 
-  void confirmBuyerDelivery(BuildContext context, {required String status, required double rating, String? review}) async {
+  void confirmBuyerDelivery(BuildContext context,
+      {required String status, required double rating, String? review}) async {
     OrderController orderController = Get.find<OrderController>();
     CoreController coreController = Get.find<CoreController>();
     await Helpers.loader();
@@ -507,9 +568,10 @@ final OrderController orderController = Get.find<OrderController>();
         'type': 'order',
         'receiverId': sellerId,
         'order': (orderController.orders
-            .where((e) => e.id == orderId)
-            .toList()
-            .first as OrderModel).toJson(),
+                .where((e) => e.id == orderId)
+                .toList()
+                .first as OrderModel)
+            .toJson(),
       });
       await Helpers.hideLoader();
       Navigator.pop(context);
@@ -523,29 +585,31 @@ final OrderController orderController = Get.find<OrderController>();
     OrderController orderController = Get.find<OrderController>();
     CoreController coreController = Get.find<CoreController>();
     await Helpers.loader();
-    final response = await orderController.changeOrderStatus(orderId: orderId, status: status);
+    final response = await orderController.changeOrderStatus(
+        orderId: orderId, status: status);
     if (response['success']) {
       await getOrders();
       coreController.socket.emit("loby", {
         'type': 'order',
         'receiverId': isSeller ? buyerId : sellerId,
         'order': (orderController.orders
-            .where((e) => e.id == orderId)
-            .toList()
-            .first as OrderModel).toJson(),
+                .where((e) => e.id == orderId)
+                .toList()
+                .first as OrderModel)
+            .toJson(),
       });
       await Helpers.hideLoader();
       Navigator.pop(context);
-    } else if(response['reason'] == 'insufficient balance'){
+    } else if (response['reason'] == 'insufficient balance') {
       Helpers.hideLoader();
       ConfirmationBottomDialog(
           textTheme: Theme.of(context).textTheme,
-          contentName: "You have insifficient tokens to buy this service. Would you like to Add Tokens to your Wallet ?",
-          yesBtnClick: ()async{
+          contentName:
+              "You have insifficient tokens to buy this service. Would you like to Add Tokens to your Wallet ?",
+          yesBtnClick: () async {
             Navigator.pop(context);
             context.pushNamed(addFundScreenPage);
           }).showBottomDialog(context);
-
     } else {
       await Helpers.hideLoader();
     }
@@ -559,7 +623,8 @@ final OrderController orderController = Get.find<OrderController>();
       paths = (await FilePicker.platform.pickFiles(
         allowMultiple: true,
         onFileLoading: (FilePickerStatus status) => print(status),
-      ))!.files;
+      ))!
+          .files;
 
       await Helpers.loader();
       await orderController.uploadDeliveryProof(
@@ -568,16 +633,18 @@ final OrderController orderController = Get.find<OrderController>();
         files: paths.map((e) => File(e.path!)).toList(),
       );
       if (status != null) {
-        await orderController.changeOrderStatus(orderId: orderId, status: status);
+        await orderController.changeOrderStatus(
+            orderId: orderId, status: status);
       }
       await getOrders();
       coreController.socket.emit("loby", {
         'type': 'order',
         'receiverId': buyerId,
         'order': (orderController.orders
-            .where((e) => e.id == orderId)
-            .toList()
-            .first as OrderModel).toJson(),
+                .where((e) => e.id == orderId)
+                .toList()
+                .first as OrderModel)
+            .toJson(),
       });
       await Helpers.hideLoader();
       Navigator.pop(context);
@@ -588,7 +655,6 @@ final OrderController orderController = Get.find<OrderController>();
     }
   }
 
-
   Future<void> getOrders() async {
     OrderController orderController = Get.find<OrderController>();
     orderController.ordersPageNumber.value = 1;
@@ -596,56 +662,61 @@ final OrderController orderController = Get.find<OrderController>();
     await orderController.getOrders(status: isSeller ? 'SOLD' : 'BOUGHT');
   }
 
-
   void _selectDuelWinnerDialog(BuildContext context) {
     OrderController orderController = Get.find<OrderController>();
-    final duelUsers = [isSeller ? order.user?.displayName ?? '' : order.userGameService?.user?.displayName ?? '', 'You'];
+    final duelUsers = [
+      isSeller
+          ? order.user?.displayName ?? ''
+          : order.userGameService?.user?.displayName ?? '',
+      'You'
+    ];
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return Dialog(
-          elevation: 0,
-          backgroundColor: backgroundDarkJungleGreenColor,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.0)),
-          child: SelectDuelWinnerDialog(
-            options: duelUsers,
-            onSelectWinner: (value){
-              if(value.toString() == duelUsers[0]){
-                if(isSeller){
-                  orderController.duelWinner.value = "$buyerId/SELLER_DELIVERY_CONFIRMED";
-                }else{
-                  orderController.duelWinner.value = "$sellerId/BUYER_DELIVERY_CONFIRMED";
+            elevation: 0,
+            backgroundColor: backgroundDarkJungleGreenColor,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.0)),
+            child: SelectDuelWinnerDialog(
+              options: duelUsers,
+              onSelectWinner: (value) {
+                if (value.toString() == duelUsers[0]) {
+                  if (isSeller) {
+                    orderController.duelWinner.value =
+                        "$buyerId/SELLER_DELIVERY_CONFIRMED";
+                  } else {
+                    orderController.duelWinner.value =
+                        "$sellerId/BUYER_DELIVERY_CONFIRMED";
+                  }
+                } else {
+                  if (isSeller) {
+                    orderController.duelWinner.value =
+                        "$sellerId/SELLER_DELIVERY_CONFIRMED";
+                  } else {
+                    orderController.duelWinner.value =
+                        "$buyerId/BUYER_DELIVERY_CONFIRMED";
+                  }
                 }
-              }else{
-                if(isSeller){
-                  orderController.duelWinner.value = "$sellerId/SELLER_DELIVERY_CONFIRMED";
-                }else{
-                  orderController.duelWinner.value = "$buyerId/BUYER_DELIVERY_CONFIRMED";
+                orderController.selectedUser.value = value.toString();
+                debugPrint(orderController.duelWinner.value);
+              },
+              onSubmit: () {
+                if (orderController.duelWinner.isEmpty) {
+                  Helpers.toast("Please Select Winner");
+                } else if (orderController.selectedDuelProofs.isEmpty) {
+                  Helpers.toast("Please Upload Proofs");
+                } else {
+                  selectDuelWinner(context,
+                      winnerId: int.tryParse(
+                          orderController.duelWinner.value.split("/")[0])!,
+                      status: orderController.duelWinner.value.split("/")[1]);
                 }
-              }
-              orderController.selectedUser.value = value.toString();
-              debugPrint(orderController.duelWinner.value);
-            },
-            onSubmit: () {
-              if(orderController.duelWinner.isEmpty){
-                Helpers.toast("Please Select Winner");
-              }else if(orderController.selectedDuelProofs.isEmpty){
-                Helpers.toast("Please Upload Proofs");
-              }else{
-                selectDuelWinner(
-                    context,
-                    winnerId: int.tryParse(orderController.duelWinner.value.split("/")[0])!,
-                    status: orderController.duelWinner.value.split("/")[1]
-                );
-              }
-            },
-          )
-        );
+              },
+            ));
       },
     );
   }
-
 
   void _uploadProofsDialog(BuildContext context) {
     OrderController orderController = Get.find<OrderController>();
@@ -660,36 +731,41 @@ final OrderController orderController = Get.find<OrderController>();
                 borderRadius: BorderRadius.circular(16.0)),
             child: SelectDuelWinnerDialog(
               isNormalOrder: true,
-              onSubmit: () async{
-                if(orderController.selectedDuelProofs.isEmpty){
+              onSubmit: () async {
+                if (orderController.selectedDuelProofs.isEmpty) {
                   Helpers.toast("Please Upload Proofs");
-                }else{
+                } else {
                   await Helpers.loader();
                   final isSuccess = await orderController.uploadDeliveryProof(
                     orderId: orderId,
-                    fileTypes: orderController.selectedDuelProofs.map((element) => element.fileType).toList(),
-                    files: orderController.selectedDuelProofs.map((element) => element.file).toList(),
+                    fileTypes: orderController.selectedDuelProofs
+                        .map((element) => element.fileType)
+                        .toList(),
+                    files: orderController.selectedDuelProofs
+                        .map((element) => element.file)
+                        .toList(),
                   );
-                  if(isSuccess){
-                    await orderController.changeOrderStatus(orderId: orderId, status: sellerDeliveryConfirmed);
+                  if (isSuccess) {
+                    await orderController.changeOrderStatus(
+                        orderId: orderId, status: sellerDeliveryConfirmed);
                     await getOrders();
                     coreController.socket.emit("loby", {
                       'type': 'order',
                       'receiverId': buyerId,
                       'order': (orderController.orders
-                          .where((e) => e.id == orderId)
-                          .toList()
-                          .first as OrderModel).toJson(),
+                              .where((e) => e.id == orderId)
+                              .toList()
+                              .first as OrderModel)
+                          .toJson(),
                     });
                     await Helpers.hideLoader();
                     Navigator.pop(context);
-                  }else{
+                  } else {
                     Helpers.hideLoader();
                   }
                 }
               },
-            )
-        );
+            ));
       },
     );
   }

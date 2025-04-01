@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:loby/services/routing_service/routes_name.dart';
 
 import '../../core/theme/colors.dart';
 import 'buttons/custom_button.dart';
-
 
 class BottomDialog {
   final TextTheme? textTheme;
@@ -15,8 +12,14 @@ class BottomDialog {
   final String? contentNameLast;
   final Function()? onOk;
 
-
-  BottomDialog({this.onOk, this.textTheme, this.tileName, this.titleColor, this.contentName, this.contentLinkName, this.contentNameLast});
+  BottomDialog(
+      {this.onOk,
+      this.textTheme,
+      this.tileName,
+      this.titleColor,
+      this.contentName,
+      this.contentLinkName,
+      this.contentNameLast});
 
   void showBottomDialog(BuildContext context) {
     showGeneralDialog(
@@ -42,6 +45,7 @@ class BottomDialog {
       },
     );
   }
+
   Widget _buildDialogContent(BuildContext context) {
     return IntrinsicHeight(
       child: Container(
@@ -69,9 +73,10 @@ class BottomDialog {
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.4,
                 child: CustomButton(
-                  onTap: onOk ?? () {
-                    Navigator.pop(context);
-                  },
+                  onTap: onOk ??
+                      () {
+                        Navigator.pop(context);
+                      },
                   color: aquaGreenColor,
                   name: 'OK',
                 ),
@@ -84,13 +89,17 @@ class BottomDialog {
   }
 
   Widget _buildCongratulationsText() {
-    return tileName != null ? Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
-      child: Text(
-        tileName ?? 'Loby',
-        style: textTheme?.headline2?.copyWith(color: titleColor ?? aquaGreenColor, fontWeight: FontWeight.w400),
-      ),
-    ) :  Container();
+    return tileName != null
+        ? Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Text(
+              tileName ?? 'Loby',
+              style: textTheme?.displayMedium?.copyWith(
+                  color: titleColor ?? aquaGreenColor,
+                  fontWeight: FontWeight.w400),
+            ),
+          )
+        : Container();
   }
 
   Widget _buildContentText() {
@@ -100,15 +109,16 @@ class BottomDialog {
         text: TextSpan(
           children: [
             TextSpan(
-              text: contentName??'',
-              style: textTheme?.headline3?.copyWith(color: textLightColor),
+              text: contentName ?? '',
+              style: textTheme?.displaySmall?.copyWith(color: textLightColor),
             ),
             TextSpan(
-                text: contentLinkName?? '',
-                style: textTheme?.headline3?.copyWith(color: aquaGreenColor)),
+                text: contentLinkName ?? '',
+                style:
+                    textTheme?.displaySmall?.copyWith(color: aquaGreenColor)),
             TextSpan(
-              text: contentNameLast??'',
-              style: textTheme?.headline3?.copyWith(color: textLightColor),
+              text: contentNameLast ?? '',
+              style: textTheme?.displaySmall?.copyWith(color: textLightColor),
             ),
           ],
         ),

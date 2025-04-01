@@ -14,17 +14,16 @@ import 'package:loby/presentation/screens/auth/widgets/create_account.dart';
 import 'package:loby/presentation/screens/auth/widgets/create_profile_bottom_sheet.dart';
 import 'package:loby/presentation/screens/auth/widgets/login.dart';
 import 'package:loby/presentation/screens/auth/widgets/otp_dialog.dart';
-import 'package:loby/presentation/widgets/body_padding_widget.dart';
 import 'package:loby/presentation/widgets/buttons/custom_button.dart';
 import 'package:loby/presentation/widgets/custom_bottom_sheet.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../../core/theme/colors.dart';
 import '../../../core/utils/helpers.dart';
-import '../../widgets/text_fields/text_field_widget.dart';
 
 class SignInScreen extends StatefulWidget {
-  const SignInScreen({Key? key}) : super(key: key);
+  const SignInScreen({super.key});
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
@@ -50,14 +49,12 @@ class _SignInScreenState extends State<SignInScreen> {
 
     // Apply the desired format (1111222233 -> 1111 222 333)
     if (formattedText.length >= 4) {
-      formattedText = formattedText.substring(0, 4) +
-          ' ' +
-          formattedText.substring(4, formattedText.length);
+      formattedText =
+          '${formattedText.substring(0, 4)} ${formattedText.substring(4, formattedText.length)}';
     }
     if (formattedText.length >= 8) {
-      formattedText = formattedText.substring(0, 8) +
-          ' ' +
-          formattedText.substring(8, formattedText.length);
+      formattedText =
+          '${formattedText.substring(0, 8)} ${formattedText.substring(8, formattedText.length)}';
     }
 
     return formattedText;
@@ -66,7 +63,7 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   void dispose() {
     // TODO: implement dispose
-    authController.mobilecontroller.clear();
+    // authController.mobilecontroller.clear();
     super.dispose();
   }
 
@@ -105,7 +102,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text("Login",
-                        style: textTheme.headline1
+                        style: textTheme.displayLarge
                             ?.copyWith(color: textWhiteColor)),
                     SizedBox(
                       height: 3.h,
@@ -116,14 +113,14 @@ class _SignInScreenState extends State<SignInScreen> {
                         // mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text("Enter Mobile Number",
-                              style: textTheme.headline2?.copyWith(
+                              style: textTheme.displayMedium?.copyWith(
                                   color: whiteColor, fontSize: 18.sp)),
                           SizedBox(
                             height: 1.h,
                           ),
                           Text(
                               "Please Confirm Your Country and Enter Your Mobile Number",
-                              style: textTheme.headline5?.copyWith(
+                              style: textTheme.headlineSmall?.copyWith(
                                   color: whiteColor,
                                   fontWeight: FontWeight.w100)),
                           SizedBox(
@@ -144,7 +141,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 15, vertical: 20),
                                         child: Text("+91",
-                                            style: textTheme.headline1
+                                            style: textTheme.displayLarge
                                                 ?.copyWith(
                                                     color: textWhiteColor)),
                                       ),
@@ -154,14 +151,14 @@ class _SignInScreenState extends State<SignInScreen> {
                                     ),
                                     Expanded(
                                         child: TextFormField(
-                                      style: textTheme.headline1
+                                      style: textTheme.displayLarge
                                           ?.copyWith(color: textWhiteColor),
                                       maxLength: 10,
                                       controller:
                                           authController.mobilecontroller,
                                       textAlign: TextAlign.center,
-                                      scrollPadding:
-                                          EdgeInsets.symmetric(horizontal: 20),
+                                      scrollPadding: const EdgeInsets.symmetric(
+                                          horizontal: 20),
                                       keyboardType: TextInputType.phone,
                                       onChanged: (value) {
                                         // Update the text in the TextField with the formatted text
@@ -222,7 +219,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                           ),
                                           hintText: "0000 000 000",
                                           filled: true,
-                                          hintStyle: textTheme.headline1
+                                          hintStyle: textTheme.displayLarge
                                               ?.copyWith(
                                                   color: textWhiteColor
                                                       .withOpacity(0.5)),
@@ -299,7 +296,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                     ),
                     Text("Sign In using Google or Apple",
-                        style: textTheme.headline5?.copyWith(
+                        style: textTheme.headlineSmall?.copyWith(
                             color: whiteColor, fontWeight: FontWeight.w100)),
                     Padding(
                       padding: const EdgeInsets.symmetric(
@@ -315,7 +312,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               decoration: BoxDecoration(
                                   color: whiteColor,
                                   borderRadius: BorderRadius.circular(30)),
-                              child: Center(
+                              child: const Center(
                                 child: Image(
                                     image: AssetImage(
                                         "assets/images/google_icon.png")),
@@ -328,7 +325,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             decoration: BoxDecoration(
                                 color: whiteColor,
                                 borderRadius: BorderRadius.circular(31)),
-                            child: Center(
+                            child: const Center(
                               child: Image(
                                   image: AssetImage(
                                       "assets/images/apple_icon.png")),
@@ -603,20 +600,19 @@ class _SignInScreenState extends State<SignInScreen> {
               if (isSuccess) {
                 profileController.getProfile().then((value) async {
                   if (value) {
-                     print("profileeee ${profileController.profile}");
-                print("name >>> ${profileController.profile.name}");
-                print(
-                    "Displayname >>> ${profileController.profile.displayName}");
-                print("dob >>> ${profileController.profile.dob}");
-                if (profileController.profile.name != null ||
-                    profileController.profile.displayName != null ||
-                    profileController.profile.dob != null) {
-                       await authController.loggedUserIn();
-                    context.goNamed(mainPage);
-                    }else {
-                    _showCreateProfileBottomSheet(context);
-                  }
-                   
+                    print("profileeee ${profileController.profile}");
+                    print("name >>> ${profileController.profile.name}");
+                    print(
+                        "Displayname >>> ${profileController.profile.displayName}");
+                    print("dob >>> ${profileController.profile.dob}");
+                    if (profileController.profile.name != null ||
+                        profileController.profile.displayName != null ||
+                        profileController.profile.dob != null) {
+                      await authController.loggedUserIn();
+                      context.goNamed(mainPage);
+                    } else {
+                      _showCreateProfileBottomSheet(context);
+                    }
                   } else {
                     _showCreateProfileBottomSheet(context);
                   }
@@ -749,7 +745,7 @@ Widget _buildDropdownItem(Country country) => Container(
       child: Row(
         children: <Widget>[
           CountryPickerUtils.getDefaultFlagImage(country),
-          SizedBox(
+          const SizedBox(
             width: 8.0,
           ),
           Text("+${country.phoneCode}(${country.isoCode})"),

@@ -24,7 +24,7 @@ class SearchFieldWidget extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width * 0.13,
               child: SvgPicture.asset(
                 'assets/icons/search_icon.svg',
@@ -33,14 +33,16 @@ class SearchFieldWidget extends StatelessWidget {
                 height: 18,
               ),
             ),
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width * 0.7,
               child: TextField(
-                style: textTheme.headline4?.copyWith(color: textWhiteColor),
+                style:
+                    textTheme.headlineMedium?.copyWith(color: textWhiteColor),
                 decoration: InputDecoration(
                   border: InputBorder.none,
-                  hintStyle: textTheme.headline4?.copyWith(color: textWhiteColor),
-                  hintText: textHint?? 'Search',
+                  hintStyle:
+                      textTheme.headlineMedium?.copyWith(color: textWhiteColor),
+                  hintText: textHint ?? 'Search',
                 ),
               ),
             ),

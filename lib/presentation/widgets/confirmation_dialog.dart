@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:loby/presentation/widgets/SuccessfullyDeleteListingBottomDialog.dart';
-import 'package:loby/services/routing_service/routes_name.dart';
 
 import '../../../../../../core/theme/colors.dart';
-
 
 class ConfirmationBottomDialog {
   final TextTheme? textTheme;
@@ -17,7 +13,16 @@ class ConfirmationBottomDialog {
   dynamic yesBtnClick;
   dynamic cancelBtnClick;
 
-  ConfirmationBottomDialog({this.textTheme, this.tileName, this.titleColor, this.contentName, this.contentLinkName, this.contentNameLast, this.confirmationWidget, this.yesBtnClick, this.cancelBtnClick});
+  ConfirmationBottomDialog(
+      {this.textTheme,
+      this.tileName,
+      this.titleColor,
+      this.contentName,
+      this.contentLinkName,
+      this.contentNameLast,
+      this.confirmationWidget,
+      this.yesBtnClick,
+      this.cancelBtnClick});
 
   void showBottomDialog(BuildContext context) {
     showGeneralDialog(
@@ -43,6 +48,7 @@ class ConfirmationBottomDialog {
       },
     );
   }
+
   Widget _buildDialogContent(BuildContext context) {
     return IntrinsicHeight(
       child: Container(
@@ -74,7 +80,7 @@ class ConfirmationBottomDialog {
                     height: 45,
                     child: ElevatedButton(
                         style: ButtonStyle(
-                          side: MaterialStateProperty.all(
+                          side: WidgetStateProperty.all(
                             const BorderSide(
                               style: BorderStyle.solid,
                               color: orangeColor,
@@ -82,22 +88,22 @@ class ConfirmationBottomDialog {
                             ),
                           ),
                           shape:
-                          MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16.0),
-                              )),
-                          backgroundColor:
-                          MaterialStateProperty.all<Color>(backgroundDarkJungleGreenColor),
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16.0),
+                          )),
+                          backgroundColor: WidgetStateProperty.all<Color>(
+                              backgroundDarkJungleGreenColor),
                         ),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
                         child: Padding(
                           padding:
-                          const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+                              const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
                           child: Text("Cancel",
-                              style:
-                              textTheme?.button?.copyWith(color: orangeColor)),
+                              style: textTheme?.labelLarge
+                                  ?.copyWith(color: orangeColor)),
                         )),
                   ),
                   SizedBox(
@@ -106,18 +112,18 @@ class ConfirmationBottomDialog {
                     child: ElevatedButton(
                         style: ButtonStyle(
                           shape:
-                          MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16.0),
-                              )),
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16.0),
+                          )),
                           backgroundColor:
-                          MaterialStateProperty.all<Color>(aquaGreenColor),
+                              WidgetStateProperty.all<Color>(aquaGreenColor),
                         ),
                         onPressed: yesBtnClick,
                         child: Padding(
                           padding:
-                          const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
-                          child: Text("OK", style: textTheme?.button),
+                              const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+                          child: Text("OK", style: textTheme?.labelLarge),
                         )),
                   ),
                 ],
@@ -130,13 +136,16 @@ class ConfirmationBottomDialog {
   }
 
   Widget _buildCongratulationsText() {
-    return tileName != null? Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
-      child: Text(
-        tileName?? 'Loby',
-        style: textTheme?.headline2?.copyWith(color: titleColor, fontWeight: FontWeight.w400),
-      ),
-    ) :  Container();
+    return tileName != null
+        ? Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Text(
+              tileName ?? 'Loby',
+              style: textTheme?.displayMedium
+                  ?.copyWith(color: titleColor, fontWeight: FontWeight.w400),
+            ),
+          )
+        : Container();
   }
 
   Widget _buildContentText() {
@@ -147,14 +156,15 @@ class ConfirmationBottomDialog {
           children: [
             TextSpan(
               text: contentName ?? '',
-              style: textTheme?.headline3?.copyWith(color: textLightColor),
+              style: textTheme?.displaySmall?.copyWith(color: textLightColor),
             ),
             TextSpan(
                 text: contentLinkName ?? '',
-                style: textTheme?.headline3?.copyWith(color: aquaGreenColor)),
+                style:
+                    textTheme?.displaySmall?.copyWith(color: aquaGreenColor)),
             TextSpan(
-              text: contentNameLast ??'',
-              style: textTheme?.headline3?.copyWith(color: textLightColor),
+              text: contentNameLast ?? '',
+              style: textTheme?.displaySmall?.copyWith(color: textLightColor),
             ),
           ],
         ),

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loby/core/theme/colors.dart';
@@ -14,7 +13,6 @@ import '../../../widgets/body_padding_widget.dart';
 import 'create_profile_bottom_sheet.dart';
 import 'otp_dialog.dart';
 
-
 class CreateAccount extends StatefulWidget {
   const CreateAccount({Key? key}) : super(key: key);
   @override
@@ -22,11 +20,9 @@ class CreateAccount extends StatefulWidget {
 }
 
 class _CreateAccountState extends State<CreateAccount> {
-
   AuthController authController = Get.find<AuthController>();
   ProfileController profileController = Get.find<ProfileController>();
   final _formKey = GlobalKey<FormState>();
-
 
   TextEditingController name = TextEditingController();
   TextEditingController email = TextEditingController();
@@ -34,7 +30,6 @@ class _CreateAccountState extends State<CreateAccount> {
   TextEditingController confirmPassword = TextEditingController();
 
   TextEditingController otp = TextEditingController();
-
 
   @override
   Widget build(BuildContext context) {
@@ -44,16 +39,24 @@ class _CreateAccountState extends State<CreateAccount> {
         key: _formKey,
         child: Column(
           children: [
-            SizedBox(height: 1.h,),
-            Text('Create New Account', style: textTheme.headline2?.copyWith(color: textWhiteColor)),
-            SizedBox(height: 4.h,),
+            SizedBox(
+              height: 1.h,
+            ),
+            Text('Create New Account',
+                style:
+                    textTheme.displayMedium?.copyWith(color: textWhiteColor)),
+            SizedBox(
+              height: 4.h,
+            ),
             TextFieldWidget(
               textEditingController: name,
               title: "Full Name",
               hint: "Ex: John Doe",
               isRequired: true,
             ),
-            SizedBox(height: 3.h,),
+            SizedBox(
+              height: 3.h,
+            ),
             TextFieldWidget(
               textEditingController: email,
               type: "email",
@@ -61,7 +64,9 @@ class _CreateAccountState extends State<CreateAccount> {
               hint: "Ex: JohnDoe@gmail.com",
               isRequired: true,
             ),
-            SizedBox(height: 3.h,),
+            SizedBox(
+              height: 3.h,
+            ),
             TextFieldWidget(
               textEditingController: password,
               type: "password",
@@ -69,7 +74,9 @@ class _CreateAccountState extends State<CreateAccount> {
               hint: "Password",
               isRequired: true,
             ),
-            SizedBox(height: 3.h,),
+            SizedBox(
+              height: 3.h,
+            ),
             TextFieldWidget(
               textEditingController: confirmPassword,
               type: "password",
@@ -77,34 +84,42 @@ class _CreateAccountState extends State<CreateAccount> {
               hint: "Password",
               isRequired: true,
             ),
-            SizedBox(height: 3.h,),
+            SizedBox(
+              height: 3.h,
+            ),
             CustomButton(
               color: aquaGreenColor,
               textColor: textCharcoalBlueColor,
               name: "Create Account",
               left: 15.w,
               right: 15.w,
-              onTap: () async{
+              onTap: () async {
                 if (_formKey.currentState!.validate()) {
                   await Helpers.loader();
-                  final result = await authController.signup(name: name.text, email: email.text, password: password.text, confirmPassword: confirmPassword.text);
+                  final result = await authController.signup(
+                      name: name.text,
+                      email: email.text,
+                      password: password.text,
+                      confirmPassword: confirmPassword.text);
                   if (!mounted) return;
-                  if(result){
+                  if (result) {
                     // final isSuccess = await authController.sendAndVerifyOTP(email: email.text);
                     // Helpers.hideLoader();
                     // if(isSuccess){
                     //   _otpDialog(context);
                     // }
                     _showCreateProfileBottomSheet(context);
-                  }else{
+                  } else {
                     Helpers.hideLoader();
                   }
                 }
               },
             ),
-            SizedBox(height: 2.h,),
+            SizedBox(
+              height: 2.h,
+            ),
             Text('Sign up using Google or Apple',
-                style: textTheme.headline5
+                style: textTheme.headlineSmall
                     ?.copyWith(color: textInputTitleColor)),
             CustomButton(
                 name: "Continue with Google",
@@ -113,9 +128,10 @@ class _CreateAccountState extends State<CreateAccount> {
                 right: 10.w,
                 bottom: 2.h,
                 top: 4.h,
-                onTap: ()async{
-                  final isSuccess = await authController.googleSignInMethod(context);
-                  if(isSuccess){
+                onTap: () async {
+                  final isSuccess =
+                      await authController.googleSignInMethod(context);
+                  if (isSuccess) {
                     Navigator.pop(context);
                     _showCreateProfileBottomSheet(context);
                   }
@@ -126,9 +142,7 @@ class _CreateAccountState extends State<CreateAccount> {
                 left: 10.w,
                 right: 10.w,
                 bottom: 3.h,
-                onTap: () {
-
-                }),
+                onTap: () {}),
           ],
         ),
       ),
@@ -141,19 +155,19 @@ class _CreateAccountState extends State<CreateAccount> {
       builder: (BuildContext context) {
         return OTPDialog(
             otp: otp,
-            onVerify: () async{
+            onVerify: () async {
               Helpers.loader();
-              final isSuccess = await authController.sendAndVerifyOTP(mobile: email.text, otp: otp.text);
+              final isSuccess = await authController.sendAndVerifyOTP(
+                  mobile: email.text, otp: otp.text);
               Helpers.hideLoader();
               if (!mounted) return;
-              if(isSuccess) {
+              if (isSuccess) {
                 _showCreateProfileBottomSheet(context);
               }
             });
       },
     );
   }
-
 
   void _showCreateProfileBottomSheet(BuildContext context) {
     showModalBottomSheet(
@@ -163,17 +177,18 @@ class _CreateAccountState extends State<CreateAccount> {
       isDismissible: false,
       builder: (BuildContext context) {
         return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        child: const CustomBottomSheet(
-            isDismissible: false,
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: const CustomBottomSheet(
+              isDismissible: false,
               initialChildSize: 0.97,
               maxChildSize: 0.97,
               minChildSize: 0.5,
-              child: CreateProfileCard(from: 'signIn',)),
+              child: CreateProfileCard(
+                from: 'signIn',
+              )),
         );
       },
     );
   }
-
-
 }

@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
+
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:loby/core/utils/environment.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
@@ -19,12 +22,11 @@ import 'package:loby/services/routing_service/router.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
+
 import 'core/theme/colors.dart';
 import 'core/theme/theme.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'di/injection.dart';
 import 'firebase_options.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 // import 'package:phonepe_payment_sdk/phonepe_payment_sdk.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -88,8 +90,7 @@ Future<void> runMainApp() async {
 class MyApp extends StatefulWidget {
   final GoRouter appRouter;
   final PendingDynamicLinkData? initialLink;
-  const MyApp({Key? key, required this.appRouter, this.initialLink})
-      : super(key: key);
+  const MyApp({super.key, required this.appRouter, this.initialLink});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -126,14 +127,14 @@ class _MyAppState extends State<MyApp> {
   Future<void> initializePushNotification() async {
     var initializationSettingsAndroid =
         const AndroidInitializationSettings('@mipmap/ic_launcher');
-    var initializationSettingsIOs = const IOSInitializationSettings();
+    var initializationSettingsIOs = const DarwinInitializationSettings();
     var initializationSettings = InitializationSettings(
         android: initializationSettingsAndroid, iOS: initializationSettingsIOs);
 
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: (data) {
+        onDidReceiveNotificationResponse: (data) {
       Get.find<CoreController>()
-          .onNotificationClick(data!, contextKey.currentContext!);
+          .onNotificationClick(data.payload!, contextKey.currentContext!);
     });
 
     FirebaseMessaging.onMessage.listen(_showNotification);
@@ -169,7 +170,7 @@ class _MyAppState extends State<MyApp> {
             ongoing: true,
             styleInformation: const BigTextStyleInformation(''),
           ),
-          iOS: const IOSNotificationDetails(),
+          iOS: DarwinNotificationDetails(),
         ),
         payload: data,
       );
@@ -186,10 +187,10 @@ class _MyAppState extends State<MyApp> {
 
       if (isListingPage) {
         contextKey.currentContext
-            ?.goNamed(gameDetailPage, queryParams: {'serviceListingId': "$id"});
+            ?.goNamed(gameDetailPage, extra: {'serviceListingId': "$id"});
       } else {
         contextKey.currentContext
-            ?.goNamed(gameDetailPage, queryParams: {'serviceListingId': "$id"});
+            ?.goNamed(gameDetailPage, extra: {'serviceListingId': "$id"});
       }
     }).onError((error) {
       print(error);
@@ -201,10 +202,10 @@ class _MyAppState extends State<MyApp> {
       String? id = deepLink.queryParameters['listingId'];
       if (isListingPage) {
         contextKey.currentContext
-            ?.goNamed(gameDetailPage, queryParams: {'serviceListingId': "$id"});
+            ?.goNamed(gameDetailPage, extra: {'serviceListingId': "$id"});
       } else {
         contextKey.currentContext
-            ?.goNamed(gameDetailPage, queryParams: {'serviceListingId': "$id"});
+            ?.goNamed(gameDetailPage, extra: {'serviceListingId': "$id"});
       }
     }
   }
@@ -244,7 +245,7 @@ class NoInternetConnection extends StatelessWidget {
               ),
               Text('No Internet Connection',
                   textAlign: TextAlign.center,
-                  style: textTheme.subtitle1?.copyWith(color: whiteColor)),
+                  style: textTheme.titleMedium?.copyWith(color: whiteColor)),
               SizedBox(
                 height: 5.h,
               ),
@@ -256,7 +257,8 @@ class NoInternetConnection extends StatelessWidget {
                   bottom: 5.h,
                   onTap: () async {
                     bool isDeviceConnected =
-                        await InternetConnectionChecker().hasConnection;
+                        await InternetConnectionChecker.createInstance()
+                            .hasConnection;
                     if (!isDeviceConnected) {
                       Helpers.toast('Internet Not Connected');
                     } else {

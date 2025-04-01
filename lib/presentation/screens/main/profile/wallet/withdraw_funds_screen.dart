@@ -4,22 +4,19 @@ import 'package:go_router/go_router.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/profile/bank_detail.dart';
 import 'package:loby/presentation/getx/controllers/home_controller.dart';
-import 'package:loby/presentation/getx/controllers/kyc_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/screens/main/profile/wallet/widgets/token_widget.dart';
 import 'package:loby/presentation/widgets/confirmation_dialog.dart';
 import 'package:loby/presentation/widgets/text_fields/custom_drop_down.dart';
 import 'package:loby/presentation/widgets/text_fields/text_field_widget.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../../../../core/theme/colors.dart';
 import '../../../../../services/routing_service/routes_name.dart';
 import '../../../../widgets/bottom_dialog.dart';
-import '../../../../widgets/custom_app_bar.dart';
 import '../../../../widgets/buttons/custom_button.dart';
+import '../../../../widgets/custom_app_bar.dart';
 import '../../../../widgets/custom_loader.dart';
-import '../../../../widgets/drop_down.dart';
-import '../../../../widgets/input_text_title_widget.dart';
-import '../../../../widgets/input_text_widget.dart';
 
 class WithdrawFundsScreen extends StatefulWidget {
   const WithdrawFundsScreen({Key? key}) : super(key: key);
@@ -68,7 +65,8 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      appBar: appBar(context: context, appBarName: "Withdraw Token",isBackIcon: true),
+      appBar: appBar(
+          context: context, appBarName: "Withdraw Token", isBackIcon: true),
       body: Obx(() {
         if (profileController.isBankDetailsFetching.value) {
           return const CustomLoader();
@@ -79,117 +77,116 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
               // mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                      "Safely Access Your Funds: Initiate",
-                      style: textTheme.headline2?.copyWith(
-                        
-                          color: whiteColor, fontWeight: FontWeight.w500)),
-                          SizedBox(height: 1.h,),
-                          Text(
-                      "Withdrawal Process Today!",
-                      style: textTheme.headline2?.copyWith(
-                        
-                          color: whiteColor, fontWeight: FontWeight.w500)),
+                Text("Safely Access Your Funds: Initiate",
+                    style: textTheme.displayMedium?.copyWith(
+                        color: whiteColor, fontWeight: FontWeight.w500)),
+                SizedBox(
+                  height: 1.h,
+                ),
+                Text("Withdrawal Process Today!",
+                    style: textTheme.displayMedium?.copyWith(
+                        color: whiteColor, fontWeight: FontWeight.w500)),
                 SizedBox(
                   height: 3.h,
                 ),
-                profileController.profile.kycverify == "Y" ?
-                Container(
-                  height: 30.h,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: concordColor.withOpacity(0.2)
-                  ),
-                  child: Center(
-                    child: Column(
-                      // mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(height: 3.h,),
-                        Text(
-                            "KYC Verification Complete",
-                            style: textTheme.headline3?.copyWith(
-                                color: whiteColor,
-                                fontWeight: FontWeight.w500)),
-                               
-                        SizedBox(
-                          height: 5.h,
+                profileController.profile.kycverify == "Y"
+                    ? Container(
+                        height: 30.h,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: concordColor.withOpacity(0.2)),
+                        child: Center(
+                          child: Column(
+                            // mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 3.h,
+                              ),
+                              Text("KYC Verification Complete",
+                                  style: textTheme.displaySmall?.copyWith(
+                                      color: whiteColor,
+                                      fontWeight: FontWeight.w500)),
+                              SizedBox(
+                                height: 5.h,
+                              ),
+                              const Image(
+                                  image: AssetImage(
+                                      "assets/images/success_logo.png")),
+                            ],
+                          ),
                         ),
-                        Image(image: AssetImage("assets/images/success_logo.png")),
-                      ],
-                    ),
-                  ),
-                ) : 
-                Container(
-                  height: 30.h,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: concordColor.withOpacity(0.2)
-                  ),
-                  child: Center(
-                    child: Column(
-                      // mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(height: 3.h,),
-                        Text(
-                            "Get Started with KYC Verification",
-                            style: textTheme.headline3?.copyWith(
-                                color: whiteColor,
-                                fontWeight: FontWeight.w500)),
-                                SizedBox(height: 1.h,),
-                                Text(
-                            "Secure Your Account Now!",
-                            style: textTheme.headline3?.copyWith(
-                                color: whiteColor,
-                                fontWeight: FontWeight.w500)),
-                        SizedBox(
-                          height: 5.h,
+                      )
+                    : Container(
+                        height: 30.h,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: concordColor.withOpacity(0.2)),
+                        child: Center(
+                          child: Column(
+                            // mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 3.h,
+                              ),
+                              Text("Get Started with KYC Verification",
+                                  style: textTheme.displaySmall?.copyWith(
+                                      color: whiteColor,
+                                      fontWeight: FontWeight.w500)),
+                              SizedBox(
+                                height: 1.h,
+                              ),
+                              Text("Secure Your Account Now!",
+                                  style: textTheme.displaySmall?.copyWith(
+                                      color: whiteColor,
+                                      fontWeight: FontWeight.w500)),
+                              SizedBox(
+                                height: 5.h,
+                              ),
+                              CustomButton(
+                                color: purpleLightIndigoColor,
+                                textColor: textWhiteColor,
+                                left: 20.w,
+                                right: 20.w,
+                                height: 7.5.h,
+                                name: "Get Started",
+                                onTap: () {
+                                  context.pushNamed(myKycScreen);
+                                },
+                              ),
+                            ],
+                          ),
                         ),
-                        CustomButton(
-                          color: purpleLightIndigoColor,
-                          textColor: textWhiteColor,
-                          left: 20.w,
-                          right: 20.w,
-                          height: 7.5.h,
-                          name: "Get Started",
-                          onTap: () {
-                            context.pushNamed(myKycScreen);
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                      ),
                 SizedBox(
                   height: 5.h,
                 ),
-                profileController.profile.kycverify == "Y" ?
-                CustomButton(
-                  color: purpleLightIndigoColor,
-                  textColor: textWhiteColor,
-                  left: 10.w,
-                  
-                  right: 10.w,
-                  height: 7.5.h,
-                  name: "Add New Withdraw Method",
-                  onTap: () {
-                    _addNewWithdrawMethodDialog(context, textTheme);
-                  },
-                ): CustomButton(
-                  color: disablepurpleLightIndigoColor,
-                  textColor: textWhiteColor.withOpacity(0.5),
-                  left: 10.w,
-                  
-                  right: 10.w,
-                  height: 7.5.h,
-                  name: "Add New Withdraw Method",
-                  onTap: () {
-                    // Helpers.toast("Please Complete Your Kyc");
-                  },
-                )
+                profileController.profile.kycverify == "Y"
+                    ? CustomButton(
+                        color: purpleLightIndigoColor,
+                        textColor: textWhiteColor,
+                        left: 10.w,
+                        right: 10.w,
+                        height: 7.5.h,
+                        name: "Add New Withdraw Method",
+                        onTap: () {
+                          _addNewWithdrawMethodDialog(context, textTheme);
+                        },
+                      )
+                    : CustomButton(
+                        color: disablepurpleLightIndigoColor,
+                        textColor: textWhiteColor.withOpacity(0.5),
+                        left: 10.w,
+                        right: 10.w,
+                        height: 7.5.h,
+                        name: "Add New Withdraw Method",
+                        onTap: () {
+                          // Helpers.toast("Please Complete Your Kyc");
+                        },
+                      )
               ],
             ),
           );
@@ -237,7 +234,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                   children: [
                                     Text('Current Balance',
                                         textAlign: TextAlign.center,
-                                        style: textTheme.headline3?.copyWith(
+                                        style: textTheme.displaySmall?.copyWith(
                                             color: textTunaBlueColor,
                                             fontWeight: FontWeight.w500)),
                                     Padding(
@@ -290,7 +287,8 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                                       item.upiId == null
                                                           ? "${item.bankName} ${item.bankAccountNumber?.replaceAll("\\w(?=\\w{4})", "X")}"
                                                           : "UPI ID: ${item.upiId}",
-                                                      style: textTheme.headline3
+                                                      style: textTheme
+                                                          .displaySmall
                                                           ?.copyWith(
                                                               color:
                                                                   whiteColor)),
@@ -349,7 +347,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                       ),
                                       Text(
                                         "₹ ${profileController.tokenToRupee}",
-                                        style: textTheme.headline3
+                                        style: textTheme.displaySmall
                                             ?.copyWith(color: whiteColor),
                                       ),
                                     ],
@@ -374,7 +372,8 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                                 children: [
                                                   Text(
                                                     'Are you sure you want to withdraw ',
-                                                    style: textTheme.headline3
+                                                    style: textTheme
+                                                        .displaySmall
                                                         ?.copyWith(
                                                             color:
                                                                 textLightColor),
@@ -385,20 +384,22 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                                         profileController
                                                             .rupeeToToken.value,
                                                         style: textTheme
-                                                            .headline3
+                                                            .displaySmall
                                                             ?.copyWith(
                                                                 color:
                                                                     textLightColor),
                                                       )),
                                                   Text(
                                                       ' ( ₹${profileController.tokenToRupee.value} ) ',
-                                                      style: textTheme.headline3
+                                                      style: textTheme
+                                                          .displaySmall
                                                           ?.copyWith(
                                                               color:
                                                                   aquaGreenColor)),
                                                   Text(
                                                     'from your Loby Wallet?',
-                                                    style: textTheme.headline3
+                                                    style: textTheme
+                                                        .displaySmall
                                                         ?.copyWith(
                                                             color:
                                                                 textLightColor),
@@ -446,7 +447,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                     child: Text(
                                         'Attention: Razorpay may charge a fee for receiving the earnings',
                                         textAlign: TextAlign.center,
-                                        style: textTheme.headline6
+                                        style: textTheme.titleLarge
                                             ?.copyWith(color: textWhiteColor)),
                                   ),
                                 ],
@@ -467,7 +468,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                         padding: const EdgeInsets.only(right: 20.0),
                         child: Text('View all Transactions',
                             textAlign: TextAlign.end,
-                            style: textTheme.subtitle2
+                            style: textTheme.titleSmall
                                 ?.copyWith(color: textWhiteColor)),
                       ),
                     ),
@@ -516,8 +517,8 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                   Text('Add Withdraw Method',
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
-                      style:
-                          textTheme.headline4?.copyWith(color: textWhiteColor)),
+                      style: textTheme.headlineMedium
+                          ?.copyWith(color: textWhiteColor)),
                   SizedBox(height: 4.h),
                   _addBankDetailOption(textTheme, context, 'Bank Account',
                       onTap: () {
@@ -727,7 +728,7 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
         child: Text(title,
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
-            style: textTheme.headline6?.copyWith(color: textWhiteColor)),
+            style: textTheme.titleLarge?.copyWith(color: textWhiteColor)),
       ),
     );
   }

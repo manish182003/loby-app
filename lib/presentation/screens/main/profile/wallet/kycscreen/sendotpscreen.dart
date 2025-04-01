@@ -5,11 +5,10 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/core/theme/colors.dart';
 import 'package:loby/core/utils/helpers.dart';
+import 'package:loby/domain/entities/kyc/get_kyc_token.dart';
 import 'package:loby/presentation/getx/controllers/home_controller.dart';
 import 'package:loby/presentation/getx/controllers/kyc_controller.dart';
-import 'package:loby/presentation/getx/controllers/order_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
-import 'package:loby/presentation/screens/main/profile/my_order/all_orders_screen.dart';
 import 'package:loby/presentation/widgets/buttons/custom_button.dart';
 import 'package:loby/presentation/widgets/custom_app_bar.dart';
 import 'package:loby/presentation/widgets/text_fields/text_field_widget.dart';
@@ -17,7 +16,6 @@ import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
-import 'package:loby/domain/entities/kyc/get_kyc_token.dart';
 
 class sendOtpScreen extends StatefulWidget {
   final GetKycToken? geTKyctoken;
@@ -81,7 +79,8 @@ class _sendOtpScreenState extends State<sendOtpScreen>
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       backgroundColor: backgroundDarkJungleGreenColor,
-      appBar: appBar(context: context, appBarName: "KYC Verification", isBackIcon: true),
+      appBar: appBar(
+          context: context, appBarName: "KYC Verification", isBackIcon: true),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -124,14 +123,15 @@ class _sendOtpScreenState extends State<sendOtpScreen>
                 ),
                 Text(
                   "OTP Verification",
-                  style: textTheme.headline1?.copyWith(color: textWhiteColor),
+                  style:
+                      textTheme.displayLarge?.copyWith(color: textWhiteColor),
                 ),
                 SizedBox(
                   height: 2.h,
                 ),
                 Text(
                   "Please enter the verification code sent to your \n mobile number",
-                  style: textTheme.headline4?.copyWith(
+                  style: textTheme.headlineMedium?.copyWith(
                       color: textWhiteColor, fontWeight: FontWeight.w300),
                 ),
                 SizedBox(
@@ -172,7 +172,8 @@ class _sendOtpScreenState extends State<sendOtpScreen>
                     ),
                     cursorColor: whiteColor,
                     animationDuration: const Duration(milliseconds: 100),
-                    textStyle: textTheme.headline3?.copyWith(color: whiteColor),
+                    textStyle:
+                        textTheme.displaySmall?.copyWith(color: whiteColor),
                     // enableActiveFill: true,
                     errorAnimationController: errorController,
                     controller: otp,
@@ -205,7 +206,7 @@ class _sendOtpScreenState extends State<sendOtpScreen>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Didn't Received ?",
-                          style: textTheme.headline4?.copyWith(
+                          style: textTheme.headlineMedium?.copyWith(
                               color: textWhiteColor,
                               fontWeight: FontWeight.w300)),
                       InkWell(
@@ -215,8 +216,8 @@ class _sendOtpScreenState extends State<sendOtpScreen>
                           kycController.sendKycOtp(
                               kycToken: prefs.getString("kycToken"),
                               aadharNumber: kycController
-                                  .aadharNumbercontroller.value.text.
-                                  replaceAll(' ', ''));
+                                  .aadharNumbercontroller.value.text
+                                  .replaceAll(' ', ''));
                           //     .then((value) {
                           //   if (value) {
                           //     context.pushNamed(sendOtppage);
@@ -231,7 +232,7 @@ class _sendOtpScreenState extends State<sendOtpScreen>
                                 borderRadius: BorderRadius.circular(10)),
                             child: Center(
                               child: Text("Resend",
-                                  style: textTheme.headline4?.copyWith(
+                                  style: textTheme.headlineMedium?.copyWith(
                                       color: textWhiteColor,
                                       fontWeight: FontWeight.w300)),
                             )),
@@ -254,19 +255,20 @@ class _sendOtpScreenState extends State<sendOtpScreen>
                           await SharedPreferences.getInstance();
                       kycController
                           .verifyKycOtp(
-                            // aadharNumber: kycController
-                            //       .aadharNumbercontroller.value.text
-                            //       .replaceAll(' ', ''),
-                              refId: prefs.getString("refId"),
-                              kycToken: prefs.getString("kycToken"),
-                              otp: otp.value.text.trim(),
-                              aadharNum: kycController.aadharNumbercontroller.text.replaceAll(' ', ''),
-                              )
+                        // aadharNumber: kycController
+                        //       .aadharNumbercontroller.value.text
+                        //       .replaceAll(' ', ''),
+                        refId: prefs.getString("refId"),
+                        kycToken: prefs.getString("kycToken"),
+                        otp: otp.value.text.trim(),
+                        aadharNum: kycController.aadharNumbercontroller.text
+                            .replaceAll(' ', ''),
+                      )
                           .then((value) {
-                            if (value) {
-                      _successDialog(context);
-                    }
-                          });
+                        if (value) {
+                          _successDialog(context);
+                        }
+                      });
                     }),
               ],
             ),
@@ -290,30 +292,40 @@ class _sendOtpScreenState extends State<sendOtpScreen>
           content: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                Text("KYC Verification Done", style: textTheme.headline2?.copyWith(color: textWhiteColor, fontSize: 17.sp, fontWeight: FontWeight.w500)),
-                SizedBox(height: 2.h,),
-                Image(image: AssetImage("assets/images/success_logo.png")),
-                SizedBox(height: 2.h,),
+                Text("KYC Verification Done",
+                    style: textTheme.displayMedium?.copyWith(
+                        color: textWhiteColor,
+                        fontSize: 17.sp,
+                        fontWeight: FontWeight.w500)),
+                SizedBox(
+                  height: 2.h,
+                ),
+                const Image(
+                    image: AssetImage("assets/images/success_logo.png")),
+                SizedBox(
+                  height: 2.h,
+                ),
                 Text("Now continue your transaction securely",
-                    style: textTheme.headline5?.copyWith(color: textWhiteColor, fontSize: 9.sp))
+                    style: textTheme.headlineSmall
+                        ?.copyWith(color: textWhiteColor, fontSize: 9.sp))
               ],
             ),
           ),
-          
+
           actions: <Widget>[
             CustomButton(
-                                  height: 8.h,
-                                  fontSize: 15.sp,
-                                  name: "Continue",
-                                  color: aquaGreenColor,
+                height: 8.h,
+                fontSize: 15.sp,
+                name: "Continue",
+                color: aquaGreenColor,
 
-                                  // left: 0.w,
-                                  // right: 0.w,
-                                  bottom: 3.h,
-                                  top: 2.h,
-                                  onTap: () async {
-                                    _addNewWithdrawMethodDialog(context, textTheme);
-                                  }),
+                // left: 0.w,
+                // right: 0.w,
+                bottom: 3.h,
+                top: 2.h,
+                onTap: () async {
+                  _addNewWithdrawMethodDialog(context, textTheme);
+                }),
             // TextButton(
             //   child: Text(
             //     'Done',
@@ -348,8 +360,8 @@ class _sendOtpScreenState extends State<sendOtpScreen>
                   Text('Add Withdraw Method',
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
-                      style:
-                          textTheme.headline4?.copyWith(color: textWhiteColor)),
+                      style: textTheme.headlineMedium
+                          ?.copyWith(color: textWhiteColor)),
                   SizedBox(height: 4.h),
                   _addBankDetailOption(textTheme, context, 'Bank Account',
                       onTap: () {
@@ -502,7 +514,7 @@ class _sendOtpScreenState extends State<sendOtpScreen>
         child: Text(title,
             textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
-            style: textTheme.headline6?.copyWith(color: textWhiteColor)),
+            style: textTheme.titleLarge?.copyWith(color: textWhiteColor)),
       ),
     );
   }

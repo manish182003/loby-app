@@ -52,7 +52,7 @@ class SlotsRemoteDatasourceImpl extends SlotsRemoteDatasource {
         _dio,
         RequestType.get,
         ApiEndpoints.getSlotsForSeller,
-        queryParams: {'day': day, 'providerId': providerId},
+        extra: {'day': day, 'providerId': providerId},
         headers: headers,
       );
 
@@ -71,7 +71,7 @@ class SlotsRemoteDatasourceImpl extends SlotsRemoteDatasource {
         _dio,
         RequestType.get,
         ApiEndpoints.getSlots,
-        queryParams: {'date': date, 'providerId': providerId},
+        extra: {'date': date, 'providerId': providerId},
         headers: headers,
       );
 
@@ -82,7 +82,7 @@ class SlotsRemoteDatasourceImpl extends SlotsRemoteDatasource {
   }
 
   @override
-  Future<Map<String,dynamic>> deleteSlots(int? slotId) async {
+  Future<Map<String, dynamic>> deleteSlots(int? slotId) async {
     try {
       String token = await Helpers.getApiToken();
       final Map<String, dynamic> headers = {
@@ -93,7 +93,7 @@ class SlotsRemoteDatasourceImpl extends SlotsRemoteDatasource {
 
       final response = await Helpers.sendRequest(
           _dio, RequestType.post, ApiEndpoints.deleteSlot,
-          queryParams: data, headers: headers, encoded: true);
+          extra: data, headers: headers, encoded: true);
 
       // print("respo msg >> $response");
 
@@ -102,16 +102,17 @@ class SlotsRemoteDatasourceImpl extends SlotsRemoteDatasource {
       throw ServerException(message: e.message);
     }
   }
-  
+
   @override
-  Future<Map<String,dynamic>> editSlots(String? date, int? orderId, int? slotId) async {
+  Future<Map<String, dynamic>> editSlots(
+      String? date, int? orderId, int? slotId) async {
     try {
       final headers = await Helpers.getApiHeaders();
       final response = await Helpers.sendRequest(
         _dio,
         RequestType.post,
         ApiEndpoints.editSlot,
-        queryParams: {'booked_date': date, "slot_id" : slotId, "order_id" : orderId},
+        extra: {'booked_date': date, "slot_id": slotId, "order_id": orderId},
         headers: headers,
       );
 
@@ -133,7 +134,7 @@ class SlotsRemoteDatasourceImpl extends SlotsRemoteDatasource {
 //         _dio,
 //         RequestType.get,
 //         from == 'myProfile' ? ApiEndpoints.getSlotsForSeller : ApiEndpoints.getSlots,
-//         queryParams: {
+//         extra: {
 //           'seller_id': '${sellerId}',
 //           'slot_id': '${slotId}',
 //           'day': '${day}',

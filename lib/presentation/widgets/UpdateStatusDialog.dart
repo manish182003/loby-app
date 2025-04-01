@@ -86,7 +86,8 @@ class UpdateStatusDialog {
                       SizedBox(
                         child: Text('Update Status',
                             textAlign: TextAlign.center,
-                            style: textTheme.headline2?.copyWith(color: textWhiteColor)),
+                            style: textTheme.displayMedium
+                                ?.copyWith(color: textWhiteColor)),
                       ),
                       SizedBox(
                         child: GestureDetector(
@@ -117,7 +118,8 @@ class UpdateStatusDialog {
                   borderRadius: BorderRadius.circular(16.0),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0.0),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 0.0),
                   child: Container(
                     width: MediaQuery.of(context).size.width * 1,
                     decoration: BoxDecoration(
@@ -127,10 +129,7 @@ class UpdateStatusDialog {
                     child: SingleChildScrollView(
                       child: Padding(
                         padding: const EdgeInsets.only(
-                            top: 24.0,
-                            left: 24.0,
-                            right: 24.0,
-                            bottom: 24.0),
+                            top: 24.0, left: 24.0, right: 24.0, bottom: 24.0),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,30 +145,28 @@ class UpdateStatusDialog {
                                 const SizedBox(width: 4.0),
                                 Text("Order Placed",
                                     overflow: TextOverflow.ellipsis,
-                                    style: textTheme.headline6
+                                    style: textTheme.titleLarge
                                         ?.copyWith(color: textWhiteColor)),
                                 const SizedBox(width: 8.0),
                                 Expanded(
                                   child: Text("May 26, 2022 18:23:43",
                                       textAlign: TextAlign.end,
                                       overflow: TextOverflow.ellipsis,
-                                      style: textTheme.headline6?.copyWith(
-                                          color: textLightColor)),
+                                      style: textTheme.titleLarge
+                                          ?.copyWith(color: textLightColor)),
                                 ),
                               ],
                             ),
                             const SizedBox(height: 16.0),
                             Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SizedBox(
-                                  width: MediaQuery.of(context).size.width *
-                                      0.3,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.3,
                                   child: Button(
                                     width:
-                                        MediaQuery.of(context).size.width *
-                                            0.3,
+                                        MediaQuery.of(context).size.width * 0.3,
                                     height: 36,
                                     onPress: () {
                                       debugPrint('update');
@@ -182,12 +179,11 @@ class UpdateStatusDialog {
                                   ),
                                 ),
                                 SizedBox(
-                                  width: MediaQuery.of(context).size.width *
-                                      0.3,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.3,
                                   child: Button(
                                     width:
-                                        MediaQuery.of(context).size.width *
-                                            0.3,
+                                        MediaQuery.of(context).size.width * 0.3,
                                     height: 36,
                                     onPress: () {
                                       debugPrint('update');
@@ -209,19 +205,18 @@ class UpdateStatusDialog {
                                       TextSpan(
                                         text:
                                             'Sellers are requsted to discuss & freeze all delivery details with buyer on ',
-                                        style: textTheme.subtitle1
-                                            ?.copyWith(
-                                                color: textLightColor),
+                                        style: textTheme.titleMedium
+                                            ?.copyWith(color: textLightColor),
                                       ),
                                       TextSpan(
                                           text: 'Loby Chat ',
-                                          style: textTheme.subtitle1
+                                          style: textTheme.titleMedium
                                               ?.copyWith(
                                                   color: aquaGreenColor)),
                                       TextSpan(
                                           text:
                                               'before accpecting or declining the Order. Any conversation outside Loby Chat will not be insured/covered by Loby Protection',
-                                          style: textTheme.subtitle1
+                                          style: textTheme.titleMedium
                                               ?.copyWith(
                                                   color: textLightColor)),
                                     ]))),
@@ -237,7 +232,7 @@ class UpdateStatusDialog {
                                 const SizedBox(width: 4.0),
                                 Text("Seller Accepted",
                                     overflow: TextOverflow.ellipsis,
-                                    style: textTheme.headline6
+                                    style: textTheme.titleLarge
                                         ?.copyWith(color: textWhiteColor)),
                                 const SizedBox(width: 8.0),
                                 Expanded(
@@ -245,7 +240,7 @@ class UpdateStatusDialog {
                                     "May 26, 2022 18:23:43",
                                     textAlign: TextAlign.end,
                                     overflow: TextOverflow.ellipsis,
-                                    style: textTheme.headline6
+                                    style: textTheme.titleLarge
                                         ?.copyWith(color: textLightColor),
                                   ),
                                 ),
@@ -263,15 +258,15 @@ class UpdateStatusDialog {
                                 const SizedBox(width: 4.0),
                                 Text("Order in Progress",
                                     overflow: TextOverflow.ellipsis,
-                                    style: textTheme.headline6
+                                    style: textTheme.titleLarge
                                         ?.copyWith(color: textWhiteColor)),
                                 const SizedBox(width: 8.0),
                                 Expanded(
                                   child: Text("May 26, 2022 18:23:43",
                                       textAlign: TextAlign.end,
                                       overflow: TextOverflow.ellipsis,
-                                      style: textTheme.headline6?.copyWith(
-                                          color: textLightColor)),
+                                      style: textTheme.titleLarge
+                                          ?.copyWith(color: textLightColor)),
                                 ),
                               ],
                             ),
@@ -299,7 +294,7 @@ class UpdateStatusDialog {
                                 const SizedBox(width: 4.0),
                                 Text("Seller Delivery Confirmed ",
                                     overflow: TextOverflow.ellipsis,
-                                    style: textTheme.headline6
+                                    style: textTheme.titleLarge
                                         ?.copyWith(color: textWhiteColor)),
                               ],
                             ),
@@ -315,14 +310,13 @@ class UpdateStatusDialog {
                                 const SizedBox(width: 4.0),
                                 Container(
                                   constraints: BoxConstraints(
-                                      maxWidth: MediaQuery.of(context)
-                                              .size
-                                              .width -
-                                          30.w),
+                                      maxWidth:
+                                          MediaQuery.of(context).size.width -
+                                              30.w),
                                   child: Text(
                                       "Buyer Declined Delivery. Kindly resolve & ask buyer to re-confirm.",
-                                      style: textTheme.headline6?.copyWith(
-                                          color: textWhiteColor)),
+                                      style: textTheme.titleLarge
+                                          ?.copyWith(color: textWhiteColor)),
                                 ),
                               ],
                             ),
@@ -338,7 +332,7 @@ class UpdateStatusDialog {
                                 const SizedBox(width: 4.0),
                                 Text("Buyer Delivery Confirmed",
                                     overflow: TextOverflow.ellipsis,
-                                    style: textTheme.headline6
+                                    style: textTheme.titleLarge
                                         ?.copyWith(color: textWhiteColor)),
                               ],
                             ),
@@ -355,7 +349,7 @@ class UpdateStatusDialog {
                                 const SizedBox(width: 4.0),
                                 Text("Transaction Complete",
                                     overflow: TextOverflow.ellipsis,
-                                    style: textTheme.headline6
+                                    style: textTheme.titleLarge
                                         ?.copyWith(color: textWhiteColor)),
                               ],
                             ),
@@ -372,13 +366,13 @@ class UpdateStatusDialog {
                                 const SizedBox(width: 4.0),
                                 Text("Loby Protection Period - ",
                                     overflow: TextOverflow.ellipsis,
-                                    style: textTheme.headline6
+                                    style: textTheme.titleLarge
                                         ?.copyWith(color: textWhiteColor)),
                                 Expanded(
                                   child: Text("6 Days Remaining",
                                       overflow: TextOverflow.ellipsis,
-                                      style: textTheme.headline6?.copyWith(
-                                          color: textLightColor)),
+                                      style: textTheme.titleLarge
+                                          ?.copyWith(color: textLightColor)),
                                 ),
                               ],
                             ),
@@ -395,7 +389,7 @@ class UpdateStatusDialog {
                                 const SizedBox(width: 4.0),
                                 Text("Order Completed",
                                     overflow: TextOverflow.ellipsis,
-                                    style: textTheme.headline6
+                                    style: textTheme.titleLarge
                                         ?.copyWith(color: textWhiteColor)),
                               ],
                             ),

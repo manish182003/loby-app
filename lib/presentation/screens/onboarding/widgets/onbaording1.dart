@@ -1,6 +1,5 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loby/core/theme/colors.dart';
 import 'package:loby/presentation/widgets/body_padding_widget.dart';
 import 'package:sizer/sizer.dart';
@@ -13,7 +12,16 @@ class OnBoarding1 extends StatelessWidget {
   final double? frontImageSize;
   final double? frontImagePosition;
   final double? backImageSize;
-  const OnBoarding1({Key? key, required this.backgroundImage, required this.frontImage, required this.title, required this.desc, this.frontImageSize, this.frontImagePosition, this.backImageSize}) : super(key: key);
+  const OnBoarding1(
+      {Key? key,
+      required this.backgroundImage,
+      required this.frontImage,
+      required this.title,
+      required this.desc,
+      this.frontImageSize,
+      this.frontImagePosition,
+      this.backImageSize})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +36,21 @@ class OnBoarding1 extends StatelessWidget {
             alignment: AlignmentDirectional.center,
             children: [
               FadeInUp(
-                duration: const Duration(seconds: 1),
-                  child: Image.asset("assets/onboarding/$backgroundImage.png", height: backImageSize ?? 41.h, width: 41.h,)),
+                  duration: const Duration(seconds: 1),
+                  child: Image.asset(
+                    "assets/onboarding/$backgroundImage.png",
+                    height: backImageSize ?? 41.h,
+                    width: 41.h,
+                  )),
               Positioned(
                 bottom: frontImagePosition ?? 2.h,
                 child: FadeInDown(
                     duration: const Duration(seconds: 1),
-                    child: Image.asset("assets/onboarding/$frontImage.png", height: frontImageSize ?? 35.h, width: frontImageSize ?? 35.h,)),
+                    child: Image.asset(
+                      "assets/onboarding/$frontImage.png",
+                      height: frontImageSize ?? 35.h,
+                      width: frontImageSize ?? 35.h,
+                    )),
               ),
             ],
           ),
@@ -45,9 +61,13 @@ class OnBoarding1 extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 3.h),
-                Text(title, style: textTheme.headline2?.copyWith(color: whiteColor, fontSize: 18.sp)),
+                Text(title,
+                    style: textTheme.displayMedium
+                        ?.copyWith(color: whiteColor, fontSize: 18.sp)),
                 SizedBox(height: 3.h),
-                Text(desc, style: textTheme.headline5?.copyWith(color: whiteColor, fontWeight: FontWeight.w100))
+                Text(desc,
+                    style: textTheme.headlineSmall?.copyWith(
+                        color: whiteColor, fontWeight: FontWeight.w100))
               ],
             ),
           ),

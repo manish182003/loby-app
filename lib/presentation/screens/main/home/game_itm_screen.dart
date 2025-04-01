@@ -11,8 +11,8 @@ import 'package:loby/presentation/screens/main/home/widgets/filter_bottom_sheet_
 import 'package:loby/presentation/widgets/body_padding_widget.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../../../core/theme/colors.dart';
-import '../../../widgets/custom_app_bar.dart';
 import '../../../widgets/custom_chip.dart';
 import '../../../widgets/custom_loader.dart';
 import '../../../widgets/drop_down_with_divider.dart';
@@ -23,7 +23,10 @@ class GameItemScreen extends StatefulWidget {
   final String gameName;
 
   const GameItemScreen(
-      {Key? key, required this.categoryId, required this.gameId, required this.gameName})
+      {Key? key,
+      required this.categoryId,
+      required this.gameId,
+      required this.gameName})
       : super(key: key);
 
   @override
@@ -31,7 +34,6 @@ class GameItemScreen extends StatefulWidget {
 }
 
 class _GameItemScreenState extends State<GameItemScreen> {
-
   final HomeController homeController = Get.find<HomeController>();
   final ListingController listingController = Get.find<ListingController>();
   final controller = ScrollController();
@@ -46,23 +48,23 @@ class _GameItemScreenState extends State<GameItemScreen> {
   ];
   String? selectedValue = 'Top Rated';
 
-
   @override
   void initState() {
     categoryId = widget.categoryId;
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-
       homeController.getCategoryGames(categoryId: categoryId);
 
       listingController.buyerListingPageNumber.value = 1;
       listingController.areMoreListingAvailable.value = true;
-      listingController.getBuyerListings(categoryId: categoryId, gameId: widget.gameId);
+      listingController.getBuyerListings(
+          categoryId: categoryId, gameId: widget.gameId);
 
       controller.addListener(() {
         if (controller.position.maxScrollExtent == controller.offset) {
-          listingController.getBuyerListings(categoryId: categoryId, gameId: widget.gameId);
+          listingController.getBuyerListings(
+              categoryId: categoryId, gameId: widget.gameId);
         }
       });
     });
@@ -73,7 +75,6 @@ class _GameItemScreenState extends State<GameItemScreen> {
     controller.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -89,66 +90,79 @@ class _GameItemScreenState extends State<GameItemScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                   Align(
-                alignment: Alignment.topCenter,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                  child: Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                    width: 42,
-                    height: 42,
-                    child: MaterialButton(
-                      shape: const CircleBorder(),
-                      color: textCharcoalBlueColor,
-                      onPressed: () {
-                          Navigator.pop(context);
-                        
-                      },
-                      child: const Icon(
-                        Icons.arrow_back_ios,
-                        size: 18,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  Text("${widget.gameName}", style: textTheme.headline2?.copyWith(color: aquaGreenColor),),
-                        GestureDetector(
-                      onTap: () {
-                        context.pushNamed(searchScreenPage);
-                      },
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          color: textCharcoalBlueColor,
-                          borderRadius: BorderRadius.circular(10)
+                  Align(
+                      alignment: Alignment.topCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 5),
+                        child: Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: 42,
+                                height: 42,
+                                child: MaterialButton(
+                                  shape: const CircleBorder(),
+                                  color: textCharcoalBlueColor,
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Icon(
+                                    Icons.arrow_back_ios,
+                                    size: 18,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                widget.gameName,
+                                style: textTheme.displayMedium
+                                    ?.copyWith(color: aquaGreenColor),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  context.pushNamed(searchScreenPage);
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                      color: textCharcoalBlueColor,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: const Icon(
+                                    CupertinoIcons.search,
+                                    size: 23,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        child: const Icon(CupertinoIcons.search, size: 23, color: Colors.white,),
-                      ),
-                    ),
-                      ],
-                    ),
-                  
+                      )),
+                  SizedBox(
+                    height: 2.h,
                   ),
-                )),
-                SizedBox(height: 2.h,),
                   Obx(() {
                     if (homeController.isCategoryFetching.value) {
                       return const CustomLoader();
                     } else {
                       return CustomChip(
-                        labelName: homeController.categories.map((element) => element.name!).toList(),
-                        selectedIndex: homeController.categories.indexWhere((element) => element.id == categoryId),
+                        labelName: homeController.categories
+                            .map((element) => element.name!)
+                            .toList(),
+                        selectedIndex: homeController.categories
+                            .indexWhere((element) => element.id == categoryId),
                         onChanged: (index) {
                           listingController.buyerListingPageNumber.value = 1;
-                          listingController.areMoreListingAvailable.value = true;
+                          listingController.areMoreListingAvailable.value =
+                              true;
                           setState(() {
                             categoryId = homeController.categories[index].id!;
                           });
-                          listingController.getBuyerListings(categoryId: categoryId, gameId: widget.gameId);
+                          listingController.getBuyerListings(
+                              categoryId: categoryId, gameId: widget.gameId);
                         },
                       );
                     }
@@ -178,15 +192,22 @@ class _GameItemScreenState extends State<GameItemScreen> {
                             SizedBox(
                               width: MediaQuery.of(context).size.width * 0.5,
                               child: TextField(
-                                onChanged: (value){
-                                  listingController.buyerListingPageNumber.value = 1;
-                                  listingController.areMoreListingAvailable.value = true;
-                                  listingController.getBuyerListings(categoryId: categoryId, gameId: widget.gameId, search: value);
-                                  },
-                                style: textTheme.headline4?.copyWith(color: textWhiteColor),
+                                onChanged: (value) {
+                                  listingController
+                                      .buyerListingPageNumber.value = 1;
+                                  listingController
+                                      .areMoreListingAvailable.value = true;
+                                  listingController.getBuyerListings(
+                                      categoryId: categoryId,
+                                      gameId: widget.gameId,
+                                      search: value);
+                                },
+                                style: textTheme.headlineMedium
+                                    ?.copyWith(color: textWhiteColor),
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintStyle: textTheme.headline4?.copyWith(color: textWhiteColor),
+                                  hintStyle: textTheme.headlineMedium
+                                      ?.copyWith(color: textWhiteColor),
                                   hintText: 'Search',
                                 ),
                               ),
@@ -226,12 +247,14 @@ class _GameItemScreenState extends State<GameItemScreen> {
                             "${listingController.buyerListings.length} Result",
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
-                            style: textTheme.headline6?.copyWith(color: textWhiteColor),
+                            style: textTheme.titleLarge
+                                ?.copyWith(color: textWhiteColor),
                           );
                         }),
                       ),
                       const SizedBox(width: 4.0),
-                      DropDownDivider(categoryId: categoryId, gameId: widget.gameId),
+                      DropDownDivider(
+                          categoryId: categoryId, gameId: widget.gameId),
                     ],
                   ),
                   const SizedBox(height: 4.0),
@@ -244,22 +267,20 @@ class _GameItemScreenState extends State<GameItemScreen> {
                   const SizedBox(height: 10.0),
                   _buildGames(textTheme),
                   const SizedBox(height: 16.0),
-                ]
-            ),
+                ]),
           ),
         ),
       ),
     );
   }
 
-
   _buildGames(TextTheme textTheme) {
     return Obx(() {
       if (listingController.isBuyerListingsFetching.value) {
         return const CustomLoader();
-      } else if(listingController.buyerListings.isEmpty){
+      } else if (listingController.buyerListings.isEmpty) {
         return const NoDataFoundWidget(text: 'No Listings Found');
-      }else{
+      } else {
         return GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
@@ -275,9 +296,8 @@ class _GameItemScreenState extends State<GameItemScreen> {
               return ItemList(
                   from: ListingPageRedirection.home,
                   menuIcon: true,
-                  listing: listingController.buyerListings[index]
-              );
-            }else{
+                  listing: listingController.buyerListings[index]);
+            } else {
               if (listingController.areMoreListingAvailable.value) {
                 return const Padding(
                   padding: EdgeInsets.symmetric(vertical: 12.0),
@@ -309,13 +329,16 @@ class _GameItemScreenState extends State<GameItemScreen> {
               children: <Widget>[
                 Expanded(
                     child: Container(
-                      decoration: const BoxDecoration(
-                        color: backgroundBalticSeaColor,
-                        borderRadius:
+                  decoration: const BoxDecoration(
+                    color: backgroundBalticSeaColor,
+                    borderRadius:
                         BorderRadius.vertical(top: Radius.circular(24)),
-                      ),
-                      child: FilterBottomSheet(controller: scrollController, categoryId: categoryId, gameId: widget.gameId),
-                    )),
+                  ),
+                  child: FilterBottomSheet(
+                      controller: scrollController,
+                      categoryId: categoryId,
+                      gameId: widget.gameId),
+                )),
               ],
             );
           },

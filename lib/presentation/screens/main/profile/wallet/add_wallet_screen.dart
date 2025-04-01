@@ -7,22 +7,23 @@ import 'package:loby/presentation/screens/main/profile/wallet/widgets/token_widg
 import 'package:loby/presentation/widgets/body_padding_widget.dart';
 import 'package:loby/presentation/widgets/custom_loader.dart';
 import 'package:loby/presentation/widgets/text_fields/text_field_widget.dart';
+import 'package:rename/platform_file_editors/abs_platform_file_editor.dart';
 // import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../../../../core/theme/colors.dart';
-import '../../../../widgets/custom_app_bar.dart';
 import '../../../../widgets/buttons/custom_button.dart';
+import '../../../../widgets/custom_app_bar.dart';
 // import 'package:phonepe_payment_sdk/phonepe_payment_sdk.dart';
 
 class AddFundsScreen extends StatefulWidget {
-  const AddFundsScreen({Key? key}) : super(key: key);
+  const AddFundsScreen({super.key});
 
   @override
   State<AddFundsScreen> createState() => _AddFundsScreenState();
 }
 
 class _AddFundsScreenState extends State<AddFundsScreen> {
-
   ProfileController profileController = Get.find<ProfileController>();
   HomeController homeController = Get.find<HomeController>();
   TextEditingController amount = TextEditingController();
@@ -48,15 +49,13 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme
-        .of(context)
-        .textTheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-        appBar: appBar(context: context, appBarName: "Add Token", isBackIcon: true),
+        appBar:
+            appBar(context: context, appBarName: "Add Token", isBackIcon: true),
         body: BodyPaddingWidget(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -70,10 +69,7 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
                       borderRadius: BorderRadius.circular(16.0),
                     ),
                     child: Container(
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width * 1,
+                        width: MediaQuery.of(context).size.width * 1,
                         height: 140.0,
                         decoration: BoxDecoration(
                           color: aquaGreenColor,
@@ -86,18 +82,22 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
                             children: [
                               Text('Current Balance',
                                   textAlign: TextAlign.center,
-                                  style: textTheme.headline3?.copyWith(
+                                  style: textTheme.displaySmall?.copyWith(
                                       color: textTunaBlueColor,
                                       fontWeight: FontWeight.w500)),
-                              Padding(padding: const EdgeInsets.symmetric(
-                                  horizontal: 8.0, vertical: 16.0),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0, vertical: 16.0),
                                 child: Obx(() {
-                                  if (profileController.isProfileFetching
-                                      .value) {
+                                  if (profileController
+                                      .isProfileFetching.value) {
                                     return const CustomLoader();
                                   } else {
                                     return TokenWidget(
-                                      tokens: profileController.profile.walletMoney!.toStringAsFixed(2),);
+                                      tokens: profileController
+                                          .profile.walletMoney!
+                                          .toStringAsFixed(2),
+                                    );
                                   }
                                 }),
                               ),
@@ -114,10 +114,7 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
                         borderRadius: BorderRadius.circular(16.0),
                       ),
                       child: Container(
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width * 1,
+                        width: MediaQuery.of(context).size.width * 1,
                         decoration: BoxDecoration(
                           color: shipGreyColor,
                           borderRadius: BorderRadius.circular(16.0),
@@ -130,7 +127,8 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Padding(
-                                    padding: const EdgeInsets.only(bottom: 24.0),
+                                    padding:
+                                        const EdgeInsets.only(bottom: 24.0),
                                     child: TextFieldWidget(
                                       textEditingController: amount,
                                       hint: "Enter Token Quantity",
@@ -139,27 +137,48 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
                                       isRequired: true,
                                       onChanged: (value) {
                                         if (value.isNotEmpty) {
-                                          profileController.tokenToRupee.value = (int.tryParse(value)! * int.tryParse(homeController.staticData[5].realValue!)!).floor().toString();
-                                          profileController.rupeeToToken.value = (int.tryParse(value)! / int.tryParse(homeController.staticData[5].key!)!).floor().toString();
-                                        }else{
-                                          profileController.tokenToRupee.value = '0';
-                                          profileController.rupeeToToken.value = '0';
+                                          profileController.tokenToRupee.value =
+                                              (int.tryParse(value)! *
+                                                      int.tryParse(
+                                                          homeController
+                                                              .staticData[4]
+                                                              .realValue!)!)
+                                                  .floor()
+                                                  .toString();
+                                          logger.i(
+                                              'rupee->${profileController.tokenToRupee.value}');
+                                          profileController.rupeeToToken.value =
+                                              (int.tryParse(value)! /
+                                                      int.tryParse(
+                                                          homeController
+                                                              .staticData[5]
+                                                              .key!)!)
+                                                  .floor()
+                                                  .toString();
+                                        } else {
+                                          profileController.tokenToRupee.value =
+                                              '0';
+                                          profileController.rupeeToToken.value =
+                                              '0';
                                         }
                                       },
-                                    )
-                                ),
+                                    )),
                                 Obx(() {
                                   return Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
                                     children: [
                                       TokenWidget(
-                                        tokens: profileController.rupeeToToken.value,
+                                        tokens: profileController
+                                            .rupeeToToken.value,
                                         textColor: whiteColor,
-                                        size: 20,),
+                                        size: 20,
+                                      ),
                                       Text(
                                         "₹ ${profileController.tokenToRupee}",
-                                        style: textTheme.headline3?.copyWith(
-                                            color: whiteColor),),
+                                        style: textTheme.displaySmall
+                                            ?.copyWith(color: whiteColor),
+                                      ),
                                     ],
                                   );
                                 }),
@@ -170,7 +189,8 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
                                     right: 15.w,
                                     color: purpleLightIndigoColor,
                                     textColor: textWhiteColor,
-                                    name: "Pay  ₹ ${profileController.tokenToRupee}",
+                                    name:
+                                        "Pay  ₹ ${profileController.tokenToRupee}",
                                     onTap: _openCheckout,
                                   );
                                 }),
@@ -185,10 +205,8 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
               ),
             ],
           ),
-        )
-    );
+        ));
   }
-
 
   // void _handlePaymentSuccess(PaymentSuccessResponse response) async {
   //   await profileController.verifyPayment(
@@ -233,15 +251,14 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
         profileController.tokenToRupee.value = "0";
         var options = {
           'key': 'rzp_test_0OFPJol8Rd6TZB',
-          'amount': int.tryParse(profileController.addFundsResponse['total_amount'],),
+          'amount': int.tryParse(
+            profileController.addFundsResponse['total_amount'],
+          ),
           'name': 'Loby',
           'order_id': profileController.addFundsResponse['order_id'],
           'description': 'Add Fund to Wallet',
           'timeout': 60,
-          'prefill': {
-            'contact': '8888888888',
-            'email': 'test@razorpay.com'
-          }
+          'prefill': {'contact': '8888888888', 'email': 'test@razorpay.com'}
         };
         try {
           // _razorpay.open(options);
@@ -251,6 +268,4 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
       }
     }
   }
-
-
 }
