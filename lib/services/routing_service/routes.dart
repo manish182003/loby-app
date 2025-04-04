@@ -35,3 +35,4 @@ const String myKycRoute = "/my_kyc_screen";
 const String sendotproute = "/sendotpscreen";
 const String addAccountRoute = "/account_detail_screen";
 const String upiDetailRoute = "/upi)detail_screen";
+const String noInternetRoute = "/no_internet_screen";

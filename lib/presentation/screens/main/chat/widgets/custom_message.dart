@@ -7,7 +7,7 @@ import 'package:sizer/sizer.dart';
 
 class CustomMessage extends StatelessWidget {
   final types.CustomMessage message;
-  const CustomMessage({Key? key, required this.message}) : super(key: key);
+  const CustomMessage({super.key, required this.message});
 
   @override
   Widget build(BuildContext context) {

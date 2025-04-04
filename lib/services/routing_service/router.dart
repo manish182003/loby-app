@@ -2,6 +2,7 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loby/no_internet_page.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 import 'package:loby/presentation/getx/controllers/kyc_controller.dart';
 import 'package:loby/presentation/screens/auth/create_profile_screen.dart';
@@ -141,6 +142,15 @@ class MyRouter {
                 return CupertinoPage(
                   key: state.pageKey,
                   child: const MainScreen(),
+                );
+              }),
+          GoRoute(
+              name: noInternetpage,
+              path: noInternetRoute,
+              pageBuilder: (context, state) {
+                return CupertinoPage(
+                  key: state.pageKey,
+                  child: const NoInternetConnection(),
                 );
               }),
           GoRoute(

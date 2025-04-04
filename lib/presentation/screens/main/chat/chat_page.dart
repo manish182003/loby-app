@@ -123,8 +123,36 @@ class _ChatPageState extends State<ChatPage> {
                       secondaryColor: textFieldColor,
                       inputBackgroundColor: textFieldColor,
                     ),
+                    // textMessageBuilder: (message,
+                    //     {required messageWidth, required showName}) {
+                    //   return Padding(
+                    //     padding: const EdgeInsets.all(12),
+                    //     child: Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.start,
+
+                    //       children: [
+                    //         Text(
+                    //           message.text,
+                    //           style: const TextStyle(color: Colors.white),
+                    //         ),
+                    //         Align(
+                    //           alignment: Alignment.bottomRight,
+                    //           child: Text(
+                    //             DateFormat('hh:mm a').format(
+                    //                 DateTime.fromMillisecondsSinceEpoch(
+                    //                     message.createdAt!)),
+                    //             style: const TextStyle(
+                    //                 color: Colors.grey, fontSize: 12),
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   );
+                    // },
                     customMessageBuilder: (message, {messageWidth = 0}) {
-                      return CustomMessage(message: message);
+                      return CustomMessage(
+                        message: message,
+                      );
                     }),
               ),
             ],
@@ -150,7 +178,8 @@ class _ChatPageState extends State<ChatPage> {
   void _handleFileSelection() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['mp4', 'jpg', 'png', 'pdf', 'docx'],
+      allowedExtensions: ['mp4'],
+      // allowedExtensions: ['mp4', 'jpg', 'png', 'pdf', 'docx'],
     );
 
     if (result != null && result.files.single.path != null) {

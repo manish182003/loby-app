@@ -11,19 +11,17 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:loby/core/utils/environment.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 import 'package:loby/presentation/getx/controllers/core_controller.dart';
-import 'package:loby/presentation/widgets/buttons/custom_button.dart';
 import 'package:loby/presentation/widgets/custom_loading_widget.dart';
 import 'package:loby/services/routing_service/router.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
+import 'package:rename/platform_file_editors/abs_platform_file_editor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
-import 'core/theme/colors.dart';
 import 'core/theme/theme.dart';
 import 'di/injection.dart';
 import 'firebase_options.dart';
@@ -39,17 +37,22 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
-  'high_importance_channel', // id
+  'your_channel_id', // id
   'High Importance Notifications', // title
   description:
       'This channel is used for important notifications.', // description
   importance: Importance.max,
+  sound: RawResourceAndroidNotificationSound('notification_sound'),
+  playSound: true,
+  enableVibration: true,
 );
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  debugPrint = (String? message, {int? wrapWidth}) => print(message);
   await dotenv.load(fileName: Environment.fileName);
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
   // PhonePePaymentSdk.init("UAT", , "PGTESTPAYUAT", true);
   // bool isDeviceConnected = await InternetConnectionChecker().hasConnection;
   // if (!isDeviceConnected) {
@@ -63,6 +66,7 @@ Future<void> main() async {
 
 Future<void> runMainApp() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
@@ -71,6 +75,8 @@ Future<void> runMainApp() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  await FirebaseMessaging.instance.requestPermission();
 
   // PendingDynamicLinkData? initialLink = await FirebaseDynamicLinks.instance.getInitialLink();
   PendingDynamicLinkData? initialLink;
@@ -103,6 +109,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     initializePushNotification();
     _handleDynamicLink();
   }
@@ -151,6 +158,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _showNotification(RemoteMessage message) {
+    logger.i('notif->17');
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
     final data = jsonEncode(message.data);
@@ -166,9 +174,12 @@ class _MyAppState extends State<MyApp> {
             channel.name,
             channelDescription: channel.description,
             icon: android.smallIcon,
-            importance: Importance.defaultImportance,
+            importance: Importance.max,
             ongoing: true,
             styleInformation: const BigTextStyleInformation(''),
+            sound: RawResourceAndroidNotificationSound('notification_sound'),
+            priority: Priority.high,
+            playSound: true,
           ),
           iOS: DarwinNotificationDetails(),
         ),
@@ -211,65 +222,65 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class NoInternetConnection extends StatelessWidget {
-  const NoInternetConnection({super.key});
+// class NoInternetConnection extends StatelessWidget {
+//   const NoInternetConnection({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    return Sizer(builder: (context, orientation, deviceType) {
-      return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Loby',
-        theme: ApplicationTheme.getAppThemeData(),
-        builder: FlutterSmartDialog.init(
-          loadingBuilder: (String msg) => const CustomLoadingWidget(),
-        ),
-        home: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/images/no_internet.png',
-                width: 10.h,
-                height: 10.h,
-              ),
-              // SvgPicture.asset(
-              //   'assets/icons/tick.svg',
-              //   width: 10.h                ,
-              //   height: 10.h,
-              // ),
-              SizedBox(
-                height: 2.h,
-              ),
-              Text('No Internet Connection',
-                  textAlign: TextAlign.center,
-                  style: textTheme.titleMedium?.copyWith(color: whiteColor)),
-              SizedBox(
-                height: 5.h,
-              ),
-              CustomButton(
-                  name: "Retry",
-                  color: aquaGreenColor,
-                  left: 10.w,
-                  right: 10.w,
-                  bottom: 5.h,
-                  onTap: () async {
-                    bool isDeviceConnected =
-                        await InternetConnectionChecker.createInstance()
-                            .hasConnection;
-                    if (!isDeviceConnected) {
-                      Helpers.toast('Internet Not Connected');
-                    } else {
-                      Helpers.loader();
-                      runMainApp();
-                    }
-                  }),
-            ],
-          ),
-        ),
-      );
-    });
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     final textTheme = Theme.of(context).textTheme;
+//     return Sizer(builder: (context, orientation, deviceType) {
+//       return MaterialApp(
+//         debugShowCheckedModeBanner: false,
+//         title: 'Loby',
+//         theme: ApplicationTheme.getAppThemeData(),
+//         builder: FlutterSmartDialog.init(
+//           loadingBuilder: (String msg) => const CustomLoadingWidget(),
+//         ),
+//         home: Center(
+//           child: Column(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             crossAxisAlignment: CrossAxisAlignment.center,
+//             children: [
+//               Image.asset(
+//                 'assets/images/no_internet.png',
+//                 width: 10.h,
+//                 height: 10.h,
+//               ),
+//               // SvgPicture.asset(
+//               //   'assets/icons/tick.svg',
+//               //   width: 10.h                ,
+//               //   height: 10.h,
+//               // ),
+//               SizedBox(
+//                 height: 2.h,
+//               ),
+//               Text('No Internet Connection',
+//                   textAlign: TextAlign.center,
+//                   style: textTheme.titleMedium?.copyWith(color: whiteColor)),
+//               SizedBox(
+//                 height: 5.h,
+//               ),
+//               CustomButton(
+//                   name: "Retry",
+//                   color: aquaGreenColor,
+//                   left: 10.w,
+//                   right: 10.w,
+//                   bottom: 5.h,
+//                   onTap: () async {
+//                     bool isDeviceConnected =
+//                         await InternetConnectionChecker.createInstance()
+//                             .hasConnection;
+//                     if (!isDeviceConnected) {
+//                       Helpers.toast('Internet Not Connected');
+//                     } else {
+//                       Helpers.loader();
+//                       runMainApp();
+//                     }
+//                   }),
+//             ],
+//           ),
+//         ),
+//       );
+//     });
+//   }
+// }

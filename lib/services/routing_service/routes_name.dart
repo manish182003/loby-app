@@ -35,3 +35,4 @@ const String myKycScreen = "my_kyc_screen";
 const String sendOtppage = "sendotpscren";
 const String addAccountpage = "account_detail_screen";
 const String upiDetailpage = "upi_detail_screen";
+const String noInternetpage = "no_internet_page";

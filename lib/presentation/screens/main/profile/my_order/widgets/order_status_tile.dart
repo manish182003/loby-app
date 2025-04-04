@@ -36,7 +36,7 @@ class OrderStatusTile extends StatelessWidget {
   final String lastStatus;
 
   OrderStatusTile({
-    Key? key,
+    super.key,
     required this.orderId,
     required this.isDone,
     required this.title,
@@ -49,7 +49,7 @@ class OrderStatusTile extends StatelessWidget {
     required this.sellerId,
     required this.buyerId,
     required this.order,
-  }) : super(key: key);
+  });
   final OrderController orderController = Get.find<OrderController>();
 
   @override
@@ -386,7 +386,7 @@ class OrderStatusTile extends StatelessWidget {
                                 },
                                 onSubmit: () async {
                                   confirmSellerDelivery(context,
-                                      status: '',
+                                      status: 'ORDER_COMPLETED',
                                       rating: rating,
                                       review: review.text);
                                 },

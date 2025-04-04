@@ -226,6 +226,8 @@ class OrderItem extends StatelessWidget {
                             orderController.selectedOrder.refresh();
                             context.pushNamed(buyerTimeSlotScreen, extra: {
                               "id": "${order.userGameService?.userId}"
+                            }, pathParameters: {
+                              "id": "${order.userGameService?.userId}"
                             }
                                 // extra: {"isEditing": "false"}
                                 );

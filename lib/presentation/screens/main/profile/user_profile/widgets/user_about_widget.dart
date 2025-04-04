@@ -7,7 +7,7 @@ import '../../../../../widgets/cusstom_text.dart';
 
 class UserAboutWidget extends StatelessWidget {
   final User user;
-  const UserAboutWidget({Key? key, required this.user}) : super(key: key);
+  const UserAboutWidget({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +130,13 @@ class UserAboutWidget extends StatelessWidget {
             style: textTheme.headlineSmall?.copyWith(color: textLightColor),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 8),
+        Text(
+          'UID: ${user.uid}',
+          style: textTheme.headlineSmall?.copyWith(color: whiteColor),
+          textAlign: TextAlign.left,
+        ),
+        const SizedBox(height: 8),
         Text(
           Helpers.formatDateTime(dateTime: user.createdAt ?? DateTime.now()),
           style: textTheme.headlineSmall?.copyWith(color: whiteColor),

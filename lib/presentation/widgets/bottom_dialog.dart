@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:loby/main.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/theme/colors.dart';
 import 'buttons/custom_button.dart';
@@ -74,8 +77,12 @@ class BottomDialog {
                 width: MediaQuery.of(context).size.width * 0.4,
                 child: CustomButton(
                   onTap: onOk ??
-                      () {
-                        Navigator.pop(context);
+                      () async {
+                        if (await canLaunchUrl(Uri.parse(contentName!))) {
+                          launchUrl(Uri.parse(contentName!));
+                        } else {
+                          contextKey.currentContext!.pop();
+                        }
                       },
                   color: aquaGreenColor,
                   name: 'OK',

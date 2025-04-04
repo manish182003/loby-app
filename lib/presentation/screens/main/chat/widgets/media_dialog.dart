@@ -77,7 +77,7 @@ class ChatMediaDialog {
                 child: Align(
                   alignment: AlignmentDirectional.centerStart,
                   child: Text(
-                    'File/Video',
+                    'Video',
                     style:
                         textTheme.displaySmall?.copyWith(color: aquaGreenColor),
                   ),

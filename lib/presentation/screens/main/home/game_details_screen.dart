@@ -153,24 +153,24 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                               horizontal: 12, vertical: 5),
                           child: Container(
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                SizedBox(
-                                  width: 42,
-                                  height: 42,
-                                  child: MaterialButton(
-                                    shape: const CircleBorder(),
-                                    color: textCharcoalBlueColor,
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Icon(
-                                      Icons.arrow_back_ios,
-                                      size: 18,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
+                                // SizedBox(
+                                //   width: 42,
+                                //   height: 42,
+                                //   child: MaterialButton(
+                                //     shape: const CircleBorder(),
+                                //     color: textCharcoalBlueColor,
+                                //     onPressed: () {
+                                //       Navigator.pop(context);
+                                //     },
+                                //     child: const Icon(
+                                //       Icons.arrow_back_ios,
+                                //       size: 18,
+                                //       color: Colors.white,
+                                //     ),
+                                //   ),
+                                // ),
                                 // Text("${widget.gameName}", style: textTheme.headline2?.copyWith(color: aquaGreenColor),),
                                 GestureDetector(
                                   onTap: () {

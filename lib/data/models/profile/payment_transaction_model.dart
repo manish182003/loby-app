@@ -1,7 +1,7 @@
 // ignore_for_file: overridden_fields, annotate_overrides
 import 'package:loby/domain/entities/profile/payment_transaction.dart';
 
-class PaymentTransactionModel extends PaymentTransaction{
+class PaymentTransactionModel extends PaymentTransaction {
   const PaymentTransactionModel({
     this.id,
     this.userId,
@@ -36,41 +36,44 @@ class PaymentTransactionModel extends PaymentTransaction{
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
-  factory PaymentTransactionModel.fromJson(Map<String, dynamic> json) => PaymentTransactionModel(
-    id: json["id"],
-    userId: json["user_id"],
-    orderId: json["order_id"],
-    tnxId: json["tnx_id"],
-    paymentJsonResponse: json["payment_json_response"],
-    paymentJsonRequest: json["payment_json_request"],
-    orderJsonResponse: json["order_json_response"],
-    totalAmount: json["total_amount"] == null ? null : double.tryParse(json["total_amount"]),
-    currency: json["currency"],
-    walletTransactionId: json["wallet_transaction_id"],
-    paymentStatus: json["payment_status"],
-    cronUpdate: json["cron_update"],
-    cronUpdatedTime: json["cron_updated_time"],
-    createdAt: DateTime.parse(json["createdAt"]),
-    updatedAt: DateTime.parse(json["updatedAt"]),
-  );
+  factory PaymentTransactionModel.fromJson(Map<String, dynamic> json) =>
+      PaymentTransactionModel(
+        id: json["id"],
+        userId: json["user_id"],
+        orderId: json["order_id"],
+        tnxId: json["tnx_id"],
+        paymentJsonResponse: json["payment_json_response"],
+        paymentJsonRequest: json["payment_json_request"],
+        orderJsonResponse: json["order_json_response"],
+        totalAmount: json["total_amount"] == null
+            ? null
+            : double.tryParse(json["total_amount"].toString()),
+        currency: json["currency"],
+        walletTransactionId: json["wallet_transaction_id"],
+        paymentStatus: json["payment_status"],
+        cronUpdate: json["cron_update"],
+        cronUpdatedTime: json["cron_updated_time"],
+        createdAt: DateTime.parse(json["createdAt"]),
+        updatedAt: DateTime.parse(json["updatedAt"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "user_id": userId,
-    "order_id": orderId,
-    "tnx_id": tnxId,
-    "payment_json_response": paymentJsonResponse,
-    "payment_json_request": paymentJsonRequest,
-    "order_json_response": orderJsonResponse,
-    "total_amount": totalAmount,
-    "currency": currency,
-    "wallet_transaction_id": walletTransactionId,
-    "payment_status": paymentStatus,
-    "cron_update": cronUpdate,
-    "cron_updated_time": cronUpdatedTime,
-    "createdAt": createdAt?.toIso8601String(),
-    "updatedAt": updatedAt?.toIso8601String(),
-  };
+        "id": id,
+        "user_id": userId,
+        "order_id": orderId,
+        "tnx_id": tnxId,
+        "payment_json_response": paymentJsonResponse,
+        "payment_json_request": paymentJsonRequest,
+        "order_json_response": orderJsonResponse,
+        "total_amount": totalAmount,
+        "currency": currency,
+        "wallet_transaction_id": walletTransactionId,
+        "payment_status": paymentStatus,
+        "cron_update": cronUpdate,
+        "cron_updated_time": cronUpdatedTime,
+        "createdAt": createdAt?.toIso8601String(),
+        "updatedAt": updatedAt?.toIso8601String(),
+      };
 
   @override
   List<Object?> get props => [id, userId, tnxId, totalAmount, paymentStatus];

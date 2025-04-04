@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/core/theme/colors.dart';
@@ -26,6 +27,63 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     homeController.getCategories();
     homeController.getGames();
+  }
+
+  /// Helper method for menu items
+  PopupMenuItem _buildMenuItem(String title, String? iconPath, bool isEnabled,
+      String? icon, double? width, double? height) {
+    return PopupMenuItem(
+      enabled: isEnabled,
+      child: Row(
+        children: [
+          if (iconPath != null) ...[
+            Container(
+              padding: EdgeInsets.all(12),
+              constraints: BoxConstraints(
+                minWidth: 60.w,
+                minHeight: 4.h,
+              ),
+              decoration: BoxDecoration(
+                color: aquaGreenColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                children: [
+                  SvgPicture.asset(iconPath, height: 20, width: 20),
+                  SizedBox(width: 10),
+                  Text(title,
+                      style: TextStyle(
+                          color: isEnabled ? Colors.white : Colors.grey)),
+                ],
+              ),
+            ),
+          ] else ...[
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                SvgPicture.asset(icon!, height: height, width: width),
+                SizedBox(width: 18),
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: isEnabled ? Colors.white : Color(0xFFD9D9D9),
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                if (!isEnabled)
+                  Text("  Coming Soon",
+                      style: TextStyle(
+                        color: Color(0xFFE94F31),
+                        fontSize: 6,
+                        fontWeight: FontWeight.w200,
+                      )),
+              ],
+            )
+          ]
+        ],
+      ),
+    );
   }
 
   @override
@@ -57,9 +115,67 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: GlobalSearchFieldWidget(onTap: () {
-                      context.pushNamed(searchScreenPage);
-                    }),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: GlobalSearchFieldWidget(onTap: () {
+                            context.pushNamed(searchScreenPage);
+                          }),
+                        ),
+                        SizedBox(
+                          width: 2.w,
+                        ),
+                        GestureDetector(
+                          onTapDown: (TapDownDetails details) async {
+                            final selected = await showMenu(
+                              context: context,
+                              color: Color(0xFF33343B),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              position: RelativeRect.fromDirectional(
+                                textDirection: TextDirection.ltr,
+                                start: 50,
+                                top: 220,
+                                end: 20,
+                                bottom: 0,
+                              ),
+                              items: [
+                                _buildMenuItem(
+                                    'Marketplace',
+                                    'assets/icons/Marketplace.svg',
+                                    true,
+                                    null,
+                                    0,
+                                    0),
+                                _buildMenuItem('Clans / Teams', null, false,
+                                    'assets/icons/1.svg', 20, 15),
+                                _buildMenuItem('Tournaments', null, false,
+                                    'assets/icons/2.svg', 16, 20),
+                                _buildMenuItem('Web3', null, false,
+                                    'assets/icons/3.svg', 20, 20),
+                              ],
+                            );
+                          },
+                          child: Container(
+                            constraints: const BoxConstraints(
+                              minHeight: 55,
+                              minWidth: 55,
+                            ),
+                            padding: EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: textFieldColor,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: SvgPicture.asset(
+                              'assets/icons/Marketplace.svg',
+                              height: 30,
+                              width: 30,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: 3.h,

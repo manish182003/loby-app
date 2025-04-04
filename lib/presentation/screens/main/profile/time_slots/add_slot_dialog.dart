@@ -264,7 +264,7 @@ class _AddSlotDialogState extends State<AddSlotDialog> {
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: TextFormField(
                           controller: slotController.toTime.value,
-                          // readOnly: true,
+                          readOnly: true,
                           onTap: () {
                             _selectToTime(context);
                           },
@@ -277,7 +277,6 @@ class _AddSlotDialogState extends State<AddSlotDialog> {
                           textAlign: TextAlign.center,
                           style: textTheme.displayMedium
                               ?.copyWith(color: textWhiteColor),
-
                           decoration: const InputDecoration(
                               // suffixIcon: IconButton(
                               //   icon: Icon(Icons.access_time),

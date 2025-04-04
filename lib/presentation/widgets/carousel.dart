@@ -99,7 +99,7 @@ class _CarouselState extends State<Carousel> {
                           context,
                           CupertinoPageRoute(
                               builder: (context) =>
-                                  FullImageView(image: list[index])));
+                                  FullImageView(image: list)));
                     });
               } else if (list[index].type == 1) {
                 return GestureDetector(

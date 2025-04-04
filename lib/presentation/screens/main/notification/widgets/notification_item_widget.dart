@@ -12,8 +12,7 @@ import 'package:sizer/sizer.dart';
 class NotificationItemWidget extends StatelessWidget {
   final notify.Notification notification;
 
-  const NotificationItemWidget({Key? key, required this.notification})
-      : super(key: key);
+  const NotificationItemWidget({super.key, required this.notification});
 
   @override
   Widget build(BuildContext context) {
@@ -60,13 +59,23 @@ class NotificationItemWidget extends StatelessWidget {
                 SizedBox(
                   height: 1.h,
                 ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: Text(
-                    Helpers.formatDateTime(dateTime: notification.updatedAt!),
-                    style:
-                        textTheme.titleLarge?.copyWith(color: textLightColor),
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      Helpers.formatDateTime(dateTime: notification.updatedAt!),
+                      style:
+                          textTheme.titleLarge?.copyWith(color: textLightColor),
+                    ),
+                    SizedBox(
+                      width: 2,
+                    ),
+                    Icon(
+                      Icons.done_all,
+                      color: textLightColor,
+                      size: 15,
+                    )
+                  ],
                 ),
               ],
             ),

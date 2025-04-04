@@ -14,6 +14,7 @@ import 'package:intl/intl.dart';
 import 'package:loby/core/theme/colors.dart';
 import 'package:loby/core/utils/environment.dart';
 import 'package:loby/domain/entities/listing/service_listing.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -512,6 +513,27 @@ class Helpers {
         .where((element) => element.type != 3)
         .toList();
     return listingImages.isEmpty ? null : listingImages.first.path!;
+  }
+
+  static Future<bool> biometricAuthenticate() async {
+    final LocalAuthentication localAuth = LocalAuthentication();
+    bool isAvailable = await localAuth.canCheckBiometrics ||
+        await localAuth.isDeviceSupported();
+
+    if (isAvailable) {
+      try {} catch (e) {
+        return false;
+      }
+      return await localAuth.authenticate(
+        localizedReason: 'Verify your fingerprint or face to unlock',
+        options: AuthenticationOptions(
+          biometricOnly: true,
+          useErrorDialogs: true,
+          stickyAuth: true,
+        ),
+      );
+    }
+    return false;
   }
 
   static Future<File> urlToFile(String imageUrl) async {

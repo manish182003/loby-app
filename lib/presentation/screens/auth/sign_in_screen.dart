@@ -334,6 +334,38 @@ class _SignInScreenState extends State<SignInScreen> {
                         ],
                       ),
                     ),
+
+                    SizedBox(
+                      height: 1.h,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25),
+                      child: RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'By continuing, you agree to Loby’s ',
+                              style: textTheme.headlineSmall?.copyWith(
+                                color: whiteColor,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12,
+                              ),
+                            ),
+                            TextSpan(
+                              text:
+                                  'EULA, Refund, Terms of Service & Privacy Policy',
+                              style: textTheme.headlineSmall?.copyWith(
+                                color: Color(0xFF00FF62),
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
                     // CustomButton(
                     //     name: "Create Account",
                     //     color: aquaGreenColor,

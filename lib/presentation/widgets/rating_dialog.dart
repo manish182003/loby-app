@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:loby/presentation/widgets/text_fields/text_field_widget.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../core/theme/colors.dart';
 import 'buttons/custom_button.dart';
-import 'input_text_widget.dart';
 
 class RatingDialog extends StatefulWidget {
   final String? title, descriptions, text;
@@ -13,14 +11,20 @@ class RatingDialog extends StatefulWidget {
   final ValueChanged<double>? onChanged;
   final Function() onSubmit;
 
-  const RatingDialog({super.key, this.title, this.descriptions, this.text, this.onChanged, required this.onSubmit, required this.review});
+  const RatingDialog(
+      {super.key,
+      this.title,
+      this.descriptions,
+      this.text,
+      this.onChanged,
+      required this.onSubmit,
+      required this.review});
 
   @override
   State<RatingDialog> createState() => _RatingDialogState();
 }
 
 class _RatingDialogState extends State<RatingDialog> {
-
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -44,16 +48,14 @@ class _RatingDialogState extends State<RatingDialog> {
           borderRadius: BorderRadius.circular(12.0),
           boxShadow: const [
             BoxShadow(
-                color: Colors.black,
-                offset: Offset(0, 10),
-                blurRadius: 10),
+                color: Colors.black, offset: Offset(0, 10), blurRadius: 10),
           ]),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Text(
             widget.title ?? 'test',
-            style: textTheme.headline2?.copyWith(color: textWhiteColor),
+            style: textTheme.headlineMedium.copyWith(color: textWhiteColor),
           ),
           const SizedBox(
             height: 15,
@@ -61,7 +63,7 @@ class _RatingDialogState extends State<RatingDialog> {
           Text(
             textAlign: TextAlign.center,
             widget.descriptions ?? 'test',
-            style: textTheme.headline5?.copyWith(color: textWhiteColor),
+            style: textTheme.headlineMedium.copyWith(color: textWhiteColor),
           ),
           const SizedBox(
             height: 22,
@@ -99,8 +101,7 @@ class _RatingDialogState extends State<RatingDialog> {
                     color: aquaGreenColor,
                     textColor: textBlackColor,
                     name: "OK",
-                    onTap: widget.onSubmit
-                )),
+                    onTap: widget.onSubmit)),
           ),
         ],
       ),

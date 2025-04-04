@@ -14,7 +14,7 @@ import 'order_status_tile.dart';
 
 class StatusBottomSheet extends StatelessWidget {
   final int orderId;
-  const StatusBottomSheet({Key? key, required this.orderId}) : super(key: key);
+  const StatusBottomSheet({super.key, required this.orderId});
 
   @override
   Widget build(BuildContext context) {
@@ -201,7 +201,10 @@ class StatusBottomSheet extends StatelessWidget {
     if (order.orderStatuses!.last.status! == lobyProtectionPeriod) {
       if (order.orderStatuses![index].status! == lobyProtectionPeriod) {
         HomeController homeController = Get.find<HomeController>();
-        final days = int.tryParse(homeController.staticData[1].realValue!);
+        var data = homeController.staticData.firstWhere(
+          (e) => e.label == 'Loby Protection Period',
+        );
+        final days = int.tryParse(data.realValue ?? '1');
         return '${Helpers.daysBetween(order.orderStatuses![index].createdAt!, DateTime.now().add(Duration(days: days!)))} Days Remaining of $days';
       } else {
         return '${Helpers.formatDateTime(dateTime: order.orderStatuses![index].createdAt!)}';

@@ -3,7 +3,10 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
+import 'package:loby/main.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
+import 'package:loby/services/routing_service/routes_name.dart';
 
 import '../../../core/utils/helpers.dart';
 
@@ -11,6 +14,7 @@ class NetworkController extends GetxController {
   final Connectivity _connectivity = Connectivity();
   late List<ConnectivityResult> _connectivityResult;
   late StreamSubscription<List<ConnectivityResult>> _streamSubscription;
+  final RxBool isConnected = true.obs;
 
   ProfileController profileController = Get.find<ProfileController>();
 
@@ -24,6 +28,7 @@ class NetworkController extends GetxController {
 
   Future<void> _initConnectivity() async {
     _connectivityResult = await _connectivity.checkConnectivity();
+    _updateConnectionStatus(_connectivityResult);
   }
 
   void _updateConnectionStatus(List<ConnectivityResult> connectivityResult) {
@@ -31,6 +36,8 @@ class NetworkController extends GetxController {
 
     if (connectivityResult.first == ConnectivityResult.none) {
       Helpers.toast("Internet Not Connected");
+      isConnected.value = false;
+      contextKey.currentContext!.pushNamed(noInternetpage);
       // SmartDialog.show(
       //   backDismiss: false,
       //   clickMaskDismiss: false,

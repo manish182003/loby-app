@@ -127,6 +127,12 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                           ))
                       .toList(),
                   onChanged: (value) {
+                    listingController.configuration.gameCategoryServices
+                        ?.clear();
+                    listingController.isServicesAvailable.value = false;
+                    multiSelectionServices.clear();
+                    singleSelectedServiceController.clear();
+                    listingController.optionAnswer.clear();
                     selectedCategoryName = value.name;
                     homeController.selectedCategoryId.value = value.id;
                     homeController.disclaimer.value = value.disclaimer;
@@ -172,11 +178,14 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                                     color: textLightColor)),
                             'click': StyledTextActionTag(
                               (text, attrs) {
+                                print('data->181');
+                                print(attrs.values);
                                 BottomDialog(
                                         textTheme: textTheme,
                                         tileName: text,
                                         titleColor: aquaGreenColor,
-                                        contentName: attrs['href'],
+                                        // contentName: attrs['href'],
+                                        contentName: attrs.values.first,
                                         contentLinkName: '')
                                     .showBottomDialog(context);
                               },
@@ -211,6 +220,11 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   return finalList;
                 },
                 onSuggestionSelected: (value) {
+                  listingController.configuration.gameCategoryServices?.clear();
+                  listingController.isServicesAvailable.value = false;
+                  multiSelectionServices.clear();
+                  singleSelectedServiceController.clear();
+                  listingController.optionAnswer.clear();
                   final index = homeController.games
                       .indexWhere((element) => element.name == value);
                   homeController.selectedGameId.value =
