@@ -16,8 +16,10 @@ import 'package:loby/core/utils/environment.dart';
 import 'package:loby/domain/entities/listing/service_listing.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:logger/logger.dart';
+import 'package:lottie/lottie.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'exceptions.dart';
@@ -324,7 +326,21 @@ class Helpers {
   }
 
   static loader() {
-    SmartDialog.showLoading();
+    SmartDialog.showLoading(
+        backType: SmartBackType.block,
+        clickMaskDismiss: false,
+        builder: (context) => Center(
+              child: Container(
+                width: 80.w,
+                height: 80.h,
+                padding: EdgeInsets.all(16),
+                child: Lottie.asset(
+                  'assets/animations/loader.json',
+                  fit: BoxFit.contain,
+                  repeat: true,
+                ),
+              ),
+            ));
   }
 
   static hideLoader() {

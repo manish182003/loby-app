@@ -193,7 +193,9 @@ class _MyTimeSlotState extends State<MyTimeSlot> {
                       ),
                     ),
                   ),
-                  value: slotsController.selectedDay.value,
+                  value: slotsController.selectedDay.value.isEmpty
+                      ? null
+                      : slotsController.selectedDay.value,
 
                   items: slotsController.days
                       .map(
@@ -344,9 +346,21 @@ class _MyTimeSlotState extends State<MyTimeSlot> {
                   ),
                   Column(
                     children: [
-                      ...dynamicTimeSlots.asMap().entries.map(
-                            (e) => addTimeSlotsDynamically(e.key),
+                      if (slotsController.selectedDay.isNotEmpty)
+                        ...dynamicTimeSlots.asMap().entries.map(
+                              (e) => addTimeSlotsDynamically(e.key),
+                            )
+                      else
+                        Center(
+                          child: Text(
+                            'Select Day',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: textWhiteColor,
+                            ),
                           ),
+                        ),
                     ],
                   ),
                   SizedBox(

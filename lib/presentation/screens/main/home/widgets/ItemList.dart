@@ -10,6 +10,7 @@ import 'package:loby/domain/entities/listing/service_listing.dart';
 import 'package:loby/presentation/getx/controllers/listing_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/screens/main/profile/wallet/widgets/token_widget.dart';
+import 'package:loby/presentation/widgets/ConfirmationRiseDisputeBottomDialog.dart';
 import 'package:loby/presentation/widgets/custom_cached_network_image.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
@@ -35,6 +36,7 @@ class ItemList extends StatefulWidget {
 class _ItemListState extends State<ItemList> {
   ListingController listingController = Get.find<ListingController>();
   ProfileController profileController = Get.find<ProfileController>();
+  TextEditingController reportController = TextEditingController();
   final CustomPopupMenuController _controller = CustomPopupMenuController();
 
   @override
@@ -242,16 +244,54 @@ class _ItemListState extends State<ItemList> {
                                                       behavior: HitTestBehavior
                                                           .translucent,
                                                       onTap: () async {
-                                                        await Helpers.loader();
-                                                        await listingController
-                                                            .reportListing(
-                                                                userGameServiceId:
-                                                                    widget
-                                                                        .listing
-                                                                        .id);
-                                                        await Helpers
-                                                            .hideLoader();
                                                         _controller.hideMenu();
+                                                        ConfirmationRiseDisputeBottomDialog(
+                                                          textTheme: textTheme,
+                                                          contentName:
+                                                              "Are you sure you want to report this listing ?",
+                                                          yesBtnClick:
+                                                              () async {
+                                                            if (reportController
+                                                                .text
+                                                                .trim()
+                                                                .isEmpty) {
+                                                              Helpers.toast(
+                                                                  'Reason for Report is Required.');
+                                                              return;
+                                                            }
+                                                            await Helpers
+                                                                .loader();
+                                                            bool isSuccess = await listingController
+                                                                .reportListing(
+                                                                    userGameServiceId:
+                                                                        widget
+                                                                            .listing
+                                                                            .id);
+                                                            await Helpers
+                                                                .hideLoader();
+                                                            if (isSuccess) {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            }
+                                                          },
+                                                          reportController:
+                                                              reportController,
+                                                          hintText:
+                                                              'Reason For Report',
+                                                          isReport: true,
+                                                        ).showBottomDialog(
+                                                            context);
+                                                        // await Helpers.loader();
+                                                        // await listingController
+                                                        //     .reportListing(
+                                                        //         userGameServiceId:
+                                                        //             widget
+                                                        //                 .listing
+                                                        //                 .id);
+                                                        // await Helpers
+                                                        //     .hideLoader();
+                                                        // _controller.hideMenu();
                                                         /* ConfirmationRiseDisputeBottomDialog(
                           textTheme: textTheme,
                           contentName:

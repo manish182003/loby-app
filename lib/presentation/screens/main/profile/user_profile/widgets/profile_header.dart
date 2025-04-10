@@ -541,6 +541,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                               },
                               reportController: reportController,
                               hintText: 'Reason For Report',
+                              isReport: true,
                             ).showBottomDialog(context);
                           },
                           child: Container(

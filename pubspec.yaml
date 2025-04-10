@@ -109,6 +109,7 @@ dependencies:
   razorpay_flutter: ^1.4.0
   image_cropper: ^9.1.0
   video_thumbnail: ^0.5.3
+  lottie: ^3.3.1
 
 
 
@@ -149,6 +150,7 @@ flutter:
     - assets/
     - assets/images/
     - assets/icons/
+    - assets/animations/
     - assets/icons/home_crousel.svg
     - assets/onboarding/
     - .env.production

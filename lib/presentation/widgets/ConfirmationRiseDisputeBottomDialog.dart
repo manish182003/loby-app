@@ -12,6 +12,7 @@ class ConfirmationRiseDisputeBottomDialog {
   String? contentName;
   String? contentLinkName;
   String? hintText;
+  bool isReport;
   TextEditingController? reportController;
   String? contentNameLast;
   Function()? yesBtnClick;
@@ -28,6 +29,7 @@ class ConfirmationRiseDisputeBottomDialog {
     this.cancelBtnClick,
     this.reportController,
     this.hintText,
+    this.isReport = false,
   });
 
   void showBottomDialog(BuildContext context) {
@@ -82,11 +84,13 @@ class ConfirmationRiseDisputeBottomDialog {
             children: [
               const SizedBox(height: 16),
               _buildContentText(),
-              const SizedBox(height: 16),
-              TextFieldWidget(
-                textEditingController: reportController!,
-                hint: hintText,
-              ),
+              if (isReport) ...[
+                const SizedBox(height: 16),
+                TextFieldWidget(
+                  textEditingController: reportController!,
+                  hint: hintText,
+                ),
+              ],
               const SizedBox(height: 44),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
