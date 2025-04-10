@@ -97,8 +97,8 @@ class Helpers {
   static validateWalletAdd(String? value) {
     if (value == null || value.isEmpty) {
       return "Field Required";
-    } else if (int.tryParse(value)! > 5000 || int.tryParse(value)! < 20) {
-      return 'Add tokens between 20 - 5,000';
+    } else if (int.tryParse(value)! < 20) {
+      return 'Add tokens above 20';
     } else {
       return null;
     }
@@ -213,6 +213,7 @@ class Helpers {
     Map<String, dynamic>? headers,
     bool encoded = false,
     dynamic data,
+    Map<String, dynamic>? queryParams,
   }) async {
     final logger = Logger(
       printer: PrettyPrinter(
@@ -251,6 +252,7 @@ class Helpers {
         case RequestType.post:
           response = await dio.post(
             path,
+            queryParameters: queryParams,
             options: Options(
                 headers: headers,
                 contentType:
@@ -282,7 +284,9 @@ class Helpers {
         logger.i(
             'Failed Response ${const JsonEncoder().convert(response.data as Map<String, dynamic>)}');
         throw ServerException(
-          message: response.data['message'],
+          message: response.data['message'] is Map<String, dynamic>
+              ? response.data['message']['error']['description']
+              : response.data['message'],
           code: response.statusCode,
         );
       } else {
@@ -487,6 +491,27 @@ class Helpers {
   static getString(String string) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(string);
+  }
+
+  static saveLast10Searches(String search) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> searchHistory = prefs.getStringList('searchHis') ?? [];
+    if (searchHistory.isEmpty) {
+      searchHistory.add(search);
+    } else {
+      searchHistory.remove(search);
+      searchHistory.insert(0, search);
+      if (searchHistory.length > 10) {
+        searchHistory = searchHistory.sublist(0, 10);
+      }
+    }
+    await prefs.setStringList('searchHis', searchHistory);
+  }
+
+  static Future<List<String>> getLast10Searches() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> searchHistory = prefs.getStringList('searchHis') ?? [];
+    return searchHistory;
   }
 
   static formatDateTime({required DateTime dateTime}) {

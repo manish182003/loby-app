@@ -18,7 +18,6 @@ import 'package:loby/presentation/getx/controllers/core_controller.dart';
 import 'package:loby/presentation/widgets/custom_loading_widget.dart';
 import 'package:loby/services/routing_service/router.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
-import 'package:rename/platform_file_editors/abs_platform_file_editor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
@@ -49,9 +48,15 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  debugPrint = (String? message, {int? wrapWidth}) => print(message);
+  // FlutterError.onError = (FlutterErrorDetails details) {
+  //   FlutterError.presentError(details);
+  //   debugPrint("Flutter Error Caught: ${details.exception}");
+  //   debugPrint("Stack Trace: ${details.stack}");
+  // };
+
   await dotenv.load(fileName: Environment.fileName);
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   // PhonePePaymentSdk.init("UAT", , "PGTESTPAYUAT", true);
   // bool isDeviceConnected = await InternetConnectionChecker().hasConnection;
@@ -107,7 +112,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     initializePushNotification();
@@ -158,7 +162,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _showNotification(RemoteMessage message) {
-    logger.i('notif->17');
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
     final data = jsonEncode(message.data);
@@ -170,7 +173,7 @@ class _MyAppState extends State<MyApp> {
         notification.body,
         NotificationDetails(
           android: AndroidNotificationDetails(
-            channel.id,
+            'your_channel_id',
             channel.name,
             channelDescription: channel.description,
             icon: android.smallIcon,

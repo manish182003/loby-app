@@ -46,6 +46,8 @@ class _ProfileHeaderState extends State<ProfileHeader> {
   AuthController authController = Get.find<AuthController>();
   ChatController chatController = Get.find<ChatController>();
   ListingController listingController = Get.find<ListingController>();
+  TextEditingController reportController = TextEditingController();
+  final _formkey = GlobalKey<FormState>();
 
   final CustomPopupMenuController _controller = CustomPopupMenuController();
 
@@ -192,35 +194,35 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                   const SizedBox(
                                     height: 4,
                                   ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      RichText(
-                                        textAlign: TextAlign.start,
-                                        text: TextSpan(
-                                          children: [
-                                            TextSpan(
-                                                text: 'User ID : ',
-                                                style: textTheme.headlineSmall
-                                                    ?.copyWith(
-                                                  color: selectiveYellowColor,
-                                                  fontWeight: FontWeight.w200,
-                                                )),
-                                            TextSpan(
-                                              text: widget.user.uid == null
-                                                  ? "000000000"
-                                                  : "${widget.user.uid}",
-                                              style: textTheme.headlineSmall
-                                                  ?.copyWith(
-                                                color: selectiveYellowColor,
-                                                fontWeight: FontWeight.w700,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                  // Row(
+                                  //   mainAxisAlignment: MainAxisAlignment.center,
+                                  //   children: [
+                                  //     RichText(
+                                  //       textAlign: TextAlign.start,
+                                  //       text: TextSpan(
+                                  //         children: [
+                                  //           TextSpan(
+                                  //               text: 'User ID : ',
+                                  //               style: textTheme.headlineSmall
+                                  //                   ?.copyWith(
+                                  //                 color: selectiveYellowColor,
+                                  //                 fontWeight: FontWeight.w200,
+                                  //               )),
+                                  //           TextSpan(
+                                  //             text: widget.user.uid == null
+                                  //                 ? "000000000"
+                                  //                 : "${widget.user.uid}",
+                                  //             style: textTheme.headlineSmall
+                                  //                 ?.copyWith(
+                                  //               color: selectiveYellowColor,
+                                  //               fontWeight: FontWeight.w700,
+                                  //             ),
+                                  //           ),
+                                  //         ],
+                                  //       ),
+                                  //     ),
+                                  //   ],
+                                  // ),
                                   const SizedBox(
                                     height: 4,
                                   ),
@@ -384,7 +386,8 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                         widget.user.userFollowStatus == 'N'
                                             ? 'assets/icons/follow.svg'
                                             : 'assets/icons/unfollow.svg',
-                                        color: iconWhiteColor,
+
+                                        // color: iconWhiteColor,
                                         width: 40,
                                         height: 7.h,
                                       ),
@@ -413,13 +416,13 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                               )
                             : const SizedBox(),
                         const SizedBox(
-                          height: 12,
+                          height: 18,
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 0.0, horizontal: 16.0),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Row(
                                 children: [
@@ -519,18 +522,26 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                           onTap: () {
                             _controller.hideMenu();
                             ConfirmationRiseDisputeBottomDialog(
-                                textTheme: textTheme,
-                                contentName:
-                                    "Are you sure you want to report this account ?",
-                                yesBtnClick: () async {
-                                  Helpers.loader();
-                                  final isSuccess = await listingController
-                                      .reportListing(userId: widget.user.id);
-                                  Helpers.hideLoader();
-                                  if (isSuccess) {
-                                    Navigator.of(context).pop();
-                                  }
-                                }).showBottomDialog(context);
+                              textTheme: textTheme,
+                              contentName:
+                                  "Are you sure you want to report this account ?",
+                              yesBtnClick: () async {
+                                if (reportController.text.trim().isEmpty) {
+                                  Helpers.toast(
+                                      'Reason for Report is Required.');
+                                  return;
+                                }
+                                Helpers.loader();
+                                final isSuccess = await listingController
+                                    .reportListing(userId: widget.user.id);
+                                Helpers.hideLoader();
+                                if (isSuccess) {
+                                  Navigator.of(context).pop();
+                                }
+                              },
+                              reportController: reportController,
+                              hintText: 'Reason For Report',
+                            ).showBottomDialog(context);
                           },
                           child: Container(
                             height: 40,

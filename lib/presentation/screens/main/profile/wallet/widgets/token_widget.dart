@@ -9,8 +9,7 @@ class TokenWidget extends StatelessWidget {
   final Color? textColor;
   final Widget? text;
   const TokenWidget(
-      {Key? key, this.tokens, this.textColor, this.size, this.text})
-      : super(key: key);
+      {super.key, this.tokens, this.textColor, this.size, this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -28,16 +27,21 @@ class TokenWidget extends StatelessWidget {
         SizedBox(
           width: 1.w,
         ),
-        text ??
-            Text(tokens ?? '0',
-                textAlign: TextAlign.center,
-                style: size == 20
-                    ? textTheme.displaySmall?.copyWith(
-                        color: textColor ?? textTunaBlueColor,
-                        fontFamily: 'Inter')
-                    : textTheme.headlineLarge?.copyWith(
-                        color: textColor ?? textTunaBlueColor,
-                        fontFamily: 'Inter')),
+        SizedBox(
+          // width: 70.w,
+          child: text ??
+              Text(tokens ?? '0',
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: size == 20
+                      ? textTheme.displaySmall?.copyWith(
+                          color: textColor ?? textTunaBlueColor,
+                          fontFamily: 'Inter')
+                      : textTheme.headlineLarge?.copyWith(
+                          color: textColor ?? textTunaBlueColor,
+                          fontFamily: 'Inter')),
+        ),
       ],
     );
   }

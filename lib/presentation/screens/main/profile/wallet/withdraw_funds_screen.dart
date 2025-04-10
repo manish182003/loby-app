@@ -19,7 +19,7 @@ import '../../../../widgets/custom_app_bar.dart';
 import '../../../../widgets/custom_loader.dart';
 
 class WithdrawFundsScreen extends StatefulWidget {
-  const WithdrawFundsScreen({Key? key}) : super(key: key);
+  const WithdrawFundsScreen({super.key});
 
   @override
   State<WithdrawFundsScreen> createState() => _WithdrawFundsScreenState();
@@ -239,16 +239,17 @@ class _WithdrawFundsScreenState extends State<WithdrawFundsScreen> {
                                             fontWeight: FontWeight.w500)),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0, vertical: 16.0),
+                                          horizontal: 0.0, vertical: 16.0),
                                       child: Obx(() {
                                         if (profileController
                                             .isProfileFetching.value) {
                                           return const CustomLoader();
                                         } else {
                                           return TokenWidget(
-                                              tokens: profileController
-                                                  .profile.walletMoney!
-                                                  .toStringAsFixed(2));
+                                            tokens: profileController
+                                                .profile.walletMoney!
+                                                .toStringAsFixed(2),
+                                          );
                                         }
                                       }),
                                     ),

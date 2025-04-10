@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:dotted_border/dotted_border.dart';
@@ -21,16 +22,15 @@ import 'package:loby/presentation/widgets/custom_chips.dart';
 import 'package:loby/presentation/widgets/text_fields/auto_complete_field.dart';
 import 'package:loby/presentation/widgets/text_fields/custom_drop_down.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
-import 'package:rename/platform_file_editors/abs_platform_file_editor.dart';
 import 'package:sizer/sizer.dart';
 import 'package:styled_text/styled_text.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../../../../core/theme/colors.dart';
 import '../../../widgets/bottom_dialog.dart';
 import '../../../widgets/buttons/custom_button.dart';
 import '../../../widgets/custom_checkbox.dart';
 import '../../../widgets/text_fields/text_field_widget.dart';
-import '../profile/wallet/widgets/token_widget.dart';
 
 class CreateListingScreen extends StatefulWidget {
   const CreateListingScreen({super.key});
@@ -86,8 +86,8 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    logger.i(
-        'time->${listingController.configuration.maximumEstimatedDeliveryTimeDays}');
+    // logger.i(
+    //     'time->${listingController.configuration.maximumEstimatedDeliveryTimeDays}');
     final textTheme = Theme.of(context).textTheme;
 
     return SingleChildScrollView(
@@ -350,51 +350,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
               //           style: textTheme.headline4
               //               ?.copyWith(color: textLightColor)),
               //     ])),
-              SizedBox(height: 2.h),
-              Row(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16.0),
-                        color: aquaGreenColor,
-                        border: Border.all(color: aquaGreenColor)),
-                    child: const Padding(
-                      padding: EdgeInsets.all(2.0),
-                      child: Icon(
-                        Icons.check,
-                        color: Colors.white,
-                        size: 9.5,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 2.w),
-                  Expanded(
-                    child: SizedBox(
-                        child: RichText(
-                            textAlign: TextAlign.start,
-                            text: TextSpan(children: [
-                              TextSpan(
-                                text: "‘Loby Protection’",
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () => context.pushNamed(
-                                      staticContentPage,
-                                      extra: {'termName': 'Loby Protection'}),
-                                style: textTheme.headlineMedium
-                                    ?.copyWith(color: aquaGreenColor),
-                              ),
-                              TextSpan(
-                                  text: " Insurance",
-                                  style: textTheme.headlineMedium
-                                      ?.copyWith(color: textLightColor)),
-                              // TextSpan(
-                              //   text: '7 Days Insurance',
-                              //   style: textTheme.subtitle2
-                              //       ?.copyWith(color: textLightColor),
-                              // ),
-                            ]))),
-                  ),
-                ],
-              ),
+
               SizedBox(height: 2.h),
               Row(
                 children: [
@@ -440,6 +396,52 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
               ),
 
               SizedBox(height: 2.h),
+              SizedBox(height: 2.h),
+              Row(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16.0),
+                        color: aquaGreenColor,
+                        border: Border.all(color: aquaGreenColor)),
+                    child: const Padding(
+                      padding: EdgeInsets.all(2.0),
+                      child: Icon(
+                        Icons.check,
+                        color: Colors.white,
+                        size: 9.5,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 2.w),
+                  Expanded(
+                    child: SizedBox(
+                        child: RichText(
+                            textAlign: TextAlign.start,
+                            text: TextSpan(children: [
+                              TextSpan(
+                                text: "‘Loby Protection’",
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () => context.pushNamed(
+                                      staticContentPage,
+                                      extra: {'termName': 'Loby Protection'}),
+                                style: textTheme.headlineMedium
+                                    ?.copyWith(color: aquaGreenColor),
+                              ),
+                              TextSpan(
+                                  text: " Insurance",
+                                  style: textTheme.headlineMedium
+                                      ?.copyWith(color: textLightColor)),
+                              // TextSpan(
+                              //   text: '7 Days Insurance',
+                              //   style: textTheme.subtitle2
+                              //       ?.copyWith(color: textLightColor),
+                              // ),
+                            ]))),
+                  ),
+                ],
+              ),
+              SizedBox(height: 1.h),
               _buildTermsCheckbox(
                   textTheme,
                   'I have read and agreed to all sellers policy and the ',
@@ -595,18 +597,43 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
 
       _paths = (await FilePicker.platform.pickFiles(
         allowMultiple: true,
-        onFileLoading: (FilePickerStatus status) => print(status),
+        allowCompression: true,
+        compressionQuality: 60,
+        onFileLoading: (FilePickerStatus status) {
+          if (status == FilePickerStatus.picking) {}
+        },
         type: FileType.custom,
         allowedExtensions: ['jpg', 'png', 'mp4'],
       ))!
           .files;
 
-      listingController.files.addAll(_paths);
-      selectedFilesExtensions = _paths.map((e) => e.extension).toList();
-
-      for (final i in selectedFilesExtensions) {
-        listingController.fileTypes.add(Helpers.getFileType(i!));
+      for (final file in _paths) {
+        final fileSize = file.size;
+        final extension = file.extension?.toLowerCase();
+        if (extension == 'jpg' || extension == 'png') {
+          if (fileSize > 5 * 1024 * 1024) {
+            Helpers.toast('Image ${file.name} exceeds 5MB limit');
+            continue;
+          }
+        } else if (extension == 'mp4') {
+          if (fileSize > 100 * 1024 * 1024) {
+            Helpers.toast('Video ${file.name} exceeds 100MB limit');
+            continue;
+          }
+        }
+        // Add valid files only
+        listingController.files.add(file);
+        selectedFilesExtensions.add(extension);
+        listingController.fileTypes.add(Helpers.getFileType(extension!));
       }
+
+      // listingController.files.addAll(_paths);
+
+      // selectedFilesExtensions = _paths.map((e) => e.extension).toList();
+
+      // for (final i in selectedFilesExtensions) {
+      //   listingController.fileTypes.add(Helpers.getFileType(i!));
+      // }
     } on PlatformException catch (e) {
       Helpers.toast('Unsupported operation$e');
     } catch (e) {
@@ -804,36 +831,118 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
     }
   }
 
-  Widget selectedFileTile({required File image, required int index}) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      constraints: BoxConstraints(
-          minHeight: MediaQuery.of(context).size.height * 0.08,
-          minWidth: MediaQuery.of(context).size.width * 0.4),
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-              spreadRadius: 1, blurRadius: 5, color: Colors.black.withAlpha(50))
-        ],
-        borderRadius: BorderRadius.circular(12),
-        color: iconWhiteColor,
-        image: DecorationImage(image: FileImage(image), fit: BoxFit.cover),
-      ),
-      child: GestureDetector(
-        onTap: () {
-          listingController.files.removeAt(index);
-          listingController.fileTypes.removeAt(index);
-        },
-        child: Align(
-          alignment: AlignmentDirectional.topEnd,
-          child: SvgPicture.asset(
-            'assets/icons/close_icon.svg',
-            color: selectiveYellowColor,
-            width: 8,
-            height: 8,
-          ),
-        ),
-      ),
+  Widget selectedFileTile({
+    required File image,
+    required int index,
+  }) {
+    //  for (var path in _paths) {
+    //     if (path.extension == 'mp4') {
+    //       var thumb = await VideoThumbnail.thumbnailFile(
+    //         video: path.path!,
+    //         imageFormat: ImageFormat.PNG,
+
+    //       );
+    //       if (thumb != null) {
+    //         final file = File(thumb);
+    //         listingController.files.add(PlatformFile(
+    //           name: file.uri.pathSegments.last,
+    //           path: file.path,
+    //           size: await file.length(),
+    //         ));
+
+    //       }
+    //     }
+    //   }
+    return StatefulBuilder(
+      builder: (context, setState) {
+        String? videoImage;
+        bool isLoading = false;
+        Rx<double> loadingValue = 0.0.obs;
+
+        return FutureBuilder<String?>(
+          future: () async {
+            if (image.path.toLowerCase().endsWith('.mp4')) {
+              isLoading = true;
+
+              return await VideoThumbnail.thumbnailFile(
+                video: image.path,
+                imageFormat: ImageFormat.PNG,
+              );
+            } else {
+              return null;
+            }
+          }(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting &&
+                snapshot.data == null) {
+              Timer.periodic(
+                Duration(milliseconds: 100),
+                (timer) {
+                  if (loadingValue.value < 1) {
+                    loadingValue.value += 0.1;
+                  } else {
+                    timer.cancel();
+                  }
+                },
+              );
+              return Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: iconWhiteColor,
+                ),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Obx(
+                    () => LinearProgressIndicator(
+                      borderRadius: BorderRadius.circular(8),
+                      minHeight: 5,
+                      valueColor: AlwaysStoppedAnimation<Color>(aquaGreenColor),
+                      value: loadingValue.value,
+                    ),
+                  ),
+                ),
+              );
+            }
+            videoImage = snapshot.data;
+            return Container(
+              padding: const EdgeInsets.all(8),
+              constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height * 0.08,
+                  minWidth: MediaQuery.of(context).size.width * 0.4),
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                      spreadRadius: 1,
+                      blurRadius: 5,
+                      color: Colors.black.withAlpha(50))
+                ],
+                borderRadius: BorderRadius.circular(12),
+                color: iconWhiteColor,
+                image: DecorationImage(
+                    image: FileImage(
+                        videoImage == null ? image : File(videoImage!)),
+                    fit: BoxFit.cover),
+              ),
+              child: GestureDetector(
+                onTap: () {
+                  listingController.files.removeAt(index);
+                  listingController.fileTypes.removeAt(index);
+                },
+                child: Align(
+                  alignment: AlignmentDirectional.topEnd,
+                  child: SvgPicture.asset(
+                    'assets/icons/close_icon.svg',
+                    color: selectiveYellowColor,
+                    width: 8,
+                    height: 8,
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 
@@ -946,31 +1055,31 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
           ],
         ),
         SizedBox(height: 2.h),
-        Container(
-          padding: const EdgeInsets.all(6.0),
-          // margin: const EdgeInsets.symmetric(horizontal: 15.0),
-          decoration: BoxDecoration(
-            border: Border.all(color: textErrorColor, width: 1),
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          child: Obx(() {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                TokenWidget(
-                  tokens: listingController.rupeeToToken.value,
-                  textColor: whiteColor,
-                  size: 20,
-                ),
-                Text(
-                  " = ₹ ${listingController.tokenToRupee}",
-                  style: textTheme.displaySmall?.copyWith(color: whiteColor),
-                ),
-              ],
-            );
-          }),
-        )
+        // Container(
+        //   padding: const EdgeInsets.all(6.0),
+        //   // margin: const EdgeInsets.symmetric(horizontal: 15.0),
+        //   decoration: BoxDecoration(
+        //     border: Border.all(color: textErrorColor, width: 1),
+        //     borderRadius: BorderRadius.circular(8.0),
+        //   ),
+        //   child: Obx(() {
+        //     return Row(
+        //       mainAxisAlignment: MainAxisAlignment.center,
+        //       crossAxisAlignment: CrossAxisAlignment.center,
+        //       children: [
+        //         TokenWidget(
+        //           tokens: listingController.rupeeToToken.value,
+        //           textColor: whiteColor,
+        //           size: 20,
+        //         ),
+        //         Text(
+        //           " = ₹ ${listingController.tokenToRupee}",
+        //           style: textTheme.displaySmall?.copyWith(color: whiteColor),
+        //         ),
+        //       ],
+        //     );
+        //   }),
+        // )
       ],
     );
   }

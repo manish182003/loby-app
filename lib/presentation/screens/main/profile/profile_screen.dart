@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loby/di/injection.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/widgets/custom_loader.dart';
@@ -147,6 +148,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 context.pushNamed(myDisputePage);
                               }),
                           ProfileOptionsWidget(
+                              name: "My Time Slots",
+                              onTap: () {
+                                context.pushNamed(sellerTimeSlotScreen);
+                              }),
+                          ProfileOptionsWidget(
                               name: "Profile Verification",
                               onTap: () {
                                 context.pushNamed(profileVerificationPage);
@@ -166,11 +172,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               onTap: () {
                                 context.pushNamed(faqPage);
                               }),
-                          ProfileOptionsWidget(
-                              name: "Seller Time Slots",
-                              onTap: () {
-                                context.pushNamed(sellerTimeSlotScreen);
-                              }),
+                          // ProfileOptionsWidget(
+                          //     name: "Seller Time Slots",
+                          //     onTap: () {
+                          //       context.pushNamed(sellerTimeSlotScreen);
+                          //     }),
                           // ProfileOptionsWidget(
                           // name: "buyer Time slots",
                           // onTap: () {
@@ -201,6 +207,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               onTap: () {
                                 context.pushNamed(legalTermsPage);
                               }),
+                          ProfileOptionsWidget(
+                            name: "Settings",
+                            onTap: () {
+                              context.pushNamed(settingsPage);
+                            },
+                          ),
                           ProfileOptionsWidget(name: "Logout", onTap: _logout),
                         ],
                       )
@@ -230,9 +242,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> _logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     // authController.clearProfileDetails();
+    await prefs.remove('searchHis');
+
     await prefs.remove('apiToken');
     await prefs.remove('isLoggedIn');
 
+    Get.deleteAll();
+    DependencyInjector.inject();
     context.goNamed(loginPage);
   }
 }

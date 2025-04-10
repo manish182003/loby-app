@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../core/theme/colors.dart';
 
@@ -9,8 +10,7 @@ class CustomAppBar extends StatelessWidget {
   final Function()? onBack;
 
   const CustomAppBar(
-      {Key? key, this.appBarName, this.otherIcon, this.txtColor, this.onBack})
-      : super(key: key);
+      {super.key, this.appBarName, this.otherIcon, this.txtColor, this.onBack});
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +81,7 @@ PreferredSizeWidget appBar({
   required BuildContext context,
   String? appBarName,
   IconData? otherIcon,
+  String? userImage,
   Color? txtColor,
   Function()? onBack,
   bool isBackIcon = true,
@@ -136,14 +137,35 @@ PreferredSizeWidget appBar({
             // ),
             Align(
               alignment: Alignment.center,
-              child: Text(
-                textAlign: TextAlign.center,
-                appBarName ?? '',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: textTheme.displayMedium
-                    ?.copyWith(color: txtColor ?? aquaGreenColor),
-              ),
+              child: userImage == null
+                  ? Text(
+                      textAlign: TextAlign.center,
+                      appBarName ?? '',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: textTheme.displayMedium
+                          ?.copyWith(color: txtColor ?? aquaGreenColor),
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircleAvatar(
+                          backgroundImage: NetworkImage(userImage),
+                          radius: 24,
+                        ),
+                        SizedBox(
+                          width: 1.w,
+                        ),
+                        Text(
+                          textAlign: TextAlign.center,
+                          appBarName ?? '',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: textTheme.displayMedium
+                              ?.copyWith(color: txtColor ?? aquaGreenColor),
+                        )
+                      ],
+                    ),
             ),
             isBackIcon
                 ? SizedBox(

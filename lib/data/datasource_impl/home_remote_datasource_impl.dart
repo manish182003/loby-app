@@ -5,6 +5,7 @@ import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/data/datasources/home_remote_datasource.dart';
 import 'package:loby/data/models/response_models/home/category_games_response_model.dart';
 import 'package:loby/data/models/response_models/home/category_response_model.dart';
+import 'package:loby/data/models/response_models/home/faqs_data_response_model.dart';
 import 'package:loby/data/models/response_models/home/game_response_model.dart';
 import 'package:loby/data/models/response_models/home/global_search_response_model.dart';
 import 'package:loby/data/models/response_models/home/notification_response_model.dart';
@@ -221,6 +222,22 @@ class HomeRemoteDatasourceImpl extends HomeRemoteDatasource {
       );
 
       return StaticDataResponseModel.fromJSON(response!);
+    } on ServerException catch (e) {
+      throw ServerException(message: e.message);
+    }
+  }
+
+  @override
+  Future<FaqsDataResponseModel> getAllFaqs() async {
+    try {
+      final headers = await Helpers.getApiHeaders();
+      final response = await Helpers.sendRequest(
+        _dio,
+        RequestType.get,
+        ApiEndpoints.getAllFaqsData,
+        headers: headers,
+      );
+      return FaqsDataResponseModel.fromJson(response!);
     } on ServerException catch (e) {
       throw ServerException(message: e.message);
     }

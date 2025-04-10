@@ -15,8 +15,7 @@ class UserSocialWidget extends StatelessWidget {
   final User user;
   final String from;
 
-  const UserSocialWidget({Key? key, required this.user, required this.from})
-      : super(key: key);
+  const UserSocialWidget({super.key, required this.user, required this.from});
 
   @override
   Widget build(BuildContext context) {
@@ -56,17 +55,35 @@ class UserSocialWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const SizedBox(height: 8),
-        buildItem(textTheme, context, 'assets/icons/instagram_one_icon.svg',
-            'Instagram', user.instagramId ?? "", 50.0, 50.0),
+        buildItem(
+            textTheme,
+            context,
+            'assets/icons/instagram_one_icon.svg',
+            'Instagram',
+            user.instagramId ?? "https://www.instagram.com/loby.gg",
+            40.0,
+            40.0),
         const SizedBox(height: 16),
-        buildItem(textTheme, context, 'assets/icons/youtube_icon.svg',
-            'YouTube', user.youtubeId ?? "", 40.0, 40.0),
+        buildItem(
+            textTheme,
+            context,
+            'assets/icons/youtube_icon.svg',
+            'YouTube',
+            user.youtubeId ?? "https://www.youtube.com/c/loby.gg",
+            40.0,
+            40.0),
         const SizedBox(height: 16),
-        buildItem(textTheme, context, 'assets/icons/discord_icon.svg',
-            'Discord', user.discordId ?? "", 40.0, 40.0),
+        buildItem(
+            textTheme,
+            context,
+            'assets/icons/discord_icon.svg',
+            'Discord',
+            user.discordId ?? "https://discord.com/channels/loby.gg",
+            40.0,
+            40.0),
         const SizedBox(height: 16),
         buildItem(textTheme, context, 'assets/icons/twitch_icon.svg', 'Twitch',
-            user.twitchId ?? "", 40.0, 40.0),
+            user.twitchId ?? "https://www.twitch.tv/shroud", 40.0, 40.0),
         const SizedBox(height: 16),
       ],
     );
@@ -96,28 +113,18 @@ class UserSocialWidget extends StatelessWidget {
                     width: height,
                   ),
                 ),
-                const SizedBox(
-                  width: 8.0,
+                SizedBox(
+                  width: 3.w,
                 ),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(socialTitle,
-                          overflow: TextOverflow.ellipsis,
-                          style: textTheme.headlineMedium
-                              ?.copyWith(color: aquaGreenColor)),
-                      const SizedBox(height: 6),
-                      GestureDetector(
-                        onTap: () {
-                          Helpers.launch(socialLink);
-                        },
-                        child: Text(socialLink,
-                            overflow: TextOverflow.ellipsis,
-                            style: textTheme.titleLarge
-                                ?.copyWith(color: whiteColor)),
-                      ),
-                    ],
+                  child: GestureDetector(
+                    onTap: () {
+                      Helpers.launch(socialLink);
+                    },
+                    child: Text(socialLink,
+                        overflow: TextOverflow.ellipsis,
+                        style:
+                            textTheme.titleLarge?.copyWith(color: whiteColor)),
                   ),
                 ),
               ],

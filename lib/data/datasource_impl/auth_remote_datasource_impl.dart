@@ -160,7 +160,8 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource {
       int? cityId,
       String? DOB,
       List<Map<String, dynamic>>? profileTags,
-      String? bio) async {
+      String? bio,
+      String? email) async {
     try {
       String token = await Helpers.getApiToken();
       final Map<String, dynamic> headers = {
@@ -199,6 +200,9 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource {
         )
         ..fields.add(
           MapEntry('bio', bio!),
+        )
+        ..fields.add(
+          MapEntry('email', email!),
         )
         ..fields.add(MapEntry(
             'profile_tags',
@@ -354,6 +358,29 @@ class AuthRemoteDatasourceImpl extends AuthRemoteDatasource {
                 'confirm_password': confirmPassword,
               },
         // headers: headers,
+      );
+
+      return response!;
+    } on ServerException catch (e) {
+      throw ServerException(message: e.message);
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> deleteAccount(int userId) async {
+    try {
+      String token = await Helpers.getApiToken();
+      final Map<String, dynamic> headers = {
+        'Authorization': 'Bearer $token',
+      };
+      final response = await Helpers.sendRequest(
+        _dio,
+        RequestType.post,
+        ApiEndpoints.delete,
+        queryParams: {
+          'delete_user_id': userId,
+        },
+        headers: headers,
       );
 
       return response!;

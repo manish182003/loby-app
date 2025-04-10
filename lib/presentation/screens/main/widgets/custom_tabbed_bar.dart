@@ -53,10 +53,12 @@ class CustomTabbedAppBarState extends State<CustomTabbedAppBar>
           child: TabBarView(
             controller: _tabController,
             physics: const NeverScrollableScrollPhysics(),
-            children: const [
+            children: [
               HomeScreen(),
               CreateListingScreen(),
-              ChatScreen(),
+              ChatScreen(
+                isFromCustomTab: true,
+              ),
               NotificationScreen(),
               ProfileScreen(),
             ],

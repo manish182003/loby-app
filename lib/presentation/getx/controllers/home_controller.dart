@@ -5,12 +5,14 @@ import 'package:loby/core/usecases/usecase.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/home/category.dart';
 import 'package:loby/domain/entities/home/category_games.dart';
+import 'package:loby/domain/entities/home/faqs.dart';
 import 'package:loby/domain/entities/home/game.dart';
 import 'package:loby/domain/entities/home/notification.dart' as notification;
 import 'package:loby/domain/entities/home/static_data.dart';
 import 'package:loby/domain/entities/listing/service_listing.dart';
 import 'package:loby/domain/entities/profile/user.dart';
 import 'package:loby/domain/usecases/home/delete_notification.dart';
+import 'package:loby/domain/usecases/home/get_all_faqs.dart';
 import 'package:loby/domain/usecases/home/get_categories.dart';
 import 'package:loby/domain/usecases/home/get_category_games.dart';
 import 'package:loby/domain/usecases/home/get_games.dart';
@@ -21,7 +23,7 @@ import 'package:loby/presentation/getx/controllers/listing_controller.dart';
 import '../../../domain/usecases/home/get_static_data.dart';
 import '../../../domain/usecases/home/global_search.dart';
 
-class HomeController extends GetxController{
+class HomeController extends GetxController {
   final GetCategories _getCategories;
   final GetGames _getGames;
   final GetCategoryGames _getCategoryGames;
@@ -30,6 +32,7 @@ class HomeController extends GetxController{
   final GetUnreadCount _getUnreadCount;
   final GlobalSearch _globalSearch;
   final GetStaticData _getStaticData;
+  final GetAllFaqs _getAllFaqs;
 
   HomeController({
     required GetCategories getCategories,
@@ -40,14 +43,16 @@ class HomeController extends GetxController{
     required GetUnreadCount getUnreadCount,
     required GlobalSearch globalSearch,
     required GetStaticData getStaticData,
-  }) : _getCategories = getCategories,
-      _getGames = getGames,
+    required GetAllFaqs getAllFaqs,
+  })  : _getCategories = getCategories,
+        _getGames = getGames,
         _getCategoryGames = getCategoryGames,
-  _getNotifications = getNotifications,
-  _deleteNotification = deleteNotification,
-  _getUnreadCount = getUnreadCount,
+        _getNotifications = getNotifications,
+        _deleteNotification = deleteNotification,
+        _getUnreadCount = getUnreadCount,
         _globalSearch = globalSearch,
-  _getStaticData = getStaticData;
+        _getStaticData = getStaticData,
+        _getAllFaqs = getAllFaqs;
 
   ListingController listingController = Get.find<ListingController>();
 
@@ -57,7 +62,6 @@ class HomeController extends GetxController{
 
   final games = <Game>[].obs;
   final isGamesFetching = false.obs;
-
 
   final categoryGames = <CategoryGames>[].obs;
   final isCategoryGamesFetching = false.obs;
@@ -72,7 +76,6 @@ class HomeController extends GetxController{
   final selectedCategoryId = 0.obs;
   final selectedGameId = 0.obs;
 
-
   final notifications = <notification.Notification>[].obs;
   final isNotificationFetching = false.obs;
   final areMoreNotificationAvailable = true.obs;
@@ -86,14 +89,9 @@ class HomeController extends GetxController{
   final userResults = <User>[].obs;
   final gameResults = <Game>[].obs;
 
-
   final staticData = <StaticData>[].obs;
+  final allFaqsData = <Faqs>[].obs;
   final isStaticDataFetching = false.obs;
-
-
-
-
-
 
   final errorMessage = ''.obs;
 
@@ -101,24 +99,25 @@ class HomeController extends GetxController{
     isCategoryFetching(true);
 
     final failureOrSuccess = await _getCategories(
-      Params(homeParams: HomeParams(
-        name: name,
-        page: page,
-        categoryId: categoryId,
-      ),),
+      Params(
+        homeParams: HomeParams(
+          name: name,
+          page: page,
+          categoryId: categoryId,
+        ),
+      ),
     );
 
     failureOrSuccess.fold(
-          (failure) {
+      (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
         Helpers.toast(errorMessage.value);
         isCategoryFetching(false);
       },
-          (success) {
+      (success) {
         categories.value = success.categories;
         isCategoryFetching(false);
-
       },
     );
     return failureOrSuccess.isRight() ? true : false;
@@ -128,58 +127,55 @@ class HomeController extends GetxController{
     isGamesFetching(true);
 
     final failureOrSuccess = await _getGames(
-      Params(homeParams: HomeParams(
-        name: name,
-        page: page,
-        gameId: gameId,
-      ),),
+      Params(
+        homeParams: HomeParams(
+          name: name,
+          page: page,
+          gameId: gameId,
+        ),
+      ),
     );
 
     failureOrSuccess.fold(
-          (failure) {
+      (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
         Helpers.toast(errorMessage.value);
         isGamesFetching(false);
-
-
       },
-          (success) {
-
+      (success) {
         games.value = success.games;
         isGamesFetching(false);
-
       },
     );
     return failureOrSuccess.isRight() ? true : false;
   }
-
 
   Future<bool> getCategoryGames({int? categoryId, String? search}) async {
     // categoriesGamePageNumber.value == 1 ? isCategoryGamesFetching(true) : isCategoryGamesFetching(false);
 
     isCategoryGamesFetching(true);
 
-    if(areMoreCategoryGamesAvailable.value){
+    if (areMoreCategoryGamesAvailable.value) {
       final failureOrSuccess = await _getCategoryGames(
-        Params(homeParams: HomeParams(
-            categoryId: categoryId,
-            search: search,
-            page: categoriesGamePageNumber.value
-        ),),
+        Params(
+          homeParams: HomeParams(
+              categoryId: categoryId,
+              search: search,
+              page: categoriesGamePageNumber.value),
+        ),
       );
 
       failureOrSuccess.fold(
-            (failure) {
+        (failure) {
           errorMessage.value = Helpers.convertFailureToMessage(failure);
           debugPrint(errorMessage.value);
           Helpers.toast(errorMessage.value);
           isCategoryGamesFetching(false);
         },
-            (success) {
+        (success) {
           categoryGames.value = success.categoryGames.categoryGames ?? [];
           isCategoryGamesFetching(false);
-
         },
       );
       return failureOrSuccess.isRight() ? true : false;
@@ -187,37 +183,40 @@ class HomeController extends GetxController{
     return false;
   }
 
-
   Future<bool> getNotifications({int? notificationId}) async {
-    notificationPageNumber.value == 1 ? isNotificationFetching(true) : isNotificationFetching(false);
+    notificationPageNumber.value == 1
+        ? isNotificationFetching(true)
+        : isNotificationFetching(false);
 
-    if(areMoreNotificationAvailable.value){
+    if (areMoreNotificationAvailable.value) {
       final failureOrSuccess = await _getNotifications(
-        Params(homeParams: HomeParams(
-            page: notificationPageNumber.value,
-            notificationId: notificationId
-        ),),
+        Params(
+          homeParams: HomeParams(
+              page: notificationPageNumber.value,
+              notificationId: notificationId),
+        ),
       );
 
       failureOrSuccess.fold(
-            (failure) {
+        (failure) {
           errorMessage.value = Helpers.convertFailureToMessage(failure);
           debugPrint(errorMessage.value);
           Helpers.toast(errorMessage.value);
           isNotificationFetching(false);
         },
-            (success) {
-              areMoreNotificationAvailable.value = success.notifications.length == 10;
+        (success) {
+          areMoreNotificationAvailable.value =
+              success.notifications.length == 10;
 
-              if (notificationPageNumber > 1) {
-                notifications.addAll(success.notifications);
-              } else {
-                notifications.value = success.notifications;
-              }
+          if (notificationPageNumber > 1) {
+            notifications.addAll(success.notifications);
+          } else {
+            notifications.value = success.notifications;
+          }
 
-              notificationPageNumber.value++;
+          notificationPageNumber.value++;
 
-              isNotificationFetching.value = false;
+          isNotificationFetching.value = false;
           // Helpers.toast('Profile Changed');
         },
       );
@@ -226,22 +225,20 @@ class HomeController extends GetxController{
     return false;
   }
 
-
   Future<bool> deleteNotification({int? notificationId}) async {
     final failureOrSuccess = await _deleteNotification(
-      Params(homeParams: HomeParams(
-          notificationId: notificationId
-      ),),
+      Params(
+        homeParams: HomeParams(notificationId: notificationId),
+      ),
     );
 
     failureOrSuccess.fold(
-          (failure) {
+      (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
         Helpers.toast(errorMessage.value);
       },
-          (success) {
-
+      (success) {
         // Helpers.toast('Profile Changed');
       },
     );
@@ -250,24 +247,23 @@ class HomeController extends GetxController{
 
   Future<bool> getUnreadCount({String? type}) async {
     final failureOrSuccess = await _getUnreadCount(
-      Params(homeParams: HomeParams(
-          type: type
-      ),),
+      Params(
+        homeParams: HomeParams(type: type),
+      ),
     );
 
     failureOrSuccess.fold(
-          (failure) {
+      (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
         // Helpers.toast("Something Went Wrong in $type Api");
       },
-          (success) {
-
-            if(type == 'chat'){
-              chatCount.value = success;
-            }else{
-              notificationCount.value = success;
-            }
+      (success) {
+        if (type == 'chat') {
+          chatCount.value = success;
+        } else {
+          notificationCount.value = success;
+        }
 
         // Helpers.toast('Profile Changed');
       },
@@ -275,56 +271,53 @@ class HomeController extends GetxController{
     return failureOrSuccess.isRight() ? true : false;
   }
 
-
-
-
   Future<bool> globalSearch({required String search}) async {
     isGlobalSearchFetching(true);
     final failureOrSuccess = await _globalSearch(
-      Params(homeParams: HomeParams(
+      Params(
+        homeParams: HomeParams(
           search: search,
-      ),),
+        ),
+      ),
     );
 
     failureOrSuccess.fold(
-          (failure) {
+      (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
         Helpers.toast(errorMessage.value);
         isGlobalSearchFetching(false);
       },
-          (success) {
-            listingController.buyerListings.value = success.userGameServiceDetails;
-            serviceListingResults.value = success.userGameServiceDetails;
-            userResults.value = success.userDetails;
-            gameResults.value = success.gameDetails;
-            isGlobalSearchFetching(false);
+      (success) {
+        listingController.buyerListings.value = success.userGameServiceDetails;
+        serviceListingResults.value = success.userGameServiceDetails;
+        userResults.value = success.userDetails;
+        gameResults.value = success.gameDetails;
+        isGlobalSearchFetching(false);
         // Helpers.toast('Profile Changed');
       },
     );
     return failureOrSuccess.isRight() ? true : false;
   }
 
-
-
   Future<bool> getStaticData() async {
     isStaticDataFetching(true);
     final failureOrSuccess = await _getStaticData(
-      const Params(homeParams: HomeParams(
-
-      ),),
+      const Params(
+        homeParams: HomeParams(),
+      ),
     );
 
     failureOrSuccess.fold(
-          (failure) {
+      (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
         Helpers.toast(errorMessage.value);
         isStaticDataFetching(false);
       },
-          (success) {
-            staticData.value = success.staticData;
-            isStaticDataFetching(false);
+      (success) {
+        staticData.value = success.staticData;
+        isStaticDataFetching(false);
 
         // Helpers.toast('Profile Changed');
       },
@@ -332,8 +325,25 @@ class HomeController extends GetxController{
     return failureOrSuccess.isRight() ? true : false;
   }
 
+  Future<void> getFaqsData() async {
+    Helpers.loader();
+    final failureOrSuccess = await _getAllFaqs(
+      const Params(),
+    );
 
+    failureOrSuccess.fold(
+      (failure) {
+        errorMessage.value = Helpers.convertFailureToMessage(failure);
+        debugPrint(errorMessage.value);
+        Helpers.hideLoader();
+        Helpers.toast(errorMessage.value);
+      },
+      (success) {
+        allFaqsData.value = success.allFaqs;
+        Helpers.hideLoader();
 
-
-
+        // Helpers.toast('Profile Changed');
+      },
+    );
+  }
 }

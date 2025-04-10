@@ -15,8 +15,7 @@ import '../../../../core/utils/helpers.dart';
 class OTPDialog extends StatefulWidget {
   final TextEditingController otp;
   final Function() onVerify;
-  const OTPDialog({Key? key, required this.onVerify, required this.otp})
-      : super(key: key);
+  const OTPDialog({super.key, required this.onVerify, required this.otp});
 
   @override
   State<OTPDialog> createState() => _OTPDialogState();
@@ -31,7 +30,7 @@ class _OTPDialogState extends State<OTPDialog> {
   @override
   void dispose() {
     // TODO: implement dispose
-    widget.otp.dispose();
+    // widget.otp.dispose();
     super.dispose();
   }
 
@@ -176,7 +175,7 @@ class _OTPDialogState extends State<OTPDialog> {
                                           const Duration(milliseconds: 1000));
                                       await authController.login(
                                           mobile: authController
-                                              .mobilecontroller.text
+                                              .mobilecontroller.value.text
                                               .replaceAll(' ', ''));
                                       await Helpers.hideLoader();
                                     },

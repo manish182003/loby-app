@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:loby/core/theme/colors.dart';
 import 'package:loby/presentation/widgets/carousel.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:sizer/sizer.dart';
-
-import '../../../../../core/theme/colors.dart';
 
 class FullImageView extends StatefulWidget {
   final List<CarouselList> image;
@@ -25,12 +24,6 @@ class _FullImageViewState extends State<FullImageView> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Icon(Icons.close, color: whiteColor)),
-              SizedBox(height: 2.h),
               SizedBox(
                 // height: 300,
                 height: MediaQuery.of(context).size.height / 1.5,
@@ -50,7 +43,25 @@ class _FullImageViewState extends State<FullImageView> {
                     );
                   },
                 ),
-              )
+              ),
+              SizedBox(
+                height: 4.h,
+              ),
+              Center(
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: aquaGreenColor,
+                    radius: 30,
+                    child: const Icon(
+                      Icons.close,
+                      color: textBlackColor,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

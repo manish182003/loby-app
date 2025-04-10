@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loby/presentation/widgets/text_fields/text_field_widget.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
 
 import '../../../../../../core/theme/colors.dart';
@@ -10,19 +11,24 @@ class ConfirmationRiseDisputeBottomDialog {
   Color? titleColor;
   String? contentName;
   String? contentLinkName;
+  String? hintText;
+  TextEditingController? reportController;
   String? contentNameLast;
   Function()? yesBtnClick;
   Function()? cancelBtnClick;
 
-  ConfirmationRiseDisputeBottomDialog(
-      {this.textTheme,
-      this.tileName,
-      this.titleColor,
-      this.contentName,
-      this.contentLinkName,
-      this.contentNameLast,
-      this.yesBtnClick,
-      this.cancelBtnClick});
+  ConfirmationRiseDisputeBottomDialog({
+    this.textTheme,
+    this.tileName,
+    this.titleColor,
+    this.contentName,
+    this.contentLinkName,
+    this.contentNameLast,
+    this.yesBtnClick,
+    this.cancelBtnClick,
+    this.reportController,
+    this.hintText,
+  });
 
   void showBottomDialog(BuildContext context) {
     showGeneralDialog(
@@ -32,9 +38,14 @@ class ConfirmationRiseDisputeBottomDialog {
       transitionDuration: const Duration(milliseconds: 300),
       context: context,
       pageBuilder: (context, _, __) {
-        return Align(
-          alignment: Alignment.bottomCenter,
-          child: _buildDialogContent(context),
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: _buildDialogContent(context),
+          ),
         );
       },
       transitionBuilder: (_, animation1, __, child) {
@@ -71,6 +82,11 @@ class ConfirmationRiseDisputeBottomDialog {
             children: [
               const SizedBox(height: 16),
               _buildContentText(),
+              const SizedBox(height: 16),
+              TextFieldWidget(
+                textEditingController: reportController!,
+                hint: hintText,
+              ),
               const SizedBox(height: 44),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

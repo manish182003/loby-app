@@ -46,7 +46,7 @@ class SlotsController extends GetxController {
     "Sat",
     "Sun",
   ];
-  List selectedDay = ["Mon"].obs;
+  RxString selectedDay = ''.obs;
   final slots = <GetSlotsForSeller>[].obs;
   final buyerSlots = <GetSlotsForBuyer>[].obs;
 
@@ -108,6 +108,7 @@ class SlotsController extends GetxController {
   // }
 
   Future<bool> addSlots({int? day, String? from, String? to}) async {
+    Helpers.loader();
     final failureOrSuccess = await _addSlots(
       Params(
         slotsParams: SlotsParams(
@@ -121,11 +122,14 @@ class SlotsController extends GetxController {
 
     failureOrSuccess.fold(
       (failure) {
+        Helpers.hideLoader();
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
         Helpers.toast(errorMessage.value);
       },
       (success) {
+        getSlots();
+        Helpers.hideLoader();
         Helpers.toast('Slots added Successfully');
         clearListing();
       },
@@ -163,13 +167,14 @@ class SlotsController extends GetxController {
 
   Future<bool> getSlots({int? day, int? providerId}) async {
     // providerid.value == 1 ? isSlotsFetching(true) : isSlotsFetching(false);
+    Helpers.loader();
     final userId = await Helpers.getUserId();
 
     if (areMoreSlotsAvailable.value) {
       final failureOrSuccess = await _getSlots(
         Params(
           slotsParams: SlotsParams(
-            day: days.indexOf(selectedDay[0]),
+            day: days.indexOf(selectedDay.value),
             providerId: userId,
             // slotId: slotId,
           ),
@@ -178,6 +183,7 @@ class SlotsController extends GetxController {
 
       failureOrSuccess.fold(
         (failure) {
+          Helpers.hideLoader();
           errorMessage.value = Helpers.convertFailureToMessage(failure);
           debugPrint(errorMessage.value);
           Helpers.toast(errorMessage.value);
@@ -187,6 +193,7 @@ class SlotsController extends GetxController {
           // areMoreSlotsAvailable.value = success.getSlotForSeller.length == 10;
           // slots.addAll(success.getSlotForSeller);
           slots.value = success.getSlotForSeller;
+          Helpers.hideLoader();
           // if (providerid) {
           //   slots.addAll(success.getSlotForSeller);
           // } else {

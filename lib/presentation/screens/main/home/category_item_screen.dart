@@ -17,8 +17,7 @@ class CategoryItemScreen extends StatefulWidget {
   final String? catName;
 
   const CategoryItemScreen(
-      {Key? key, required this.categoryId, required this.catName})
-      : super(key: key);
+      {super.key, required this.categoryId, required this.catName});
 
   @override
   State<CategoryItemScreen> createState() => _CategoryItemScreenState();
@@ -91,109 +90,111 @@ class _CategoryItemScreenState extends State<CategoryItemScreen> {
         // appBar(
         //     context: context, appBarName: widget.catName, txtColor: aquaGreenColor),
         // appBar: AppBar(),
-        body: Column(
-          children: [
-            Align(
-                alignment: Alignment.topCenter,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                  child: Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          width: 42,
-                          height: 42,
-                          child: MaterialButton(
-                            shape: const CircleBorder(),
-                            color: textCharcoalBlueColor,
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Icon(
-                              Icons.arrow_back_ios,
-                              size: 18,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          "${widget.catName}",
-                          style: textTheme.displayMedium
-                              ?.copyWith(color: aquaGreenColor),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            context.pushNamed(searchScreenPage);
-                          },
-                          child: Container(
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                                color: textCharcoalBlueColor,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: const Icon(
-                              CupertinoIcons.search,
-                              size: 23,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )),
-            SizedBox(
-              height: 2.h,
-            ),
-            BodyPaddingWidget(
-              child: TextFieldWidget(
-                textEditingController: search,
-                hint: "Select Game (Dropdown + searchfree)",
-                onChanged: (value) {
-                  homeController.getCategoryGames(
-                    categoryId: widget.categoryId,
-                    search: value,
-                  );
-                },
-              ),
-            ),
-            Obx(() {
-              if (homeController.isCategoryGamesFetching.value) {
-                return const CustomLoader();
-              } else {
-                return SingleChildScrollView(
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Align(
+                  alignment: Alignment.topCenter,
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        childAspectRatio: 6.0 / 7.75,
-                        mainAxisSpacing: 1,
-                        // crossAxisSpacing: 1,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                    child: Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: 42,
+                            height: 42,
+                            child: MaterialButton(
+                              shape: const CircleBorder(),
+                              color: textCharcoalBlueColor,
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Icon(
+                                Icons.arrow_back_ios,
+                                size: 18,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            "${widget.catName}",
+                            style: textTheme.displayMedium
+                                ?.copyWith(color: aquaGreenColor),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              context.pushNamed(searchScreenPage);
+                            },
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                  color: textCharcoalBlueColor,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: const Icon(
+                                CupertinoIcons.search,
+                                size: 23,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: homeController.categoryGames.length,
-                      itemBuilder: (context, index) {
-                        final game = homeController.categoryGames[index].game;
-                        return CategoryItemCard(
-                          categoryId: widget.categoryId!,
-                          gameId: game!.id!,
-                          index: index,
-                          gameName: game.name!,
-                          images: game.image,
-                          game: game,
-                        );
-                      },
                     ),
-                  ),
-                );
-              }
-            }),
-          ],
+                  )),
+              SizedBox(
+                height: 2.h,
+              ),
+              BodyPaddingWidget(
+                child: TextFieldWidget(
+                  textEditingController: search,
+                  hint: "Select Game",
+                  onChanged: (value) {
+                    homeController.getCategoryGames(
+                      categoryId: widget.categoryId,
+                      search: value,
+                    );
+                  },
+                ),
+              ),
+              Obx(() {
+                if (homeController.isCategoryGamesFetching.value) {
+                  return const CustomLoader();
+                } else {
+                  return SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          childAspectRatio: 6.0 / 7.75,
+                          mainAxisSpacing: 1,
+                          // crossAxisSpacing: 1,
+                        ),
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: homeController.categoryGames.length,
+                        itemBuilder: (context, index) {
+                          final game = homeController.categoryGames[index].game;
+                          return CategoryItemCard(
+                            categoryId: widget.categoryId!,
+                            gameId: game!.id!,
+                            index: index,
+                            gameName: game.name!,
+                            images: game.image,
+                            game: game,
+                          );
+                        },
+                      ),
+                    ),
+                  );
+                }
+              }),
+            ],
+          ),
         ),
       ),
     );

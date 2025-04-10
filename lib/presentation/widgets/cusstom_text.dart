@@ -4,19 +4,21 @@ import 'package:sizer/sizer.dart';
 class MyText extends StatelessWidget {
   final String name;
   final Color textColor;
+  final double? height;
   final Color myBackgroundColor;
 
   const MyText(
-      {Key? key,
+      {super.key,
       required this.name,
       required this.textColor,
-      required this.myBackgroundColor})
-      : super(key: key);
+      required this.myBackgroundColor,
+      this.height});
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return Container(
+        height: height,
         decoration: BoxDecoration(
           color: myBackgroundColor,
           borderRadius: BorderRadius.circular(10.0),

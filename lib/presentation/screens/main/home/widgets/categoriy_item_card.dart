@@ -26,7 +26,7 @@ class CategoryItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         context.pushNamed(gamePage, extra: {
           'categoryId': '$categoryId',

@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:loby/core/usecases/profile_params.dart';
@@ -20,6 +21,7 @@ import 'package:loby/domain/usecases/profile/profile_verification.dart';
 import 'package:loby/domain/usecases/profile/submit_feedback.dart';
 import 'package:loby/domain/usecases/profile/update_social_links.dart';
 import 'package:loby/domain/usecases/profile/withdraw_money.dart';
+
 import '../../../domain/entities/profile/bank_detail.dart';
 import '../../../domain/entities/profile/duel_details.dart';
 import '../../../domain/entities/profile/duel_details_count.dart';
@@ -31,9 +33,7 @@ import '../../../domain/usecases/profile/get_total_earning.dart';
 import '../../../domain/usecases/profile/get_wallet_transactions.dart';
 import '../../../domain/usecases/profile/verify_payment.dart';
 
-
-class ProfileController extends GetxController{
-
+class ProfileController extends GetxController {
   final GetProfile _getProfile;
   final GetRatings _getRatings;
   final GetDuel _getDuel;
@@ -71,26 +71,24 @@ class ProfileController extends GetxController{
     required GetSettlementRequests getSettlementRequests,
     required GetTotalEarning getTotalEarning,
     required GetEarningTransactions getEarningTransactions,
-  }) : _getProfile = getProfile,
-  _getRatings = getRatings,
-  _getDuel = getDuel,
-  _addFunds = addFunds,
-  _verifyPayment = verifyPayment,
-  _followUnfollow = followUnfollow,
-  _updateSocialLinks = updateSocialLinks,
-  _profileVerification = profileVerification,
+  })  : _getProfile = getProfile,
+        _getRatings = getRatings,
+        _getDuel = getDuel,
+        _addFunds = addFunds,
+        _verifyPayment = verifyPayment,
+        _followUnfollow = followUnfollow,
+        _updateSocialLinks = updateSocialLinks,
+        _profileVerification = profileVerification,
         _addBankDetails = addBankDetails,
-  _getBankDetails = getBankDetails,
+        _getBankDetails = getBankDetails,
         _withdrawMoney = withdrawMoney,
         _getPaymentTransactions = getPaymentTransactions,
         _getWalletTransactions = getWalletTransactions,
-  _getFollowers = getFollowers,
+        _getFollowers = getFollowers,
         _submitFeedback = submitFeedback,
-  _getSettlementRequests = getSettlementRequests,
-  _getTotalEarning = getTotalEarning,
+        _getSettlementRequests = getSettlementRequests,
+        _getTotalEarning = getTotalEarning,
         _getEarningTransactions = getEarningTransactions;
-
-
 
   final errorMessage = ''.obs;
 
@@ -108,32 +106,28 @@ class ProfileController extends GetxController{
   final areMoreDuelDetailsAvailable = true.obs;
   final duelDetailsPageNumber = 1.obs;
 
-
   final addFundsResponse = {}.obs;
   final isSocialLinksFetching = false.obs;
 
   final bankDetails = <BankDetail>[].obs;
   final isBankDetailsFetching = false.obs;
 
-  final lastOrderStatus ="".obs;
+  final lastOrderStatus = "".obs;
 
   final paymentTransactions = <PaymentTransaction>[].obs;
   final isPaymentTransactionsFetching = false.obs;
   final areMorePaymentTransactionsAvailable = true.obs;
   final paymentTransactionsPageNumber = 1.obs;
 
-
   final walletTransactions = <WalletTransaction>[].obs;
   final isWalletTransactionsFetching = false.obs;
   final areMoreWalletTransactionsAvailable = true.obs;
   final walletTransactionsPageNumber = 1.obs;
 
-
   final earningTransactions = <WalletTransaction>[].obs;
   final isEarningTransactionsFetching = false.obs;
   final areMoreEarningTransactionsAvailable = true.obs;
   final earningTransactionsPageNumber = 1.obs;
-
 
   final followers = <User>[].obs;
   final isFollowersFetching = false.obs;
@@ -153,32 +147,31 @@ class ProfileController extends GetxController{
 
   final totalEarning = 0.00.obs;
 
-
-
   Future<bool> getProfile({int? userId, String? from}) async {
-    from == "social" ? isSocialLinksFetching.value = true : isProfileFetching.value = true;
+    from == "social"
+        ? isSocialLinksFetching.value = true
+        : isProfileFetching.value = true;
 
     final failureOrSuccess = await _getProfile(
-      Params(profileParams: ProfileParams(
-         userId: userId
-      ),),
+      Params(
+        profileParams: ProfileParams(userId: userId),
+      ),
     );
     print("useriddddd >>>> $userId");
     failureOrSuccess.fold(
-          (failure) {
+      (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
         Helpers.toast(errorMessage.value);
         isProfileFetching.value = false;
         isSocialLinksFetching.value = false;
       },
-          (success) {
-            if(userId != null){
-
-              otherUserProfile = success.user;
-            }else{
-              profile = success.user;
-            }
+      (success) {
+        if (userId != null) {
+          otherUserProfile = success.user;
+        } else {
+          profile = success.user;
+        }
 
         isProfileFetching.value = false;
         isSocialLinksFetching.value = false;
@@ -187,25 +180,26 @@ class ProfileController extends GetxController{
     return failureOrSuccess.isRight() ? true : false;
   }
 
-
   Future<bool> getRatings({int? userId}) async {
     isRatingsFetching.value = true;
 
     final failureOrSuccess = await _getRatings(
-      Params(profileParams: ProfileParams(
+      Params(
+        profileParams: ProfileParams(
           userId: userId,
-        page: ratingPageNumber.value,
-      ),),
+          page: ratingPageNumber.value,
+        ),
+      ),
     );
 
     failureOrSuccess.fold(
-          (failure) {
+      (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
         Helpers.toast(errorMessage.value);
         isRatingsFetching.value = false;
       },
-          (success) {
+      (success) {
         ratings.value = success.ratings;
         isRatingsFetching.value = false;
       },
@@ -213,40 +207,41 @@ class ProfileController extends GetxController{
     return failureOrSuccess.isRight() ? true : false;
   }
 
-
-
   Future<bool> getDuel({int? userId}) async {
-    duelDetailsPageNumber.value == 1 ? isDuelDetailsFetching(true) : isDuelDetailsFetching(false);
+    duelDetailsPageNumber.value == 1
+        ? isDuelDetailsFetching(true)
+        : isDuelDetailsFetching(false);
 
-    if(areMoreDuelDetailsAvailable.value){
+    if (areMoreDuelDetailsAvailable.value) {
       final failureOrSuccess = await _getDuel(
-        Params(profileParams: ProfileParams(
+        Params(
+            profileParams: ProfileParams(
           userId: userId,
           page: duelDetailsPageNumber.value,
         )),
       );
 
       failureOrSuccess.fold(
-            (failure) {
+        (failure) {
           errorMessage.value = Helpers.convertFailureToMessage(failure);
           debugPrint(errorMessage.value);
           Helpers.toast(errorMessage.value);
           isDuelDetailsFetching.value = false;
         },
-            (success) {
-              areMoreDuelDetailsAvailable.value = success.duelDetailsList.length == 10;
-              duelDetailsCount.value = success.duelDetailsCount;
+        (success) {
+          areMoreDuelDetailsAvailable.value =
+              success.duelDetailsList.length == 10;
+          duelDetailsCount.value = success.duelDetailsCount;
 
-              if (duelDetailsPageNumber > 1) {
-                duelDetailsList.addAll(success.duelDetailsList);
-              } else {
-                duelDetailsList.value = success.duelDetailsList;
-              }
+          if (duelDetailsPageNumber > 1) {
+            duelDetailsList.addAll(success.duelDetailsList);
+          } else {
+            duelDetailsList.value = success.duelDetailsList;
+          }
 
-              duelDetailsPageNumber.value++;
+          duelDetailsPageNumber.value++;
 
-              isDuelDetailsFetching.value = false;
-
+          isDuelDetailsFetching.value = false;
         },
       );
       return failureOrSuccess.isRight() ? true : false;
@@ -254,240 +249,252 @@ class ProfileController extends GetxController{
     return false;
   }
 
-
   Future<bool> addFunds({int? amount}) async {
-
     final failureOrSuccess = await _addFunds(
-      Params(profileParams: ProfileParams(
-        amount: amount,
-      ),),
+      Params(
+        profileParams: ProfileParams(
+          amount: amount,
+        ),
+      ),
     );
 
     failureOrSuccess.fold(
-          (failure) {
+      (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
         Helpers.toast(errorMessage.value);
+        Helpers.hideLoader();
       },
-          (success) {
+      (success) {
         addFundsResponse.value = success;
+        Helpers.hideLoader();
       },
     );
     return failureOrSuccess.isRight() ? true : false;
   }
 
-  Future<bool> verifyPayment({String? signature, String? paymentId, String? paymentStatus, String? orderId}) async {
-
+  Future<bool> verifyPayment(
+      {String? signature,
+      String? paymentId,
+      String? paymentStatus,
+      String? orderId}) async {
     final failureOrSuccess = await _verifyPayment(
-      Params(profileParams: ProfileParams(
-        signature: signature,
-        paymentId: paymentId,
-        paymentStatus: paymentStatus,
-        orderId: orderId,
-      ),),
+      Params(
+        profileParams: ProfileParams(
+          signature: signature,
+          paymentId: paymentId,
+          paymentStatus: paymentStatus,
+          orderId: orderId,
+        ),
+      ),
     );
 
     failureOrSuccess.fold(
-          (failure) {
+      (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
         Helpers.toast(errorMessage.value);
       },
-          (success) async{
-            await getProfile();
+      (success) async {
+        await getProfile();
       },
     );
     return failureOrSuccess.isRight() ? true : false;
   }
 
   Future<bool> followUnfollow({int? userId}) async {
-
     final failureOrSuccess = await _followUnfollow(
-      Params(profileParams: ProfileParams(
-       userId: userId
-      ),),
+      Params(
+        profileParams: ProfileParams(userId: userId),
+      ),
     );
 
     failureOrSuccess.fold(
-          (failure) {
+      (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
         Helpers.toast(errorMessage.value);
       },
-          (success) {
-
-      },
+      (success) {},
     );
     return failureOrSuccess.isRight() ? true : false;
   }
 
-  Future<bool> updateSocialLinks({String? insta, String? youtube, String? twitch, String? discord}) async {
-
+  Future<bool> updateSocialLinks(
+      {String? insta, String? youtube, String? twitch, String? discord}) async {
     final failureOrSuccess = await _updateSocialLinks(
-      Params(profileParams: ProfileParams(
-        insta: insta,
-        youtube: youtube,
-        twitch: twitch,
-        discord: discord,
-      ),),
+      Params(
+        profileParams: ProfileParams(
+          insta: insta,
+          youtube: youtube,
+          twitch: twitch,
+          discord: discord,
+        ),
+      ),
     );
 
     failureOrSuccess.fold(
-          (failure) {
+      (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
         Helpers.toast(errorMessage.value);
       },
-          (success) {
-            Helpers.toast("Social Links Updated Successfully");
-
-      },
-    );
-    return failureOrSuccess.isRight() ? true : false;
-  }
-
-
-  Future<bool> profileVerification({String? displayName, String? name, String? message, String? youtube, String? twitch, String? instagram, File? idCard, File? selfie}) async {
-
-    final failureOrSuccess = await _profileVerification(
-      Params(profileParams: ProfileParams(
-        displayName: displayName,
-        name: name,
-        message: message,
-        insta: instagram,
-        youtube: youtube,
-        twitch: twitch,
-        idCard: idCard,
-        selfie: selfie,
-      ),),
-    );
-
-    failureOrSuccess.fold(
-          (failure) {
-        errorMessage.value = Helpers.convertFailureToMessage(failure);
-        debugPrint(errorMessage.value);
-        Helpers.toast(errorMessage.value);
-      },
-          (success) {
+      (success) {
         Helpers.toast("Social Links Updated Successfully");
-
       },
     );
     return failureOrSuccess.isRight() ? true : false;
   }
 
-  Future<bool> addBankDetails({
-    // String? bankName, 
-    // String? branchName, 
-    String? accountNumber, 
-    String? confirmAccountNumber, 
-    String? ifscCode, 
-    // String? holderName, 
-    String? upiId, 
-    String? type}) async {
-
-    final failureOrSuccess = await _addBankDetails(
-      Params(profileParams: ProfileParams(
-        // bankName: bankName,
-        // branchName: branchName,
-        accountNumber: accountNumber,
-        confirmAccountNumber: confirmAccountNumber,
-        ifscCode: ifscCode,
-        // holderName: holderName,
-        upiID: upiId,
-        type: type,
-      ),),
+  Future<bool> profileVerification(
+      {String? displayName,
+      String? name,
+      String? message,
+      String? youtube,
+      String? twitch,
+      String? instagram,
+      File? idCard,
+      File? selfie}) async {
+    final failureOrSuccess = await _profileVerification(
+      Params(
+        profileParams: ProfileParams(
+          displayName: displayName,
+          name: name,
+          message: message,
+          insta: instagram,
+          youtube: youtube,
+          twitch: twitch,
+          idCard: idCard,
+          selfie: selfie,
+        ),
+      ),
     );
 
     failureOrSuccess.fold(
-          (failure) {
+      (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
         Helpers.toast(errorMessage.value);
       },
-          (success) {
-
-
-
+      (success) {
+        Helpers.toast("Social Links Updated Successfully");
       },
     );
     return failureOrSuccess.isRight() ? true : false;
   }
 
+  Future<bool> addBankDetails(
+      {
+      // String? bankName,
+      // String? branchName,
+      String? accountNumber,
+      String? confirmAccountNumber,
+      String? ifscCode,
+      // String? holderName,
+      String? upiId,
+      String? type}) async {
+    final failureOrSuccess = await _addBankDetails(
+      Params(
+        profileParams: ProfileParams(
+          // bankName: bankName,
+          // branchName: branchName,
+          accountNumber: accountNumber,
+          confirmAccountNumber: confirmAccountNumber,
+          ifscCode: ifscCode,
+          // holderName: holderName,
+          upiID: upiId,
+          type: type,
+        ),
+      ),
+    );
+
+    failureOrSuccess.fold(
+      (failure) {
+        errorMessage.value = Helpers.convertFailureToMessage(failure);
+        debugPrint(errorMessage.value);
+        Helpers.toast(errorMessage.value);
+      },
+      (success) {},
+    );
+    return failureOrSuccess.isRight() ? true : false;
+  }
 
   Future<bool> getBankDetails() async {
     isBankDetailsFetching(true);
     final failureOrSuccess = await _getBankDetails(
-      const Params(profileParams: ProfileParams(
-
-      ),),
+      const Params(
+        profileParams: ProfileParams(),
+      ),
     );
 
     failureOrSuccess.fold(
-          (failure) {
+      (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
         Helpers.toast(errorMessage.value);
         isBankDetailsFetching(false);
       },
-          (success) {
-            bankDetails.value = success.bankDetails;
-            isBankDetailsFetching(false);
+      (success) {
+        bankDetails.value = success.bankDetails;
+        isBankDetailsFetching(false);
       },
     );
     return failureOrSuccess.isRight() ? true : false;
   }
 
-  Future<bool> withdrawMoney({required int? bankDetailId, required int? amount}) async {
+  Future<bool> withdrawMoney(
+      {required int? bankDetailId, required int? amount}) async {
     final failureOrSuccess = await _withdrawMoney(
-      Params(profileParams: ProfileParams(
-        bankDetailId: bankDetailId,
-        amount: amount,
-      ),),
+      Params(
+        profileParams: ProfileParams(
+          bankDetailId: bankDetailId,
+          amount: amount,
+        ),
+      ),
     );
 
     failureOrSuccess.fold(
-          (failure) {
+      (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
         Helpers.toast(errorMessage.value);
       },
-          (success) {
-
-      },
+      (success) {},
     );
     return failureOrSuccess.isRight() ? true : false;
   }
 
-
-
   Future<bool> getPaymentTransactions() async {
-    paymentTransactionsPageNumber.value == 1 ? isPaymentTransactionsFetching(true) : isPaymentTransactionsFetching(false);
+    paymentTransactionsPageNumber.value == 1
+        ? isPaymentTransactionsFetching(true)
+        : isPaymentTransactionsFetching(false);
 
-    if(areMorePaymentTransactionsAvailable.value){
+    if (areMorePaymentTransactionsAvailable.value) {
       final failureOrSuccess = await _getPaymentTransactions(
-        Params(profileParams: ProfileParams(
-          page: paymentTransactionsPageNumber.value,
-        ),),
+        Params(
+          profileParams: ProfileParams(
+            page: paymentTransactionsPageNumber.value,
+          ),
+        ),
       );
 
       failureOrSuccess.fold(
-            (failure) {
+        (failure) {
           errorMessage.value = Helpers.convertFailureToMessage(failure);
           debugPrint(errorMessage.value);
           Helpers.toast(errorMessage.value);
           isPaymentTransactionsFetching.value = false;
         },
-            (success) {
+        (success) {
+          if (paymentTransactionsPageNumber > 1) {
+            paymentTransactions.addAll(success.paymentTransactions);
+          } else {
+            paymentTransactions.value = success.paymentTransactions;
+          }
+          areMorePaymentTransactionsAvailable.value =
+              success.paymentTransactions.length == 10;
 
-            if (paymentTransactionsPageNumber > 1) {
-              paymentTransactions.addAll(success.paymentTransactions);
-            } else {
-              paymentTransactions.value = success.paymentTransactions;
-            }
-            areMorePaymentTransactionsAvailable.value = success.paymentTransactions.length == 10;
-
-            paymentTransactionsPageNumber.value++;
+          paymentTransactionsPageNumber.value++;
 
           isPaymentTransactionsFetching.value = false;
         },
@@ -497,34 +504,36 @@ class ProfileController extends GetxController{
     return false;
   }
 
-
   Future<bool> getWalletTransactions({String? type}) async {
-    walletTransactionsPageNumber.value == 1 ? isWalletTransactionsFetching(true) : isWalletTransactionsFetching(false);
+    walletTransactionsPageNumber.value == 1
+        ? isWalletTransactionsFetching(true)
+        : isWalletTransactionsFetching(false);
 
-    if(areMoreWalletTransactionsAvailable.value){
+    if (areMoreWalletTransactionsAvailable.value) {
       final failureOrSuccess = await _getWalletTransactions(
-        Params(profileParams: ProfileParams(
-          page: walletTransactionsPageNumber.value,
-        ),),
+        Params(
+          profileParams: ProfileParams(
+            page: walletTransactionsPageNumber.value,
+          ),
+        ),
       );
 
       failureOrSuccess.fold(
-            (failure) {
+        (failure) {
           errorMessage.value = Helpers.convertFailureToMessage(failure);
           debugPrint(errorMessage.value);
           Helpers.toast(errorMessage.value);
           isWalletTransactionsFetching.value = false;
         },
-            (success)            {
-              areMoreWalletTransactionsAvailable.value = success.walletTransactions.length == 10;
-
+        (success) {
+          areMoreWalletTransactionsAvailable.value =
+              success.walletTransactions.length == 10;
 
           if (walletTransactionsPageNumber > 1) {
             walletTransactions.addAll(success.walletTransactions);
           } else {
             walletTransactions.value = success.walletTransactions;
           }
-
 
           walletTransactionsPageNumber.value++;
 
@@ -536,27 +545,30 @@ class ProfileController extends GetxController{
     return false;
   }
 
-
   Future<bool> getEarningTransactions({String? type}) async {
-    earningTransactionsPageNumber.value == 1 ? isEarningTransactionsFetching(true) : isEarningTransactionsFetching(false);
+    earningTransactionsPageNumber.value == 1
+        ? isEarningTransactionsFetching(true)
+        : isEarningTransactionsFetching(false);
 
-    if(areMoreEarningTransactionsAvailable.value){
+    if (areMoreEarningTransactionsAvailable.value) {
       final failureOrSuccess = await _getEarningTransactions(
-        Params(profileParams: ProfileParams(
-          page: earningTransactionsPageNumber.value,
-        ),),
+        Params(
+          profileParams: ProfileParams(
+            page: earningTransactionsPageNumber.value,
+          ),
+        ),
       );
 
       failureOrSuccess.fold(
-            (failure) {
+        (failure) {
           errorMessage.value = Helpers.convertFailureToMessage(failure);
           debugPrint(errorMessage.value);
           Helpers.toast(errorMessage.value);
           isEarningTransactionsFetching.value = false;
         },
-            (success)            {
-          areMoreEarningTransactionsAvailable.value = success.walletTransactions.length == 10;
-
+        (success) {
+          areMoreEarningTransactionsAvailable.value =
+              success.walletTransactions.length == 10;
 
           if (earningTransactionsPageNumber > 1) {
             earningTransactions.addAll(success.walletTransactions);
@@ -574,86 +586,82 @@ class ProfileController extends GetxController{
     return false;
   }
 
-
-
-
-
-
   Future<bool> getFollowers({String? type}) async {
     isFollowersFetching(true);
     final failureOrSuccess = await _getFollowers(
-      Params(profileParams: ProfileParams(
-        type: type,
-      ),),
+      Params(
+        profileParams: ProfileParams(
+          type: type,
+        ),
+      ),
     );
 
     failureOrSuccess.fold(
-          (failure) {
+      (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
         Helpers.toast(errorMessage.value);
         isFollowersFetching(false);
       },
-          (success) {
-            if(type == 'following'){
-              following.value = success.followers;
-            }else{
-              followers.value = success.followers;
-            }
-            isFollowersFetching(false);
-
-          },
+      (success) {
+        if (type == 'following') {
+          following.value = success.followers;
+        } else {
+          followers.value = success.followers;
+        }
+        isFollowersFetching(false);
+      },
     );
     return failureOrSuccess.isRight() ? true : false;
   }
 
-  Future<bool> submitFeedback({required String feedback, required String email}) async {
+  Future<bool> submitFeedback(
+      {required String feedback, required String email}) async {
     final failureOrSuccess = await _submitFeedback(
-      Params(profileParams: ProfileParams(
-        feedback: feedback,
-        email: email,
-      ),),
+      Params(
+        profileParams: ProfileParams(
+          feedback: feedback,
+          email: email,
+        ),
+      ),
     );
 
     failureOrSuccess.fold(
-          (failure) {
+      (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
         Helpers.toast(errorMessage.value);
         isBankDetailsFetching(false);
       },
-          (success) {
-
-      },
+      (success) {},
     );
     return failureOrSuccess.isRight() ? true : false;
   }
 
-
-
   Future<bool> getSettlementRequests({String? type}) async {
+    settlementRequestsPageNumber.value == 1
+        ? isSettlementRequestsFetching(true)
+        : isSettlementRequestsFetching(false);
 
-
-
-    settlementRequestsPageNumber.value == 1 ? isSettlementRequestsFetching(true) : isSettlementRequestsFetching(false);
-
-    if(areMoreSettlementRequestsAvailable.value){
+    if (areMoreSettlementRequestsAvailable.value) {
       final failureOrSuccess = await _getSettlementRequests(
-        Params(profileParams: ProfileParams(
-          page: settlementRequestsPageNumber.value,
-        ),),
+        Params(
+          profileParams: ProfileParams(
+            page: settlementRequestsPageNumber.value,
+          ),
+        ),
       );
 
       failureOrSuccess.fold(
-            (failure) {
+        (failure) {
           errorMessage.value = Helpers.convertFailureToMessage(failure);
           debugPrint(errorMessage.value);
           Helpers.toast(errorMessage.value);
           isSettlementRequestsFetching.value = false;
         },
-            (success) {
-          areMoreSettlementRequestsAvailable.value = success.settlementRequests.length == 10;
-
+        (success) {
+          areMoreSettlementRequestsAvailable.value =
+              success.settlementRequests.length == 10;
 
           if (settlementRequestsPageNumber > 1) {
             settlementRequests.addAll(success.settlementRequests);
@@ -670,30 +678,23 @@ class ProfileController extends GetxController{
     return false;
   }
 
-
-
   Future<bool> getTotalEarning() async {
     final failureOrSuccess = await _getTotalEarning(
-      const Params(profileParams: ProfileParams(
-      ),),
+      const Params(
+        profileParams: ProfileParams(),
+      ),
     );
 
     failureOrSuccess.fold(
-          (failure) {
+      (failure) {
         errorMessage.value = Helpers.convertFailureToMessage(failure);
         debugPrint(errorMessage.value);
         Helpers.toast(errorMessage.value);
       },
-          (success) {
-            totalEarning.value = success;
+      (success) {
+        totalEarning.value = success;
       },
     );
     return failureOrSuccess.isRight() ? true : false;
   }
-
-
-
-
-
-
 }

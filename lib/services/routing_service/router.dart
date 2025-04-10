@@ -1,29 +1,36 @@
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loby/core/theme/colors.dart';
+import 'package:loby/main.dart';
 import 'package:loby/no_internet_page.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 import 'package:loby/presentation/getx/controllers/kyc_controller.dart';
+import 'package:loby/presentation/screens/auth/banned_user/user_banned_screen.dart';
 import 'package:loby/presentation/screens/auth/create_profile_screen.dart';
 import 'package:loby/presentation/screens/auth/sign_up_screen.dart';
 import 'package:loby/presentation/screens/main/chat/chat_page.dart';
 import 'package:loby/presentation/screens/main/profile/faqs.dart';
 import 'package:loby/presentation/screens/main/profile/my_disputes/create_new_dispute_screen.dart';
+import 'package:loby/presentation/screens/main/profile/settings/my_settings.dart';
 import 'package:loby/presentation/screens/main/profile/terms_conditions/legal_options.dart';
 import 'package:loby/presentation/screens/main/profile/terms_conditions/static_terms.dart';
 import 'package:loby/presentation/screens/main/profile/time_slots/buyer_time_slot.dart';
-import 'package:loby/presentation/screens/main/profile/time_slots/seller_time_slot.dart';
+import 'package:loby/presentation/screens/main/profile/time_slots/my_time_slot.dart';
 import 'package:loby/presentation/screens/main/profile/wallet/kycscreen/account_detail_screen.dart';
 import 'package:loby/presentation/screens/main/profile/wallet/kycscreen/my_kyc_screen.dart';
 import 'package:loby/presentation/screens/main/profile/wallet/kycscreen/sendotpscreen.dart';
 import 'package:loby/presentation/screens/main/profile/wallet/kycscreen/upi_detail_screen.dart';
 import 'package:loby/presentation/screens/main/profile/wallet/settlement_request_history.dart';
+import 'package:loby/presentation/screens/main/profile/wallet/wallet_kyc.dart';
 import 'package:loby/presentation/screens/onboarding/onboarding_screen.dart';
 import 'package:loby/services/routing_service/routes.dart';
 import 'package:loby/services/routing_service/routing_service.dart';
 import 'package:moment_dart/moment_dart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../presentation/getx/controllers/profile_controller.dart';
 import '../../presentation/screens/auth/sign_in_screen.dart';
@@ -62,6 +69,7 @@ class MyRouter {
           bool? onBoardingDone = prefs.getBool('onBoardingDone') ?? false;
           String? token = prefs.getString('apiToken');
           debugPrint("Api Token $token");
+          debugPrint('userId->${profileController.profile.id}');
 
           final isLogging = state.uri.toString() == loginRoute;
           final onBoarding = state.uri.toString() == onBoardingRoute;
@@ -78,11 +86,18 @@ class MyRouter {
             return null;
           } else if (profileController.profile.banTill! > DateTime.now() &&
               !isLogging) {
-            await authController.logout();
-            return loginRoute;
+            return showDialog(
+              context: contextKey.currentContext!,
+              barrierDismissible: false,
+              builder: (context) {
+                return showAlertDialog();
+              },
+            );
           } else {
             return null;
           }
+
+          // return null;
           // toMoment().toLocal()
         },
         debugLogDiagnostics: true,
@@ -230,6 +245,16 @@ class MyRouter {
               }),
 
           GoRoute(
+              name: settingsPage,
+              path: mySettingRoute,
+              pageBuilder: (context, state) {
+                return CupertinoPage(
+                  key: state.pageKey,
+                  child: const SettingsPage(),
+                );
+              }),
+
+          GoRoute(
               name: myOrderPage,
               path: myOrderRoute,
               pageBuilder: (context, state) {
@@ -320,6 +345,15 @@ class MyRouter {
           GoRoute(
               name: withdrawFundScreenPage,
               path: withdrawFundScreenRoute,
+              redirect: (context, state) async {
+                ProfileController profileController =
+                    Get.find<ProfileController>();
+                await profileController.getBankDetails();
+                if (profileController.bankDetails.isEmpty) {
+                  return walletKycScreenRoute;
+                }
+                return null;
+              },
               pageBuilder: (context, state) {
                 return CupertinoPage(
                   key: state.pageKey,
@@ -356,6 +390,15 @@ class MyRouter {
                 return CupertinoPage(
                   key: state.pageKey,
                   child: const WalletTransactionHistory(),
+                );
+              }),
+          GoRoute(
+              name: walletKycScreenPage,
+              path: walletKycScreenRoute,
+              pageBuilder: (context, state) {
+                return CupertinoPage(
+                  key: state.pageKey,
+                  child: const WalletKyc(),
                 );
               }),
           GoRoute(
@@ -413,7 +456,8 @@ class MyRouter {
               pageBuilder: (context, state) {
                 return CupertinoPage(
                   key: state.pageKey,
-                  child: SellerTimeSlot(),
+                  // child: SellerTimeSlot(),
+                  child: MyTimeSlot(),
                 );
               }),
           GoRoute(
@@ -422,6 +466,13 @@ class MyRouter {
               pageBuilder: (context, state) {
                 return CupertinoPage(
                     key: state.pageKey, child: const LegalOptions());
+              }),
+          GoRoute(
+              name: userBanPage,
+              path: userBanRoute,
+              pageBuilder: (context, state) {
+                return CupertinoPage(
+                    key: state.pageKey, child: const UserBannedScreen());
               }),
           GoRoute(
               name: staticContentPage,
@@ -440,9 +491,10 @@ class MyRouter {
                 return CupertinoPage(
                     key: state.pageKey,
                     child: ChatPage(
-                      chatId: int.tryParse(data['chatId']!)!,
-                      senderId: int.tryParse(data['senderId']!)!,
-                      receiverId: int.tryParse(data['receiverId']!)!,
+                      chatId: int.tryParse(data['chatId'] ?? '-1') ?? -1,
+                      senderId: int.tryParse(data['senderId'] ?? '-1') ?? -1,
+                      receiverId:
+                          int.tryParse(data['receiverId'] ?? '-1') ?? -1,
                     )
                     // MessagePage(chatId: int.tryParse(state.extra['chatId']!)!, name: state.extra['name']!,),
                     );
@@ -457,5 +509,53 @@ class MyRouter {
               }),
         ]);
     return router;
+  }
+
+  Widget showAlertDialog() {
+    final authController = Get.find<AuthController>();
+    ProfileController profileController = Get.find<ProfileController>();
+    return AlertDialog(
+      backgroundColor: textTunaBlueColor,
+      titlePadding: EdgeInsets.symmetric(
+        horizontal: 18.w,
+      ).copyWith(top: 2.h),
+      title: Text(
+        'Account Banned',
+        style: TextStyle(
+          color: textWhiteColor,
+          fontSize: 14.spa,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      alignment: Alignment.center,
+      content: Text(
+        'Unfortunately, due to conflict with Loby Guidelines & Terms of Use this account has been banned for ${DateTime.now().differenceInDays(profileController.profile.banTill ?? DateTime.now().add(Duration(days: 3))).toString().replaceAll('-', '')} days. Please try logging in after remaining time.',
+        style: TextStyle(
+          color: textWhiteColor,
+        ),
+        textAlign: TextAlign.center,
+      ),
+      actionsAlignment: MainAxisAlignment.center,
+      actions: [
+        ElevatedButton(
+          onPressed: () async {
+            await authController.logout();
+            contextKey.currentContext!.goNamed(loginPage);
+          },
+          style: ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll<Color>(textErrorColor),
+            minimumSize:
+                WidgetStatePropertyAll<Size>(Size(double.infinity, 60)),
+          ),
+          child: Text(
+            'OK',
+            style: TextStyle(
+              color: textWhiteColor,
+              fontSize: 20,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

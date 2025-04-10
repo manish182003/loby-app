@@ -7,8 +7,8 @@ import 'package:loby/presentation/screens/main/profile/wallet/widgets/token_widg
 import 'package:loby/presentation/widgets/body_padding_widget.dart';
 import 'package:loby/presentation/widgets/custom_loader.dart';
 import 'package:loby/presentation/widgets/text_fields/text_field_widget.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:rename/platform_file_editors/abs_platform_file_editor.dart';
-// import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../core/theme/colors.dart';
@@ -28,15 +28,15 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
   HomeController homeController = Get.find<HomeController>();
   TextEditingController amount = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  // final Razorpay _razorpay = Razorpay();
+  final Razorpay _razorpay = Razorpay();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    // _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    // _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
   }
 
   @override
@@ -52,6 +52,11 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    // int i = 0;
+    // for (var data in homeController.staticData) {
+    //   logger.i('static data index->${i++}');
+    //   logger.i('1. data->${data.realValue}, key->${data.key}');
+    // }
 
     return Scaffold(
         appBar:
@@ -174,10 +179,18 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
                                         textColor: whiteColor,
                                         size: 20,
                                       ),
-                                      Text(
-                                        "₹ ${profileController.tokenToRupee}",
-                                        style: textTheme.displaySmall
-                                            ?.copyWith(color: whiteColor),
+                                      SizedBox(
+                                        width: 1.w,
+                                      ),
+                                      SizedBox(
+                                        width: 30.w,
+                                        child: Text(
+                                          "₹ ${profileController.tokenToRupee}",
+                                          style: textTheme.displaySmall
+                                              ?.copyWith(color: whiteColor),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
                                     ],
                                   );
@@ -208,37 +221,38 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
         ));
   }
 
-  // void _handlePaymentSuccess(PaymentSuccessResponse response) async {
-  //   await profileController.verifyPayment(
-  //       signature: response.signature,
-  //       paymentId: response.paymentId,
-  //       paymentStatus: 'success',
-  //       orderId: response.orderId,
-  //   );
-  //   await Helpers.hideLoader();
-  //   Helpers.toast("Payment Successful");
-  // }
+  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
+    await profileController.verifyPayment(
+      signature: response.signature,
+      paymentId: response.paymentId,
+      paymentStatus: 'success',
+      orderId: response.orderId,
+    );
+    await Helpers.hideLoader();
+    Helpers.toast("Payment Successful");
+  }
 
-  // void _handlePaymentError(PaymentFailureResponse response) async{
-  //   await profileController.verifyPayment(
-  //     paymentStatus: 'failed',
-  //     orderId: profileController.addFundsResponse['order_id'],
-  //   );
-  //   Helpers.hideLoader();
-  //   // Helpers.toast("Payment Failed ");
-  //   print('Payment Error : ${response.code.toString()} ${response.message.toString()}');
-  //   Helpers.toast("Payment Failed");
-  //   // Helpers.toast("ERROR: ${response.code} - ${response.message!}");
-  // }
+  void _handlePaymentError(PaymentFailureResponse response) async {
+    await profileController.verifyPayment(
+      paymentStatus: 'failed',
+      orderId: profileController.addFundsResponse['order_id'],
+    );
+    Helpers.hideLoader();
+    // Helpers.toast("Payment Failed ");
+    print(
+        'Payment Error : ${response.code.toString()} ${response.message.toString()}');
+    Helpers.toast("Payment Failed");
+    // Helpers.toast("ERROR: ${response.code} - ${response.message!}");
+  }
 
-  // void _handleExternalWallet(ExternalWalletResponse response) async{
-  //   await profileController.verifyPayment(
-  //     paymentStatus: 'failed',
-  //     orderId: profileController.addFundsResponse['order_id'],
-  //   );
-  //   Helpers.hideLoader();
-  //   Helpers.toast("Payment Failed");
-  // }
+  void _handleExternalWallet(ExternalWalletResponse response) async {
+    await profileController.verifyPayment(
+      paymentStatus: 'failed',
+      orderId: profileController.addFundsResponse['order_id'],
+    );
+    Helpers.hideLoader();
+    Helpers.toast("Payment Failed");
+  }
 
   Future<void> _openCheckout() async {
     if (_formKey.currentState!.validate()) {
@@ -252,16 +266,18 @@ class _AddFundsScreenState extends State<AddFundsScreen> {
         var options = {
           'key': 'rzp_test_0OFPJol8Rd6TZB',
           'amount': int.tryParse(
-            profileController.addFundsResponse['total_amount'],
-          ),
+                profileController.addFundsResponse['total_amount'],
+              )! *
+              100,
           'name': 'Loby',
           'order_id': profileController.addFundsResponse['order_id'],
           'description': 'Add Fund to Wallet',
           'timeout': 60,
-          'prefill': {'contact': '8888888888', 'email': 'test@razorpay.com'}
+          'prefill': {'contact': '8888888888', 'email': 'test@razorpay.com'},
         };
         try {
-          // _razorpay.open(options);
+          logger.i('options->$options');
+          _razorpay.open(options);
         } catch (e) {
           debugPrint("Error : $e");
         }

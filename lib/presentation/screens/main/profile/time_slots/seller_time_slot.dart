@@ -80,10 +80,10 @@ class _SellerTimeSlotState extends State<SellerTimeSlot> {
     setState(() {
       if (slotsController.selectedDay.contains(day)) {
         // Remove the day if it's already selected
-        slotsController.selectedDay.remove(day);
+        slotsController.selectedDay.value = '';
       } else {
         // Add the day if it's not selected
-        slotsController.selectedDay = [day];
+        slotsController.selectedDay.value = day;
       }
     });
     // int indexOfDay = days.indexOf(day);
@@ -278,7 +278,7 @@ class _SellerTimeSlotState extends State<SellerTimeSlot> {
                                   _addSlotDialog(
                                       context,
                                       slotsController.days.indexOf(
-                                          slotsController.selectedDay[0]));
+                                          slotsController.selectedDay.value));
                                 }),
                           ],
                         )),

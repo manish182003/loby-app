@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/auth/selected_option.dart';
@@ -13,7 +14,6 @@ import 'package:loby/presentation/widgets/body_padding_widget.dart';
 import 'package:loby/presentation/widgets/custom_chips.dart';
 import 'package:loby/presentation/widgets/text_fields/text_field_widget.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
-import 'package:rename/platform_file_editors/abs_platform_file_editor.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../core/theme/colors.dart';
@@ -111,6 +111,16 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                     );
                   }
                 }),
+                SizedBox(
+                  height: 3.h,
+                ),
+                TextFieldWidget(
+                  textEditingController: authController.email.value,
+                  type: "email",
+                  title: "Email",
+                  hint: "Enter Email",
+                  isRequired: true,
+                ),
                 SizedBox(
                   height: 3.h,
                 ),
@@ -248,7 +258,7 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
                         });
                       }
                     });
-                    logger.i("tags-> ${authController.selectedProfileTags}");
+                    // logger.i("tags-> ${authController.selectedProfileTags}");
                   },
                 ),
                 Obx(() {
@@ -354,34 +364,75 @@ class _CreateProfileCardState extends State<CreateProfileCard> {
 
   _imgFromGallery(String type) async {
     var image = await _picker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      if (image != null) {
-        if (type == 'cover') {
-          authController.coverImageFile.value = File(image.path);
-        } else {
-          authController.profileImageFile.value = File(image.path);
-        }
-      } else {
-        if (kDebugMode) print('No image selected.');
+
+    if (image != null) {
+      final croppedImage =
+          await ImageCropper().cropImage(sourcePath: image.path, uiSettings: [
+        AndroidUiSettings(
+          toolbarTitle: 'Crop Image',
+          hideBottomControls: true,
+          lockAspectRatio: true,
+          initAspectRatio: type == 'cover'
+              ? CropAspectRatioPreset.ratio16x9
+              : CropAspectRatioPreset.square,
+          cropStyle: type == 'cover' ? CropStyle.rectangle : CropStyle.circle,
+        ),
+        IOSUiSettings(
+          title: 'Crop Image',
+          aspectRatioLockEnabled: true,
+          cropStyle: type == 'cover' ? CropStyle.rectangle : CropStyle.circle,
+        ),
+      ]);
+      if (croppedImage == null) {
+        return;
       }
-    });
+      if (type == 'cover') {
+        authController.coverImageFile.value = File(croppedImage.path);
+        setState(() {});
+      } else {
+        authController.profileImageFile.value = File(croppedImage.path);
+        setState(() {});
+      }
+    } else {
+      if (kDebugMode) print('No image selected.');
+    }
   }
 
   _imgFromCamera(String type) async {
     var image =
         await _picker.pickImage(source: ImageSource.camera, imageQuality: 50);
 
-    setState(() {
-      if (image != null) {
-        if (type == 'cover') {
-          authController.coverImageFile.value = File(image.path);
-        } else {
-          authController.profileImageFile.value = File(image.path);
-        }
-      } else {
-        if (kDebugMode) print('No image selected.');
+    if (image != null) {
+      final croppedImage =
+          await ImageCropper().cropImage(sourcePath: image.path, uiSettings: [
+        AndroidUiSettings(
+          toolbarTitle: 'Crop Image',
+          hideBottomControls: true,
+          lockAspectRatio: true,
+          initAspectRatio: type == 'cover'
+              ? CropAspectRatioPreset.ratio16x9
+              : CropAspectRatioPreset.square,
+          cropStyle: type == 'cover' ? CropStyle.rectangle : CropStyle.circle,
+        ),
+        IOSUiSettings(
+          title: 'Crop Image',
+          aspectRatioLockEnabled: true,
+          cropStyle: type == 'cover' ? CropStyle.rectangle : CropStyle.circle,
+        ),
+      ]);
+      if (croppedImage == null) {
+        return;
       }
-    });
+      if (type == 'cover') {
+        authController.coverImageFile.value = File(croppedImage.path);
+        setState(() {});
+      } else {
+        authController.profileImageFile.value = File(croppedImage.path);
+        setState(() {});
+      }
+    } else {
+      if (kDebugMode) print('No image selected.');
+    }
   }
 
   Widget showProfileImage(TextTheme textTheme) {

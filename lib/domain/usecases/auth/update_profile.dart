@@ -1,4 +1,3 @@
-
 import 'package:dartz/dartz.dart';
 import 'package:loby/core/usecases/usecase.dart';
 import 'package:loby/core/utils/failure.dart';
@@ -11,7 +10,6 @@ class UpdateProfile extends UseCase<bool, Params> {
 
   @override
   Future<Either<Failure, bool>> call(Params params) {
-
     return _repository.updateProfile(
       cover: params.authParams?.cover,
       avatar: params.authParams?.avatar,
@@ -23,6 +21,7 @@ class UpdateProfile extends UseCase<bool, Params> {
       DOB: params.authParams?.DOB,
       profileTags: params.authParams?.profileTags,
       bio: params.authParams?.bio,
+      email: params.authParams?.email,
     );
   }
 }

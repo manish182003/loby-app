@@ -5,8 +5,7 @@ import 'package:loby/data/models/profile/user_model.dart';
 // import 'package:loby/domain/entities/listing/service_listing.dart';
 import 'package:loby/domain/entities/profile/duel_details.dart';
 
-
-class DuelDetailsModel extends DuelDetails{
+class DuelDetailsModel extends DuelDetails {
   const DuelDetailsModel({
     this.id,
     this.userOrderId,
@@ -35,30 +34,47 @@ class DuelDetailsModel extends DuelDetails{
   final OrderModel? userOrder;
   final ServiceListingModel? userGameService;
 
-factory DuelDetailsModel.fromJson(Map<String, dynamic> json) => DuelDetailsModel(
-  id: json["id"],
-  userOrderId: json["user_order_id"],
-  winnerSelectedBuyer: json["winner_selected_buyer"],
-  winnerSelectedSeller: json["winner_selected_seller"],
-  userGameServiceId: json["user_game_service_id"],
-  disputeWinner: json["dispute_winner"],
-  createdAt: DateTime.parse(json["createdAt"]),
-  updatedAt: DateTime.parse(json["updatedAt"]),
-  winner: json["dispute_winner"] != 0 ? json["dispute_winner"] == json["userOrder"]["user"]["id"] ? UserModel.fromJson(json["userOrder"]["user"]) : UserModel.fromJson(json["userGameService"]["user"]) : json["winner_selected_buyer"] == json["userOrder"]["user"]["id"] ? UserModel.fromJson(json["userOrder"]["user"]) : UserModel.fromJson(json["userGameService"]["user"]),
-  loser: json["dispute_winner"] != 0 ? json["dispute_winner"] == json["userOrder"]["user"]["id"] ? UserModel.fromJson(json["userGameService"]["user"]) : UserModel.fromJson(json["userOrder"]["user"])  : json["winner_selected_buyer"] == json["userOrder"]["user"]["id"] ? UserModel.fromJson(json["userGameService"]["user"]) : UserModel.fromJson(json["userOrder"]["user"]),
-  userOrder: OrderModel.fromJson(json["userOrder"]),
-  userGameService: ServiceListingModel.fromJson(json["userGameService"]),
-);
+  factory DuelDetailsModel.fromJson(Map<String, dynamic> json) =>
+      DuelDetailsModel(
+        id: json["id"],
+        userOrderId: json["user_order_id"],
+        winnerSelectedBuyer: json["winner_selected_buyer"],
+        winnerSelectedSeller: json["winner_selected_seller"],
+        userGameServiceId: json["user_game_service_id"],
+        disputeWinner: json["dispute_winner"],
+        createdAt: DateTime.parse(json["createdAt"]),
+        updatedAt: DateTime.parse(json["updatedAt"]),
+        winner: json["dispute_winner"] != 0
+            ? json["dispute_winner"] == json["userOrder"]["user"]["id"]
+                ? UserModel.fromJson(json["userOrder"]["user"])
+                : json["userGameService"]["user"] == null
+                    ? null
+                    : UserModel.fromJson(json["userGameService"]["user"])
+            : json["winner_selected_buyer"] == json["userOrder"]["user"]["id"]
+                ? UserModel.fromJson(json["userOrder"]["user"])
+                : UserModel.fromJson(json["userGameService"]["user"]),
+        loser: json["dispute_winner"] != 0
+            ? json["dispute_winner"] == json["userOrder"]["user"]["id"]
+                ? json["userGameService"]['user'] == null
+                    ? null
+                    : UserModel.fromJson(json["userGameService"]["user"])
+                : UserModel.fromJson(json["userOrder"]["user"])
+            : json["winner_selected_buyer"] == json["userOrder"]["user"]["id"]
+                ? UserModel.fromJson(json["userGameService"]["user"])
+                : UserModel.fromJson(json["userOrder"]["user"]),
+        userOrder: OrderModel.fromJson(json["userOrder"]),
+        userGameService: ServiceListingModel.fromJson(json["userGameService"]),
+      );
 
-Map<String, dynamic> toJson() => {
-  "id": id,
-  "user_order_id": userOrderId,
-  "winner_selected_buyer": winnerSelectedBuyer,
-  "winner_selected_seller": winnerSelectedSeller,
-  "user_game_service_id": userGameServiceId,
-  "createdAt": createdAt?.toIso8601String(),
-  "updatedAt": updatedAt?.toIso8601String(),
-  "userOrder": userOrder?.toJson(),
-  "userGameService": userGameService?.toJson(),
-};
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "user_order_id": userOrderId,
+        "winner_selected_buyer": winnerSelectedBuyer,
+        "winner_selected_seller": winnerSelectedSeller,
+        "user_game_service_id": userGameServiceId,
+        "createdAt": createdAt?.toIso8601String(),
+        "updatedAt": updatedAt?.toIso8601String(),
+        "userOrder": userOrder?.toJson(),
+        "userGameService": userGameService?.toJson(),
+      };
 }

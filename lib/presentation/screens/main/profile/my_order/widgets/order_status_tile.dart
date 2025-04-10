@@ -57,6 +57,8 @@ class OrderStatusTile extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     double rating = 0.0;
     TextEditingController review = TextEditingController();
+    print('rating->${orderController.ratingDone.value}');
+    print(lastStatus);
 
     return Column(children: [
       _statusTile(textTheme, isDone: isDone, title: title, date: date),
@@ -386,7 +388,7 @@ class OrderStatusTile extends StatelessWidget {
                                 },
                                 onSubmit: () async {
                                   confirmSellerDelivery(context,
-                                      status: 'ORDER_COMPLETED',
+                                      status: '',
                                       rating: rating,
                                       review: review.text);
                                 },
@@ -532,7 +534,7 @@ class OrderStatusTile extends StatelessWidget {
     final isSuccess = await orderController.submitRating(
         orderId: orderId, stars: rating, review: review);
     if (isSuccess) {
-      await orderController.changeOrderStatus(orderId: orderId, status: status);
+      // await orderController.changeOrderStatus(orderId: orderId, status: status);
       await getOrders();
 
       coreController.socket.emit("loby", {

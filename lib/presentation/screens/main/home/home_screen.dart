@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -20,6 +21,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   HomeController homeController = Get.find<HomeController>();
+  RxInt currentIndex = 0.obs;
+  CarouselSliderController controller = CarouselSliderController();
+  final List<String> imageList = [
+    'assets/images/home_crousel.png',
+    'assets/images/home_crousel.png',
+    'assets/images/home_crousel.png',
+  ];
 
   @override
   void initState() {
@@ -37,24 +45,22 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Row(
         children: [
           if (iconPath != null) ...[
-            Container(
-              padding: EdgeInsets.all(12),
-              constraints: BoxConstraints(
-                minWidth: 60.w,
-                minHeight: 4.h,
-              ),
-              decoration: BoxDecoration(
-                color: aquaGreenColor,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                children: [
-                  SvgPicture.asset(iconPath, height: 20, width: 20),
-                  SizedBox(width: 10),
-                  Text(title,
-                      style: TextStyle(
-                          color: isEnabled ? Colors.white : Colors.grey)),
-                ],
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: aquaGreenColor,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  children: [
+                    SvgPicture.asset(iconPath, height: 20, width: 20),
+                    SizedBox(width: 10),
+                    Text(title,
+                        style: TextStyle(
+                            color: isEnabled ? Colors.white : Colors.grey)),
+                  ],
+                ),
               ),
             ),
           ] else ...[
@@ -111,78 +117,156 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: 80,
                   ),
                   SizedBox(
-                    height: 1.h,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: GlobalSearchFieldWidget(onTap: () {
-                            context.pushNamed(searchScreenPage);
-                          }),
-                        ),
-                        SizedBox(
-                          width: 2.w,
-                        ),
-                        GestureDetector(
-                          onTapDown: (TapDownDetails details) async {
-                            final selected = await showMenu(
-                              context: context,
-                              color: Color(0xFF33343B),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              position: RelativeRect.fromDirectional(
-                                textDirection: TextDirection.ltr,
-                                start: 50,
-                                top: 220,
-                                end: 20,
-                                bottom: 0,
-                              ),
-                              items: [
-                                _buildMenuItem(
-                                    'Marketplace',
-                                    'assets/icons/Marketplace.svg',
-                                    true,
-                                    null,
-                                    0,
-                                    0),
-                                _buildMenuItem('Clans / Teams', null, false,
-                                    'assets/icons/1.svg', 20, 15),
-                                _buildMenuItem('Tournaments', null, false,
-                                    'assets/icons/2.svg', 16, 20),
-                                _buildMenuItem('Web3', null, false,
-                                    'assets/icons/3.svg', 20, 20),
-                              ],
-                            );
-                          },
-                          child: Container(
-                            constraints: const BoxConstraints(
-                              minHeight: 55,
-                              minWidth: 55,
-                            ),
-                            padding: EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: textFieldColor,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: SvgPicture.asset(
-                              'assets/icons/Marketplace.svg',
-                              height: 30,
-                              width: 30,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  SizedBox(
                     height: 3.h,
                   ),
                 ],
               ),
             ),
+            SizedBox(
+              height: 3.h,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: GlobalSearchFieldWidget(onTap: () {
+                      context.pushNamed(searchScreenPage);
+                    }),
+                  ),
+                  SizedBox(
+                    width: 2.w,
+                  ),
+                  GestureDetector(
+                    onTapDown: (TapDownDetails details) async {
+                      final selected = await showMenu(
+                        context: context,
+                        color: Color(0xFF33343B),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        position: RelativeRect.fromDirectional(
+                          textDirection: TextDirection.ltr,
+                          start: 50,
+                          top: 220,
+                          end: 20,
+                          bottom: 0,
+                        ),
+                        items: [
+                          _buildMenuItem('Marketplace',
+                              'assets/icons/Marketplace.svg', true, null, 0, 0),
+                          _buildMenuItem('Clans / Teams', null, false,
+                              'assets/icons/1.svg', 20, 15),
+                          _buildMenuItem('Tournaments', null, false,
+                              'assets/icons/2.svg', 16, 20),
+                          _buildMenuItem('Web3', null, false,
+                              'assets/icons/3.svg', 20, 20),
+                        ],
+                      );
+                    },
+                    child: Container(
+                      constraints: const BoxConstraints(
+                        minHeight: 55,
+                        minWidth: 55,
+                      ),
+                      padding: EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: textFieldColor,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: SvgPicture.asset(
+                        'assets/icons/Marketplace.svg',
+                        height: 30,
+                        width: 30,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 3.h,
+            ),
+            Stack(
+              children: [
+                CarouselSlider.builder(
+                  itemCount: imageList.length,
+                  carouselController: controller,
+                  itemBuilder: (context, index, realIndex) {
+                    var img = imageList[index];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: Image.asset(
+                          img,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                        ),
+                      ),
+                    );
+                  },
+                  options: CarouselOptions(
+                    height: 20.h,
+                    enlargeCenterPage: true,
+                    enableInfiniteScroll: true,
+                    autoPlay: true,
+                    viewportFraction: 1,
+                    onPageChanged: (index, reason) {
+                      currentIndex.value = index;
+                    },
+                  ),
+                ),
+                Positioned(
+                  right: 40.w,
+                  bottom: 1.h,
+                  child: Row(
+                    children: imageList.asMap().entries.map((entry) {
+                      return GestureDetector(
+                        onTap: () => {
+                          controller.animateToPage(entry.key)
+                        }, // you can add slide jump here
+                        child: Obx(
+                          () => Container(
+                            width: currentIndex.value == entry.key ? 12.0 : 8,
+                            height: currentIndex.value == entry.key ? 12.0 : 8,
+                            margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: textWhiteColor,
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                )
+              ],
+            ),
+            // SizedBox(
+            //   width: double.infinity,
+            //   height: 20.h,
+            //   child: CarouselView(
+            //     itemExtent: 100.w,
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(10),
+            //     ),
+            //     scrollDirection: Axis.horizontal,
+            //     itemSnapping: true,
+            //     padding: EdgeInsets.symmetric(horizontal: 20),
+            //     children: [
+            //       Image.asset(
+            //         'assets/images/home_crousel.png',
+            //         fit: BoxFit.cover,
+            //       ),
+            //       Image.asset(
+            //         'assets/images/home_crousel.png',
+            //         fit: BoxFit.cover,
+            //       ),
+            //     ],
+            //   ),
+            // ),
+
             SizedBox(
               height: 3.h,
             ),
@@ -203,15 +287,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 3.h,
                 ),
                 Padding(
-                    padding: EdgeInsets.all(2.h),
+                    padding: EdgeInsets.all(2.h).copyWith(bottom: 1.h),
                     child: Text('Top Games',
                         style: textTheme.displaySmall
                             ?.copyWith(color: textWhiteColor))),
                 Container(
                     decoration: const BoxDecoration(
-                      color: textFieldColor,
-                      // borderRadius: BorderRadius.circular(16.0),
-                    ),
+                        // color: textFieldColor,
+                        // borderRadius: BorderRadius.circular(16.0),
+                        ),
                     child: Column(
                       children: [
                         // Padding(
@@ -239,12 +323,13 @@ class _HomeScreenState extends State<HomeScreen> {
         return GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            childAspectRatio: 2.5,
+            childAspectRatio: 3.5,
             mainAxisSpacing: 15,
-            crossAxisSpacing: 30,
+            crossAxisSpacing: 15,
           ),
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.symmetric(horizontal: 8),
           itemCount: homeController.categories.length,
           itemBuilder: (context, index) {
             return GestureDetector(
@@ -258,13 +343,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   });
                 },
                 child: Container(
-                  height: 2.h,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
+                  // padding:
+                  //     const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: textFieldColor,
                     // border: bor,
+                    border: Border.all(
+                      color: Color(0xFF7B7B7B),
+                    ),
                     borderRadius: BorderRadius.circular(12.0),
                   ),
                   child: Text(

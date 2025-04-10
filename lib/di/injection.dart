@@ -33,6 +33,7 @@ import 'package:loby/domain/repositories/profile_repository.dart';
 import 'package:loby/domain/repositories/slots_repository.dart';
 import 'package:loby/domain/usecases/auth/add_fcm_token.dart';
 import 'package:loby/domain/usecases/auth/check_username.dart';
+import 'package:loby/domain/usecases/auth/delete_account.dart';
 import 'package:loby/domain/usecases/auth/get_cities.dart';
 import 'package:loby/domain/usecases/auth/get_countries.dart';
 import 'package:loby/domain/usecases/auth/get_profile_tags.dart';
@@ -45,25 +46,26 @@ import 'package:loby/domain/usecases/chat/check_eligibility.dart';
 import 'package:loby/domain/usecases/chat/get_chats.dart';
 import 'package:loby/domain/usecases/chat/get_messages.dart';
 import 'package:loby/domain/usecases/chat/send_message.dart';
-import 'package:loby/domain/usecases/home/get_static_data.dart';
-import 'package:loby/domain/usecases/home/global_search.dart';
-import 'package:loby/domain/usecases/kyc/get_kyc_token.dart';
-import 'package:loby/domain/usecases/kyc/send_kyc_otp.dart';
-import 'package:loby/domain/usecases/kyc/verify_kyc_otp.dart';
-import 'package:loby/domain/usecases/order/change_order_status.dart';
-import 'package:loby/domain/usecases/order/create_order.dart';
-import 'package:loby/domain/usecases/order/get_disputes.dart';
-import 'package:loby/domain/usecases/order/get_orders.dart';
 import 'package:loby/domain/usecases/home/delete_notification.dart';
+import 'package:loby/domain/usecases/home/get_all_faqs.dart';
 import 'package:loby/domain/usecases/home/get_categories.dart';
 import 'package:loby/domain/usecases/home/get_category_games.dart';
 import 'package:loby/domain/usecases/home/get_games.dart';
 import 'package:loby/domain/usecases/home/get_notifications.dart';
+import 'package:loby/domain/usecases/home/get_static_data.dart';
 import 'package:loby/domain/usecases/home/get_unread_count.dart';
+import 'package:loby/domain/usecases/home/global_search.dart';
+import 'package:loby/domain/usecases/kyc/get_kyc_token.dart';
+import 'package:loby/domain/usecases/kyc/send_kyc_otp.dart';
+import 'package:loby/domain/usecases/kyc/verify_kyc_otp.dart';
 import 'package:loby/domain/usecases/listing/create_listing.dart';
 import 'package:loby/domain/usecases/listing/get_buyer_listings.dart';
 import 'package:loby/domain/usecases/listing/get_configurations.dart';
 import 'package:loby/domain/usecases/listing/report_listing.dart';
+import 'package:loby/domain/usecases/order/change_order_status.dart';
+import 'package:loby/domain/usecases/order/create_order.dart';
+import 'package:loby/domain/usecases/order/get_disputes.dart';
+import 'package:loby/domain/usecases/order/get_orders.dart';
 import 'package:loby/domain/usecases/order/raise_dispute.dart';
 import 'package:loby/domain/usecases/order/select_duel_winner.dart';
 import 'package:loby/domain/usecases/order/submit_dispute_proof.dart';
@@ -192,6 +194,7 @@ class DependencyInjector {
     Get.lazyPut(() => AddFCMToken(authRepository));
     Get.lazyPut(() => SendAndVerifyOTP(authRepository));
     Get.lazyPut(() => ForgotAndResetPassword(authRepository));
+    Get.lazyPut(() => DeleteAccount(repository: authRepository));
   }
 
   static void _injectHomeUsecases() {
@@ -205,6 +208,7 @@ class DependencyInjector {
     Get.lazyPut(() => GetUnreadCount(homeRepository));
     Get.lazyPut(() => GlobalSearch(homeRepository));
     Get.lazyPut(() => GetStaticData(homeRepository));
+    Get.lazyPut(() => GetAllFaqs(repository: homeRepository));
   }
 
   static void _injectListingUsecases() {

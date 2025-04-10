@@ -137,7 +137,7 @@ class _UserDuelsWidgetState extends State<UserDuelsWidget> {
                           style: textTheme.headlineMedium?.copyWith(
                               color: textTunaBlueColor,
                               fontWeight: FontWeight.w500)),
-                      Text("${duelDetailsCount.loseCount}",
+                      Text("${duelDetailsCount.loseCount ?? 0}",
                           textAlign: TextAlign.center,
                           style: textTheme.headlineLarge?.copyWith(
                               color: textTunaBlueColor,
@@ -276,7 +276,7 @@ class DuelWidget extends StatelessWidget {
                               padding: const EdgeInsets.symmetric(
                                   vertical: 4.0, horizontal: 8.0),
                               child: Text(
-                                  duelDetails.userGameService!.game!.name!,
+                                  duelDetails.userGameService?.game?.name ?? '',
                                   maxLines: 1,
                                   textAlign: TextAlign.center,
                                   overflow: TextOverflow.ellipsis,
@@ -295,7 +295,8 @@ class DuelWidget extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 4.0, horizontal: 8.0),
-                              child: Text(duelDetails.userGameService!.title!,
+                              child: Text(
+                                  duelDetails.userGameService?.title ?? '',
                                   maxLines: 1,
                                   textAlign: TextAlign.center,
                                   overflow: TextOverflow.ellipsis,
@@ -356,7 +357,7 @@ class DuelWidget extends StatelessWidget {
           ),
         ),
         Text(
-          name,
+          name ?? '',
           style: textTheme.headlineSmall?.copyWith(color: textLightColor),
         )
       ],

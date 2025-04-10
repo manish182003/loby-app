@@ -33,18 +33,16 @@ class _DropDownDividerState extends State<DropDownDivider> {
         [
           DropdownMenuItem<String>(
             value: item,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    item,
-                    style:
-                        textTheme.titleLarge?.copyWith(color: textWhiteColor),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14.0,
+                ),
+                child: Text(
+                  item,
+                  style: textTheme.titleLarge?.copyWith(color: textWhiteColor),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),
@@ -53,8 +51,12 @@ class _DropDownDividerState extends State<DropDownDivider> {
             const DropdownMenuItem<String>(
               enabled: false,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 8.0,
+                ),
                 child: Divider(
+                  height: 1,
+                  thickness: 1,
                   color: footerColor,
                 ),
               ),
@@ -91,6 +93,10 @@ class _DropDownDividerState extends State<DropDownDivider> {
           ),
         ),
         items: _addDividersAfterItems(items, textTheme),
+        menuItemStyleData: MenuItemStyleData(
+          height: 40, // Adjust the height to reduce space
+          padding: EdgeInsets.symmetric(horizontal: 14.0),
+        ),
         // customItemsIndexes: _getDividersIndexes(),
         // customItemsHeight: 4,
         value: selectedValue,
@@ -134,11 +140,13 @@ class _DropDownDividerState extends State<DropDownDivider> {
               );
           }
         },
+
         dropdownStyleData: DropdownStyleData(
+            padding: EdgeInsets.zero,
             decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
-          color: shipGreyColor,
-        )),
+              borderRadius: BorderRadius.circular(14),
+              color: shipGreyColor,
+            )),
         // dropdownDecoration: BoxDecoration(
         //   borderRadius: BorderRadius.circular(14),
         //   color: shipGreyColor,

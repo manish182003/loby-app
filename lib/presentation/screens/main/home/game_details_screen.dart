@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -172,24 +171,24 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                                 //   ),
                                 // ),
                                 // Text("${widget.gameName}", style: textTheme.headline2?.copyWith(color: aquaGreenColor),),
-                                GestureDetector(
-                                  onTap: () {
-                                    context.pushNamed(searchScreenPage);
-                                  },
-                                  child: Container(
-                                    height: 40,
-                                    width: 40,
-                                    decoration: BoxDecoration(
-                                        color: textCharcoalBlueColor,
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
-                                    child: const Icon(
-                                      CupertinoIcons.search,
-                                      size: 23,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
+                                // GestureDetector(
+                                //   onTap: () {
+                                //     context.pushNamed(searchScreenPage);
+                                //   },
+                                //   child: Container(
+                                //     height: 40,
+                                //     width: 40,
+                                //     decoration: BoxDecoration(
+                                //         color: textCharcoalBlueColor,
+                                //         borderRadius:
+                                //             BorderRadius.circular(10)),
+                                //     child: const Icon(
+                                //       CupertinoIcons.search,
+                                //       size: 23,
+                                //       color: Colors.white,
+                                //     ),
+                                //   ),
+                                // ),
                               ],
                             ),
                           ),

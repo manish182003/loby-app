@@ -19,6 +19,7 @@ import 'package:loby/presentation/widgets/custom_app_bar.dart';
 import 'package:loby/presentation/widgets/custom_loader.dart';
 import 'package:mime/mime.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:rename/platform_file_editors/abs_platform_file_editor.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../services/routing_service/routes_name.dart';
@@ -72,6 +73,8 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
+    logger.i(
+        'chatId->${widget.chatId}, senderId->${widget.senderId}, receiverId->${widget.receiverId}');
     final textTheme = Theme.of(context).textTheme;
 
     final chatChannel = chatController.chats
@@ -81,7 +84,9 @@ class _ChatPageState extends State<ChatPage> {
 
     return Scaffold(
       appBar: appBar(
-          context: context, appBarName: chatChannel.receiverInfo?.displayName),
+          context: context,
+          appBarName: chatChannel.receiverInfo?.displayName,
+          userImage: chatChannel.receiverInfo?.image),
       body: Obx(() {
         if (chatController.isMessagesFetching.value ||
             profileController.isProfileFetching.value) {
@@ -122,33 +127,8 @@ class _ChatPageState extends State<ChatPage> {
                       backgroundColor: backgroundColor,
                       secondaryColor: textFieldColor,
                       inputBackgroundColor: textFieldColor,
+                      bubbleMargin: EdgeInsets.all(10),
                     ),
-                    // textMessageBuilder: (message,
-                    //     {required messageWidth, required showName}) {
-                    //   return Padding(
-                    //     padding: const EdgeInsets.all(12),
-                    //     child: Column(
-                    //       crossAxisAlignment: CrossAxisAlignment.start,
-
-                    //       children: [
-                    //         Text(
-                    //           message.text,
-                    //           style: const TextStyle(color: Colors.white),
-                    //         ),
-                    //         Align(
-                    //           alignment: Alignment.bottomRight,
-                    //           child: Text(
-                    //             DateFormat('hh:mm a').format(
-                    //                 DateTime.fromMillisecondsSinceEpoch(
-                    //                     message.createdAt!)),
-                    //             style: const TextStyle(
-                    //                 color: Colors.grey, fontSize: 12),
-                    //           ),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   );
-                    // },
                     customMessageBuilder: (message, {messageWidth = 0}) {
                       return CustomMessage(
                         message: message,

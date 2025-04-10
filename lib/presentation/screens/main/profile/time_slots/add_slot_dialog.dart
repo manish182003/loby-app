@@ -192,8 +192,8 @@ class _AddSlotDialogState extends State<AddSlotDialog> {
                                   from: slotController.sendFromDataToAPI(),
                                   to: slotController.sendToDataToAPI(),
                                   // sellerId: 104,
-                                  day: slotController.days
-                                      .indexOf(slotController.selectedDay[0]))
+                                  day: slotController.days.indexOf(
+                                      slotController.selectedDay.value))
                               .then((value) {
                             Navigator.of(context).pop();
                             context.pushNamed(sellerTimeSlotScreen);

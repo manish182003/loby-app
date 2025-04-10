@@ -1,15 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import 'package:loby/core/utils/constants.dart';
 import 'package:loby/presentation/getx/controllers/home_controller.dart';
 import 'package:loby/presentation/getx/controllers/listing_controller.dart';
 import 'package:loby/presentation/screens/main/home/widgets/ItemList.dart';
 import 'package:loby/presentation/screens/main/home/widgets/filter_bottom_sheet_widget.dart';
 import 'package:loby/presentation/widgets/body_padding_widget.dart';
-import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../core/theme/colors.dart';
@@ -23,11 +20,10 @@ class GameItemScreen extends StatefulWidget {
   final String gameName;
 
   const GameItemScreen(
-      {Key? key,
+      {super.key,
       required this.categoryId,
       required this.gameId,
-      required this.gameName})
-      : super(key: key);
+      required this.gameName});
 
   @override
   State<GameItemScreen> createState() => _GameItemScreenState();
@@ -95,50 +91,49 @@ class _GameItemScreenState extends State<GameItemScreen> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 12, vertical: 5),
-                        child: Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                width: 42,
-                                height: 42,
-                                child: MaterialButton(
-                                  shape: const CircleBorder(),
-                                  color: textCharcoalBlueColor,
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Icon(
-                                    Icons.arrow_back_ios,
-                                    size: 18,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                              Text(
-                                widget.gameName,
-                                style: textTheme.displayMedium
-                                    ?.copyWith(color: aquaGreenColor),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  context.pushNamed(searchScreenPage);
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: 42,
+                              height: 42,
+                              child: MaterialButton(
+                                shape: const CircleBorder(),
+                                color: textCharcoalBlueColor,
+                                onPressed: () {
+                                  Navigator.pop(context);
                                 },
-                                child: Container(
-                                  height: 40,
-                                  width: 40,
-                                  decoration: BoxDecoration(
-                                      color: textCharcoalBlueColor,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: const Icon(
-                                    CupertinoIcons.search,
-                                    size: 23,
-                                    color: Colors.white,
-                                  ),
+                                child: const Icon(
+                                  Icons.arrow_back_ios,
+                                  size: 18,
+                                  color: Colors.white,
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                            Text(
+                              widget.gameName,
+                              style: textTheme.displayMedium
+                                  ?.copyWith(color: aquaGreenColor),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                // context.pushNamed(searchScreenPage);
+                              },
+                              child: SizedBox(),
+                              // child: Container(
+                              //   height: 40,
+                              //   width: 40,
+                              //   decoration: BoxDecoration(
+                              //       color: textCharcoalBlueColor,
+                              //       borderRadius: BorderRadius.circular(10)),
+                              //   child: const Icon(
+                              //     CupertinoIcons.search,
+                              //     size: 23,
+                              //     color: Colors.white,
+                              //   ),
+                              // ),
+                            ),
+                          ],
                         ),
                       )),
                   SizedBox(

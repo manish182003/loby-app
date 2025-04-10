@@ -1,6 +1,8 @@
 const String initialPage = "initial_page";
 const String onBoardingPage = "on-boarding-page";
 const String loginPage = "login";
+const String userBanPage = "user-ban";
+const String settingsPage = "my_profile_settings";
 const String signUpScreenPage = "signup_screen_page";
 const String createProfilePage = "create_profile";
 const String mainPage = "main_screen";
@@ -22,6 +24,7 @@ const String profileVerificationPage = "profile_verification_screen";
 const String feedbackScreenPage = "feedback_screen";
 const String addFundScreenPage = "add_funds_screen";
 const String withdrawFundScreenPage = "withdraw_funds_screen";
+const String walletKycScreenPage = "wallet_kyc_screen";
 const String myProfileScreenPage = "my_profile_screen";
 const String searchScreenPage = "search_screen";
 const String faqPage = "faq-screen";

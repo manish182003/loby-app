@@ -8,15 +8,18 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:loby/core/usecases/auth_params.dart';
 import 'package:loby/core/usecases/usecase.dart';
 import 'package:loby/core/utils/helpers.dart';
+import 'package:loby/di/injection.dart';
 import 'package:loby/domain/entities/auth/city.dart';
 import 'package:loby/domain/entities/auth/country.dart';
 import 'package:loby/domain/entities/auth/profile_tag.dart';
 import 'package:loby/domain/entities/auth/selected_option.dart';
 import 'package:loby/domain/usecases/auth/check_username.dart';
+import 'package:loby/domain/usecases/auth/delete_account.dart';
 import 'package:loby/domain/usecases/auth/forgot_and_reset_password.dart';
 import 'package:loby/domain/usecases/auth/get_cities.dart';
 import 'package:loby/domain/usecases/auth/get_countries.dart';
@@ -26,7 +29,9 @@ import 'package:loby/domain/usecases/auth/login.dart';
 import 'package:loby/domain/usecases/auth/send_and_verify_otp.dart';
 import 'package:loby/domain/usecases/auth/signup.dart';
 import 'package:loby/domain/usecases/auth/update_profile.dart';
+import 'package:loby/main.dart';
 import 'package:loby/presentation/getx/controllers/core_controller.dart';
+import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:rename/platform_file_editors/abs_platform_file_editor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -46,6 +51,7 @@ class AuthController extends GetxController {
   final AddFCMToken _addFCMToken;
   final SendAndVerifyOTP _sendAndVerifyOTP;
   final ForgotAndResetPassword _forgotAndResetPassword;
+  final DeleteAccount _deleteAccount;
 
   AuthController({
     required Signup signup,
@@ -59,6 +65,7 @@ class AuthController extends GetxController {
     required AddFCMToken addFCMToken,
     required SendAndVerifyOTP sendAndVerifyOTP,
     required ForgotAndResetPassword forgotAndResetPassword,
+    required DeleteAccount deleteAccount,
   })  : _signup = signup,
         _getCountries = getCountries,
         _getStates = getStates,
@@ -69,7 +76,8 @@ class AuthController extends GetxController {
         _checkUsername = checkUsername,
         _addFCMToken = addFCMToken,
         _sendAndVerifyOTP = sendAndVerifyOTP,
-        _forgotAndResetPassword = forgotAndResetPassword;
+        _forgotAndResetPassword = forgotAndResetPassword,
+        _deleteAccount = deleteAccount;
 
   final auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
@@ -94,9 +102,10 @@ class AuthController extends GetxController {
   final selectedState = SelectedOption(id: 0, name: "").obs;
   final selectedCity = SelectedOption(id: 0, name: "").obs;
   final DOB = TextEditingController().obs;
+  final email = TextEditingController().obs;
   final selectedProfileTags = <Map<String, dynamic>>[].obs;
   final bio = TextEditingController().obs;
-  TextEditingController mobilecontroller = TextEditingController();
+  Rx<TextEditingController> mobilecontroller = TextEditingController().obs;
 
   final errorMessage = ''.obs;
 
@@ -154,6 +163,8 @@ class AuthController extends GetxController {
     // clearProfileDetails();
     await prefs.remove('apiToken');
     await prefs.remove('isLoggedIn');
+    Get.deleteAll();
+    DependencyInjector.inject();
     // await prefs.remove('kycToken');
   }
 
@@ -264,6 +275,30 @@ class AuthController extends GetxController {
       },
     );
     return failureOrSuccess.isRight() ? true : false;
+  }
+
+  Future<void> deleteAccount({required int userId}) async {
+    Helpers.loader();
+    final failureOrSuccess = await _deleteAccount(
+      Params(
+        authParams: AuthParams(uid: userId),
+      ),
+    );
+
+    failureOrSuccess.fold(
+      (failure) {
+        Helpers.hideLoader();
+        errorMessage.value = Helpers.convertFailureToMessage(failure);
+        debugPrint(errorMessage.value);
+        Helpers.toast(errorMessage.value);
+      },
+      (success) {
+        logout();
+        Helpers.hideLoader();
+        Helpers.toast(success['message']);
+        contextKey.currentContext?.goNamed(loginPage);
+      },
+    );
   }
 
   Future<bool> login(
@@ -438,6 +473,7 @@ class AuthController extends GetxController {
             cityId: selectedCity.value.id,
             DOB: Helpers.getDateFormat(DOB.value.text),
             profileTags: selectedProfileTags,
+            email: email.value.text,
             bio: bio.value.text),
       ),
     );
@@ -483,6 +519,7 @@ class AuthController extends GetxController {
         ? File('')
         : await Helpers.urlToFile(profile.image!));
     fullName.value.text = profile.name ?? '';
+    email.value.text = profile.email ?? '';
     displayName.value.text = profile.displayName ?? '';
     selectedCountry.value =
         SelectedOption(id: profile.country!.id!, name: profile.country!.name!);

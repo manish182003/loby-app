@@ -11,6 +11,7 @@ class AuthParams extends Equatable {
   final String? confirmPassword;
   final String? search;
   final int? page;
+  final int? uid;
   final String? type;
   final File? avatar;
   final File? cover;
@@ -28,23 +29,30 @@ class AuthParams extends Equatable {
   final String? otp;
   final String? mobile;
 
-  const AuthParams({
-    this.cover,
-    this.name,
-    this.email,
-    this.password,
-    this.confirmPassword,
-    this.search,
-    this.page,
-    this.type,
-    this.countryId,
-    this.stateId,
-    this.cityId,
-    this.socialLoginId, this.socialLoginType,
-    this.avatar, this.fullName, this.displayName, this.profileTags, this.bio, this.DOB, this.fcmToken,
-    this.otp,
-    this.mobile
-  });
+  const AuthParams(
+      {this.cover,
+      this.name,
+      this.email,
+      this.password,
+      this.confirmPassword,
+      this.search,
+      this.page,
+      this.type,
+      this.uid,
+      this.countryId,
+      this.stateId,
+      this.cityId,
+      this.socialLoginId,
+      this.socialLoginType,
+      this.avatar,
+      this.fullName,
+      this.displayName,
+      this.profileTags,
+      this.bio,
+      this.DOB,
+      this.fcmToken,
+      this.otp,
+      this.mobile});
 
   @override
   List<Object> get props => [];

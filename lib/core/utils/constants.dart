@@ -6,9 +6,10 @@ class ApiEndpoints {
   /// Auth APIs ///
   static const String signup = "/signup";
   static const String login = "/loginV2";
+  static const String delete = "/delete-account-user-side";
   static const String socialLogin = "/social-login";
   static const String getCountries = "/get-country-list";
-  static const String getStates = "/get-state-list"; 
+  static const String getStates = "/get-state-list";
   static const String getCities = "/get-city-list";
   static const String getProfileTags = "/get-profile-tags";
   static const String updateProfile = "/edit-user-profile";
@@ -28,6 +29,7 @@ class ApiEndpoints {
   static const String getUnreadNotificationCount =
       "/get-unread-notification-count";
   static const String getStaticData = "/get-static-content";
+  static const String getAllFaqsData = "/get-static-faqs";
 
   /// Order APIs ///
   static const String createOrder = "/create-user-order";

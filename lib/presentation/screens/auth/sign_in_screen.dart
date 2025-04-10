@@ -63,13 +63,14 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   void dispose() {
     // TODO: implement dispose
-    // authController.mobilecontroller.clear();
+    // authController.mobilecontroller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(children: [
@@ -84,308 +85,318 @@ class _SignInScreenState extends State<SignInScreen> {
         Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Container(
-              height: 64.h,
-              width: MediaQuery.of(context).size.width,
-              // child: Text("hellooo", style: TextStyle(color: Colors.amber , fontSize: 60),),
-              decoration: const BoxDecoration(
-                  color: backgroundColor,
-                  // border: Border(top: BorderSide(color: Colors.white)),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                  )),
-              // child: Text("Login", style: textTheme.headline2?.copyWith(color: textWhiteColor)),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 28, right: 28, top: 40),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text("Login",
-                        style: textTheme.displayLarge
-                            ?.copyWith(color: textWhiteColor)),
-                    SizedBox(
-                      height: 3.h,
-                    ),
-                    Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        // mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text("Enter Mobile Number",
-                              style: textTheme.displayMedium?.copyWith(
-                                  color: whiteColor, fontSize: 18.sp)),
-                          SizedBox(
-                            height: 1.h,
-                          ),
-                          Text(
-                              "Please Confirm Your Country and Enter Your Mobile Number",
-                              style: textTheme.headlineSmall?.copyWith(
-                                  color: whiteColor,
-                                  fontWeight: FontWeight.w100)),
-                          SizedBox(
-                            height: 4.h,
-                          ),
-                          Form(
-                            key: _formKey,
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          color: textFieldColor,
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 15, vertical: 20),
-                                        child: Text("+91",
-                                            style: textTheme.displayLarge
-                                                ?.copyWith(
-                                                    color: textWhiteColor)),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 3.w,
-                                    ),
-                                    Expanded(
-                                        child: TextFormField(
-                                      style: textTheme.displayLarge
-                                          ?.copyWith(color: textWhiteColor),
-                                      maxLength: 10,
-                                      controller:
-                                          authController.mobilecontroller,
-                                      textAlign: TextAlign.center,
-                                      scrollPadding: const EdgeInsets.symmetric(
-                                          horizontal: 20),
-                                      keyboardType: TextInputType.phone,
-                                      onChanged: (value) {
-                                        // Update the text in the TextField with the formatted text
-                                        setState(() {
-                                          authController.mobilecontroller.text =
-                                              formatText(value);
-                                          // Move the cursor to the end of the text
-                                          authController
-                                                  .mobilecontroller.selection =
-                                              TextSelection.fromPosition(
-                                            TextPosition(
-                                                offset: authController
-                                                    .mobilecontroller
-                                                    .text
-                                                    .length),
-                                          );
-                                        });
-                                      },
-                                      inputFormatters: [
-                                        FilteringTextInputFormatter.digitsOnly
-                                      ],
-                                      decoration: InputDecoration(
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                                color: aquaGreenColor,
-                                                width: 0.5),
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                                color: textFieldColor,
-                                                width: 0),
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
-                                          ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                                color: textFieldColor,
-                                                width: 0),
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
-                                          ),
-                                          errorBorder: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                                color: textErrorColor,
-                                                width: 0.5),
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
-                                          ),
-                                          focusedErrorBorder:
-                                              OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                                color: textErrorColor,
-                                                width: 0.5),
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
-                                          ),
-                                          hintText: "0000 000 000",
-                                          filled: true,
-                                          hintStyle: textTheme.displayLarge
-                                              ?.copyWith(
-                                                  color: textWhiteColor
-                                                      .withOpacity(0.5)),
-                                          fillColor: textFieldColor,
-                                          counterText: ""),
-                                    )
-                                        // TextFieldWidget(
-                                        //   length: 10,
-                                        //   textEditingController: mobile,
-                                        //   type: "phone",
-                                        //   isNumber: true,
-                                        //   // title: "0000 000 000",
-                                        //   isRequired: true,
-                                        //   scrollBottomPadding: 20,
-                                        //   hint: "0000 000 000",
-
-                                        //   // prefix: CountryPickerDropdown(
-                                        //   //   initialValue: 'in',
-                                        //   //   itemBuilder: _buildDropdownItem,
-                                        //   //   onValuePicked: (Country country) {
-                                        //   //     print("${country.name}");
-                                        //   //   },
-                                        //   // ).toString(),
-                                        // ),
-                                        ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 2.h,
-                                ),
-                                CustomButton(
-                                    height: 8.h,
-                                    fontSize: 15.sp,
-                                    name: "Continue",
-                                    color: aquaGreenColor,
-
-                                    // left: 0.w,
-                                    // right: 0.w,
-                                    bottom: 3.h,
-                                    top: 2.h,
-                                    onTap: () async {
-                                      // _createAccountDialog(context);
-                                      if (_formKey.currentState!.validate() &&
-                                          authController.mobilecontroller.text
-                                                  .replaceAll(' ', '')
-                                                  .length ==
-                                              10) {
-                                        await Helpers.loader();
-                                        final isSuccess =
-                                            await authController.login(
-                                                mobile: authController
-                                                    .mobilecontroller.text
-                                                    .replaceAll(' ', ''));
-                                        await Helpers.hideLoader();
-                                        if (isSuccess) {
-                                          _otpDialog(context);
-                                        }
-                                      } else if (!_formKey.currentState!
-                                          .validate()) {
-                                        // Helpers.toast("")
-                                      } else if (authController
-                                              .mobilecontroller.text
-                                              .trim()
-                                              .length <
-                                          10) {
-                                        Helpers.toast(
-                                            "Number should be must 10 digits");
-                                      }
-                                    }),
-                              ],
-                            ),
-                          ),
-                        ],
+            Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: Container(
+                height: 64.h,
+                width: MediaQuery.of(context).size.width,
+                // child: Text("hellooo", style: TextStyle(color: Colors.amber , fontSize: 60),),
+                decoration: const BoxDecoration(
+                    color: backgroundColor,
+                    // border: Border(top: BorderSide(color: Colors.white)),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
+                    )),
+                // child: Text("Login", style: textTheme.headline2?.copyWith(color: textWhiteColor)),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 28, right: 28, top: 40),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text("Login",
+                          style: textTheme.displayLarge
+                              ?.copyWith(color: textWhiteColor)),
+                      SizedBox(
+                        height: 3.h,
                       ),
-                    ),
-                    Text("Sign In using Google or Apple",
-                        style: textTheme.headlineSmall?.copyWith(
-                            color: whiteColor, fontWeight: FontWeight.w100)),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 80, vertical: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          InkWell(
-                            onTap: _checkProfileStatus,
-                            child: Container(
-                              height: 60,
-                              width: 60,
-                              decoration: BoxDecoration(
-                                  color: whiteColor,
-                                  borderRadius: BorderRadius.circular(30)),
-                              child: const Center(
-                                child: Image(
-                                    image: AssetImage(
-                                        "assets/images/google_icon.png")),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            height: 62,
-                            width: 62,
-                            decoration: BoxDecoration(
-                                color: whiteColor,
-                                borderRadius: BorderRadius.circular(31)),
-                            child: const Center(
-                              child: Image(
-                                  image: AssetImage(
-                                      "assets/images/apple_icon.png")),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-
-                    SizedBox(
-                      height: 1.h,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25),
-                      child: RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
+                      Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          // mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            TextSpan(
-                              text: 'By continuing, you agree to Loby’s ',
-                              style: textTheme.headlineSmall?.copyWith(
-                                color: whiteColor,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 12,
-                              ),
+                            Text("Enter Mobile Number",
+                                style: textTheme.displayMedium?.copyWith(
+                                    color: whiteColor, fontSize: 18.sp)),
+                            SizedBox(
+                              height: 1.h,
                             ),
-                            TextSpan(
-                              text:
-                                  'EULA, Refund, Terms of Service & Privacy Policy',
-                              style: textTheme.headlineSmall?.copyWith(
-                                color: Color(0xFF00FF62),
-                                fontWeight: FontWeight.w700,
-                                fontSize: 12,
+                            Text(
+                                "Please Confirm Your Country and Enter Your Mobile Number",
+                                style: textTheme.headlineSmall?.copyWith(
+                                    color: whiteColor,
+                                    fontWeight: FontWeight.w100)),
+                            SizedBox(
+                              height: 4.h,
+                            ),
+                            Form(
+                              key: _formKey,
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color: textFieldColor,
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 15, vertical: 20),
+                                          child: Text("+91",
+                                              style: textTheme.displayLarge
+                                                  ?.copyWith(
+                                                      color: textWhiteColor)),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 3.w,
+                                      ),
+                                      Expanded(
+                                          child: TextFormField(
+                                        style: textTheme.displayLarge
+                                            ?.copyWith(color: textWhiteColor),
+                                        maxLength: 10,
+                                        controller: authController
+                                            .mobilecontroller.value,
+                                        textAlign: TextAlign.center,
+                                        scrollPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 20),
+                                        keyboardType: TextInputType.phone,
+                                        onChanged: (value) {
+                                          // Update the text in the TextField with the formatted text
+                                          setState(() {
+                                            authController.mobilecontroller
+                                                .value.text = formatText(value);
+                                            // Move the cursor to the end of the text
+                                            authController.mobilecontroller
+                                                    .value.selection =
+                                                TextSelection.fromPosition(
+                                              TextPosition(
+                                                  offset: authController
+                                                      .mobilecontroller
+                                                      .value
+                                                      .text
+                                                      .length),
+                                            );
+                                          });
+                                        },
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.digitsOnly
+                                        ],
+                                        decoration: InputDecoration(
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  color: aquaGreenColor,
+                                                  width: 0.5),
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  color: textFieldColor,
+                                                  width: 0),
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                            ),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  color: textFieldColor,
+                                                  width: 0),
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                            ),
+                                            errorBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  color: textErrorColor,
+                                                  width: 0.5),
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                            ),
+                                            focusedErrorBorder:
+                                                OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  color: textErrorColor,
+                                                  width: 0.5),
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                            ),
+                                            hintText: "0000 000 000",
+                                            filled: true,
+                                            hintStyle: textTheme.displayLarge
+                                                ?.copyWith(
+                                                    color: textWhiteColor
+                                                        .withOpacity(0.5)),
+                                            fillColor: textFieldColor,
+                                            counterText: ""),
+                                      )
+                                          // TextFieldWidget(
+                                          //   length: 10,
+                                          //   textEditingController: mobile,
+                                          //   type: "phone",
+                                          //   isNumber: true,
+                                          //   // title: "0000 000 000",
+                                          //   isRequired: true,
+                                          //   scrollBottomPadding: 20,
+                                          //   hint: "0000 000 000",
+
+                                          //   // prefix: CountryPickerDropdown(
+                                          //   //   initialValue: 'in',
+                                          //   //   itemBuilder: _buildDropdownItem,
+                                          //   //   onValuePicked: (Country country) {
+                                          //   //     print("${country.name}");
+                                          //   //   },
+                                          //   // ).toString(),
+                                          // ),
+                                          ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 2.h,
+                                  ),
+                                  CustomButton(
+                                      height: 8.h,
+                                      fontSize: 15.sp,
+                                      name: "Continue",
+                                      color: aquaGreenColor,
+
+                                      // left: 0.w,
+                                      // right: 0.w,
+                                      bottom: 3.h,
+                                      top: 2.h,
+                                      onTap: () async {
+                                        // _createAccountDialog(context);
+                                        if (_formKey.currentState!.validate() &&
+                                            authController
+                                                    .mobilecontroller.value.text
+                                                    .replaceAll(' ', '')
+                                                    .length ==
+                                                10) {
+                                          await Helpers.loader();
+                                          final isSuccess =
+                                              await authController.login(
+                                                  mobile: authController
+                                                      .mobilecontroller
+                                                      .value
+                                                      .text
+                                                      .replaceAll(' ', ''));
+                                          await Helpers.hideLoader();
+                                          if (isSuccess) {
+                                            _otpDialog(context);
+                                          }
+                                        } else if (!_formKey.currentState!
+                                            .validate()) {
+                                          // Helpers.toast("")
+                                        } else if (authController
+                                                .mobilecontroller.value.text
+                                                .trim()
+                                                .length <
+                                            10) {
+                                          Helpers.toast(
+                                              "Number should be must 10 digits");
+                                        }
+                                      }),
+                                ],
                               ),
                             ),
                           ],
                         ),
                       ),
-                    ),
+                      Text("Sign In using Google or Apple",
+                          style: textTheme.headlineSmall?.copyWith(
+                              color: whiteColor, fontWeight: FontWeight.w100)),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 80, vertical: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            InkWell(
+                              onTap: _checkProfileStatus,
+                              child: Container(
+                                height: 60,
+                                width: 60,
+                                decoration: BoxDecoration(
+                                    color: whiteColor,
+                                    borderRadius: BorderRadius.circular(30)),
+                                child: const Center(
+                                  child: Image(
+                                      image: AssetImage(
+                                          "assets/images/google_icon.png")),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: 62,
+                              width: 62,
+                              decoration: BoxDecoration(
+                                  color: whiteColor,
+                                  borderRadius: BorderRadius.circular(31)),
+                              child: const Center(
+                                child: Image(
+                                    image: AssetImage(
+                                        "assets/images/apple_icon.png")),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
 
-                    // CustomButton(
-                    //     name: "Create Account",
-                    //     color: aquaGreenColor,
-                    //     left: 14.w,
-                    //     right: 14.w,
-                    //     bottom: 5.h,
-                    //     top: 2.h,
-                    //     onTap: () async {
-                    //       _createAccountDialog(context);
-                    //     }),
-                    // CustomButton(
-                    //     name: "Login",
-                    //     color: butterflyBlueColor,
-                    //     left: 14.w,
-                    //     right: 14.w,
-                    //     bottom: 5.h,
-                    //     onTap: () async {
-                    //       _loginDialog(context);
-                    //     }),
-                  ],
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 25),
+                        child: RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'By continuing, you agree to Loby’s ',
+                                style: textTheme.headlineSmall?.copyWith(
+                                  color: whiteColor,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              TextSpan(
+                                text:
+                                    'EULA, Refund, Terms of Service & Privacy Policy',
+                                style: textTheme.headlineSmall?.copyWith(
+                                  color: Color(0xFF00FF62),
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      // CustomButton(
+                      //     name: "Create Account",
+                      //     color: aquaGreenColor,
+                      //     left: 14.w,
+                      //     right: 14.w,
+                      //     bottom: 5.h,
+                      //     top: 2.h,
+                      //     onTap: () async {
+                      //       _createAccountDialog(context);
+                      //     }),
+                      // CustomButton(
+                      //     name: "Login",
+                      //     color: butterflyBlueColor,
+                      //     left: 14.w,
+                      //     right: 14.w,
+                      //     bottom: 5.h,
+                      //     onTap: () async {
+                      //       _loginDialog(context);
+                      //     }),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -624,8 +635,8 @@ class _SignInScreenState extends State<SignInScreen> {
             onVerify: () async {
               Helpers.loader();
               final isSuccess = await authController.sendAndVerifyOTP(
-                  mobile:
-                      authController.mobilecontroller.text.replaceAll(' ', ''),
+                  mobile: authController.mobilecontroller.value.text
+                      .replaceAll(' ', ''),
                   otp: otp.text);
               Helpers.hideLoader();
               if (!mounted) return;

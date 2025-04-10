@@ -7,9 +7,7 @@ import 'package:loby/domain/entities/response_entities/slots/get_slots_for_buyer
 
 // ignore_for_file: overridden_fields, annotate_overrides
 
-
 class GetBuyerSlotResponseModel extends GetSlotsForBuyerResponse {
-
   final List<GetBuyerSlotsModel> getBuyerSlots;
 
   const GetBuyerSlotResponseModel({
@@ -21,9 +19,11 @@ class GetBuyerSlotResponseModel extends GetSlotsForBuyerResponse {
 
   factory GetBuyerSlotResponseModel.fromJSON(Map<String, dynamic> json) =>
       GetBuyerSlotResponseModel(
-        getBuyerSlots: (json['data'] as List<dynamic>)
-            .map<GetBuyerSlotsModel>((buyerslots) => GetBuyerSlotsModel.fromJson(buyerslots))
-            .toList(),
+        getBuyerSlots: json['data'] == null
+            ? []
+            : (json['data'] as List<dynamic>)
+                .map<GetBuyerSlotsModel>(
+                    (buyerslots) => GetBuyerSlotsModel.fromJson(buyerslots))
+                .toList(),
       );
 }
-
