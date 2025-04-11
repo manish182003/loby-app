@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../core/theme/colors.dart';
@@ -7,10 +8,16 @@ class CustomAppBar extends StatelessWidget {
   final String? appBarName;
   final IconData? otherIcon;
   final Color? txtColor;
+
   final Function()? onBack;
 
-  const CustomAppBar(
-      {super.key, this.appBarName, this.otherIcon, this.txtColor, this.onBack});
+  const CustomAppBar({
+    super.key,
+    this.appBarName,
+    this.otherIcon,
+    this.txtColor,
+    this.onBack,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +89,9 @@ PreferredSizeWidget appBar({
   String? appBarName,
   IconData? otherIcon,
   String? userImage,
+  bool? isVerified,
   Color? txtColor,
+  double? textSize,
   Function()? onBack,
   bool isBackIcon = true,
 }) {
@@ -94,47 +103,6 @@ PreferredSizeWidget appBar({
         margin: const EdgeInsets.all(15),
         child: Stack(
           children: [
-            // Align(
-            //   alignment: Alignment.centerRight,
-            //   child: GestureDetector(
-            //     onTap: () {
-            //       context.pushNamed(searchScreenPage);
-            //     },
-            //     child: Container(
-            //       height: 40,
-            //       width: 40,
-            //       decoration: BoxDecoration(
-            //         color: textCharcoalBlueColor,
-            //         borderRadius: BorderRadius.circular(10)
-            //       ),
-            //       child: const Icon(CupertinoIcons.search, size: 23, color: Colors.white,),
-            //     ),
-            //   ),
-            //   child: SizedBox(
-            //   // width: 40,
-            //   // height: 42,
-            //   child: Padding(
-            //     padding: const EdgeInsets.all(8.0),
-            //     child: MaterialButton(
-            //       shape:  RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            //       color: textCharcoalBlueColor,
-            //       onPressed: () {
-            //         if(onBack == null){
-            //           Navigator.pop(context);
-            //         }else{
-            //           onBack();
-            //           Navigator.pop(context);
-            //         }
-            //       },
-            //       child: const Icon(
-            //           CupertinoIcons.search,
-            //           size: 25,
-            //           color: Colors.white,
-            //         ),
-            //     ),
-            //   ),
-            // )
-            // ),
             Align(
               alignment: Alignment.center,
               child: userImage == null
@@ -143,16 +111,43 @@ PreferredSizeWidget appBar({
                       appBarName ?? '',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: textTheme.displayMedium
-                          ?.copyWith(color: txtColor ?? aquaGreenColor),
+                      style: textTheme.displayMedium?.copyWith(
+                        color: txtColor ?? aquaGreenColor,
+                        fontSize: textSize,
+                      ),
                     )
                   : Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CircleAvatar(
-                          backgroundImage: NetworkImage(userImage),
-                          radius: 24,
-                        ),
+                        if (isVerified == true)
+                          Stack(
+                            alignment: AlignmentDirectional.topEnd,
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: butterflyBlueColor,
+                                radius: 24,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(24),
+                                  child: Image.network(
+                                    userImage,
+                                    fit: BoxFit.cover,
+                                    width: 35,
+                                    height: 35,
+                                  ),
+                                ), //CircleAvatar
+                              ),
+                              SvgPicture.asset(
+                                'assets/icons/blue_tick.svg',
+                                height: 18,
+                                width: 18,
+                              ),
+                            ],
+                          )
+                        else
+                          CircleAvatar(
+                            backgroundImage: NetworkImage(userImage),
+                            radius: 24,
+                          ),
                         SizedBox(
                           width: 1.w,
                         ),

@@ -205,7 +205,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
               }),
               AutoCompleteField(
                 selectedSuggestion: selectedGameName,
-                hint: 'Select Game (Dropdown + Search)',
+                hint: 'Select Game',
                 isRequired: true,
                 suggestionsCallback: (pattern) async {
                   if (pattern == selectedGameString) {
@@ -771,7 +771,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
           itemsList: serviceOption
               ?.map((item) => DropdownMenuItem<GameCategoryServiceOption>(
                     value: item,
-                    child: Text(item.serviceOption!.serviceOptionName!,
+                    child: Text(item.serviceOption?.serviceOptionName ?? '',
                         style: textTheme.displaySmall
                             ?.copyWith(color: whiteColor)),
                   ))
@@ -977,8 +977,10 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                         recognizer: TapGestureRecognizer()
                           ..onTap = () => context.pushNamed(staticContentPage,
                               extra: {'termName': 'Terms of Use'}),
-                        style: textTheme.titleSmall
-                            ?.copyWith(color: aquaGreenColor)),
+                        style: textTheme.titleSmall?.copyWith(
+                          color: aquaGreenColor,
+                          fontWeight: FontWeight.w700,
+                        )),
                   ]))),
         ),
       ],

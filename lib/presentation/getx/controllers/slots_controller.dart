@@ -38,13 +38,13 @@ class SlotsController extends GetxController {
   final errorMessage = ''.obs;
   // List selectedDay = [].obs;
   final days = [
-    "Mon",
-    "Tue",
-    "Wed",
-    "Thu",
-    "Fri",
-    "Sat",
-    "Sun",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
   ];
   RxString selectedDay = ''.obs;
   final slots = <GetSlotsForSeller>[].obs;

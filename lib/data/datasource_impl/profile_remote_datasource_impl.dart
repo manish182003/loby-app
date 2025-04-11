@@ -1,4 +1,5 @@
 import 'dart:io';
+
 // import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -429,7 +430,8 @@ class ProfileRemoteDatasourceImpl extends ProfileRemoteDatasource {
         headers: headers,
       );
 
-      return double.tryParse(response!["data"]["totalEarning"] ?? "0.00") ??
+      return double.tryParse(
+              response!["data"]["totalEarning"]?.toString() ?? "0.00") ??
           0.00;
     } on ServerException catch (e) {
       throw ServerException(message: e.message);

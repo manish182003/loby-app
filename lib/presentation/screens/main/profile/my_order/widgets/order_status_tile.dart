@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:loby/data/models/order/order_model.dart';
 import 'package:loby/domain/entities/order/order.dart';
 import 'package:loby/presentation/getx/controllers/core_controller.dart';
@@ -195,11 +196,67 @@ class OrderStatusTile extends StatelessWidget {
         ),
         SizedBox(height: 2.h),
         Padding(
-            padding: EdgeInsets.only(bottom: 2.h),
-            child: Text(
-              'Note - When anyone wins a Duel. There will be two separate wallet transactions.\n\n1. First will be the return of his original amount with no deduction.\n2. Second will be the winning amount with the loby protection & taxes deducted as shown above',
+          padding: EdgeInsets.only(bottom: 2.h),
+          child: RichText(
+            text: TextSpan(
               style: textTheme.titleMedium!.copyWith(color: textLightColor),
-            )),
+              children: [
+                const TextSpan(
+                    text:
+                        '1. Sellers are requsted to discuss & freeze all terms & conditions with the opponent on ',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w400,
+                    )),
+                TextSpan(
+                  text: 'Loby Chat',
+                  style: textTheme.titleMedium!.copyWith(
+                    color: aquaGreenColor,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                const TextSpan(
+                    text:
+                        ' before accpecting or declining the Duel.\n2. Amount of ',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w400,
+                    )),
+                TextSpan(
+                  text: NumberFormat.currency(locale: 'en_IN', symbol: 'Rs. ')
+                      .format(order.price),
+                  style: textTheme.titleMedium!.copyWith(
+                    color: aquaGreenColor,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                const TextSpan(
+                    text:
+                        ' will be kept on hold if you accept the Duel. \n3. Any conversation outside ',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w400,
+                    )),
+                TextSpan(
+                  text: 'Loby Chat',
+                  style: textTheme.titleMedium!.copyWith(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                const TextSpan(
+                  text: ' will not be insured/covered by Loby Protection.',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -670,7 +727,10 @@ class OrderStatusTile extends StatelessWidget {
       isSeller
           ? order.user?.displayName ?? ''
           : order.userGameService?.user?.displayName ?? '',
-      'You'
+      isSeller
+          ? order.userGameService?.user?.displayName ?? ''
+          : order.userGameService?.user?.displayName ?? '',
+      // 'You'
     ];
     showDialog(
       context: context,

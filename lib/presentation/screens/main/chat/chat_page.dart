@@ -84,9 +84,11 @@ class _ChatPageState extends State<ChatPage> {
 
     return Scaffold(
       appBar: appBar(
-          context: context,
-          appBarName: chatChannel.receiverInfo?.displayName,
-          userImage: chatChannel.receiverInfo?.image),
+        context: context,
+        appBarName: chatChannel.receiverInfo?.displayName,
+        userImage: chatChannel.receiverInfo?.image,
+        isVerified: chatChannel.receiverInfo?.verifiedProfile ?? false,
+      ),
       body: Obx(() {
         if (chatController.isMessagesFetching.value ||
             profileController.isProfileFetching.value) {

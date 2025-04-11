@@ -163,7 +163,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 context.pushNamed(feedbackScreenPage);
                               }),
                           ProfileOptionsWidget(
-                              name: "Payment Transaction",
+                              name: "PG Transactions",
                               onTap: () {
                                 context.pushNamed(paymentTransactionPage);
                               }),

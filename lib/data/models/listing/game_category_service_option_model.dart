@@ -16,7 +16,9 @@ class GameCategoryServiceOptionModel extends GameCategoryServiceOption {
   factory GameCategoryServiceOptionModel.fromJson(Map<String, dynamic> json) =>
       GameCategoryServiceOptionModel(
         id: json["id"],
-        serviceOption: ServiceOptionModel.fromJson(json["serviceOption"]),
+        serviceOption: json["serviceOption"] == null
+            ? null
+            : ServiceOptionModel.fromJson(json["serviceOption"]),
       );
 
   Map<String, dynamic> toJson() => {

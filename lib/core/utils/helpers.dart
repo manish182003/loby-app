@@ -325,10 +325,11 @@ class Helpers {
     return prefs.getBool('isLoggedIn') ?? false;
   }
 
-  static loader() {
+  static loader({bool canCancel = false}) {
     SmartDialog.showLoading(
-        backType: SmartBackType.block,
-        clickMaskDismiss: false,
+        backType: canCancel ? SmartBackType.normal : SmartBackType.block,
+        clickMaskDismiss: canCancel,
+        maskColor: Colors.white24,
         builder: (context) => Center(
               child: Container(
                 width: 80.w,

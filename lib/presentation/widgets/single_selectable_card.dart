@@ -41,13 +41,13 @@ class SingleSelectableCardState extends State<SingleSelectableCard> {
       crossAxisSpacing: 4.w,
       children: [
         StaggeredGridTile.count(
-          crossAxisCellCount: 4,
-          mainAxisCellCount: 1,
+          crossAxisCellCount: 3,
+          mainAxisCellCount: 1.2,
           child: selectWinnerTile(0),
         ),
         StaggeredGridTile.count(
-          crossAxisCellCount: 2,
-          mainAxisCellCount: 1,
+          crossAxisCellCount: 3,
+          mainAxisCellCount: 1.2,
           child: selectWinnerTile(1),
         ),
       ],
@@ -66,8 +66,11 @@ class SingleSelectableCardState extends State<SingleSelectableCard> {
       },
       child: Container(
         decoration: BoxDecoration(
+          color: _selected == index ? Color(0xFFF47960) : null,
           border: Border.all(
-              color: _selected == index ? aquaGreenColor : carminePinkColor,
+              // color: _selected == index ? aquaGreenColor : carminePinkColor,
+              color:
+                  _selected == index ? Colors.transparent : Color(0xFFD9D9D9),
               width: 1,
               style: BorderStyle.solid),
           borderRadius: BorderRadius.circular(12.0),
@@ -76,7 +79,8 @@ class SingleSelectableCardState extends State<SingleSelectableCard> {
         child: Text(widget.options[index],
             style: textTheme.displaySmall?.copyWith(
                 fontWeight: FontWeight.w500,
-                color: _selected == index ? aquaGreenColor : carminePinkColor)),
+                // color: _selected == index ? aquaGreenColor : carminePinkColor,
+                color: _selected == index ? textBlackColor : textWhiteColor)),
       ),
     );
   }

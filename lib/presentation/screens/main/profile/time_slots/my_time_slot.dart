@@ -202,8 +202,14 @@ class _MyTimeSlotState extends State<MyTimeSlot> {
                         (day) => DropdownMenuItem<String>(
                             value: day,
                             child: Padding(
-                              padding: EdgeInsets.all(12),
-                              child: Text(day),
+                              padding: EdgeInsets.all(8),
+                              child: Text(
+                                day,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                             )),
                       )
                       .toList(),
@@ -293,39 +299,82 @@ class _MyTimeSlotState extends State<MyTimeSlot> {
                         DateFormat('HH:mm').parse(totimeIn24HourFormat);
                     String totimeIn12HourFormat =
                         DateFormat('h:mm a').format(totime24Hour);
-                    return Container(
-                      width: 26.w,
-                      height: 6.h,
-                      decoration: BoxDecoration(
-                        color: shipGreyColor,
-                        borderRadius: BorderRadius.circular(7),
-                      ),
-                      child: Center(
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                  text: '$fromtimeIn12HourFormat - ',
-                                  style: TextStyle(
-                                    fontSize: 9.spa,
-                                    fontWeight: FontWeight.w600,
-                                  )),
-                              TextSpan(
-                                  text: totimeIn12HourFormat,
-                                  style: TextStyle(
-                                    fontSize: 9.spa,
-                                    fontWeight: FontWeight.w600,
-                                  )),
-                            ],
+                    return Stack(
+                      children: [
+                        Container(
+                          width: 26.w,
+                          height: 5.h,
+                          margin: EdgeInsets.only(right: 3, top: 5),
+                          decoration: BoxDecoration(
+                            color: shipGreyColor,
+                            borderRadius: BorderRadius.circular(7),
+                          ),
+                          child: Center(
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                      text: '$fromtimeIn12HourFormat - ',
+                                      style: TextStyle(
+                                        fontSize: 9.5.spa,
+                                        fontWeight: FontWeight.w700,
+                                      )),
+                                  TextSpan(
+                                      text: totimeIn12HourFormat,
+                                      style: TextStyle(
+                                        fontSize: 9.5.spa,
+                                        fontWeight: FontWeight.w700,
+                                      )),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                        Positioned(
+                          right: 0,
+                          child: CircleAvatar(
+                            radius: 8,
+                            child: GestureDetector(
+                              onTap: () async {
+                                await slotsController.deleteSlots(
+                                    slotId: slot.slotId);
+                              },
+                              child: Icon(
+                                Icons.close,
+                                color: textErrorColor,
+                                size: 12,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
                     );
                   }).toList(),
                 );
               }),
               SizedBox(
                 height: 4.h,
+              ),
+              Container(
+                width: 30.w,
+                height: 4.h,
+                decoration: BoxDecoration(
+                  color: Color(0xFFFF754C),
+                  borderRadius: BorderRadius.circular(9),
+                ),
+                child: Center(
+                  child: Text(
+                    'Copy to all Days',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
+                      color: textWhiteColor,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 5.h,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

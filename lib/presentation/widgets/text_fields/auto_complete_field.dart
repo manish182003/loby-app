@@ -7,12 +7,13 @@ import 'package:sizer/sizer.dart';
 import '../../../core/theme/colors.dart';
 import '../../../core/utils/helpers.dart';
 
-class AutoCompleteField extends StatelessWidget {
+class AutoCompleteField extends StatefulWidget {
   final List? suggestions;
   final String? hint;
   final String? title;
   final String? icon;
   final double? height;
+  final bool readOnly;
   final TextEditingController? selectedSuggestion;
   final ValueChanged<String>? onChanged;
   final FutureOr<List<dynamic>?> Function(String)? suggestionsCallback;
@@ -34,8 +35,15 @@ class AutoCompleteField extends StatelessWidget {
       this.selectedValuesList,
       this.isRequired = false,
       this.isMultiple = false,
-      this.title});
+      this.title,
+      this.readOnly = false});
 
+  @override
+  State<AutoCompleteField> createState() => _AutoCompleteFieldState();
+}
+
+class _AutoCompleteFieldState extends State<AutoCompleteField> {
+  final SuggestionsController _suggestionsController = SuggestionsController();
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -44,25 +52,33 @@ class AutoCompleteField extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        title == null
+        widget.title == null
             ? const SizedBox()
             : Text(
-                title ?? '',
+                widget.title ?? '',
                 style: textTheme.headlineSmall
                     ?.copyWith(color: textInputTitleColor),
               ),
-        SizedBox(height: title == null ? 0.h : 2.h),
+        SizedBox(height: widget.title == null ? 0.h : 2.h),
         TypeAheadField(
           builder: (context, controller, focusNode) {
             return TextFormField(
               controller: controller,
               focusNode: focusNode,
               enableSuggestions: true,
+              readOnly: widget.readOnly,
+              onTap: () {
+                if (widget.readOnly) {
+                  controller.clear(); // Let user reselect even same value
+                  focusNode.requestFocus();
+                  _suggestionsController.open();
+                }
+              },
               scrollPadding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom * 1.5),
               style: textTheme.headlineMedium!.copyWith(color: textWhiteColor),
               decoration: InputDecoration(
-                hintText: hint,
+                hintText: widget.hint,
 
                 filled: true,
                 fillColor: textFieldColor,
@@ -74,10 +90,11 @@ class AutoCompleteField extends StatelessWidget {
                     textTheme.headlineMedium!.copyWith(color: textWhiteColor),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                      color: isMultiple ? textFieldColor : aquaGreenColor,
-                      width: isMultiple ? 0 : 0.5),
-                  borderRadius: isMultiple
-                      ? selectedValuesList!.isNotEmpty
+                      color:
+                          widget.isMultiple ? textFieldColor : aquaGreenColor,
+                      width: widget.isMultiple ? 0 : 0.5),
+                  borderRadius: widget.isMultiple
+                      ? widget.selectedValuesList!.isNotEmpty
                           ? const BorderRadius.only(
                               topLeft: Radius.circular(8.0),
                               topRight: Radius.circular(8.0))
@@ -86,9 +103,10 @@ class AutoCompleteField extends StatelessWidget {
                 ),
                 border: OutlineInputBorder(
                   borderSide: BorderSide(
-                      color: textFieldColor, width: isMultiple ? 0 : 0.5),
-                  borderRadius: isMultiple
-                      ? selectedValuesList!.isNotEmpty
+                      color: textFieldColor,
+                      width: widget.isMultiple ? 0 : 0.5),
+                  borderRadius: widget.isMultiple
+                      ? widget.selectedValuesList!.isNotEmpty
                           ? const BorderRadius.only(
                               topLeft: Radius.circular(8.0),
                               topRight: Radius.circular(8.0))
@@ -98,9 +116,10 @@ class AutoCompleteField extends StatelessWidget {
 
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                      color: textFieldColor, width: isMultiple ? 0 : 0.5),
-                  borderRadius: isMultiple
-                      ? selectedValuesList!.isNotEmpty
+                      color: textFieldColor,
+                      width: widget.isMultiple ? 0 : 0.5),
+                  borderRadius: widget.isMultiple
+                      ? widget.selectedValuesList!.isNotEmpty
                           ? const BorderRadius.only(
                               topLeft: Radius.circular(8.0),
                               topRight: Radius.circular(8.0))
@@ -128,9 +147,9 @@ class AutoCompleteField extends StatelessWidget {
               ),
               cursorColor: whiteColor,
               validator: (value) {
-                if (isRequired) {
-                  if (isMultiple) {
-                    if (selectedValuesList!.isEmpty) {
+                if (widget.isRequired) {
+                  if (widget.isMultiple) {
+                    if (widget.selectedValuesList!.isEmpty) {
                       return Helpers.validateField(value!);
                     } else {
                       return null;
@@ -173,24 +192,24 @@ class AutoCompleteField extends StatelessWidget {
               child: child,
             );
           },
-          suggestionsController: SuggestionsController(),
+          suggestionsController: _suggestionsController,
           suggestionsCallback: (search) async {
-            if (suggestionsCallback != null) {
-              return await suggestionsCallback!(search);
+            if (widget.suggestionsCallback != null) {
+              return await widget.suggestionsCallback!(search);
             }
             return [];
           },
 
           onSelected: (value) {
-            if (onSuggestionSelected != null) {
-              onSuggestionSelected!(value);
+            if (widget.onSuggestionSelected != null) {
+              widget.onSuggestionSelected!(value);
             }
 
-            selectedSuggestion?.text = value;
+            widget.selectedSuggestion?.text = value;
           },
           //    getImmediateSuggestions: false,
           // hideSuggestionsOnKeyboardHide: true,
-          controller: selectedSuggestion,
+          controller: widget.selectedSuggestion,
 
           // onSuggestionSelected: onSuggestionSelected ??
           //     (value) {

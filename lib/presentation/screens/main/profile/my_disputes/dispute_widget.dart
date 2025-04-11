@@ -109,7 +109,9 @@ class DisputeWidget extends StatelessWidget {
                               padding: const EdgeInsets.symmetric(
                                   vertical: 4.0, horizontal: 8.0),
                               child: Text(
-                                  dispute.userOrder!.userGameService!.title!,
+                                  dispute.userOrder!.userGameService!.category
+                                          ?.name ??
+                                      '',
                                   maxLines: 1,
                                   textAlign: TextAlign.center,
                                   overflow: TextOverflow.ellipsis,

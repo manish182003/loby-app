@@ -104,7 +104,7 @@ class _CarouselState extends State<Carousel> {
               } else if (list[index].type == 1) {
                 return GestureDetector(
                   onTap: () async {
-                    Helpers.loader();
+                    Helpers.loader(canCancel: true);
                     await _initPlayer(widget.images[index].path);
                     _videoPlayerDialog(context);
                     Helpers.hideLoader();

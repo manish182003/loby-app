@@ -194,35 +194,6 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                   const SizedBox(
                                     height: 4,
                                   ),
-                                  // Row(
-                                  //   mainAxisAlignment: MainAxisAlignment.center,
-                                  //   children: [
-                                  //     RichText(
-                                  //       textAlign: TextAlign.start,
-                                  //       text: TextSpan(
-                                  //         children: [
-                                  //           TextSpan(
-                                  //               text: 'User ID : ',
-                                  //               style: textTheme.headlineSmall
-                                  //                   ?.copyWith(
-                                  //                 color: selectiveYellowColor,
-                                  //                 fontWeight: FontWeight.w200,
-                                  //               )),
-                                  //           TextSpan(
-                                  //             text: widget.user.uid == null
-                                  //                 ? "000000000"
-                                  //                 : "${widget.user.uid}",
-                                  //             style: textTheme.headlineSmall
-                                  //                 ?.copyWith(
-                                  //               color: selectiveYellowColor,
-                                  //               fontWeight: FontWeight.w700,
-                                  //             ),
-                                  //           ),
-                                  //         ],
-                                  //       ),
-                                  //     ),
-                                  //   ],
-                                  // ),
                                   const SizedBox(
                                     height: 4,
                                   ),

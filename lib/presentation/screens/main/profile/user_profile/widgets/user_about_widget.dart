@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:loby/core/utils/helpers.dart';
+import 'package:intl/intl.dart';
 import 'package:loby/domain/entities/profile/user.dart';
 
 import '../../../../../../core/theme/colors.dart';
@@ -132,16 +132,33 @@ class UserAboutWidget extends StatelessWidget {
             style: textTheme.headlineSmall?.copyWith(color: textLightColor),
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 4),
         Text(
-          'UID: ${user.uid}',
+          // Helpers.formatDateTime(dateTime: user.createdAt ?? DateTime.now()),
+          DateFormat('MMMM d, y').format(user.createdAt ?? DateTime.now()),
           style: textTheme.headlineSmall?.copyWith(color: whiteColor),
           textAlign: TextAlign.left,
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 16),
         Text(
-          Helpers.formatDateTime(dateTime: user.createdAt ?? DateTime.now()),
-          style: textTheme.headlineSmall?.copyWith(color: whiteColor),
+          'User Identification Number (UID)',
+          style: textTheme.headlineSmall?.copyWith(
+            color: Color(0xFF808191),
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+          ),
+          textAlign: TextAlign.left,
+        ),
+        SizedBox(
+          height: 4,
+        ),
+        Text(
+          user.uid,
+          style: textTheme.headlineSmall?.copyWith(
+            color: textWhiteColor,
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
           textAlign: TextAlign.left,
         ),
         const SizedBox(height: 16),
