@@ -109,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 children: [
                   SizedBox(
-                    height: 4.h,
+                    height: 1.h,
                   ),
                   Image.asset(
                     "assets/icons/app_icon.png",
@@ -117,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: 80,
                   ),
                   SizedBox(
-                    height: 3.h,
+                    height: 1.h,
                   ),
                 ],
               ),

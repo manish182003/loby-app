@@ -88,6 +88,7 @@ class _ChatPageState extends State<ChatPage> {
         appBarName: chatChannel.receiverInfo?.displayName,
         userImage: chatChannel.receiverInfo?.image,
         isVerified: chatChannel.receiverInfo?.verifiedProfile ?? false,
+        userId: chatChannel.receiverInfo?.id.toString(),
       ),
       body: Obx(() {
         if (chatController.isMessagesFetching.value ||

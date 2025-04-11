@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../core/theme/colors.dart';
@@ -90,6 +92,7 @@ PreferredSizeWidget appBar({
   IconData? otherIcon,
   String? userImage,
   bool? isVerified,
+  String? userId,
   Color? txtColor,
   double? textSize,
   Function()? onBack,
@@ -120,33 +123,49 @@ PreferredSizeWidget appBar({
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         if (isVerified == true)
-                          Stack(
-                            alignment: AlignmentDirectional.topEnd,
-                            children: [
-                              CircleAvatar(
-                                backgroundColor: butterflyBlueColor,
-                                radius: 24,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(24),
-                                  child: Image.network(
-                                    userImage,
-                                    fit: BoxFit.cover,
-                                    width: 35,
-                                    height: 35,
-                                  ),
-                                ), //CircleAvatar
-                              ),
-                              SvgPicture.asset(
-                                'assets/icons/blue_tick.svg',
-                                height: 18,
-                                width: 18,
-                              ),
-                            ],
+                          GestureDetector(
+                            onTap: () {
+                              context.pushNamed(
+                                userProfilePage,
+                                extra: {'userId': userId, 'from': 'other'},
+                              );
+                            },
+                            child: Stack(
+                              alignment: AlignmentDirectional.topEnd,
+                              children: [
+                                CircleAvatar(
+                                  backgroundColor: butterflyBlueColor,
+                                  radius: 24,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(24),
+                                    child: Image.network(
+                                      userImage,
+                                      fit: BoxFit.cover,
+                                      width: 35,
+                                      height: 35,
+                                    ),
+                                  ), //CircleAvatar
+                                ),
+                                SvgPicture.asset(
+                                  'assets/icons/blue_tick.svg',
+                                  height: 18,
+                                  width: 18,
+                                ),
+                              ],
+                            ),
                           )
                         else
-                          CircleAvatar(
-                            backgroundImage: NetworkImage(userImage),
-                            radius: 24,
+                          GestureDetector(
+                            onTap: () {
+                              context.pushNamed(
+                                userProfilePage,
+                                extra: {'userId': userId, 'from': 'other'},
+                              );
+                            },
+                            child: CircleAvatar(
+                              backgroundImage: NetworkImage(userImage),
+                              radius: 24,
+                            ),
                           ),
                         SizedBox(
                           width: 1.w,

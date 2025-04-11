@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:chewie/chewie.dart';
@@ -5,9 +7,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:loby/core/theme/colors.dart';
-import 'package:loby/core/utils/helpers.dart';
 import 'package:sizer/sizer.dart';
 import 'package:video_player/video_player.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../screens/main/home/widgets/full_image_view.dart';
 
@@ -42,20 +44,22 @@ class _CarouselState extends State<Carousel> {
       videoPlayerController: videoPlayerController,
       autoPlay: true,
       looping: true,
-      additionalOptions: (context) {
-        return <OptionItem>[
-          OptionItem(
-            onTap: (context) => debugPrint('Option 1 pressed!'),
-            iconData: Icons.chat,
-            title: 'Option 1',
-          ),
-          OptionItem(
-            onTap: (context) => debugPrint('Option 2 pressed!'),
-            iconData: Icons.share,
-            title: 'Option 2',
-          ),
-        ];
-      },
+      allowPlaybackSpeedChanging: false,
+
+      // additionalOptions: (context) {
+      //   return <OptionItem>[
+      //     OptionItem(
+      //       onTap: (context) => debugPrint('Option 1 pressed!'),
+      //       iconData: Icons.chat,
+      //       title: 'Option 1',
+      //     ),
+      //     OptionItem(
+      //       onTap: (context) => debugPrint('Option 2 pressed!'),
+      //       iconData: Icons.share,
+      //       title: 'Option 2',
+      //     ),
+      //   ];
+      // },
     );
   }
 
@@ -64,6 +68,13 @@ class _CarouselState extends State<Carousel> {
     videoPlayerController.dispose();
     chewieController?.dispose();
     super.dispose();
+  }
+
+  Future<String?> getVideoThumbnail(String path) async {
+    return await VideoThumbnail.thumbnailFile(
+      video: path,
+      imageFormat: ImageFormat.PNG,
+    );
   }
 
   @override
@@ -104,18 +115,41 @@ class _CarouselState extends State<Carousel> {
               } else if (list[index].type == 1) {
                 return GestureDetector(
                   onTap: () async {
-                    Helpers.loader(canCancel: true);
-                    await _initPlayer(widget.images[index].path);
-                    _videoPlayerDialog(context);
-                    Helpers.hideLoader();
+                    Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                            builder: (context) => FullImageView(image: list)));
+                    // Helpers.loader(canCancel: true);
+                    // await _initPlayer(widget.images[index].path);
+                    // _videoPlayerDialog(context);
+                    // Helpers.hideLoader();
                   },
                   child: Stack(
                     alignment: AlignmentDirectional.center,
                     children: [
                       Opacity(
                         opacity: 0.5,
-                        child: buildLocalImage(
-                            imagePath: "assets/images/listing_placeholder.jpg"),
+                        child: FutureBuilder(
+                          future: () async {
+                            return await getVideoThumbnail(
+                                widget.images[index].path);
+                          }(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Container(
+                                width: double.infinity,
+                                margin: EdgeInsets.symmetric(horizontal: 20),
+                                decoration: BoxDecoration(
+                                  color: textWhiteColor,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              );
+                            }
+
+                            return buildLocalImage(imagePath: snapshot.data);
+                          },
+                        ),
                       ),
                       const Icon(
                         Icons.play_circle_outline,
@@ -220,10 +254,15 @@ class _CarouselState extends State<Carousel> {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(16.0),
           // margin: EdgeInsets.symmetric(horizontal: 12),
-          child: Image.asset(
-            imagePath!,
+          child: Image.file(
+            File(imagePath ?? ''),
             fit: BoxFit.cover,
             width: MediaQuery.of(context).size.width,
+            errorBuilder: (context, error, stackTrace) => Image.asset(
+              'assets/images/listing_placeholder.jpg',
+              fit: BoxFit.cover,
+              width: MediaQuery.of(context).size.width,
+            ),
           ),
         ),
       ),
