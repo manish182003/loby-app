@@ -1,3 +1,4 @@
+import 'package:loby/data/models/response_models/home/banner_response_model.dart';
 import 'package:loby/data/models/response_models/home/category_games_response_model.dart';
 import 'package:loby/data/models/response_models/home/category_response_model.dart';
 import 'package:loby/data/models/response_models/home/faqs_data_response_model.dart';
@@ -27,4 +28,5 @@ abstract class HomeRemoteDatasource {
 
   Future<StaticDataResponseModel> getStaticData();
   Future<FaqsDataResponseModel> getAllFaqs();
+  Future<BannerResponseModel> getAllBanners();
 }

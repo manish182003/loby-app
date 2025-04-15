@@ -7,11 +7,13 @@ import 'package:loby/domain/entities/home/category.dart';
 import 'package:loby/domain/entities/home/category_games.dart';
 import 'package:loby/domain/entities/home/faqs.dart';
 import 'package:loby/domain/entities/home/game.dart';
+import 'package:loby/domain/entities/home/home_banner.dart';
 import 'package:loby/domain/entities/home/notification.dart' as notification;
 import 'package:loby/domain/entities/home/static_data.dart';
 import 'package:loby/domain/entities/listing/service_listing.dart';
 import 'package:loby/domain/entities/profile/user.dart';
 import 'package:loby/domain/usecases/home/delete_notification.dart';
+import 'package:loby/domain/usecases/home/get_all_banners.dart';
 import 'package:loby/domain/usecases/home/get_all_faqs.dart';
 import 'package:loby/domain/usecases/home/get_categories.dart';
 import 'package:loby/domain/usecases/home/get_category_games.dart';
@@ -33,6 +35,7 @@ class HomeController extends GetxController {
   final GlobalSearch _globalSearch;
   final GetStaticData _getStaticData;
   final GetAllFaqs _getAllFaqs;
+  final GetAllBanners _getAllBanners;
 
   HomeController({
     required GetCategories getCategories,
@@ -44,6 +47,7 @@ class HomeController extends GetxController {
     required GlobalSearch globalSearch,
     required GetStaticData getStaticData,
     required GetAllFaqs getAllFaqs,
+    required GetAllBanners getAllBanners,
   })  : _getCategories = getCategories,
         _getGames = getGames,
         _getCategoryGames = getCategoryGames,
@@ -52,7 +56,8 @@ class HomeController extends GetxController {
         _getUnreadCount = getUnreadCount,
         _globalSearch = globalSearch,
         _getStaticData = getStaticData,
-        _getAllFaqs = getAllFaqs;
+        _getAllFaqs = getAllFaqs,
+        _getAllBanners = getAllBanners;
 
   ListingController listingController = Get.find<ListingController>();
 
@@ -64,6 +69,7 @@ class HomeController extends GetxController {
   final isGamesFetching = false.obs;
 
   final categoryGames = <CategoryGames>[].obs;
+  final homeBanners = <HomeBanner>[].obs;
   final isCategoryGamesFetching = false.obs;
   final areMoreCategoryGamesAvailable = true.obs;
   final categoriesGamePageNumber = 1.obs;
@@ -181,6 +187,24 @@ class HomeController extends GetxController {
       return failureOrSuccess.isRight() ? true : false;
     }
     return false;
+  }
+
+  Future<void> getAllBanners() async {
+    final failureOrSuccess = await _getAllBanners(
+      Params(),
+    );
+
+    failureOrSuccess.fold(
+      (failure) {
+        errorMessage.value = Helpers.convertFailureToMessage(failure);
+        debugPrint(errorMessage.value);
+        Helpers.toast(errorMessage.value);
+        isCategoryGamesFetching(false);
+      },
+      (success) {
+        homeBanners.value = success.banners;
+      },
+    );
   }
 
   Future<bool> getNotifications({int? notificationId}) async {

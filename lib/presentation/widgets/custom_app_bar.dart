@@ -135,9 +135,9 @@ PreferredSizeWidget appBar({
                               children: [
                                 CircleAvatar(
                                   backgroundColor: butterflyBlueColor,
-                                  radius: 24,
+                                  radius: 35,
                                   child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(24),
+                                    borderRadius: BorderRadius.circular(35),
                                     child: Image.network(
                                       userImage,
                                       fit: BoxFit.cover,
@@ -148,8 +148,8 @@ PreferredSizeWidget appBar({
                                 ),
                                 SvgPicture.asset(
                                   'assets/icons/blue_tick.svg',
-                                  height: 18,
-                                  width: 18,
+                                  height: 24,
+                                  width: 24,
                                 ),
                               ],
                             ),

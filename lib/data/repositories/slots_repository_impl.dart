@@ -15,10 +15,10 @@ class SlotsRepositoryImpl extends SlotsRepository {
 
   @override
   Future<Either<Failure, Map<String, dynamic>>> addSlot(
-      {int? slotId,int? day, String? from, String? to}) async {
+      {int? slotId, int? day, String? from, String? to}) async {
     try {
-      return Right(await _slotsRemoteDatasource.addSlots(
-          slotId,  day, from, to));
+      return Right(
+          await _slotsRemoteDatasource.addSlots(slotId, day, from, to));
     } on ServerException catch (e) {
       // Loggers can be added here for analyzation.
       return Left(ServerFailure(message: e.message.toString()));
@@ -26,7 +26,8 @@ class SlotsRepositoryImpl extends SlotsRepository {
   }
 
   @override
-  Future<Either<Failure, Map<String,dynamic>>> deleteSlot({int? slotId}) async {
+  Future<Either<Failure, Map<String, dynamic>>> deleteSlot(
+      {int? slotId}) async {
     // print("deleteSlot in repo_impl => ${slotId}");
     try {
       return Right(await _slotsRemoteDatasource.deleteSlots(slotId));
@@ -68,12 +69,23 @@ class SlotsRepositoryImpl extends SlotsRepository {
       return Left(ServerFailure(message: e.message.toString()));
     }
   }
-  
+
   @override
-  Future<Either<Failure, Map<String,dynamic>>> updateSlot({String? date, int? slotId, int? orderId}) async {
+  Future<Either<Failure, Map<String, dynamic>>> updateSlot(
+      {String? date, int? slotId, int? orderId}) async {
     try {
       return Right(
           await _slotsRemoteDatasource.editSlots(date, orderId, slotId));
+    } on ServerException catch (e) {
+      // Loggers can be added here for analyzation.
+      return Left(ServerFailure(message: e.message.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> addSlotsForWeekend(int dayId) async {
+    try {
+      return Right(await _slotsRemoteDatasource.addSlotsForWeekend(dayId));
     } on ServerException catch (e) {
       // Loggers can be added here for analyzation.
       return Left(ServerFailure(message: e.message.toString()));

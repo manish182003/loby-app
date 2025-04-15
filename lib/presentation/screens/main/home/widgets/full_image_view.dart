@@ -23,24 +23,27 @@ class _FullImageViewState extends State<FullImageView> {
     videoPlayerController.dispose();
     chewieController?.dispose();
 
-    videoPlayerController = VideoPlayerController.network(url);
+    videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(url));
     await videoPlayerController.initialize();
 
-    videoPlayerController.addListener(() {
-      if (videoPlayerController.value.position >=
-              videoPlayerController.value.duration &&
-          !videoPlayerController.value.isPlaying &&
-          mounted) {
-        setState(() {
-          _initPlayer(url, index);
-        });
-      }
-    });
+    // videoPlayerController.addListener(() {
+    //   if (videoPlayerController.value.position >=
+    //           videoPlayerController.value.duration &&
+    //       !videoPlayerController.value.isPlaying &&
+    //       mounted) {
+    //     setState(() {
+    //       videoPlayerController.removeListener(
+    //         () {},
+    //       );
+    //       _initPlayer(url, index);
+    //     });
+    //   }
+    // });
 
     chewieController = ChewieController(
       videoPlayerController: videoPlayerController,
       autoPlay: true,
-      looping: false, // disable loop
+      looping: true, // disable loop
       showOptions: false, // hide three dots menu
       allowPlaybackSpeedChanging: false,
     );

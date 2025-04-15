@@ -11,7 +11,7 @@ abstract class SlotsRemoteDatasource {
   Future<GetSlotsForSellerResponse> getSlots(
     // int? slotId,
     int? day,
-    int? providerId,  
+    int? providerId,
   );
 
   Future<GetSlotsForBuyerResponse> getBuyerSlots(
@@ -19,14 +19,12 @@ abstract class SlotsRemoteDatasource {
     int? providerId,
   );
 
-  Future<Map<String,dynamic>> deleteSlots(
-    int? slotId, 
+  Future<Map<String, dynamic>> deleteSlots(
+    int? slotId,
   );
 
-  Future<Map<String,dynamic>> editSlots(
-    String? date,
-    int? orderId,
-    int? slotId
-  );
+  Future<Map<String, dynamic>> editSlots(
+      String? date, int? orderId, int? slotId);
 
+  Future<String> addSlotsForWeekend(int dayId);
 }

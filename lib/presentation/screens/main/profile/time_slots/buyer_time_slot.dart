@@ -1,16 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:loby/core/theme/colors.dart';
+import 'package:loby/main.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 import 'package:loby/presentation/getx/controllers/order_controller.dart';
 import 'package:loby/presentation/getx/controllers/slots_controller.dart';
-import 'package:loby/presentation/screens/main/profile/time_slots/widget/buyer_time_slot_box.dart';
 import 'package:loby/presentation/widgets/buttons/custom_button.dart';
-import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
 
 class BuyerTimeSlot extends StatefulWidget {
@@ -28,6 +26,8 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
   OrderController orderController = Get.find<OrderController>();
   final controller = ScrollController();
   Rx<DateFormat> format2 = DateFormat('MMMM yyyy').obs;
+  List<DateTime> visibleDates = [];
+  final ScrollController _scrollController = ScrollController();
 
   DateTime _currentDate = DateTime.now();
 
@@ -47,16 +47,38 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
   DateTime now = DateTime.now();
   late DateTime lastDayOfMonth;
 
+  void _addNextMonthDates() {
+    DateTime lastDate = visibleDates.last;
+    DateTime nextMonth = DateTime(lastDate.year, lastDate.month + 1, 1);
+    DateTime endOfNextMonth = DateTime(nextMonth.year, nextMonth.month + 1, 0);
+
+    for (int i = 0; i < endOfNextMonth.difference(nextMonth).inDays + 1; i++) {
+      visibleDates.add(nextMonth.add(Duration(days: i)));
+    }
+    // setState(() {});
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    getMonthsData();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent - 200) {
+        _addNextMonthDates(); // 👇
+      }
+    });
     lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
-    slotsController.selectDateofCale.value = [
-      DateFormat('yyyy-MM-dd').format(DateTime.now())
-    ];
-    slotsController.selectDateofCale.refresh();
-    getBuyerSlots();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        slotsController.selectDateofCale.value =
+            DateFormat('yyyy-MM-dd').format(DateTime.now());
+        slotsController.selectDateofCale.refresh();
+        getBuyerSlots();
+      },
+    );
+
     // getBuyerSlots();
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   slotsController.getSlots(sellerId: 1);
@@ -91,6 +113,17 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
     return date.isBefore(DateTime(today.year, today.month, today.day));
   }
 
+  getMonthsData() {
+    DateTime today = DateTime.now();
+    DateTime lastDayOfCurrentMonth = DateTime(today.year, today.month + 1, 0);
+
+    for (int i = 0;
+        i <= lastDayOfCurrentMonth.difference(today).inDays + 1;
+        i++) {
+      visibleDates.add(today.add(Duration(days: i)));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     print("slecteddddd ${slotsController.selectSlotArr}");
@@ -98,19 +131,8 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       body: SafeArea(
-        child: Stack(children: [
-          // appBar(context: context,isBackIcon: true),
-
-          Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage("assets/images/login_bg_img.jpeg"),
-                    opacity: 0.5,
-                    fit: BoxFit.fill)),
-          ),
-          Column(
+        child: SingleChildScrollView(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Align(
@@ -118,449 +140,214 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
                   child: Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                    child: Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            width: 42,
-                            height: 42,
-                            child: MaterialButton(
-                              shape: const CircleBorder(),
-                              color: textCharcoalBlueColor,
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Icon(
-                                Icons.arrow_back_ios,
-                                size: 18,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              context.pushNamed(searchScreenPage);
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 42,
+                          height: 42,
+                          child: MaterialButton(
+                            shape: const CircleBorder(),
+                            color: textCharcoalBlueColor,
+                            onPressed: () {
+                              Navigator.pop(context);
                             },
-                            child: Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                  color: textCharcoalBlueColor,
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: const Icon(
-                                CupertinoIcons.search,
-                                size: 23,
-                                color: Colors.white,
-                              ),
+                            child: const Icon(
+                              Icons.arrow_back_ios,
+                              size: 18,
+                              color: Colors.white,
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                        SizedBox(
+                          width: 15.w,
+                        ),
+                        Text(
+                          'Available Time Slots',
+                          style: TextStyle(
+                            color: textWhiteColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        )
+                      ],
                     ),
                   )),
-              Stack(
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 10, left: 15, right: 15),
-                    child: Align(
-                      child: SizedBox(
-                        width: 100.w,
-                        // height: 30.h,
-                        child: Image.asset(
-                          "assets/images/calender_container.png",
-                          fit: BoxFit.fitHeight,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 4.0.w),
-                    child: Align(
-                      child: SizedBox(
-                        child: orderController.selectedOrder.value
-                                    .userGameService?.user?.image !=
-                                null
-                            ? CircleAvatar(
-                                radius: 32,
-                                backgroundColor: whiteColor,
-                                backgroundImage: NetworkImage(
-                                    "${orderController.selectedOrder.value.userGameService?.user?.image}"),
-                                // backgroundImage: AssetImage("assets/images/view.png"),
-                              )
-                            : const CircleAvatar(
-                                radius: 32,
-                                backgroundColor: whiteColor,
-                                backgroundImage: AssetImage(
-                                    "assets/images/user_placeholder.png"),
-                                // backgroundImage: AssetImage("assets/images/view.png"),
-                              ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 23.0.w),
-                    child: Align(
-                      child: Container(
-                        child: Column(
-                          children: [
-                            Text(
-                              "${orderController.selectedOrder.value.userGameService?.user?.name}",
-                              style: textTheme.headlineMedium
-                                  ?.copyWith(color: textWhiteColor),
-                            ),
-                            SizedBox(
-                              height: 2.h,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    _changeMonth(-1);
-                                    return;
-                                  },
-                                  child: const CircleAvatar(
-                                    radius: 10,
-                                    backgroundColor: lavaRedColor,
-                                    child: Icon(
-                                      Icons.arrow_back_ios_new_rounded,
-                                      color: whiteColor,
-                                      size: 10,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 4.w,
-                                ),
-                                Text(
-                                  format2.value.format(_currentDate),
-                                  style: textTheme.headlineMedium
-                                      ?.copyWith(color: textWhiteColor),
-                                ),
-                                SizedBox(
-                                  width: 4.w,
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    _changeMonth(1);
-
-                                    return;
-                                  },
-                                  child: const CircleAvatar(
-                                    radius: 10,
-                                    backgroundColor: lavaRedColor,
-                                    child: Icon(
-                                      Icons.arrow_forward_ios_outlined,
-                                      color: whiteColor,
-                                      size: 10,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              width: 320,
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                physics: const ClampingScrollPhysics(),
-                                child: Obx(() {
-                                  if (slotsController
-                                      .selectDateofCale.isNotEmpty) {
-                                    return Container(
-                                      height: 100,
-                                      padding: const EdgeInsets.only(
-                                        top: 4.0,
-                                      ),
-                                      child: Row(
-                                        children: List.generate(
-                                          DateTime(_currentDate.year,
-                                                  _currentDate.month + 1, 0)
-                                              .day,
-                                          (index) {
-                                            DateTime date = DateTime(
-                                                _currentDate.year,
-                                                _currentDate.month,
-                                                index + 1);
-                                            if (_isBeforeCurrentDate(date)) {
-                                              return const SizedBox();
-                                            } else {
-                                              // availbale
-                                              //     .availableDoctor.value.availabilities!
-                                              //     .clear();
-                                            }
-                                            String formattedDate =
-                                                DateFormat('dd').format(date);
-                                            String selectDateApi =
-                                                DateFormat('yyyy-MM-dd')
-                                                    .format(date);
-                                            String formattedDatee =
-                                                DateFormat('EEEE').format(date);
-                                            String dateSlect =
-                                                DateFormat('yyyy-MM-dd')
-                                                    .format(date);
-                                            String formattedDateSort =
-                                                DateFormat('ccccc')
-                                                    .format(date);
-                                            String month =
-                                                DateFormat('MMMM').format(date);
-
-                                            print("storeLanguagetttt");
-                                            String formattedDay =
-                                                DateFormat('E').format(date);
-                                            // return SizedBox();
-                                            return selectDate(
-                                              pId: widget.id,
-                                              index,
-                                              formDay: formattedDay,
-                                              title: formattedDatee
-                                                      .toUpperCase() ??
-                                                  "",
-                                              date: formattedDate,
-                                              sortName: formattedDateSort,
-                                              selectDate: dateSlect,
-                                              chooseDate: selectDateApi,
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    );
-                                  }
-                                  return const Text("Date hi empty aai");
-                                }),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
-                  // Image(image: AssetImage("assets/images/calender_container.png"), ),
-                  // Positioned(
-                  //   top: 12,
-                  //   left: 124,
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.all(8.0),
-                  //     child: CircleAvatar(
-                  //         foregroundColor: aquaGreenColor,
-                  //         backgroundColor: aquaGreenColor,
-                  //         radius: 35,
-                  //         backgroundImage: AssetImage("assets/images/user_placeholder.png"),
-                  //       ),
-                  //   ),
-                  // ),
-                  // Positioned(
-                  //   top: 100,
-                  //   left: 110,
-                  //   child: Text("Akshay gupta ✅", style: textTheme.headline4
-                  //                                 ?.copyWith(color: textWhiteColor))),
-                  //                                 Positioned(
-                  //                                   top: 130,
-                  //                                   left: 75,
-                  //                                   child: Row(
-                  //                                     mainAxisAlignment: MainAxisAlignment.center,
-                  //                                     crossAxisAlignment: CrossAxisAlignment.center,
-                  //                                     children: [
-                  //                                       CircleAvatar(
-                  //                                         radius: 8,
-                  //                                         backgroundColor: lavaRedColor,
-                  //                                         child: Text("<" , style: TextStyle(color: whiteColor, fontSize: 8),),
-                  //                                       ),
-                  //                                       SizedBox(width: 5.w,),
-                  //                                       Text("November 2023" , style: textTheme.headline4
-                  //                                 ?.copyWith(color: textWhiteColor)),
-                  //                                 SizedBox(width: 5.w,),
-                  //                                 CircleAvatar(
-                  //                                         radius: 8,
-                  //                                         backgroundColor: lavaRedColor,
-                  //                                         child: Text(">", style: TextStyle(color: whiteColor ,fontSize: 8)),
-                  //                                       ),
-                  //                                     ],
-                  //                                   ))
-                ],
-              ),
-              SizedBox(
-                height: 5.h,
-              ),
               Padding(
-                padding: const EdgeInsets.only(top: 2),
-                child: Container(
-                  height: 52.h,
-                  width: MediaQuery.of(context).size.width,
-                  // child: Text("hellooo", style: TextStyle(color: Colors.amber , fontSize: 60),),
-                  decoration: const BoxDecoration(
-                      color: backgroundColor,
-                      // border: Border(top: BorderSide(color: Colors.white)),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30),
-                      )),
-                  // child: Text("Login", style: textTheme.headline2?.copyWith(color: textWhiteColor)),
-                  child: Column(
-                    children: [
-                      Padding(
-                          padding:
-                              const EdgeInsets.only(left: 0, right: 0, top: 0),
-                          child: Obx(() {
-                            if (slotsController.buyerSlots.isNotEmpty) {
-                              return Column(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.only(top: 3.h),
-                                    height: 40.h,
-                                    child: ListView.builder(
-                                      scrollDirection: Axis.vertical,
-                                      shrinkWrap: true,
-                                      itemCount:
-                                          slotsController.buyerSlots.length,
-                                      itemBuilder: (context, index) {
-                                        return BuyerTimeSlotBox(
-                                            getBuyerSlots: slotsController
-                                                .buyerSlots[index]);
-                                      },
-                                    ),
-                                    // ),
-                                    // ),
-                                  ),
-                                  SizedBox(
-                                    height: 1.h,
-                                  ),
-                                  CustomButton(
-                                      name: "Confirm Slot",
-                                      textColor: textWhiteColor,
-                                      color: purpleLightIndigoColor,
-                                      left: 4.w,
-                                      right: 4.w,
-                                      // bottom: 1.h,
-                                      onTap: () async {
-                                        slotsController
-                                            .editSlot(
-                                              date: slotsController
-                                                  .selectDateofCale.first
-                                                  .toString(),
-                                              orderId: orderController
-                                                  .selectedOrder.value.id,
-
-                                              slotId: slotsController
-                                                  .selectSlotArr.first.id,
-                                              // isUpdatingTime: true,
-                                              // listingId: orderController
-                                              //     .selectedOrder
-                                              //     .value
-                                              //     .userGameServiceId!,
-                                              // quantity: orderController
-                                              //     .selectedOrder.value.quantity!,
-                                              // price: orderController
-                                              //     .selectedOrder.value.price
-                                              //     .toString(),
-                                              // bookDate: slotsController
-                                              //     .selectDateofCale.first
-                                              //     .toString(),
-                                              // bookFromTime: slotsController
-                                              //     .selectSlotArr.first.from,
-                                              // bookToTime: slotsController
-                                              //     .selectSlotArr.first.to,
-                                            )
-                                            .then((value) =>
-                                                _successDialog(context));
-                                        print(
-                                            " buyerdatepage >>>  ${slotsController.selectDateofCale.first.toString()}");
-                                      }),
-                                ],
-                              );
-                            }
-                            return SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              height: 300,
-                              child: const Center(
-                                child: Text("No slots found!"),
-                              ),
-                            );
-                          }))
-                    ],
+                padding: EdgeInsets.only(top: 10.0.w),
+                child: SizedBox(
+                  height: 7.h,
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    shrinkWrap: true,
+                    physics: AlwaysScrollableScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: visibleDates.length,
+                    itemBuilder: (context, index) {
+                      DateTime date = visibleDates[index];
+                      return selectDate(
+                        0,
+                        chooseDate: DateFormat('yyyy-MM-dd').format(date),
+                        formDay: DateFormat('EEE').format(date)[0],
+                        date: DateFormat('dd').format(date),
+                        pId: widget.id,
+                      );
+                    },
                   ),
                 ),
               ),
-            ],
-          )
-          // Positioned(
-          //   top: 80,
-          //   child: Image(image: AssetImage("assets/images/calender_container.png"))
+              SizedBox(
+                height: 3.h,
+              ),
+              Obx(() {
+                if (slotsController.buyerSlots.isNotEmpty) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Divider(
+                        color: Color(0xFF00FF62),
+                      ),
+                      Container(
+                          margin: EdgeInsets.only(top: 2.h),
+                          height: 40.h,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 40),
+                            child: Wrap(
+                              runSpacing: 10,
+                              spacing: 10,
+                              children: slotsController.buyerSlots.map((slot) {
+                                String fromtimeIn24HourFormat = "${slot.from}";
+                                DateTime fromtime24Hour = DateFormat('HH:mm')
+                                    .parse(fromtimeIn24HourFormat);
+                                String fromtimeIn12HourFormat =
+                                    DateFormat('h:mm a').format(fromtime24Hour);
 
-          // ),
-          // Positioned(
-          //   bottom: 0,
-          //   child: Container(
-          //     height: 50.h,
-          //     width: MediaQuery.of(context).size.width,
-          //     // child: Text("hellooo", style: TextStyle(color: Colors.amber , fontSize: 60),),
-          //     decoration: const BoxDecoration(
-          //         color: backgroundColor,
-          //         // border: Border(top: BorderSide(color: Colors.white)),
-          //         borderRadius: BorderRadius.only(
-          //           topLeft: Radius.circular(30),
-          //           topRight: Radius.circular(30),
-          //         )),
-          //     // child: Text("Login", style: textTheme.headline2?.copyWith(color: textWhiteColor)),
-          //     child: Column(
-          //       children: [
-          //         Padding(
-          //             padding: const EdgeInsets.only(left: 0, right: 0, top: 0),
-          //             child: Column(
-          //               children: [
-          //                 ListView.builder(
-          //                   shrinkWrap: true,
-          //                   itemCount: 4,
-          //                   itemBuilder: (context, index) {
-          //                     return Padding(
-          //                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 1),
-          //                       child: Column(
-          //                         mainAxisAlignment: MainAxisAlignment.center,
-          //                         crossAxisAlignment: CrossAxisAlignment.center,
-          //                         children: [
-          //                           Container(
-          //                                 height: 40,
-          //                                 width: MediaQuery.of(context).size.width,
-          //                                 decoration: BoxDecoration(
-          //                                   borderRadius: BorderRadius.circular(5),
-          //                                     border: Border.all(color: aquaGreenColor, strokeAlign: 1)),
-          //                                 child: Center(
-          //                                   child: Text(
-          //                                     "08:00 am - 10:00 am",
-          //                                     style: textTheme.headline4
-          //                                         ?.copyWith(color: textWhiteColor),
-          //                                   ),
-          //                                 ),
-          //                               ),
-          //                           SizedBox(height: 1.h,),
-          //                           Text("Available",style: textTheme.headline6?.copyWith(
-          //                                 color: aquaGreenColor,
-          //                                 fontWeight: FontWeight.w100) ),
-          //                                 SizedBox(height: 1.h,),
-          //                         ],
-          //                       ),
-          //                     );
-          //                   },
-          //                 ),
-          //                 SizedBox(height: 1.h,),
-          //                 CustomButton(
-          //           name: "Confirm Slot",
-          //           textColor: textWhiteColor,
-          //           color: purpleLightIndigoColor,
-          //           left: 4.w,
-          //           right: 4.w,
-          //           bottom: 5.h,
-          //           onTap: () async{
-          //             // _loginDialog(context);
-          //           }),
-          //               ],
-          //             )),
-          //       ],
-          //     ),
-          //   ),
-          // )
-        ]),
+                                String totimeIn24HourFormat = "${slot.to}";
+                                DateTime totime24Hour = DateFormat('HH:mm')
+                                    .parse(totimeIn24HourFormat);
+                                String totimeIn12HourFormat =
+                                    DateFormat('h:mm a').format(totime24Hour);
+                                return GestureDetector(
+                                  onTap: () {
+                                    slotsController.selectSlotArr.value = [
+                                      slot
+                                    ];
+                                    slotsController.selectSlotArr.refresh();
+                                  },
+                                  child: Container(
+                                    width: 26.w,
+                                    height: 5.h,
+                                    margin: EdgeInsets.only(right: 3, top: 5),
+                                    decoration: BoxDecoration(
+                                      color: slotsController.selectSlotArr.any(
+                                              (element) =>
+                                                  element.id == slot.id)
+                                          ? Color(0xFFFF754C)
+                                          : shipGreyColor,
+                                      borderRadius: BorderRadius.circular(7),
+                                    ),
+                                    child: Center(
+                                      child: RichText(
+                                        text: TextSpan(
+                                          children: [
+                                            TextSpan(
+                                                text:
+                                                    '$fromtimeIn12HourFormat - ',
+                                                style: TextStyle(
+                                                  fontSize: 9.5.spa,
+                                                  fontWeight: FontWeight.w700,
+                                                )),
+                                            TextSpan(
+                                                text: totimeIn12HourFormat,
+                                                style: TextStyle(
+                                                  fontSize: 9.5.spa,
+                                                  fontWeight: FontWeight.w700,
+                                                )),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          )
+
+                          // ListView.builder(
+                          //   scrollDirection: Axis.vertical,
+                          //   shrinkWrap: true,
+                          //   itemCount:
+                          //       slotsController.buyerSlots.length,
+                          //   itemBuilder: (context, index) {
+                          //     return BuyerTimeSlotBox(
+                          //         getBuyerSlots: slotsController
+                          //             .buyerSlots[index]);
+                          //   },
+                          // ),
+                          // ),
+                          // ),
+                          ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      CustomButton(
+                          name: "Confirm",
+                          textColor: textBlackColor,
+                          color: Color(0xFF00FF62),
+                          left: 30.w,
+                          right: 30.w,
+                          fontSize: 11.spa,
+                          // bottom: 1.h,
+                          onTap: () async {
+                            slotsController
+                                .editSlot(
+                                  date: slotsController.selectDateofCale.value,
+                                  orderId:
+                                      orderController.selectedOrder.value.id,
+
+                                  slotId:
+                                      slotsController.selectSlotArr.first.id,
+                                  // isUpdatingTime: true,
+                                  // listingId: orderController
+                                  //     .selectedOrder
+                                  //     .value
+                                  //     .userGameServiceId!,
+                                  // quantity: orderController
+                                  //     .selectedOrder.value.quantity!,
+                                  // price: orderController
+                                  //     .selectedOrder.value.price
+                                  //     .toString(),
+                                  // bookDate: slotsController
+                                  //     .selectDateofCale.first
+                                  //     .toString(),
+                                  // bookFromTime: slotsController
+                                  //     .selectSlotArr.first.from,
+                                  // bookToTime: slotsController
+                                  //     .selectSlotArr.first.to,
+                                )
+                                .then((value) => _successDialog(context));
+                            print(
+                                " buyerdatepage >>>  ${slotsController.selectDateofCale.value}");
+                          }),
+                    ],
+                  );
+                }
+                return SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: 300,
+                  child: Center(
+                    child: Text(
+                      "No slots found!",
+                      style: TextStyle(
+                        color: textWhiteColor,
+                        fontSize: 14.spa,
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -608,7 +395,8 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
                 bottom: 3.h,
                 top: 2.h,
                 onTap: () async {
-                  context.pushNamed(myOrderPage);
+                  // context.pushNamed(myOrderPage);
+                  contextKey.currentContext?.pop();
                 }),
           ],
           //   Column(
@@ -636,47 +424,35 @@ class _BuyerTimeSlotState extends State<BuyerTimeSlot> {
 
 Widget selectDate(int i,
     {required String chooseDate,
-    required String title,
     required String formDay,
     required String date,
     Color? colors,
-    required String sortName,
-    required String selectDate,
     required int pId}) {
   String? currentDate;
   int? selectDateIndex = 0;
-  String? dateStore;
-  int selectDateIndexDefult = 0;
-  String selectValue = "";
-  RxString dayValue = "".obs;
-  String dateSelect = "";
-  int eveningSelectIndex = -1;
-  int afterNoonSelectIndex = -1;
-  int morselectIndex = -1;
-  int nightSelectIndex = -1;
-  dynamic theme = GoogleFonts.poppins(
-    fontSize: 10.2,
-    fontWeight: FontWeight.w700,
-    height: 1.5,
-    color: currentDate == chooseDate && currentDate != ""
-        ? whiteColor
-        : selectDateIndex != i
-            ? textBlackColor
-            : textBlackColor,
-  );
-  dynamic theme1 = GoogleFonts.poppins(
-    fontSize: 13,
-    fontWeight: FontWeight.w500,
-    height: 1.5,
-    color: currentDate == chooseDate && currentDate != ""
-        ? whiteColor
-        : selectDateIndex != i
-            ? whiteColor
-            : const Color(0xffffffff),
-  );
 
   SlotsController slotsController = Get.find<SlotsController>();
+
+  dynamic theme = GoogleFonts.poppins(
+    fontSize: 10.2,
+    fontWeight: FontWeight.w300,
+    height: 1.5,
+    color: slotsController.selectDateofCale.value.contains(chooseDate)
+        ? textBlackColor
+        : textWhiteColor,
+  );
+  dynamic theme1 = GoogleFonts.poppins(
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    height: 1.5,
+    color: slotsController.selectDateofCale.value.contains(chooseDate)
+        ? textBlackColor
+        : textWhiteColor,
+  );
+
   print("slecwdjckjcbck >>>> $chooseDate");
+  print(selectDateIndex);
+  print(i);
   return GestureDetector(
     onTap: () {
       // dateStore = chooseDate;
@@ -699,57 +475,86 @@ Widget selectDate(int i,
       // afterNoonSelectIndex = -1;
       // morselectIndex = -1;
       // nightSelectIndex = -1;
-      slotsController.selectDateofCale.value = [chooseDate];
+      slotsController.selectDateofCale.value = '';
+      print('choosen date->$chooseDate');
+      slotsController.selectDateofCale.value = chooseDate;
       slotsController.selectDateofCale.refresh();
       slotsController.getBuyerSlots(date: chooseDate, providerId: pId);
       print("chooosseeee >> $chooseDate");
       // setState(() {});
     },
-    child: Container(
-        margin: const EdgeInsets.only(left: 8),
-        padding: const EdgeInsets.fromLTRB(4, 5, 4, 6),
-        width: 36,
-        height: 61,
-        decoration: BoxDecoration(
-          color: slotsController.selectDateofCale.contains(chooseDate)
-              ? orangeColor
-              : textCharcoalBlueColor,
-          // color: chooseDate.isNotEmpty ? orangeColor : textCharcoalBlueColor,
+    child: Obx(
+      () => Container(
+          margin: const EdgeInsets.only(left: 8),
+          padding: const EdgeInsets.fromLTRB(4, 5, 4, 6),
+          width: 36,
+          // height: 71,
+          decoration: BoxDecoration(
+            color: slotsController.selectDateofCale.value.contains(chooseDate)
+                ? Color(0xFF00FF62)
+                : textCharcoalBlueColor,
+            // color: chooseDate.isNotEmpty ? orangeColor : textCharcoalBlueColor,
 
-          //  currentDate == chooseDate && currentDate != ""
-          //     ? orangeColor
-          //     : i != selectDateIndex
-          //         ? textCharcoalBlueColor
-          //         : orangeColor,
-          borderRadius: BorderRadius.circular(50),
-        ),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-          Container(
-            margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
-            width: double.infinity,
-            height: 25,
-            decoration: BoxDecoration(
-              color: currentDate == chooseDate && currentDate != ""
-                  ? whiteColor
-                  : selectDateIndex != i
-                      ? whiteColor
-                      : whiteColor,
-              borderRadius: BorderRadius.circular(12.5),
-            ),
-            child: Center(
-              child: Text(
-                formDay,
-                style: theme,
+            //  currentDate == chooseDate && currentDate != ""
+            //     ? orangeColor
+            //     : i != selectDateIndex
+            //         ? textCharcoalBlueColor
+            //         : orangeColor,
+            borderRadius: BorderRadius.circular(7),
+          ),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+            Center(
+              child: Obx(
+                () => Text(
+                  formDay,
+                  style: GoogleFonts.poppins(
+                    fontSize: 10.2,
+                    fontWeight: FontWeight.w300,
+                    height: 1.5,
+                    color: slotsController.selectDateofCale.value
+                            .contains(chooseDate)
+                        ? textBlackColor
+                        : textWhiteColor,
+                  ),
+                ),
               ),
             ),
-          ),
-          Container(
-            margin: const EdgeInsets.fromLTRB(0, 0, 1, 0),
-            child: Text(
-              date,
-              style: theme1,
+            Container(
+              margin: const EdgeInsets.fromLTRB(0, 0, 1, 0),
+              child: Obx(
+                () => Text(
+                  date,
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    height: 1.5,
+                    color: slotsController.selectDateofCale.value
+                            .contains(chooseDate)
+                        ? textBlackColor
+                        : textWhiteColor,
+                  ),
+                ),
+              ),
             ),
-          ),
-        ])),
+            Container(
+              margin: const EdgeInsets.fromLTRB(0, 0, 1, 0),
+              child: Obx(
+                () => Text(
+                  DateFormat('MMM').format(DateTime.parse(chooseDate)),
+                  style: GoogleFonts.poppins(
+                    fontSize: 10.2,
+                    fontWeight: FontWeight.w300,
+                    height: 1.5,
+                    color: slotsController.selectDateofCale.value
+                            .contains(chooseDate)
+                        ? textBlackColor
+                        : textWhiteColor,
+                  ),
+                ),
+              ),
+            ),
+          ])),
+    ),
   );
 }

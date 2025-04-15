@@ -47,6 +47,7 @@ import 'package:loby/domain/usecases/chat/get_chats.dart';
 import 'package:loby/domain/usecases/chat/get_messages.dart';
 import 'package:loby/domain/usecases/chat/send_message.dart';
 import 'package:loby/domain/usecases/home/delete_notification.dart';
+import 'package:loby/domain/usecases/home/get_all_banners.dart';
 import 'package:loby/domain/usecases/home/get_all_faqs.dart';
 import 'package:loby/domain/usecases/home/get_categories.dart';
 import 'package:loby/domain/usecases/home/get_category_games.dart';
@@ -88,6 +89,7 @@ import 'package:loby/domain/usecases/profile/update_social_links.dart';
 import 'package:loby/domain/usecases/profile/verify_payment.dart';
 import 'package:loby/domain/usecases/profile/withdraw_money.dart';
 import 'package:loby/domain/usecases/slots/add_slots.dart';
+import 'package:loby/domain/usecases/slots/copy_slots_to_all_days.dart';
 import 'package:loby/domain/usecases/slots/delete_slot.dart';
 import 'package:loby/domain/usecases/slots/edit_slot.dart';
 import 'package:loby/domain/usecases/slots/get_buyer_slots.dart';
@@ -209,6 +211,7 @@ class DependencyInjector {
     Get.lazyPut(() => GlobalSearch(homeRepository));
     Get.lazyPut(() => GetStaticData(homeRepository));
     Get.lazyPut(() => GetAllFaqs(repository: homeRepository));
+    Get.lazyPut(() => GetAllBanners(homeRepository));
   }
 
   static void _injectListingUsecases() {
@@ -230,6 +233,7 @@ class DependencyInjector {
     Get.lazyPut(() => GetBuyerSlots(slotsRepository));
     Get.lazyPut(() => DeleteSlots(slotsRepository));
     Get.lazyPut(() => EditSlot(slotsRepository));
+    Get.lazyPut(() => CopyToAlldaysSlots(repository: slotsRepository));
   }
 
   static void _injectKycUsecases() {

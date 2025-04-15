@@ -1,7 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:loby/domain/entities/listing/service_listing.dart';
 import 'package:loby/domain/entities/order/dispute.dart';
+import 'package:loby/domain/entities/order/review_ratings.dart';
 import 'package:loby/domain/entities/profile/user.dart';
+
 import 'order_status.dart';
 
 class Order extends Equatable {
@@ -12,7 +14,7 @@ class Order extends Equatable {
     this.disputeId,
     this.quantity,
     this.price,
-    this.slotId,  
+    this.slotId,
     this.cronUpdatedTime,
     this.paymentSettlement,
     this.transactionFreeze,
@@ -24,7 +26,8 @@ class Order extends Equatable {
     this.orderStatuses,
     this.bookfromtime,
     this.booktotime,
-    this.bookDate
+    this.bookDate,
+    this.ratingReviews,
   });
 
   final int? id;
@@ -43,12 +46,13 @@ class Order extends Equatable {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final User? user;
+  final ReviewRatings? ratingReviews;
   final ServiceListing? userGameService;
   final Dispute? dispute;
   final List<OrderStatus>? orderStatuses;
 
   @override
-  // TODO: implement props  
+  // TODO: implement props
   List<Object?> get props => [
         id,
         userGameServiceId,

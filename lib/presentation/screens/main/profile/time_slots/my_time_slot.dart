@@ -79,6 +79,7 @@ class _MyTimeSlotState extends State<MyTimeSlot> {
 
       fromTimes.insert(fromTimes.length, TextEditingController());
       toTimes.insert(toTimes.length, TextEditingController());
+      print(slotsController.selectedDay);
       if (slotsController.selectedDay.value.contains(day)) {
         // Remove the day if it's already selected
         slotsController.selectedDay.value = '';
@@ -87,6 +88,7 @@ class _MyTimeSlotState extends State<MyTimeSlot> {
         slotsController.selectedDay.value = day;
       }
     });
+    print('slot day is ->${slotsController.selectedDay}');
     // int indexOfDay = days.indexOf(day);
     // selectedDay.add(day);
     // selectedDay
@@ -98,12 +100,18 @@ class _MyTimeSlotState extends State<MyTimeSlot> {
       initialTime: TimeOfDay.now(),
       builder: (BuildContext context, Widget? child) {
         return MediaQuery(
-          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+          data: MediaQuery.of(context).copyWith(
+            alwaysUse24HourFormat: false,
+          ),
           child: child!,
         );
       },
     );
     if (pickedTime != null) {
+      if (pickedTime.minute % 30 != 0) {
+        Helpers.toast('Minute cannot be less then or more then 30 minute.');
+        return;
+      }
       DateTime selectedTime = DateTime(
         DateTime.now().year,
         DateTime.now().month,
@@ -131,6 +139,10 @@ class _MyTimeSlotState extends State<MyTimeSlot> {
       },
     );
     if (pickedTime != null) {
+      if (pickedTime.minute % 30 != 0) {
+        Helpers.toast('Minute cannot be less then or more then 30 minute.');
+        return;
+      }
       DateTime selectedTime = DateTime(
         DateTime.now().year,
         DateTime.now().month,
@@ -198,6 +210,7 @@ class _MyTimeSlotState extends State<MyTimeSlot> {
                       : slotsController.selectedDay.value,
 
                   items: slotsController.days
+                      .where((day) => day.isNotEmpty)
                       .map(
                         (day) => DropdownMenuItem<String>(
                             value: day,
@@ -218,7 +231,8 @@ class _MyTimeSlotState extends State<MyTimeSlot> {
                   // value: selectedValue,
                   onChanged: (value) {
                     setState(() {
-                      onTap(value ?? '');
+                      print('day is ->$value');
+                      onTap(value ?? 'null');
                       slotsController.getSlots();
                       selectedDay = value ?? '';
                     });
@@ -355,20 +369,30 @@ class _MyTimeSlotState extends State<MyTimeSlot> {
               SizedBox(
                 height: 4.h,
               ),
-              Container(
-                width: 30.w,
-                height: 4.h,
-                decoration: BoxDecoration(
-                  color: Color(0xFFFF754C),
-                  borderRadius: BorderRadius.circular(9),
-                ),
-                child: Center(
-                  child: Text(
-                    'Copy to all Days',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                      color: textWhiteColor,
+              GestureDetector(
+                onTap: () {
+                  if (slotsController.selectedDay.value.isEmpty) {
+                    Helpers.toast('Please Select Day');
+                    return;
+                  }
+                  slotsController.copySlotsToAllDays(slotsController.days
+                      .indexOf(slotsController.selectedDay.value));
+                },
+                child: Container(
+                  width: 30.w,
+                  height: 4.h,
+                  decoration: BoxDecoration(
+                    color: Color(0xFFFF754C),
+                    borderRadius: BorderRadius.circular(9),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Copy to all Days',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w500,
+                        color: textWhiteColor,
+                      ),
                     ),
                   ),
                 ),

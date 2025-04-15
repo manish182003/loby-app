@@ -33,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    homeController.getAllBanners();
     homeController.getCategories();
     homeController.getGames();
   }
@@ -189,34 +190,46 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Stack(
               children: [
-                CarouselSlider.builder(
-                  itemCount: imageList.length,
-                  carouselController: controller,
-                  itemBuilder: (context, index, realIndex) {
-                    var img = imageList[index];
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: Image.asset(
-                          img,
-                          fit: BoxFit.cover,
-                          width: double.infinity,
+                Obx(() {
+                  return CarouselSlider.builder(
+                    itemCount: homeController.homeBanners.isEmpty
+                        ? imageList.length
+                        : homeController.homeBanners.length,
+                    carouselController: controller,
+                    itemBuilder: (context, index, realIndex) {
+                      var img = homeController.homeBanners.isEmpty
+                          ? imageList[index]
+                          : homeController.homeBanners[index].imageUrl ?? '';
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: img.contains('http') || img.contains('https')
+                              ? Image.network(
+                                  img,
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                )
+                              : Image.asset(
+                                  img,
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                ),
                         ),
-                      ),
-                    );
-                  },
-                  options: CarouselOptions(
-                    height: 20.h,
-                    enlargeCenterPage: true,
-                    enableInfiniteScroll: true,
-                    autoPlay: true,
-                    viewportFraction: 1,
-                    onPageChanged: (index, reason) {
-                      currentIndex.value = index;
+                      );
                     },
-                  ),
-                ),
+                    options: CarouselOptions(
+                      height: 20.h,
+                      enlargeCenterPage: true,
+                      enableInfiniteScroll: true,
+                      autoPlay: true,
+                      viewportFraction: 1,
+                      onPageChanged: (index, reason) {
+                        currentIndex.value = index;
+                      },
+                    ),
+                  );
+                }),
                 Positioned(
                   right: 40.w,
                   bottom: 1.h,

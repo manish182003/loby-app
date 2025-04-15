@@ -13,11 +13,10 @@ class TransactionTile extends StatelessWidget {
   final bool isDebited;
   final WalletTransaction transaction;
   const TransactionTile(
-      {Key? key,
+      {super.key,
       required this.title,
       required this.isDebited,
-      required this.transaction})
-      : super(key: key);
+      required this.transaction});
 
   @override
   Widget build(BuildContext context) {
@@ -152,12 +151,15 @@ class TransactionTile extends StatelessWidget {
         } else {
           totalAmount = (transaction.amount! * 100) /
               (100 -
-                  ((transaction.order!.dispute!.commissionPercent!) +
+                  ((transaction.order!.dispute!.commissionPercent ?? 0) +
                       (transaction
                           .order!.userGameService!.category!.govtCommission!)));
           lobyProtectionCharges =
-              (totalAmount * transaction.order!.dispute!.commissionPercent!) /
-                  100;
+              transaction.order!.dispute!.commissionPercent != null
+                  ? (totalAmount *
+                          transaction.order!.dispute!.commissionPercent!) /
+                      100
+                  : (totalAmount * 1) / 100;
         }
 
         double governmentCommission = (totalAmount *
@@ -192,7 +194,9 @@ class TransactionTile extends StatelessWidget {
                     text2: transaction.order!.userGameService!.game!.name!),
                 SizedBox(height: 1.h),
                 _rowWidget(textTheme,
-                    text1: 'Reason', text2: walletReason[transaction.reason!]),
+                    text1: 'Reason',
+                    text2:
+                        walletReason[transaction.reason ?? "SERVICE_ORDERED"]),
                 SizedBox(height: 1.h),
                 _rowWidget(textTheme,
                     text1: 'Details', text2: transaction.details!),

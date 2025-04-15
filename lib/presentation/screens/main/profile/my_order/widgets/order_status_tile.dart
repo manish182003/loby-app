@@ -13,6 +13,7 @@ import 'package:loby/presentation/getx/controllers/core_controller.dart';
 import 'package:loby/presentation/getx/controllers/order_controller.dart';
 import 'package:loby/presentation/screens/main/profile/my_order/widgets/select_duel_winner_dialog.dart';
 import 'package:loby/presentation/widgets/rating_dialog.dart';
+import 'package:rename/platform_file_editors/abs_platform_file_editor.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../../core/theme/colors.dart';
@@ -93,7 +94,50 @@ class OrderStatusTile extends StatelessWidget {
                               ? _selectDuelWinner(context)
                               : lastStatus == 'BUYER_DELIVERY_CONFIRMED'
                                   ? _selectDuelWinner(context)
-                                  : const SizedBox()
+                                  : lastStatus == "LOBY_PROTECTION_PERIOD" &&
+                                          orderController.ratingDone.value ==
+                                              false
+                                      ? Padding(
+                                          padding: EdgeInsets.only(bottom: 2.h),
+                                          child: CustomButton(
+                                            color: purpleLightIndigoColor,
+                                            name: order.ratingReviews == null
+                                                ? "Review & Rating"
+                                                : "Review & Rating Submitted",
+                                            textColor: textWhiteColor,
+                                            radius: 50,
+                                            onTap: order.ratingReviews == null
+                                                ? () async {
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return RatingDialog(
+                                                            title:
+                                                                "Review & Rating",
+                                                            descriptions:
+                                                                "Congratulations on successfully delivering a service. Kindly rate the buyer to help us serve you better",
+                                                            text: "OK",
+                                                            review: review,
+                                                            onChanged: (star) {
+                                                              rating = star;
+                                                            },
+                                                            onSubmit: () async {
+                                                              confirmSellerDelivery(
+                                                                  context,
+                                                                  status: '',
+                                                                  rating:
+                                                                      rating,
+                                                                  review: review
+                                                                      .text);
+                                                            },
+                                                          );
+                                                        });
+                                                  }
+                                                : () {},
+                                          ),
+                                        )
+                                      : const SizedBox()
                       :
 
                       /// else normal seller ///
@@ -106,7 +150,48 @@ class OrderStatusTile extends StatelessWidget {
                           ? _selectDuelWinner(context)
                           : lastStatus == 'SELLER_DELIVERY_CONFIRMED'
                               ? _selectDuelWinner(context)
-                              : const SizedBox()
+                              : lastStatus == "LOBY_PROTECTION_PERIOD" &&
+                                      orderController.ratingDone.value == false
+                                  ? Padding(
+                                      padding: EdgeInsets.only(bottom: 2.h),
+                                      child: CustomButton(
+                                        color: purpleLightIndigoColor,
+                                        name: order.ratingReviews == null
+                                            ? "Review & Rating"
+                                            : "Review & Rating Submitted",
+                                        textColor: textWhiteColor,
+                                        radius: 50,
+                                        onTap: order.ratingReviews == null
+                                            ? () async {
+                                                showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return RatingDialog(
+                                                        title:
+                                                            "Review & Rating",
+                                                        descriptions:
+                                                            "Congratulations on successfully getting your service delivered. Kindly rate the seller & the service to help us serve you better",
+                                                        text: "OK",
+                                                        review: review,
+                                                        onChanged: (star) {
+                                                          rating = star;
+                                                        },
+                                                        onSubmit: () async {
+                                                          confirmSellerDelivery(
+                                                              context,
+                                                              status: '',
+                                                              rating: rating,
+                                                              review:
+                                                                  review.text);
+                                                        },
+                                                      );
+                                                    });
+                                              }
+                                            : () {},
+                                      ),
+                                    )
+                                  : const SizedBox()
                       :
 
                       /// else normal Buyer ///
@@ -427,31 +512,35 @@ class OrderStatusTile extends StatelessWidget {
                     padding: EdgeInsets.only(bottom: 2.h),
                     child: CustomButton(
                       color: purpleLightIndigoColor,
-                      name: "Review & Rating",
+                      name: order.ratingReviews == null
+                          ? "Review & Rating"
+                          : "Review & Rating Submitted",
                       textColor: textWhiteColor,
                       radius: 50,
-                      onTap: () async {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return RatingDialog(
-                                title: "Review & Rating",
-                                descriptions:
-                                    "Congratulations on successfully getting your service delivered. Kindly rate thus seller & its service to help us serve you better",
-                                text: "OK",
-                                review: review,
-                                onChanged: (star) {
-                                  rating = star;
-                                },
-                                onSubmit: () async {
-                                  confirmSellerDelivery(context,
-                                      status: '',
-                                      rating: rating,
-                                      review: review.text);
-                                },
-                              );
-                            });
-                      },
+                      onTap: order.ratingReviews == null
+                          ? () async {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return RatingDialog(
+                                      title: "Review & Rating",
+                                      descriptions:
+                                          "Congratulations on successfully delivering a service. Kindly rate the buyer to help us serve you better",
+                                      text: "OK",
+                                      review: review,
+                                      onChanged: (star) {
+                                        rating = star;
+                                      },
+                                      onSubmit: () async {
+                                        confirmSellerDelivery(context,
+                                            status: '',
+                                            rating: rating,
+                                            review: review.text);
+                                      },
+                                    );
+                                  });
+                            }
+                          : () {},
                     ),
                   )
                 : const SizedBox(),
@@ -461,6 +550,7 @@ class OrderStatusTile extends StatelessWidget {
 
   Widget _buyer(
       BuildContext context, double rating, TextEditingController review) {
+    logger.i('buyer status->$lastStatus');
     return lastStatus == "SELLER_DELIVERY_CONFIRMED"
         ? Column(
             children: [
@@ -515,7 +605,7 @@ class OrderStatusTile extends StatelessWidget {
                               return RatingDialog(
                                 title: "Review & Rating",
                                 descriptions:
-                                    "Congratulations on successfully getting your service delivered. Kindly rate thus seller & its service to help us serve you better",
+                                    "Congratulations on successfully getting your service delivered. Kindly rate the seller & the service to help us serve you better",
                                 text: "OK",
                                 review: review,
                                 onChanged: (star) {
@@ -537,7 +627,44 @@ class OrderStatusTile extends StatelessWidget {
               SizedBox(height: 2.h),
             ],
           )
-        : const SizedBox();
+        : lastStatus == "LOBY_PROTECTION_PERIOD" &&
+                orderController.ratingDone.value == false
+            ? Padding(
+                padding: EdgeInsets.only(bottom: 2.h),
+                child: CustomButton(
+                  color: purpleLightIndigoColor,
+                  name: order.ratingReviews == null
+                      ? "Review & Rating"
+                      : "Review & Rating Submitted",
+                  textColor: textWhiteColor,
+                  radius: 50,
+                  onTap: order.ratingReviews == null
+                      ? () async {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return RatingDialog(
+                                  title: "Review & Rating",
+                                  descriptions:
+                                      "Congratulations on successfully delivering a service. Kindly rate the buyer to help us serve you better",
+                                  text: "OK",
+                                  review: review,
+                                  onChanged: (star) {
+                                    rating = star;
+                                  },
+                                  onSubmit: () async {
+                                    confirmSellerDelivery(context,
+                                        status: '',
+                                        rating: rating,
+                                        review: review.text);
+                                  },
+                                );
+                              });
+                        }
+                      : () {},
+                ),
+              )
+            : const SizedBox();
   }
 
   void selectDuelWinner(BuildContext context,
@@ -727,10 +854,10 @@ class OrderStatusTile extends StatelessWidget {
       isSeller
           ? order.user?.displayName ?? ''
           : order.userGameService?.user?.displayName ?? '',
-      isSeller
-          ? order.userGameService?.user?.displayName ?? ''
-          : order.userGameService?.user?.displayName ?? '',
-      // 'You'
+      // isSeller
+      //     ? order.userGameService?.user?.displayName ?? ''
+      //     : order.userGameService?.user?.displayName ?? '',
+      'You'
     ];
     showDialog(
       context: context,

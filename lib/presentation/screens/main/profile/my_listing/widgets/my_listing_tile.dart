@@ -9,6 +9,7 @@ import 'package:loby/presentation/widgets/custom_bottom_sheet.dart';
 import 'package:loby/presentation/widgets/custom_cached_network_image.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../../../../../../core/theme/colors.dart';
 import '../../../../../widgets/CustomSwitch.dart';
@@ -25,10 +26,30 @@ class MyListingTile extends StatefulWidget {
 
 class _MyListingTileState extends State<MyListingTile> {
   ListingController listingController = Get.find<ListingController>();
+  Rx<String?> videoImage = ''.obs;
+
+  @override
+  void initState() {
+    var image = Helpers.getListingImage(widget.listing);
+    if (image != null && image.contains('mp4')) {
+      getVideoThumbnail(image);
+    }
+    super.initState();
+  }
+
+  getVideoThumbnail(String path) async {
+    print('path->$path');
+    videoImage.value = await VideoThumbnail.thumbnailFile(
+      video: path,
+      imageFormat: ImageFormat.PNG,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    print(videoImage.value);
+
     return GestureDetector(
       onTap: () {
         listingController.totalPrice.value =
@@ -63,11 +84,16 @@ class _MyListingTileState extends State<MyListingTile> {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(16),
-                      child: CustomCachedNetworkImage(
-                        imageUrl: Helpers.getListingImage(widget.listing),
-                        placeHolder: Image.asset(
-                          "assets/images/listing_placeholder.jpg",
-                          fit: BoxFit.cover,
+                      child: Obx(
+                        () => CustomCachedNetworkImage(
+                          imageUrl: videoImage.value == null ||
+                                  videoImage.value!.isEmpty
+                              ? Helpers.getListingImage(widget.listing)
+                              : videoImage.value,
+                          placeHolder: Image.asset(
+                            "assets/images/listing_placeholder.jpg",
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),

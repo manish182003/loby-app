@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:loby/core/utils/exceptions.dart';
 import 'package:loby/core/utils/failure.dart';
 import 'package:loby/data/datasources/home_remote_datasource.dart';
+import 'package:loby/domain/entities/response_entities/home/banner_response.dart';
 import 'package:loby/domain/entities/response_entities/home/category_games_response.dart';
 import 'package:loby/domain/entities/response_entities/home/category_response.dart';
 import 'package:loby/domain/entities/response_entities/home/faqs_response.dart';
@@ -110,6 +111,16 @@ class HomeRepositoryImpl extends HomeRepository {
   Future<Either<Failure, FaqsResponse>> getAllFaqsData() async {
     try {
       return Right(await _homeRemoteDatasource.getAllFaqs());
+    } on ServerException catch (e) {
+      // Loggers can be added here for analyzation.
+      return Left(ServerFailure(message: e.message.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, BannerResponse>> getAllBannersData() async {
+    try {
+      return Right(await _homeRemoteDatasource.getAllBanners());
     } on ServerException catch (e) {
       // Loggers can be added here for analyzation.
       return Left(ServerFailure(message: e.message.toString()));

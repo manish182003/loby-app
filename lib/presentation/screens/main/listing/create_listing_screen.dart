@@ -425,13 +425,17 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                                   ..onTap = () => context.pushNamed(
                                       staticContentPage,
                                       extra: {'termName': 'Loby Protection'}),
-                                style: textTheme.headlineMedium
-                                    ?.copyWith(color: aquaGreenColor),
+                                style: textTheme.headlineMedium?.copyWith(
+                                  color: aquaGreenColor,
+                                  fontSize: 12,
+                                ),
                               ),
                               TextSpan(
                                   text: " Insurance",
-                                  style: textTheme.headlineMedium
-                                      ?.copyWith(color: textLightColor)),
+                                  style: textTheme.headlineMedium?.copyWith(
+                                    color: textLightColor,
+                                    fontSize: 12,
+                                  )),
                               // TextSpan(
                               //   text: '7 Days Insurance',
                               //   style: textTheme.subtitle2
@@ -441,7 +445,7 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 1.h),
+              SizedBox(height: 2.h),
               _buildTermsCheckbox(
                   textTheme,
                   'I have read and agreed to all sellers policy and the ',
@@ -885,60 +889,113 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
                   }
                 },
               );
-              return Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: iconWhiteColor,
-                ),
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Obx(
-                    () => LinearProgressIndicator(
-                      borderRadius: BorderRadius.circular(8),
-                      minHeight: 5,
-                      valueColor: AlwaysStoppedAnimation<Color>(aquaGreenColor),
-                      value: loadingValue.value,
+              return Stack(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    margin: EdgeInsets.only(right: 6, top: 6),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: iconWhiteColor,
+                    ),
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Obx(
+                        () => LinearProgressIndicator(
+                          borderRadius: BorderRadius.circular(8),
+                          minHeight: 5,
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(aquaGreenColor),
+                          value: loadingValue.value,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  Positioned(
+                    right: 0,
+                    child: GestureDetector(
+                      onTap: () {
+                        listingController.files.removeAt(index);
+                        listingController.fileTypes.removeAt(index);
+                      },
+                      child: CircleAvatar(
+                        backgroundColor: Color(0xFFE94F31),
+                        radius: 8,
+                        child: Center(
+                          child: SvgPicture.asset(
+                            'assets/icons/close_icon.svg',
+                            color: textWhiteColor,
+                            width: 5,
+                            height: 5,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               );
             }
             videoImage = snapshot.data;
-            return Container(
-              padding: const EdgeInsets.all(8),
-              constraints: BoxConstraints(
-                  minHeight: MediaQuery.of(context).size.height * 0.08,
-                  minWidth: MediaQuery.of(context).size.width * 0.4),
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                      spreadRadius: 1,
-                      blurRadius: 5,
-                      color: Colors.black.withAlpha(50))
-                ],
-                borderRadius: BorderRadius.circular(12),
-                color: iconWhiteColor,
-                image: DecorationImage(
-                    image: FileImage(
-                        videoImage == null ? image : File(videoImage!)),
-                    fit: BoxFit.cover),
-              ),
-              child: GestureDetector(
-                onTap: () {
-                  listingController.files.removeAt(index);
-                  listingController.fileTypes.removeAt(index);
-                },
-                child: Align(
-                  alignment: AlignmentDirectional.topEnd,
-                  child: SvgPicture.asset(
-                    'assets/icons/close_icon.svg',
-                    color: selectiveYellowColor,
-                    width: 8,
-                    height: 8,
+            return Stack(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  margin: EdgeInsets.only(right: 6, top: 6),
+                  constraints: BoxConstraints(
+                      minHeight: MediaQuery.of(context).size.height * 0.08,
+                      minWidth: MediaQuery.of(context).size.width * 0.4),
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                          spreadRadius: 1,
+                          blurRadius: 5,
+                          color: Colors.black.withAlpha(50))
+                    ],
+                    borderRadius: BorderRadius.circular(12),
+                    color: iconWhiteColor,
+                    image: DecorationImage(
+                        image: FileImage(
+                            videoImage == null ? image : File(videoImage!)),
+                        fit: BoxFit.cover),
                   ),
+                  // child: GestureDetector(
+                  //   onTap: () {
+                  //     listingController.files.removeAt(index);
+                  //     listingController.fileTypes.removeAt(index);
+                  //   },
+                  //   child: Align(
+                  //     alignment: AlignmentDirectional.topEnd,
+                  //     child: SvgPicture.asset(
+                  //       'assets/icons/close_icon.svg',
+                  //       color: selectiveYellowColor,
+                  //       width: 8,
+                  //       height: 8,
+                  //     ),
+                  //   ),
+                  // ),
                 ),
-              ),
+                Positioned(
+                  right: 0,
+                  child: GestureDetector(
+                    onTap: () {
+                      listingController.files.removeAt(index);
+                      listingController.fileTypes.removeAt(index);
+                    },
+                    child: CircleAvatar(
+                      backgroundColor: Color(0xFFE94F31),
+                      radius: 8,
+                      child: Center(
+                        child: SvgPicture.asset(
+                          'assets/icons/close_icon.svg',
+                          color: textWhiteColor,
+                          width: 5,
+                          height: 5,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
             );
           },
         );
@@ -947,43 +1004,49 @@ class _CreateListingScreenState extends State<CreateListingScreen> {
   }
 
   _buildTermsCheckbox(TextTheme textTheme, String content, String textSpan) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        CustomCheckbox(
-          isChecked: isChecked,
-          onChange: (value) {
-            isChecked = value;
-          },
-          backgroundColor: aquaGreenColor,
-          borderColor: aquaGreenColor,
-          icon: Icons.check,
-          size: 16,
-          iconSize: 10,
-        ),
-        const SizedBox(width: 8.0),
-        Expanded(
-          child: SizedBox(
-              child: RichText(
-                  textAlign: TextAlign.start,
-                  text: TextSpan(children: [
-                    TextSpan(
-                      text: content,
-                      style:
-                          textTheme.titleSmall?.copyWith(color: textLightColor),
-                    ),
-                    TextSpan(
-                        text: textSpan,
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () => context.pushNamed(staticContentPage,
-                              extra: {'termName': 'Terms of Use'}),
+    return Padding(
+      padding: const EdgeInsets.only(right: 60),
+      child: Row(
+        children: [
+          CustomCheckbox(
+            isChecked: isChecked,
+            onChange: (value) {
+              isChecked = value;
+            },
+            backgroundColor: aquaGreenColor,
+            borderColor: aquaGreenColor,
+            icon: Icons.check,
+            size: 16,
+            iconSize: 10,
+          ),
+          const SizedBox(width: 8.0),
+          Expanded(
+            child: SizedBox(
+                child: RichText(
+                    textAlign: TextAlign.start,
+                    text: TextSpan(children: [
+                      TextSpan(
+                        text: content,
                         style: textTheme.titleSmall?.copyWith(
-                          color: aquaGreenColor,
-                          fontWeight: FontWeight.w700,
-                        )),
-                  ]))),
-        ),
-      ],
+                          color: textWhiteColor,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      TextSpan(
+                          text: textSpan,
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => context.pushNamed(staticContentPage,
+                                extra: {'termName': 'Terms of Use'}),
+                          style: textTheme.titleSmall?.copyWith(
+                            color: aquaGreenColor,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12,
+                          )),
+                    ]))),
+          ),
+        ],
+      ),
     );
   }
 

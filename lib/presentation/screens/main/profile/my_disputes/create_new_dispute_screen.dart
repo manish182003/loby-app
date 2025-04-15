@@ -287,65 +287,210 @@ class _CreateNewDisputeState extends State<CreateNewDispute> {
                   }
                 },
               );
-              return Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: iconWhiteColor,
-                ),
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Obx(
-                    () => LinearProgressIndicator(
-                      borderRadius: BorderRadius.circular(8),
-                      minHeight: 5,
-                      valueColor: AlwaysStoppedAnimation<Color>(aquaGreenColor),
-                      value: loadingValue.value,
+              return Stack(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    margin: EdgeInsets.only(right: 6, top: 6),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: iconWhiteColor,
+                    ),
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Obx(
+                        () => LinearProgressIndicator(
+                          borderRadius: BorderRadius.circular(8),
+                          minHeight: 5,
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(aquaGreenColor),
+                          value: loadingValue.value,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  Positioned(
+                    right: 0,
+                    child: GestureDetector(
+                      onTap: () {
+                        orderController.files.removeAt(index);
+                        orderController.fileTypes.removeAt(index);
+                      },
+                      child: CircleAvatar(
+                        backgroundColor: Color(0xFFE94F31),
+                        radius: 8,
+                        child: Center(
+                          child: SvgPicture.asset(
+                            'assets/icons/close_icon.svg',
+                            color: textWhiteColor,
+                            width: 5,
+                            height: 5,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               );
             }
             videoImage = snapshot.data;
-            return Container(
-              padding: const EdgeInsets.all(8),
-              constraints: BoxConstraints(
-                  minHeight: MediaQuery.of(context).size.height * 0.08,
-                  minWidth: MediaQuery.of(context).size.width * 0.4),
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                      spreadRadius: 1,
-                      blurRadius: 5,
-                      color: Colors.black.withAlpha(50))
-                ],
-                borderRadius: BorderRadius.circular(12),
-                color: iconWhiteColor,
-                image: DecorationImage(
-                    image: FileImage(
-                        videoImage == null ? image : File(videoImage!)),
-                    fit: BoxFit.cover),
-              ),
-              child: GestureDetector(
-                onTap: () {
-                  orderController.files.removeAt(index);
-                  orderController.fileTypes.removeAt(index);
-                },
-                child: Align(
-                  alignment: AlignmentDirectional.topEnd,
-                  child: SvgPicture.asset(
-                    'assets/icons/close_icon.svg',
-                    color: selectiveYellowColor,
-                    width: 8,
-                    height: 8,
+            return Stack(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  margin: EdgeInsets.only(right: 6, top: 6),
+                  constraints: BoxConstraints(
+                      minHeight: MediaQuery.of(context).size.height * 0.08,
+                      minWidth: MediaQuery.of(context).size.width * 0.4),
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                          spreadRadius: 1,
+                          blurRadius: 5,
+                          color: Colors.black.withAlpha(50))
+                    ],
+                    borderRadius: BorderRadius.circular(12),
+                    color: iconWhiteColor,
+                    image: DecorationImage(
+                        image: FileImage(
+                            videoImage == null ? image : File(videoImage!)),
+                        fit: BoxFit.cover),
                   ),
+                  // child: GestureDetector(
+                  //   onTap: () {
+                  //     listingController.files.removeAt(index);
+                  //     listingController.fileTypes.removeAt(index);
+                  //   },
+                  //   child: Align(
+                  //     alignment: AlignmentDirectional.topEnd,
+                  //     child: SvgPicture.asset(
+                  //       'assets/icons/close_icon.svg',
+                  //       color: selectiveYellowColor,
+                  //       width: 8,
+                  //       height: 8,
+                  //     ),
+                  //   ),
+                  // ),
                 ),
-              ),
+                Positioned(
+                  right: 0,
+                  child: GestureDetector(
+                    onTap: () {
+                      orderController.files.removeAt(index);
+                      orderController.fileTypes.removeAt(index);
+                    },
+                    child: CircleAvatar(
+                      backgroundColor: Color(0xFFE94F31),
+                      radius: 8,
+                      child: Center(
+                        child: SvgPicture.asset(
+                          'assets/icons/close_icon.svg',
+                          color: textWhiteColor,
+                          width: 5,
+                          height: 5,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
             );
           },
         );
       },
     );
+
+    //  StatefulBuilder(
+    //   builder: (context, setState) {
+    //     String? videoImage;
+    //     bool isLoading = false;
+    //     Rx<double> loadingValue = 0.0.obs;
+
+    //     return FutureBuilder<String?>(
+    //       future: () async {
+    //         if (image.path.toLowerCase().endsWith('.mp4')) {
+    //           isLoading = true;
+
+    //           return await VideoThumbnail.thumbnailFile(
+    //             video: image.path,
+    //             imageFormat: ImageFormat.PNG,
+    //           );
+    //         } else {
+    //           return null;
+    //         }
+    //       }(),
+    //       builder: (context, snapshot) {
+    //         if (snapshot.connectionState == ConnectionState.waiting &&
+    //             snapshot.data == null) {
+    //           Timer.periodic(
+    //             Duration(milliseconds: 100),
+    //             (timer) {
+    //               if (loadingValue.value < 1) {
+    //                 loadingValue.value += 0.1;
+    //               } else {
+    //                 timer.cancel();
+    //               }
+    //             },
+    //           );
+    //           return Container(
+    //             padding: const EdgeInsets.all(8),
+    //             decoration: BoxDecoration(
+    //               borderRadius: BorderRadius.circular(12),
+    //               color: iconWhiteColor,
+    //             ),
+    //             child: Align(
+    //               alignment: Alignment.bottomCenter,
+    //               child: Obx(
+    //                 () => LinearProgressIndicator(
+    //                   borderRadius: BorderRadius.circular(8),
+    //                   minHeight: 5,
+    //                   valueColor: AlwaysStoppedAnimation<Color>(aquaGreenColor),
+    //                   value: loadingValue.value,
+    //                 ),
+    //               ),
+    //             ),
+    //           );
+    //         }
+    //         videoImage = snapshot.data;
+    //         return Container(
+    //           padding: const EdgeInsets.all(8),
+    //           constraints: BoxConstraints(
+    //               minHeight: MediaQuery.of(context).size.height * 0.08,
+    //               minWidth: MediaQuery.of(context).size.width * 0.4),
+    //           decoration: BoxDecoration(
+    //             boxShadow: [
+    //               BoxShadow(
+    //                   spreadRadius: 1,
+    //                   blurRadius: 5,
+    //                   color: Colors.black.withAlpha(50))
+    //             ],
+    //             borderRadius: BorderRadius.circular(12),
+    //             color: iconWhiteColor,
+    //             image: DecorationImage(
+    //                 image: FileImage(
+    //                     videoImage == null ? image : File(videoImage!)),
+    //                 fit: BoxFit.cover),
+    //           ),
+    //           child: GestureDetector(
+    //             onTap: () {
+    //               orderController.files.removeAt(index);
+    //               orderController.fileTypes.removeAt(index);
+    //             },
+    //             child: Align(
+    //               alignment: AlignmentDirectional.topEnd,
+    //               child: SvgPicture.asset(
+    //                 'assets/icons/close_icon.svg',
+    //                 color: selectiveYellowColor,
+    //                 width: 8,
+    //                 height: 8,
+    //               ),
+    //             ),
+    //           ),
+    //         );
+    //       },
+    //     );
+    //   },
+    // );
   }
 
   void _openFileExplorer() async {

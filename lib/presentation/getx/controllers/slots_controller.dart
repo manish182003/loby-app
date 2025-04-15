@@ -8,6 +8,7 @@ import 'package:loby/core/usecases/usecase.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/slots/get_slots_for_buyer.dart';
 import 'package:loby/domain/entities/slots/get_slots_for_seller.dart';
+import 'package:loby/domain/usecases/slots/copy_slots_to_all_days.dart';
 import 'package:loby/domain/usecases/slots/delete_slot.dart';
 import 'package:loby/domain/usecases/slots/edit_slot.dart';
 import 'package:loby/domain/usecases/slots/get_buyer_slots.dart';
@@ -22,22 +23,26 @@ class SlotsController extends GetxController {
   final GetBuyerSlots _getBuyerSlots;
   final DeleteSlots _deleteSlots;
   final EditSlot _editSlot;
+  final CopyToAlldaysSlots _copyToAlldaysSlots;
 
   SlotsController(
       {required AddSlots addSlots,
       required GetSlots getSlots,
       required GetBuyerSlots getBuyerSlots,
       required EditSlot editSlot,
-      required DeleteSlots deleteSlots})
+      required DeleteSlots deleteSlots,
+      required CopyToAlldaysSlots copySlots})
       : _addSlots = addSlots,
         _getSlots = getSlots,
         _getBuyerSlots = getBuyerSlots,
         _editSlot = editSlot,
-        _deleteSlots = deleteSlots;
+        _deleteSlots = deleteSlots,
+        _copyToAlldaysSlots = copySlots;
 
   final errorMessage = ''.obs;
   // List selectedDay = [].obs;
   final days = [
+    "",
     "Monday",
     "Tuesday",
     "Wednesday",
@@ -96,7 +101,7 @@ class SlotsController extends GetxController {
 
   DateTime currentDate = DateTime.now();
 
-  final selectDateofCale = [].obs;
+  final selectDateofCale = ''.obs;
 
   final selectSlotArr = <GetSlotsForBuyer>[].obs;
 
@@ -135,6 +140,31 @@ class SlotsController extends GetxController {
       },
     );
     return failureOrSuccess.isRight() ? true : false;
+  }
+
+  Future<void> copySlotsToAllDays(int day) async {
+    Helpers.loader();
+    final failureOrSuccess = await _copyToAlldaysSlots(
+      Params(
+        slotsParams: SlotsParams(
+          day: day,
+        ),
+      ),
+    );
+
+    failureOrSuccess.fold(
+      (failure) {
+        Helpers.hideLoader();
+        errorMessage.value = Helpers.convertFailureToMessage(failure);
+        debugPrint(errorMessage.value);
+        Helpers.toast(errorMessage.value);
+      },
+      (success) {
+        getSlots();
+        Helpers.hideLoader();
+        Helpers.toast('Slots Copied To All days.');
+      },
+    );
   }
 
   void clearListing() {

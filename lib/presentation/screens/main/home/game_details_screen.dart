@@ -127,6 +127,7 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    print(listingController.buyerSingleListing.value.category?.disclaimer);
 
     return SafeArea(
       child: Scaffold(
@@ -243,7 +244,8 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                             children: [
                               _rowWidget(
                                   text1:
-                                      "Unit Token / Per ${listing.unit!.name}",
+                                      // "Unit Token / Per ${listing.unit!.name}",
+                                      "Unit Price",
                                   text2: "${listing.price}",
                                   isNormal: true),
                               SizedBox(height: 1.h),
@@ -502,8 +504,84 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
                           children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                          textAlign: TextAlign.start,
+                                          "Description",
+                                          style: textTheme.headlineSmall
+                                              ?.copyWith(color: textLightColor),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8.0),
+                                        child: Text(
+                                          textAlign: TextAlign.start,
+                                          listing.description!,
+                                          style: textTheme.titleLarge?.copyWith(
+                                            color: Color(0xFFD9D9D9),
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 1.h,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                          textAlign: TextAlign.start,
+                                          "Disclaimer",
+                                          style: textTheme.headlineSmall
+                                              ?.copyWith(color: textLightColor),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8.0),
+                                        child: Text(
+                                          textAlign: TextAlign.start,
+                                          listing.category?.disclaimer ?? '',
+                                          style: textTheme.titleLarge?.copyWith(
+                                            color: Color(0xFFD9D9D9),
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 2.h),
                             _rowWidget(
-                                text1: "listing ID",
+                                text1: "Listing ID",
                                 text2: "#${listing.listingNumber}"),
                             SizedBox(height: 1.h),
                             _rowWidget(
@@ -518,50 +596,19 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                             SizedBox(height: 1.h),
                             serviceOptions(),
                             // _rowWidget(textTheme, text1: "Service Type", text2: listing.userGameServiceOptions!.map((e) => e.serviceOptions?.first.serviceOptionName).toList().join(", ")),
-                            _rowWidget(
-                              text1: "Game Platform",
-                              text2: listing.game!.platform!,
-                            ),
-                            SizedBox(height: 1.h),
+
                             _rowWidget(
                                 text1: "Link",
                                 text2: getFileLink(listing),
                                 isLink: true),
+                            SizedBox(height: 1.h),
+                            _rowWidget(
+                              text1: "Game Platform",
+                              text2: listing.game!.platform!,
+                            ),
+
                             SizedBox(height: 3.h),
 
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Align(
-                                        alignment: Alignment.topLeft,
-                                        child: Text(
-                                          textAlign: TextAlign.start,
-                                          "Description: ",
-                                          style: textTheme.headlineSmall
-                                              ?.copyWith(color: textLightColor),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 8.0),
-                                        child: Text(
-                                          textAlign: TextAlign.start,
-                                          listing.description!,
-                                          style: textTheme.titleLarge
-                                              ?.copyWith(color: textWhiteColor),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
                             const SizedBox(height: 8.0),
                           ],
                         ),

@@ -1,7 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter/material.dart';
 import 'package:loby/core/utils/failure.dart';
-import 'package:loby/domain/entities/response_entities/slots/delete_slot.dart';
 import 'package:loby/domain/entities/response_entities/slots/get_slots_for_buyer.dart';
 import 'package:loby/domain/entities/response_entities/slots/get_slots_for_seller_response.dart';
 
@@ -17,8 +15,10 @@ abstract class SlotsRepository {
 
   Future<Either<Failure, Map<String, dynamic>>> deleteSlot({int? slotId});
 
-  Future<Either<Failure, Map<String,dynamic>>> updateSlot(
+  Future<Either<Failure, Map<String, dynamic>>> updateSlot(
       {String? date, int? slotId, int? orderId});
+
+  Future<Either<Failure, String>> addSlotsForWeekend(int dayId);
 }
 
 // abstract class SlotsRepository {

@@ -3,6 +3,7 @@ import 'package:loby/core/utils/constants.dart';
 import 'package:loby/core/utils/exceptions.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/data/datasources/home_remote_datasource.dart';
+import 'package:loby/data/models/response_models/home/banner_response_model.dart';
 import 'package:loby/data/models/response_models/home/category_games_response_model.dart';
 import 'package:loby/data/models/response_models/home/category_response_model.dart';
 import 'package:loby/data/models/response_models/home/faqs_data_response_model.dart';
@@ -238,6 +239,22 @@ class HomeRemoteDatasourceImpl extends HomeRemoteDatasource {
         headers: headers,
       );
       return FaqsDataResponseModel.fromJson(response!);
+    } on ServerException catch (e) {
+      throw ServerException(message: e.message);
+    }
+  }
+
+  @override
+  Future<BannerResponseModel> getAllBanners() async {
+    try {
+      final headers = await Helpers.getApiHeaders();
+      final response = await Helpers.sendRequest(
+        _dio,
+        RequestType.get,
+        ApiEndpoints.getAllbanners,
+        headers: headers,
+      );
+      return BannerResponseModel.fromJson(response!);
     } on ServerException catch (e) {
       throw ServerException(message: e.message);
     }

@@ -7,8 +7,7 @@ class ProfileOptionsWidget extends StatelessWidget {
   String name;
   var onTap;
 
-  ProfileOptionsWidget({Key? key, required this.name, this.onTap})
-      : super(key: key);
+  ProfileOptionsWidget({super.key, required this.name, this.onTap});
 
   @override
   Widget build(BuildContext context) {

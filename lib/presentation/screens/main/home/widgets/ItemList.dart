@@ -14,6 +14,7 @@ import 'package:loby/presentation/widgets/ConfirmationRiseDisputeBottomDialog.da
 import 'package:loby/presentation/widgets/custom_cached_network_image.dart';
 import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:sizer/sizer.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../../../../../core/theme/colors.dart';
 import '../../../../widgets/profile_picture.dart';
@@ -38,6 +39,24 @@ class _ItemListState extends State<ItemList> {
   ProfileController profileController = Get.find<ProfileController>();
   TextEditingController reportController = TextEditingController();
   final CustomPopupMenuController _controller = CustomPopupMenuController();
+  Rx<String?> videoImage = ''.obs;
+
+  @override
+  void initState() {
+    var image = Helpers.getListingImage(widget.listing);
+    if (image != null && image.contains('mp4')) {
+      getVideoThumbnail(image);
+    }
+    super.initState();
+  }
+
+  getVideoThumbnail(String path) async {
+    print('path->$path');
+    videoImage.value = await VideoThumbnail.thumbnailFile(
+      video: path,
+      imageFormat: ImageFormat.PNG,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,11 +91,16 @@ class _ItemListState extends State<ItemList> {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: CustomCachedNetworkImage(
-                      imageUrl: Helpers.getListingImage(widget.listing),
-                      placeHolder: Image.asset(
-                        "assets/images/listing_placeholder.jpg",
-                        fit: BoxFit.cover,
+                    child: Obx(
+                      () => CustomCachedNetworkImage(
+                        imageUrl: videoImage.value == null ||
+                                videoImage.value!.isEmpty
+                            ? Helpers.getListingImage(widget.listing)
+                            : videoImage.value,
+                        placeHolder: Image.asset(
+                          "assets/images/listing_placeholder.jpg",
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),

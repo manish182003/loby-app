@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:loby/domain/usecases/home/delete_notification.dart';
+import 'package:loby/domain/usecases/home/get_all_banners.dart';
 import 'package:loby/domain/usecases/home/get_all_faqs.dart';
 import 'package:loby/domain/usecases/home/get_categories.dart';
 import 'package:loby/domain/usecases/home/get_category_games.dart';
@@ -22,6 +23,7 @@ class HomeBinding extends Bindings {
     final globalSearch = Get.find<GlobalSearch>();
     final getStaticData = Get.find<GetStaticData>();
     final getFaqs = Get.find<GetAllFaqs>();
+    final getBanners = Get.find<GetAllBanners>();
 
     Get.lazyPut(() => HomeController(
           getCategories: getCategories,
@@ -33,6 +35,7 @@ class HomeBinding extends Bindings {
           globalSearch: globalSearch,
           getStaticData: getStaticData,
           getAllFaqs: getFaqs,
+          getAllBanners: getBanners,
         ));
   }
 }

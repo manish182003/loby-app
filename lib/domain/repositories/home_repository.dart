@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:loby/core/utils/failure.dart';
+import 'package:loby/domain/entities/response_entities/home/banner_response.dart';
 import 'package:loby/domain/entities/response_entities/home/category_games_response.dart';
 import 'package:loby/domain/entities/response_entities/home/category_response.dart';
 import 'package:loby/domain/entities/response_entities/home/faqs_response.dart';
@@ -31,4 +32,5 @@ abstract class HomeRepository {
 
   Future<Either<Failure, StaticDataResponse>> getStaticData();
   Future<Either<Failure, FaqsResponse>> getAllFaqsData();
+  Future<Either<Failure, BannerResponse>> getAllBannersData();
 }

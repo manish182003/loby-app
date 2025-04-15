@@ -393,22 +393,24 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                           padding: const EdgeInsets.symmetric(
                               vertical: 0.0, horizontal: 16.0),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   SvgPicture.asset(
-                                    'assets/icons/outline_rating_icon.svg',
-                                    color: iconWhiteColor,
-                                    height: 16,
-                                    width: 16,
+                                    'assets/icons/rating.svg',
+                                    color: Color(0xFF00FF62),
+                                    height: 15,
+                                    width: 14,
                                   ),
-                                  const SizedBox(width: 4.0),
+                                  const SizedBox(width: 6.0),
                                   Text("${widget.user.avgRatingCount ?? 0}",
                                       overflow: TextOverflow.ellipsis,
                                       style: textTheme.headlineMedium?.copyWith(
-                                        color: textWhiteColor,
-                                        fontWeight: FontWeight.w300,
+                                        color: Color(0xFF00FF62),
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14,
                                       )),
                                 ],
                               ),
@@ -418,17 +420,18 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                               Row(
                                 children: [
                                   SvgPicture.asset(
-                                    'assets/icons/briefcase_icon.svg',
-                                    color: iconWhiteColor,
+                                    'assets/icons/briefcase.svg',
+                                    color: Color(0xFFFF817F),
                                     height: 18,
                                     width: 18,
                                   ),
-                                  const SizedBox(width: 4.0),
+                                  const SizedBox(width: 6.0),
                                   Text("${widget.user.orderCount} Orders",
                                       overflow: TextOverflow.ellipsis,
                                       style: textTheme.headlineMedium?.copyWith(
-                                        color: textWhiteColor,
-                                        fontWeight: FontWeight.w300,
+                                        color: Color(0xFFFF817F),
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14,
                                       )),
                                 ],
                               ),

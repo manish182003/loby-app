@@ -22,8 +22,6 @@ const List statuses = [
   'ORDER_COMPLETED',
 ];
 
-
-
 const Map<String, dynamic> statusesName = {
   'ORDER_PLACED': 'Order Placed',
   'SELLER_ACCEPTED': 'Seller Accepted',
@@ -50,7 +48,6 @@ const Map<String, dynamic> duelStatusesName = {
   'ORDER_COMPLETED': 'Order Completed'
 };
 
-
 const List buyerStatuses = [
   'Order Placed',
   'Seller Accepted',
@@ -58,6 +55,8 @@ const List buyerStatuses = [
   'Seller Delivery Confirmed',
   'Buyer Delivery Confirmed',
   'Transaction Completed',
+  'Loby Protection Period',
+  'Order Completed',
 ];
 
 const List sellerStatuses = [

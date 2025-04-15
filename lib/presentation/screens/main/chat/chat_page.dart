@@ -4,10 +4,12 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:loby/core/theme/colors.dart';
 import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/presentation/getx/controllers/chat_controller.dart';
@@ -17,12 +19,12 @@ import 'package:loby/presentation/screens/main/chat/widgets/custom_message.dart'
 import 'package:loby/presentation/screens/main/chat/widgets/media_dialog.dart';
 import 'package:loby/presentation/widgets/custom_app_bar.dart';
 import 'package:loby/presentation/widgets/custom_loader.dart';
+import 'package:loby/services/routing_service/routes_name.dart';
 import 'package:mime/mime.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:rename/platform_file_editors/abs_platform_file_editor.dart';
+import 'package:sizer/sizer.dart';
 import 'package:uuid/uuid.dart';
-
-import '../../../../services/routing_service/routes_name.dart';
 
 class ChatPage extends StatefulWidget {
   final int chatId;
@@ -120,11 +122,103 @@ class _ChatPageState extends State<ChatPage> {
                     onPreviewDataFetched: _handlePreviewDataFetched,
                     onSendPressed: _handleSendPressed,
                     showUserAvatars: true,
+                    avatarBuilder: (author) {
+                      if (chatChannel.receiverInfo?.verifiedProfile ?? false) {
+                        return GestureDetector(
+                          onTap: () {
+                            context.pushNamed(
+                              userProfilePage,
+                              extra: {'userId': author.id, 'from': 'other'},
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: Stack(
+                              alignment: AlignmentDirectional.topEnd,
+                              children: [
+                                CircleAvatar(
+                                  backgroundColor: butterflyBlueColor,
+                                  radius: 20,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: Image.network(
+                                      author.imageUrl!,
+                                      fit: BoxFit.cover,
+                                      width: 35,
+                                      height: 35,
+                                    ),
+                                  ), //CircleAvatar
+                                ),
+                                SvgPicture.asset(
+                                  'assets/icons/blue_tick.svg',
+                                  height: 16,
+                                  width: 16,
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: GestureDetector(
+                          onTap: () {
+                            context.pushNamed(
+                              userProfilePage,
+                              extra: {'userId': author.id, 'from': 'other'},
+                            );
+                          },
+                          child: CircleAvatar(
+                            backgroundImage: NetworkImage(author.imageUrl!),
+                          ),
+                        ),
+                      );
+                    },
                     showUserNames: true,
                     user: _user,
                     onAvatarTap: (user) {
                       context.pushNamed(userProfilePage,
                           extra: {'userId': user.id, 'from': 'other'});
+                    },
+                    textMessageBuilder: (message,
+                        {required messageWidth, required showName}) {
+                      return ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: messageWidth.toDouble(),
+                        ),
+                        child: IntrinsicWidth(
+                          child: Padding(
+                            padding: EdgeInsets.all(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  message.text,
+                                  style: TextStyle(
+                                    color: textWhiteColor,
+                                  ),
+                                  maxLines: null,
+                                ),
+                                SizedBox(
+                                  height: 0.2.h,
+                                ),
+                                Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Text(
+                                    DateFormat('hh:mm').format(
+                                      DateTime.fromMillisecondsSinceEpoch(
+                                          message.createdAt!),
+                                    ),
+                                    style: TextStyle(
+                                      color: textWhiteColor,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
                     },
                     theme: const DarkChatTheme(
                       backgroundColor: backgroundColor,

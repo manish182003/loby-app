@@ -1,7 +1,7 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loby/presentation/getx/controllers/listing_controller.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../core/theme/colors.dart';
 
@@ -22,143 +22,114 @@ class _DropDownDividerState extends State<DropDownDivider> {
     'Low to High Price',
     'High to Low Price',
   ];
-  String? selectedValue = 'Top Rated';
+  String selectedValue = 'Top Rated';
   ListingController listingController = Get.find<ListingController>();
 
-  List<DropdownMenuItem<String>> _addDividersAfterItems(
-      List<String> items, TextTheme textTheme) {
-    List<DropdownMenuItem<String>> menuItems = [];
-    for (var item in items) {
-      menuItems.addAll(
-        [
-          DropdownMenuItem<String>(
-            value: item,
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 14.0,
-                ),
-                child: Text(
-                  item,
-                  style: textTheme.titleLarge?.copyWith(color: textWhiteColor),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ),
-          //If it's last item, we will not add Divider after it.
-          if (item != items.last)
-            const DropdownMenuItem<String>(
-              enabled: false,
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 8.0,
-                ),
-                child: Divider(
-                  height: 1,
-                  thickness: 1,
-                  color: footerColor,
-                ),
-              ),
-            ),
-        ],
-      );
-    }
-    return menuItems;
-  }
+  void _onSelect(String value) {
+    setState(() {
+      selectedValue = value;
+    });
 
-  List<int> _getDividersIndexes() {
-    List<int> dividersIndexes = [];
-    for (var i = 0; i < (items.length * 2) - 1; i++) {
-      //Dividers indexes will be the odd indexes
-      if (i.isOdd) {
-        dividersIndexes.add(i);
-      }
+    listingController.buyerListingPageNumber.value = 1;
+    listingController.areMoreListingAvailable.value = true;
+
+    switch (value) {
+      case 'Top Rated':
+        listingController.getBuyerListings(
+          categoryId: widget.categoryId,
+          gameId: widget.gameId,
+          sortByRating: 'desc',
+        );
+        break;
+      case 'Most Recent':
+        listingController.getBuyerListings(
+          categoryId: widget.categoryId,
+          gameId: widget.gameId,
+        );
+        break;
+      case 'Low to High Price':
+        listingController.getBuyerListings(
+          categoryId: widget.categoryId,
+          gameId: widget.gameId,
+          sortByPrice: 'asc',
+        );
+        break;
+      case 'High to Low Price':
+        listingController.getBuyerListings(
+          categoryId: widget.categoryId,
+          gameId: widget.gameId,
+          sortByPrice: 'desc',
+        );
+        break;
+      default:
+        listingController.getBuyerListings(
+          categoryId: widget.categoryId,
+          gameId: widget.gameId,
+        );
     }
-    return dividersIndexes;
   }
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return DropdownButtonHideUnderline(
-      child: DropdownButton2(
-        isExpanded: true,
-        // Reduces the dropdowns height by +/- 50%
 
-        iconStyleData: IconStyleData(
-          icon: const Icon(
-            Icons.keyboard_arrow_down,
-            color: iconWhiteColor,
+    return Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: PopupMenuButton<String>(
+        onSelected: _onSelect,
+        color: shipGreyColor,
+        offset: const Offset(0, 35),
+        menuPadding: EdgeInsets.symmetric(
+          horizontal: 20,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(14),
+        ),
+        itemBuilder: (BuildContext context) {
+          List<PopupMenuEntry<String>> entries = [];
+
+          for (int i = 0; i < items.length; i++) {
+            entries.add(
+              PopupMenuItem<String>(
+                value: items[i],
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Text(
+                      items[i],
+                      style:
+                          textTheme.titleLarge?.copyWith(color: textWhiteColor),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ),
+            );
+
+            if (i != items.length - 1) {
+              entries.add(const PopupMenuDivider(
+                height: 0.5,
+              ));
+            }
+          }
+
+          return entries;
+        },
+        child: Padding(
+          padding: EdgeInsets.zero,
+          child: Row(
+            children: [
+              Text(
+                selectedValue,
+                style: textTheme.titleLarge?.copyWith(color: textWhiteColor),
+              ),
+              SizedBox(
+                width: 1.w,
+              ),
+              const Icon(Icons.keyboard_arrow_down, color: iconWhiteColor),
+            ],
           ),
         ),
-        items: _addDividersAfterItems(items, textTheme),
-        menuItemStyleData: MenuItemStyleData(
-          height: 40, // Adjust the height to reduce space
-          padding: EdgeInsets.symmetric(horizontal: 14.0),
-        ),
-        // customItemsIndexes: _getDividersIndexes(),
-        // customItemsHeight: 4,
-        value: selectedValue,
-        onChanged: (value) {
-          setState(() {
-            selectedValue = value as String;
-          });
-          listingController.buyerListingPageNumber.value = 1;
-          listingController.areMoreListingAvailable.value = true;
-
-          switch (value) {
-            case 'Top Rated':
-              listingController.getBuyerListings(
-                categoryId: widget.categoryId,
-                gameId: widget.gameId,
-                sortByRating: 'desc',
-              );
-              break;
-            case 'Most Recent':
-              listingController.getBuyerListings(
-                categoryId: widget.categoryId,
-                gameId: widget.gameId,
-              );
-              break;
-            case 'Low to High Price':
-              listingController.getBuyerListings(
-                  categoryId: widget.categoryId,
-                  gameId: widget.gameId,
-                  sortByPrice: 'asc');
-              break;
-            case 'High to Low Price':
-              listingController.getBuyerListings(
-                  categoryId: widget.categoryId,
-                  gameId: widget.gameId,
-                  sortByPrice: 'desc');
-              break;
-            default:
-              listingController.getBuyerListings(
-                categoryId: widget.categoryId,
-                gameId: widget.gameId,
-              );
-          }
-        },
-
-        dropdownStyleData: DropdownStyleData(
-            padding: EdgeInsets.zero,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
-              color: shipGreyColor,
-            )),
-        // dropdownDecoration: BoxDecoration(
-        //   borderRadius: BorderRadius.circular(14),
-        //   color: shipGreyColor,
-        // ),
-        buttonStyleData: ButtonStyleData(
-            height: 40,
-            width: 150,
-            padding: const EdgeInsets.symmetric(horizontal: 8.0)),
-        // buttonHeight: 40,
-        // buttonWidth: 150,
-        // itemHeight: 40,
-        // itemPadding: const EdgeInsets.symmetric(horizontal: 8.0),
       ),
     );
   }

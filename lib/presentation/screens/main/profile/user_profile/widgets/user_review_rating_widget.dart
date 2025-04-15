@@ -11,8 +11,7 @@ import '../../../../../widgets/star_rating.dart';
 class UserReviewRatingWidget extends StatefulWidget {
   final User user;
 
-  const UserReviewRatingWidget({Key? key, required this.user})
-      : super(key: key);
+  const UserReviewRatingWidget({super.key, required this.user});
 
   @override
   State<UserReviewRatingWidget> createState() => _UserReviewRatingWidgetState();
@@ -57,8 +56,7 @@ class RatingTile extends StatelessWidget {
   final User user;
   final Rating rating;
 
-  const RatingTile({Key? key, required this.rating, required this.user})
-      : super(key: key);
+  const RatingTile({super.key, required this.rating, required this.user});
 
   @override
   Widget build(BuildContext context) {

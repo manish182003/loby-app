@@ -5,6 +5,7 @@ import 'package:loby/core/utils/helpers.dart';
 import 'package:loby/domain/entities/order/order.dart';
 import 'package:loby/presentation/getx/controllers/order_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
+import 'package:rename/platform_file_editors/abs_platform_file_editor.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../../../core/theme/colors.dart';
@@ -77,6 +78,8 @@ class StatusBottomSheet extends StatelessWidget {
                             order.userGameService!.category!.name == 'Duel';
                         final isSeller = profileController.profile.id ==
                             order.userGameService?.userId;
+
+                        logger.i("review & ratings->${order.ratingReviews}");
 
                         return Column(
                           children: [
@@ -154,7 +157,7 @@ class StatusBottomSheet extends StatelessWidget {
                                     isDisputeRaised: order.disputeId != null,
                                   );
                                 } else {
-                                  debugPrint("buyer");
+                                  debugPrint("buyer $isStatic");
                                   return OrderStatusTile(
                                     order: order,
                                     orderId: order.id!,

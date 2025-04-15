@@ -54,9 +54,10 @@ class _BuildDropdownState extends State<BuildDropdown> {
       ),
       buttonStyleData: ButtonStyleData(
         height: 55,
-        padding: const EdgeInsets.only(left: 10, right: 10),
+        padding: const EdgeInsets.only(left: 0, right: 10),
       ),
       items: widget.itemsList,
+
       onChanged: widget.onChanged,
       validator: (dynamic value) {
         if (widget.isRequired) {

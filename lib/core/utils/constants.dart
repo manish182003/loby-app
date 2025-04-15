@@ -30,6 +30,7 @@ class ApiEndpoints {
       "/get-unread-notification-count";
   static const String getStaticData = "/get-static-content";
   static const String getAllFaqsData = "/get-static-faqs";
+  static const String getAllbanners = "/get-dashboard-banners";
 
   /// Order APIs ///
   static const String createOrder = "/create-user-order";
@@ -63,6 +64,7 @@ class ApiEndpoints {
 
   /// Slots APIs ///
   static const String addSlots = "/add-slots";
+  static const String addSlotsForAllDays = "/copy-to-all-days";
   static const String getSlots = "/get-slots";
   static const String getSlotsForSeller = "/get-slots-for-seller";
   static const String deleteSlot = "/delete-slots";

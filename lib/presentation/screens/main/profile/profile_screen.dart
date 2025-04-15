@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loby/di/injection.dart';
+import 'package:loby/main.dart';
 import 'package:loby/presentation/getx/controllers/auth_controller.dart';
 import 'package:loby/presentation/getx/controllers/profile_controller.dart';
 import 'package:loby/presentation/widgets/custom_loader.dart';
@@ -48,7 +49,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
+                  padding: EdgeInsets.fromLTRB(8.w, 30, 20, 30),
                   child: GestureDetector(
                     onTap: () {
                       context.pushNamed(userProfilePage, extra: {
@@ -213,7 +214,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               context.pushNamed(settingsPage);
                             },
                           ),
-                          ProfileOptionsWidget(name: "Logout", onTap: _logout),
+                          ProfileOptionsWidget(
+                            name: "Logout",
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (context) {
+                                  return showAlertDialog();
+                                },
+                              );
+                            },
+                          ),
                         ],
                       )
                     ],
@@ -236,6 +248,66 @@ class _ProfileScreenState extends State<ProfileScreen> {
           }
         }),
       ),
+    );
+  }
+
+  Widget showAlertDialog() {
+    return AlertDialog(
+      backgroundColor: textTunaBlueColor,
+      titlePadding: EdgeInsets.symmetric(
+        horizontal: 14.w,
+      ).copyWith(top: 2.h),
+      title: Text(
+        'Logout Your Account',
+        style: TextStyle(
+          color: textWhiteColor,
+          fontSize: 14.spa,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      alignment: Alignment.center,
+      content: Text(
+        'Do you really want to log out? We\'ll miss you!',
+        style: TextStyle(
+          color: textWhiteColor,
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+        ),
+        textAlign: TextAlign.center,
+      ),
+      actionsAlignment: MainAxisAlignment.spaceBetween,
+      actions: [
+        ElevatedButton(
+          onPressed: () {
+            _logout();
+          },
+          style: ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll<Color>(textErrorColor),
+          ),
+          child: Text(
+            'Logout',
+            style: TextStyle(
+              color: textWhiteColor,
+              fontSize: 13.spa,
+            ),
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            contextKey.currentContext?.pop();
+          },
+          style: ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll<Color>(aquaGreenColor),
+          ),
+          child: Text(
+            'Cancel',
+            style: TextStyle(
+              color: textWhiteColor,
+              fontSize: 18,
+            ),
+          ),
+        ),
+      ],
     );
   }
 

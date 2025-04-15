@@ -45,6 +45,32 @@ class SlotsRemoteDatasourceImpl extends SlotsRemoteDatasource {
   }
 
   @override
+  Future<String> addSlotsForWeekend(int dayId) async {
+    try {
+      String token = await Helpers.getApiToken();
+      final Map<String, dynamic> headers = {
+        'Authorization': 'Bearer $token',
+      };
+
+      var data = {
+        "day": dayId,
+      };
+
+      final response = await Helpers.sendRequest(
+        _dio,
+        RequestType.post,
+        ApiEndpoints.addSlotsForAllDays,
+        data: data,
+        headers: headers,
+      );
+
+      return response!['message'];
+    } on ServerException catch (e) {
+      throw ServerException(message: e.message);
+    }
+  }
+
+  @override
   Future<GetSlotsForSellerResponse> getSlots(int? day, int? providerId) async {
     try {
       final headers = await Helpers.getApiHeaders();

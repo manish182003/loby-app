@@ -332,11 +332,11 @@ class OrderItem extends StatelessWidget {
                           : const SizedBox()
                 ],
               ),
-              order.orderStatuses!.last.status! == orderCompleted
+              order.orderStatuses!.last.status == orderCompleted
                   ? const SizedBox()
-                  : order.orderStatuses!.last.status! == orderPlaced
+                  : order.orderStatuses!.last.status == orderPlaced
                       ? const SizedBox()
-                      : order.orderStatuses!.last.status! == sellerRejected
+                      : order.orderStatuses!.last.status == sellerRejected
                           ? const SizedBox()
                           : order.disputeId != null
                               ? const SizedBox()
