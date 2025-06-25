@@ -80,11 +80,6 @@ lib/
 
 ---
 
-## 📸 Screenshots
-
-*(Add screenshots here, e.g., tournament list, payment screen, etc., if available)*
-
----
 
 ## 🤝 Contributing
 
